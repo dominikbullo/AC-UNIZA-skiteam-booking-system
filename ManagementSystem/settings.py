@@ -144,3 +144,17 @@ SITE_ID = 1
 # django-allauth
 ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_EMAIL_REQUIRED = (True)
+
+# Django-REST-Framework
+REST_FRAMEWORK = {
+    # 2 authentication types
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 6  # 10 could be a good value to assign in production. Remember: this currently also applies to answers
+}
