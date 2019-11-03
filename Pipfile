@@ -11,6 +11,7 @@ django-allauth = "*"
 django-registration = "*"
 django-crispy-forms = "*"
 pillow = "*"
+"bump2version" = "*"
 
 [dev-packages]
 
