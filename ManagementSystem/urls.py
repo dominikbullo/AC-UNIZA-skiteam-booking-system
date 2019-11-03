@@ -18,7 +18,7 @@ from django.urls import path, include
 
 from django_registration.backends.one_step.views import RegistrationView
 
-from users.forms import CustomUserForm
+from users.forms import CustomUserCreationForm
 
 # TODO: email registration
 # https://django-registration.readthedocs.io/en/3.0/activation-workflow.html
@@ -30,7 +30,7 @@ urlpatterns = [
     # Custom registration via browser
     path("accounts/register/",
          RegistrationView.as_view(
-             form_class=CustomUserForm,
+             form_class=CustomUserCreationForm,
              success_url="/",
          ), name="django_registration_register"),
 
