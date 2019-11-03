@@ -132,6 +132,9 @@ LOGOUT_REDIRECT_URL = "/"
 
 STATIC_URL = '/static/'
 
+MEDIA_URL = "/media/"
+MEDIA_ROOT = "uploads"
+
 # Custom User Model
 AUTH_USER_MODEL = "users.CustomUser"
 
