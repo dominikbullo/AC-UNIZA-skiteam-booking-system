@@ -2,7 +2,6 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.db import models
 from django.utils import timezone
 
-
 # REFS
 # https://medium.com/@royprins/django-custom-user-model-email-authentication-d3e89d36210f
 # https://docs.djangoproject.com/en/2.2/topics/auth/default/
@@ -11,58 +10,71 @@ from django.utils import timezone
 # TODO: Redirect after reg to login
 # TODO: Do not allow anything to show when not login
 
-class UserManager(BaseUserManager):
-
-    def _create_user(self, email, password, is_staff, is_superuser, **extra_fields):
-        if not email:
-            raise ValueError('Users must have an email address')
-        now = timezone.now()
-        email = self.normalize_email(email)
-        user = self.model(
-            email=email,
-            is_staff=is_staff,
-            is_active=True,
-            is_superuser=is_superuser,
-            last_login=now,
-            date_joined=now,
-            **extra_fields
-        )
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
-
-    def create_user(self, email, password, **extra_fields):
-        return self._create_user(email, password, False, False, **extra_fields)
-
-    def create_superuser(self, email, password, **extra_fields):
-        user = self._create_user(email, password, True, True, **extra_fields)
-        return user
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
 
 
-class CustomUser(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(max_length=254, unique=True)
-    name = models.CharField(max_length=254, null=True, blank=True)
-    is_staff = models.BooleanField(default=False)
-    is_superuser = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
-    last_login = models.DateTimeField(null=True, blank=True)
-    date_joined = models.DateTimeField(auto_now_add=True)
+class CustomUser(AbstractUser):
+    username = models.CharField(blank=True, null=True, max_length=50)
+    email = models.EmailField(_('email address'), unique=True)
 
     USERNAME_FIELD = 'email'
-    EMAIL_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
 
-    objects = UserManager()
+    def __str__(self):
+        return "{}".format(self.email)
 
-    def get_absolute_url(self):
-        return "/users/%i/" % (self.pk)
 
-# class Student(models.Model):
-#     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
-#
-#     # TESTING
-#     class Meta:
-#         permissions = (
-#             ("view_blog", "Can view the blog"),
-#             ("can_publish_blog", "Can publish a blog"),
-#         )
+class Parent(CustomUser, AbstractUser):
+    class Meta:
+        permissions = [
+            ("test_permision", "Can change the status of tasks"),
+            ("close_task", "Can remove a task by setting its status as closed"),
+        ]
+
+
+class Child(CustomUser, AbstractUser):
+    category = models.CharField(max_length=5)
+
+    class Meta:
+        permissions = [
+            ("test_permision", "Can change the status of tasks"),
+            ("close_task", "Can remove a task by setting its status as closed"),
+        ]
+
+    def __str__(self):
+        return "{}".format(self.email)
+
+
+class Coach(CustomUser, AbstractUser):
+    class Meta:
+        permissions = (
+            ('blog_view', 'can view blog posts and categories'),
+            ('blog_edit', 'can edit blog category and post'),
+            ("support_view", "can view tickets"),
+            ("support_edit", "can edit tickets"),
+            ("activity_view", "can view recruiters, applicants, data, posts"),
+            ("activity_edit", "can edit data"),
+        )
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
+    title = models.CharField(max_length=5)
+    family = models.CharField(max_length=5)
+    dob = models.DateField()
+    address = models.CharField(max_length=255)
+    country = models.CharField(max_length=50)
+    city = models.CharField(max_length=50)
+    zip = models.CharField(max_length=5)
+    USER_TYPE_CHOICES = (
+        (1, 'student'),
+        (2, 'teacher'),
+        (3, 'secretary'),
+        (4, 'supervisor'),
+        (5, 'admin'),
+    )
+
+    user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES)
