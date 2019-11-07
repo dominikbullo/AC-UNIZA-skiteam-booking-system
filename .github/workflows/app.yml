@@ -28,6 +28,7 @@ jobs:
 
       - name: Compose with docker
         run: |
+          pipenv install flake8
           pipenv run docker-compose run app sh -c "python manage.py test && flake8"
 
       - name: Test
