@@ -29,4 +29,4 @@ jobs:
           pipenv run python app/manage.py test
       - name: Compose with docker and test
         run: |
-          pipenv run docker-compose run app sh -c "python manage.py test"
+          docker-compose run web sh -c "python manage.py test"
