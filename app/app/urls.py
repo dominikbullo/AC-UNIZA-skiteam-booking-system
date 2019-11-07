@@ -18,7 +18,7 @@ from django.urls import path, include
 
 from django_registration.backends.one_step.views import RegistrationView
 
-from app.users.forms import CustomUserCreationForm
+from users.forms import CustomUserCreationForm
 
 # TODO: email registration
 # https://django-registration.readthedocs.io/en/3.0/activation-workflow.html
