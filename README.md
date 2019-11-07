@@ -1,6 +1,6 @@
 # Sport club management system 
 [![Coding time tracker](https://wakatime.com/badge/github/dominikbullo/sport_club_management_system.svg)](https://wakatime.com/badge/github/dominikbullo/sport_club_management_system)
-[![Actions Status](https://github.com/dominikbullo/sport_club_management_system/workflows/app/badge.svg)](https://github.com/{owner}/{repo}/actions)
+[![Actions Status](https://github.com/dominikbullo/sport_club_management_system/workflows/app/badge.svg)](https://github.com/dominikbullo/sport_club_management_system/actions)
 ![Actions Status](https://img.shields.io/static/v1?label=Language&message=Python&color=blue)
 
 Web app for complete managing a sports club events, recording child statistics by time, calculating payouts for coaches and so on...
