@@ -14,8 +14,8 @@ pillow = "*"
 "bump2version" = "*"
 
 [dev-packages]
-"bump2version" = "*"
-"flake8" = "*"
+bump2version = "*"
+flake8 = "*"
 
 [requires]
 python_version = "3.7"
