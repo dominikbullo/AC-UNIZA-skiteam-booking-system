@@ -27,8 +27,6 @@ jobs:
 
       - name: Compose with docker and test
         run: |
-#         TODO add flake8 test
-#         run docker-compose run app sh -c "python manage.py test && flake8"
           pipenv run docker-compose run app sh -c "python manage.py test"
 
       - name: Test
