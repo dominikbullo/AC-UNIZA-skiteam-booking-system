@@ -26,8 +26,6 @@ jobs:
           pipenv run flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       - name: Compose with docker and test
         run: |
-#         TODO add flake8 test
-#         run docker-compose run app sh -c "python manage.py test && flake8"
           pipenv run docker-compose run app sh -c "python manage.py test"
       - name: Test
         run: |
