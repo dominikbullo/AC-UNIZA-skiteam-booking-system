@@ -12,9 +12,10 @@ django-registration = "*"
 django-crispy-forms = "*"
 pillow = "*"
 "bump2version" = "*"
-"flake8" = "*"
 
 [dev-packages]
+"bump2version" = "*"
+"flake8" = "*"
 
 [requires]
 python_version = "3.7"
