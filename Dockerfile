@@ -1,17 +1,26 @@
 FROM python:3.7-alpine
 MAINTAINER Dominik Bullo
 
+# Set environment varibles
+ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-RUN pip install pipenv
-COPY ./Pipfile /Pipfile
-RUN pipenv install --dev --ignore-pipfile
+#COPY ./requirements.txt /requirements.txt
+#RUN pip install -r /requirements.txt
 
-# Crete folder on docker
+# Install pipenv
+RUN pip install --upgrade pip
+RUN pip install pipenv
+
+#FASTER Docker
+#TODO Try to do this with just pipenv no requirements.txt
+COPY Pipfile* /
+RUN pipenv lock --requirements > requirements.txt
+RUN pip install -r /requirements.txt
+
+## Copy into docker
 RUN mkdir /app
 WORKDIR /app
-
-# Copy into docker
 COPY ./app /app
 
 # Create new user name user for security reasons

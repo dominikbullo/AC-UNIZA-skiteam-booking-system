@@ -10,7 +10,6 @@ django-rest-auth = "*"
 django-allauth = "*"
 django-registration = "*"
 django-crispy-forms = "*"
-"bump2version" = "*"
 
 [dev-packages]
 bump2version = "*"
