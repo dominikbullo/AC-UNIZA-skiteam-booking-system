@@ -133,4 +133,4 @@ dmypy.json
 .pyre/
 
 #do not include wakatime Dashboard link
-/ManagementSystem · WakaTime.url
+/res/*
