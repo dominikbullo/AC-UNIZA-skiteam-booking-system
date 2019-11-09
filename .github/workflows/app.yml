@@ -15,4 +15,4 @@ jobs:
 
     - name: Compose with docker
       run: |
-        docker-compose run web sh -c "python manage.py test && flake8"
+        docker-compose run web sh -c "python manage.py test && flake8 --exit-zero  --statistics"

@@ -20,7 +20,7 @@ jobs:
           pipenv install --dev
       - name: Lint with flake8
         run: |
-          pipenv run flake8 . --count --exit-zero --statistics
+          pipenv run flake8 ./app --count --exit-zero --statistics
       - name: Test
         run: |
           pipenv run python app/manage.py test
