@@ -16,7 +16,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
 
-class CustomUser(AbstractUser):
+class User(AbstractUser):
     username = models.CharField(blank=True, null=True, max_length=50)
     email = models.EmailField(_('email address'), unique=True)
 
@@ -27,7 +27,7 @@ class CustomUser(AbstractUser):
         return "{}".format(self.email)
 
 
-class Parent(CustomUser, AbstractUser):
+class Parent(User, AbstractUser):
     class Meta:
         permissions = [
             ("test_permision", "Can change the status of tasks"),
@@ -35,7 +35,7 @@ class Parent(CustomUser, AbstractUser):
         ]
 
 
-class Child(CustomUser, AbstractUser):
+class Child(User, AbstractUser):
     category = models.CharField(max_length=5)
 
     class Meta:
@@ -48,7 +48,7 @@ class Child(CustomUser, AbstractUser):
         return "{}".format(self.email)
 
 
-class Coach(CustomUser, AbstractUser):
+class Coach(User, AbstractUser):
     class Meta:
         permissions = (
             ('blog_view', 'can view blog posts and categories'),
