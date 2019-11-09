@@ -1,10 +1,11 @@
 from django.urls import path, include
-from users.forms import CustomUserCreationForm
+from django.contrib.auth import views as auth_views
 
 # TODO: email registration
 # https://django-registration.readthedocs.io/en/3.0/activation-workflow.html
-# from django_registration.backends.one_step.views import RegistrationView
-from django_registration.views import RegistrationView
+from django_registration.backends.one_step.views import RegistrationView
+
+from users.forms import CustomUserCreationForm
 
 urlpatterns = [
     # Custom registration via browser
@@ -15,10 +16,10 @@ urlpatterns = [
          ), name="django_registration_register"),
 
     # other url's used by django registration package
-    # path("accounts/", include("django_registration.backends.one_step.urls")),
+    path("accounts/", include("django_registration.backends.one_step.urls")),
 
-    # Use 2 step verification
-    path("accounts/", include('django_registration.backends.activation.urls')),
+    # Redirect user if is logged in
+    path("accounts/login/", auth_views.LoginView.as_view(redirect_authenticated_user=True), name='login'),
 
     # Login via browser
     path("accounts/", include("django.contrib.auth.urls")),
