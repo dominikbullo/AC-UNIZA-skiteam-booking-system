@@ -1,6 +1,14 @@
 [flake8]
 exclude =
+    .git,
+    __pycache__,
+    docs/source/conf.py,
   migrations,
   __pycache__,
   manage.py,
   settings.py
+  max-complexity = 10
+
+ignore = E402, F401, F811
+max-complexity = 10
+max-line-length = 121
