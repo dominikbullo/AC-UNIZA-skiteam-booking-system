@@ -18,6 +18,10 @@ COPY Pipfile* /
 RUN pipenv lock --requirements > requirements.txt
 RUN pip install -r /requirements.txt
 
+#Instal also dev packpages
+RUN pipenv lock --dev --requirements > requirements_dev.txt
+RUN pip install -r /requirements_dev.txt
+
 ## Copy into docker
 RUN mkdir /app
 WORKDIR /app
