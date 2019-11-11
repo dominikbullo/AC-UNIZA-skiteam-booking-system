@@ -66,7 +66,9 @@ Add additional notes about how to deploy this on a live system
 
 ## Versioning
 
-I use [Bumpversion](https://github.com/c4urself/bump2version) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+I use [Bumpversion](https://github.com/c4urself/bump2version) for versioning. For the versions available, see the 
+[Releases on this repository](https://github.com/dominikbullo/sport_club_management_system/releases) or if you need more details you could check you 
+[Tags on this repository](https://github.com/dominikbullo/sport_club_management_system/tags). 
 
 ## Authors
 
