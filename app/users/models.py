@@ -8,6 +8,9 @@ from core.utils import USER_TYPE_CHOICES
 class User(AbstractUser):
     pass
 
+    def __str__(self):
+        return self.email
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

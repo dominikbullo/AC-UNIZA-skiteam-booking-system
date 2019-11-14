@@ -1,9 +1,9 @@
 from django.contrib import admin
-from django.contrib import auth
 
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Permission
 
+from users.forms import CustomUserCreationForm, CustomUserChangeForm
 from users.models import User, Profile
 
 from core.utils import USER_TYPE_CHOICES
@@ -20,10 +20,10 @@ class ProfileInline(admin.StackedInline):
 
 
 class CustomUserAdmin(UserAdmin):
-    # add_form =
-    # form =
+    add_form = CustomUserCreationForm
+    form = CustomUserChangeForm
     model = User
-    list_display = ["username", "email", "first_name", "last_name", "get_type"]
+    list_display = ["email", "username", "first_name", "last_name", "get_type"]
     inlines = [ProfileInline]
 
     def get_type(self, instance):
