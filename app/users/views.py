@@ -1,3 +1,10 @@
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+
+# from users.forms import UserRegisterForm
+# from users.models import User
+
 # from django.db import transaction
 # from django.urls import reverse_lazy
 # from django.views.generic import ListView, CreateView
@@ -33,3 +40,26 @@
 #                 familymembers.instance = self.object
 #                 familymembers.save()
 #         return super(ProfileFamilyMemberCreate, self).form_valid(form)
+# TODO: Add validation of frontend and backend too
+# def register(request):
+#     if request.user.is_authenticated:
+#         return redirect('ig_manager-dashboard')
+#     else:
+#         if request.method == 'POST':
+#             form = UserRegisterForm(request.POST)
+#             # TODO: validate on client side too
+#             if form.is_valid():
+#                 instance = form.save(commit=False)
+#                 if User.objects.filter(email=instance.email).exists():
+#                     messages.warning(request, f'Your mail already exist! Do you forgot your password? ')
+#                 elif User.objects.filter(username=instance.username).exists():
+#                     messages.warning(request, f'Same username already exist please choose another!')
+#                 else:
+#                     username = "lalalala"
+#                     form.save()
+#                     # email = form.cleaned_data.get('email')
+#                     messages.success(request, f'Your account has been created! You are now able to log in')
+#                     return redirect('login')
+#         else:
+#             form = UserRegisterForm()
+#         return render(request, 'account/signup.html', {'form': form, "title": "Register"})

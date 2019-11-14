@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 
 {% block auth %}
-    <h1>QuestionTime</h1>
+    <h1>Management System</h1>
     <p class="lead text-muted">Share Your Knowledge!</p>
     <div class="login-form-container">
         <form method="POST">
@@ -10,6 +10,7 @@
             {{ form|crispy }}
             <button type="submit" class="btn btn-sm btn-outline-primary">Login</button>
         </form>
-        {#        <p class="mt-2">Or <a href="{% url 'signup' %}">Create an Account</a></p>#}
+        <p class="mt-2">Or <a href="{% url 'account_signup' %}">Create an Account</a></p>
     </div>
 {% endblock %}
+

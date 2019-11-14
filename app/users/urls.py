@@ -1,5 +1,8 @@
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
+
+from users import views as user_views
+
 # TODO: email registration
 # https://django-registration.readthedocs.io/en/3.0/activation-workflow.html
 from django_registration.backends.one_step.views import RegistrationView
@@ -7,26 +10,14 @@ from django_registration.backends.one_step.views import RegistrationView
 from users.forms import CustomUserCreationForm
 
 # https://wsvincent.com/django-login-with-email-not-username/
+
+
 urlpatterns = [
-    # # Custom registration via browser
-    # path("accounts/register/",
-    #      RegistrationView.as_view(
-    #          form_class=CustomUserCreationForm,
-    #          success_url="/",
-    #      ), name="signup"),
-
-    # Icnlude api
-    path("api/", include("users.api.urls")),
-
-    # # Redirect user if is logged in
-    # path("accounts/login/", auth_views.LoginView.as_view(redirect_authenticated_user=True), name='login'),
-    path('login/', auth_views.LoginView.as_view(template_name='account/login.html', redirect_authenticated_user=True),
-         name='login'),
-
-    path('accounts/', include('allauth.urls')),
-
     # Login via browser
-    path("accounts/", include("django.contrib.auth.urls")),
+    path("", include('allauth.urls')),
+    # path("", include("django.contrib.auth.urls")),
+
+    path("api/", include("users.api.urls")),
 
     # Login via browsable api
     path("api-auth/", include("rest_framework.urls")),
@@ -35,5 +26,5 @@ urlpatterns = [
     path("api/rest-auth/", include("rest_auth.urls")),
 
     # Registration via REST
-    path("api/rest-auth/registration/", include("rest_auth.registration.urls")),
+    path("api/rest-auth/signup/", include("rest_auth.registration.urls")),
 ]

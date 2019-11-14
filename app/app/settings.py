@@ -124,7 +124,7 @@ USE_L10N = True
 USE_TZ = True
 
 LOGIN_URL = "/accounts/login/"
-LOGIN_REDIRECT_URL = "entry-point"
+LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = LOGIN_URL
 
 # Static files (CSS, JavaScript, Images)
@@ -173,9 +173,11 @@ ACCOUNT_UNIQUE_EMAIL = True
 # ACCOUNT_UNIQUE_EMAIL = True
 
 # Make email verification mandatory to avoid junk email accounts
-# ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7
-ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = False
+
+# Longer mail expiration
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 5
 
 # # Eliminate need to provide username, as it's a very old practice+
 # ACCOUNT_USERNAME_REQUIRED = False
@@ -195,6 +197,10 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 2  # 10 could be a good value to assign in production. Remember: this currently also applies to answers
 }
 
+ACCOUNT_FORMS = {
+    'signup': 'users.forms.CustomSignupForm',
+    'login': 'users.forms.CustomLoginForm',
+}
 try:
     from .local_settings import *
 except ImportError:
