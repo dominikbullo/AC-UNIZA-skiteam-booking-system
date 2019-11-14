@@ -1,6 +1,5 @@
-from django.urls import path, include
 from django.contrib.auth import views as auth_views
-
+from django.urls import path, include
 # TODO: email registration
 # https://django-registration.readthedocs.io/en/3.0/activation-workflow.html
 from django_registration.backends.one_step.views import RegistrationView
@@ -14,6 +13,9 @@ urlpatterns = [
              form_class=CustomUserCreationForm,
              success_url="/",
          ), name="django_registration_register"),
+
+    # Icnlude api
+    path("api/", include("users.api.urls")),
 
     # other url's used by django registration package
     path("accounts/", include("django_registration.backends.one_step.urls")),

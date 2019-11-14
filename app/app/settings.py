@@ -153,20 +153,23 @@ AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend',
 # ONLY for development/testing use console
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-# Custom allauth settings
+# Custom allauth settings for testing!
+ACCOUNT_EMAIL_VERIFICATION = "none"
+ACCOUNT_EMAIL_REQUIRED = (True)
+
 # Use email as the primary identifier
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_UNIQUE_EMAIL = True
+# ACCOUNT_AUTHENTICATION_METHOD = 'email'
+# ACCOUNT_EMAIL_REQUIRED = True
+# ACCOUNT_UNIQUE_EMAIL = True
 
 # Make email verification mandatory to avoid junk email accounts
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+# ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7
 ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5
 
-# # Eliminate need to provide username, as it's a very old practice
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+# # Eliminate need to provide username, as it's a very old practice+
+# ACCOUNT_USERNAME_REQUIRED = False
+# ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 
 # Django-REST-Framework
 REST_FRAMEWORK = {
