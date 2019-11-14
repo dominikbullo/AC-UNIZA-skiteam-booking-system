@@ -60,9 +60,10 @@ Add additional notes about how to deploy this on a live system
 
 ## Built With
 
+* [Docker](https://www.docker.com/) - tool to make it easier to create, deploy, and run applications by using containers
 * [Django](https://www.djangoproject.com/) - high-level Python Web framework used mostly for backend
-* [Vue.js](https://vuejs.org/) - The web framework used on frontend
 * [Django REST](https://www.django-rest-framework.org/) - toolkit for building Web APIs.
+* [Vue.js](https://vuejs.org/) - The web framework used on frontend
 
 ## Versioning
 
