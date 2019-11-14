@@ -23,11 +23,14 @@ class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = User
-    list_display = ["email", "username", "first_name", "last_name"]
+    list_display = ["email", "first_name", "last_name", "last_login", "get_type"]
     inlines = [ProfileInline]
 
     def get_type(self, instance):
-        return dict(USER_TYPE_CHOICES)[instance.profile.user_type]
+        try:
+            return dict(USER_TYPE_CHOICES)[instance.profile.user_type]
+        except Exception:
+            return "Unidentified"
 
     get_type.short_description = 'User type'
 

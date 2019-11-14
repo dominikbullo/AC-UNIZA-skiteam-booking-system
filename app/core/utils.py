@@ -10,6 +10,7 @@ def generate_random_string(chars=ALPHANUMERIC_CHARS, length=STRING_LENGTH):
 
 
 USER_TYPE_CHOICES = (
+    (0, "Unidentified"),
     (1, 'Child'),
     (2, 'Parent'),
     (3, 'Coach'),
