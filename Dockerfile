@@ -13,7 +13,6 @@ RUN pip install --upgrade pip
 RUN pip install pipenv
 
 #FASTER Docker
-#TODO Try to do this with just pipenv no requirements.txt
 COPY Pipfile* /
 RUN pipenv lock --requirements > requirements.txt
 RUN pip install -r /requirements.txt

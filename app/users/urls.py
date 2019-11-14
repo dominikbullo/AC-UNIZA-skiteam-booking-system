@@ -3,10 +3,7 @@ from django.urls import path, include
 
 from allauth.account.views import SignupView
 
-# TODO: email registration
 # https://django-registration.readthedocs.io/en/3.0/activation-workflow.html
-from django_registration.backends.one_step.views import RegistrationView
-
 # https://wsvincent.com/django-login-with-email-not-username/
 
 urlpatterns = [
