@@ -124,7 +124,7 @@ USE_L10N = True
 USE_TZ = True
 
 LOGIN_URL = "/accounts/login/"
-LOGIN_REDIRECT_URL = "/accounts/email/"
+LOGIN_REDIRECT_URL = "entry-point"
 LOGOUT_REDIRECT_URL = LOGIN_URL
 
 # Static files (CSS, JavaScript, Images)
@@ -147,6 +147,7 @@ SITE_ID = 1
 
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
+    # 'users.auth.CustomEmailAuthBackend.EmailAuthBackend'
     "django.contrib.auth.backends.ModelBackend",
 
     # `allauth` specific authentication methods, such as login by e-mail
@@ -158,9 +159,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
 ACCOUNT_SESSION_REMEMBER = True
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_UNIQUE_EMAIL = True
 
 # # Custom allauth settings for testing!

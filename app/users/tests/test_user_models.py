@@ -12,15 +12,14 @@ class LogInTest(TestCase):
             username=self.username,
             password=self.password
         )
-        pass
 
     def test_login_via_username(self):
         logged_in = self.client.login(username=self.username, password=self.password)
         self.assertTrue(logged_in)
-
-    # def test_login_via_mail(self):
-    #     logged_in = self.client.login(email=self.email, password=self.password)
-    #     self.assertTrue(logged_in)
+        
+    def test_login_via_mail(self):
+        logged_in = self.client.login(email=self.email, password=self.password)
+        self.assertTrue(logged_in)
 
 
 class ModelsTest(TestCase):
@@ -33,17 +32,16 @@ class ModelsTest(TestCase):
             username=self.username,
             password=self.password
         )
-        pass
 
     def test_create_user_with_email_successful(self):
-        # """Test creating a new user with an email is successful"""
-        # self.assertEqual(self.default_test_user.email, self.email)
-        # self.assertTrue(self.default_test_user.check_password(self.password))
-        pass
+        """Test creating a new user with an email is successful"""
+        user = get_user_model().objects.create_user(
+            'test@test.com',
+            'test123'
+        )
 
     def test_new_user_email_normalized(self):
         """Test the email for a new user is normalized"""
-
         self.assertEqual(self.default_test_user.email, self.email.lower())
 
     def test_new_user_invalid_username(self):

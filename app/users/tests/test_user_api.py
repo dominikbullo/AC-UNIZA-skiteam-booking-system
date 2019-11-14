@@ -8,11 +8,22 @@ from users.models import User
 
 class RegistrationTestCase(APITestCase):
 
-    def test_registration(self):
+    def test_registration_full(self):
         data = {"username": "testcase", "email": "test@localhost.app",
                 "password1": "some_strong_psw", "password2": "some_strong_psw"}
         response = self.client.post("/api/rest-auth/registration/", data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_registration_without_username(self):
+        data = {"email": "test@localhost.app",
+                "password1": "some_strong_psw", "password2": "some_strong_psw"}
+        response = self.client.post("/api/rest-auth/registration/", data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_registration_without_email(self):
+        data = {"username": "testcase", "password1": "some_strong_psw", "password2": "some_strong_psw"}
+        response = self.client.post("/api/rest-auth/registration/", data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
 class ProfileViewSetTestCase(APITestCase):

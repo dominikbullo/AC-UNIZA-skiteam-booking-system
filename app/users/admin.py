@@ -23,7 +23,7 @@ class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = User
-    list_display = ["email", "username", "first_name", "last_name", "get_type"]
+    list_display = ["email", "username", "first_name", "last_name"]
     inlines = [ProfileInline]
 
     def get_type(self, instance):

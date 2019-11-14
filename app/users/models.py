@@ -22,7 +22,7 @@ class Profile(models.Model):
     user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES, null=True, blank=True)
 
     def __str__(self):  # __unicode__ for Python 2
-        return self.user.username
+        return self.user.email
 
 
 class Family(models.Model):
