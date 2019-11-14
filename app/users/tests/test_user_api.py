@@ -6,6 +6,8 @@ from rest_framework.test import APITestCase
 from users.models import User
 
 
+# TODO Tests for API calls (get user info, Profile update and so on)
+
 # class RegistrationTestCase(APITestCase):
 #
 #     def test_registration_full(self):

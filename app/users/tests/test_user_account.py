@@ -1,4 +1,4 @@
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, get_user
 from django.test import TestCase
 
 
@@ -16,7 +16,7 @@ class LogInTest(TestCase):
     def test_login_via_username(self):
         logged_in = self.client.login(username=self.username, password=self.password)
         self.assertTrue(logged_in)
-        
+
     def test_login_via_mail(self):
         logged_in = self.client.login(email=self.email, password=self.password)
         self.assertTrue(logged_in)
