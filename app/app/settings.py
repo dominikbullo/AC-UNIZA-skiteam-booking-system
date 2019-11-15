@@ -198,7 +198,7 @@ REST_FRAMEWORK = {
 
 ACCOUNT_FORMS = {
     'signup': 'users.forms.CustomSignupForm',
-    'login': 'users.forms.CustomLoginForm',
+    # 'login': 'users.forms.CustomLoginForm',
 }
 try:
     from .local_settings import *
