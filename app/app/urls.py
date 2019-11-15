@@ -21,12 +21,17 @@ from core.views import IndexTemplateView
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path("api/user/", include("users.api.urls")),
-
+    # USERS & PROFILES
     path('accounts/', include('users.urls')),
 
     path('', include('users.urls')),
 
+    path("api/user/", include("users.api.urls")),
+
+    # FAMILY
+    path("family/", include("family.urls")),
+    # path("api/family/", include("family.api.urls")),
+    
     # everything else go to IndexTemplateView aka index.html od dev index page
     # re_path(r"^.*$", IndexTemplateView.as_view(), name="entry-point")
 ]
