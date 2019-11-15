@@ -158,10 +158,12 @@ AUTHENTICATION_BACKENDS = (
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+
 ACCOUNT_USERNAME_REQUIRED = False
+
 ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
-ACCOUNT_UNIQUE_EMAIL = True
 
 # # Custom allauth settings for testing!
 # ACCOUNT_EMAIL_VERIFICATION = "none"

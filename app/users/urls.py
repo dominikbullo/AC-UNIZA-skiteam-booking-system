@@ -1,11 +1,4 @@
-from django.conf.urls import url
 from django.urls import path, include
-from rest_framework.authtoken.views import obtain_auth_token
-
-from allauth.account.views import SignupView
-
-# https://django-registration.readthedocs.io/en/3.0/activation-workflow.html
-# https://wsvincent.com/django-login-with-email-not-username/
 
 urlpatterns = [
     # Login via browser
