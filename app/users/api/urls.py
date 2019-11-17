@@ -1,13 +1,19 @@
-from django.urls import path
+from django.urls import path, include
+
+from rest_framework.routers import DefaultRouter
+
 from users.api.views import *
 
-urlpatterns = [
-    path("", CurrentUserAPIView.as_view(), name="current-user"),
+router = DefaultRouter()
+router.register(r"profiles", ProfileViewSet)
 
+urlpatterns = [
+    path("", include(router.urls)),
+
+    path("user/avatar/", AvatarUpdateView.as_view(), name="avatar-update"),
+    path("user/", CurrentUserAPIView.as_view(), name="current-user"),
     # I don't need to create token, because i already have it when creating user
     # path('create/', CreateUserView.as_view(), name='create'),
-    path('token/', CreateTokenView.as_view(), name='token'),
-    path('me/', ManageUserView.as_view(), name='me'),
-
-    path('avatar/', AvatarUpdateView.as_view(), name='avatar-update'),
+    path('user/token/', CreateTokenView.as_view(), name='token'),
+    path('user/me/', ManageUserView.as_view(), name='me'),
 ]

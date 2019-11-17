@@ -68,4 +68,4 @@ class ProfileViewSet(mixins.UpdateModelMixin,
     serializer_class = ProfileSerializer
     permission_classes = [IsAuthenticated, IsOwnProfileOrReadOnly]
     filter_backends = [SearchFilter]
-    search_fields = ["city"]
+    search_fields = ["user"]

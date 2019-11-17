@@ -26,8 +26,7 @@ urlpatterns = [
 
     path('', include('users.urls')),
 
-    path("api/user/", include("users.api.urls")),
-    path("api/profiles/", ProfileList.as_view(), name="profile-list"),
+    path("api/", include("users.api.urls")),
 
     # FAMILY
     path("family/", include("family.urls")),
