@@ -35,7 +35,6 @@ class CustomUserAdmin(UserAdmin):
     get_type.short_description = 'User type'
 
 
-# admin.site.unregister(auth.models.User)
 admin.site.register(User, CustomUserAdmin)
 admin.site.register(Profile)
 admin.site.register(Permission)

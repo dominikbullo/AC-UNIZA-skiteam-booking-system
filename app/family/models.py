@@ -5,12 +5,18 @@ from users.models import User
 
 class Family(models.Model):
     id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
 
 
 class FamilyMember(models.Model):
-    profile = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     relationship = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.user.username
 
 
 class Parent(models.Model):
@@ -21,11 +27,22 @@ class Parent(models.Model):
         return self.user.username
 
 
-class Child:
+class Child(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     parents = models.ManyToManyField('self', null=True, blank=True, related_name='p', symmetrical=False)
-    pass
+
+    def __str__(self):
+        return self.user.username
+
+    class Meta:
+        verbose_name_plural = "Children"
 
 
-class Coach:
+class Coach(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+
+    def __str__(self):
+        return self.user.username
+
+    class Meta:
+        verbose_name_plural = "Coaches"

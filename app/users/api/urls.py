@@ -2,7 +2,8 @@ from django.urls import path, include
 
 from rest_framework.routers import DefaultRouter
 
-from users.api.views import *
+from users.api.views import (ProfileViewSet, AvatarUpdateView,
+                             CurrentUserAPIView, CreateTokenView, ManageUserView)
 
 router = DefaultRouter()
 router.register(r"profiles", ProfileViewSet)
