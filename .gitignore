@@ -134,3 +134,5 @@ dmypy.json
 
 #do not include wakatime Dashboard link
 /res/*
+*/requirements.txt
+*/media/
