@@ -14,9 +14,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include, re_path
+from django.urls import path, include
 
-from core.views import IndexTemplateView
+from users.api.views import ProfileList
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,11 +27,12 @@ urlpatterns = [
     path('', include('users.urls')),
 
     path("api/user/", include("users.api.urls")),
+    path("api/profiles/", ProfileList.as_view(), name="profile-list"),
 
     # FAMILY
     path("family/", include("family.urls")),
     # path("api/family/", include("family.api.urls")),
-    
+
     # everything else go to IndexTemplateView aka index.html od dev index page
     # re_path(r"^.*$", IndexTemplateView.as_view(), name="entry-point")
 ]
