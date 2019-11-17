@@ -9,7 +9,7 @@ from users.models import Profile
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_profile(sender, instance, created, **kwargs):
-    print("Created: ", created)
+    # print("Created: ", created)
     if created:
         # Create profile for every user
         Profile.objects.create(user=instance)
