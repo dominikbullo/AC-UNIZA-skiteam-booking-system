@@ -9,6 +9,13 @@ from core.utils import FAMILY_RELATION_CHOICE
 # https://stackoverflow.com/questions/55006095/how-to-represent-a-family-relationship-in-django-using-manytomany-and-inlineform
 # https://riptutorial.com/Download/django-rest-framework.pdf
 
+class Person(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    class Meta:
+        abstract = True
+
+
 class Family(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
@@ -21,13 +28,13 @@ class Family(models.Model):
         ordering = ['name']
 
 
-# class FamilyMemberRelationship(models.Model):
-#     person = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='relationships')
-#     related = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='reverse_relationships')
-#     relation_type = models.CharField(max_length=3, choices=FAMILY_RELATION_CHOICE)
+class FamilyMemberRelationship(models.Model):
+    person = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='relationships')
+    related = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='reverse_relationships')
+    relation_type = models.CharField(max_length=3, choices=FAMILY_RELATION_CHOICE)
 
 
-class Parent(models.Model):
+class Parent(Person):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=30, blank=True)
 
@@ -35,7 +42,7 @@ class Parent(models.Model):
         return self.user.username
 
 
-class Child(models.Model):
+class Child(Person):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     parent = models.ForeignKey(Parent, on_delete=models.CASCADE, related_name='children')
 
