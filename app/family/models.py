@@ -21,6 +21,12 @@ class Family(models.Model):
         ordering = ['name']
 
 
+# class FamilyMemberRelationship(models.Model):
+#     person = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='relationships')
+#     related = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='reverse_relationships')
+#     relation_type = models.CharField(max_length=3, choices=FAMILY_RELATION_CHOICE)
+
+
 class Parent(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=30, blank=True)
@@ -32,3 +38,9 @@ class Parent(models.Model):
 class Child(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     parent = models.ForeignKey(Parent, on_delete=models.CASCADE, related_name='children')
+
+    def __str__(self):
+        return self.user.username
+
+    class Meta:
+        verbose_name_plural = "Children"
