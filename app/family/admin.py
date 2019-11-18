@@ -1,8 +1,10 @@
 from django.contrib import admin
-from family.models import Family, FamilyMember, Parent, Child, Coach
+from django.apps import apps
+from django.contrib.admin.sites import AlreadyRegistered
 
-admin.site.register(Family)
-admin.site.register(FamilyMember)
-admin.site.register(Parent)
-admin.site.register(Child)
-admin.site.register(Coach)
+app_models = apps.get_app_config('family').get_models()
+for model in app_models:
+    try:
+        admin.site.register(model)
+    except AlreadyRegistered:
+        pass

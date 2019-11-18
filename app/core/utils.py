@@ -16,3 +16,9 @@ USER_TYPE_CHOICES = (
     (3, 'Coach'),
     (4, 'Admin'),
 )
+FAMILY_RELATION_CHOICE = (
+    (1, 'Partner'),
+    (2, 'Parent'),
+    (3, 'Child'),
+    (4, 'Sibling'),
+)
