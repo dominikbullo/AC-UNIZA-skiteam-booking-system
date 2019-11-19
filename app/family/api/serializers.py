@@ -3,7 +3,8 @@ from family.models import Child, Parent, Family
 
 
 class ChildSerializer(serializers.ModelSerializer):
-    # parent_id = serializers.PrimaryKeyRelatedField(queryset=Parent.objects.all(), source='parent.user.id')
+    user = serializers.StringRelatedField()
+    family = serializers.StringRelatedField()
 
     class Meta:
         model = Child
@@ -16,8 +17,22 @@ class ChildSerializer(serializers.ModelSerializer):
 
 
 class ParentSerializer(serializers.ModelSerializer):
-    # children = ChildSerializer(many=True, read_only=True)
-    title = serializers.CharField()
+    from users.api.serializers import UserDisplaySerializer
+    # I dont need that for now, because, i wil be searching family. Because if parent have all child,
+    # then all parents must have these child and when I want to merge Mother and Father into one family, i just change
+    # one of them family id. with all child if they have some
+
+    # children = serializers.HyperlinkedRelatedField(many=True,
+    #                                                read_only=True,
+    #                                                view_name="child-detail")
+
+    user = serializers.StringRelatedField()
+
+    # More possible ways
+    # user = UserDisplaySerializer(read_only=True)
+    # user = serializers.HyperlinkedRelatedField(many=True,
+    #                                            read_only=True,
+    #                                            view_name="current-user")
 
     class Meta:
         model = Parent

@@ -56,7 +56,7 @@ class ParentDetailAPIView(APIView):
 
     def get(self, request, pk):
         article = self.get_object(pk)
-        serializer = ParentSerializer(article)
+        serializer = ParentSerializer(article, context={'request': request})
         return Response(serializer.data)
 
 # class ArticleDetailAPIView(APIView):
