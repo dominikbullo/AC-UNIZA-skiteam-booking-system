@@ -23,7 +23,7 @@ class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = User
-    list_display = ["email", "first_name", "last_name", "last_login", "get_type"]
+    list_display = ["email", "first_name", "last_name", "last_login", "get_type", "is_staff"]
     inlines = [ProfileInline]
 
     def get_type(self, instance):
@@ -33,6 +33,13 @@ class CustomUserAdmin(UserAdmin):
             return "Unidentified"
 
     get_type.short_description = 'User type'
+
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ("username", "email", "first_name", "last_name", "password1", "password2",),
+        }),
+    )
 
 
 admin.site.register(User, CustomUserAdmin)
