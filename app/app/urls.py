@@ -27,6 +27,8 @@ urlpatterns = [
     path('', include('users.urls')),
 
     path("api/", include("users.api.urls")),
+    path("api/family/", include("family.api.urls")),
+    # path("api/", include("events.api.urls")),
 
     # FAMILY
     path("family/", include("family.urls")),

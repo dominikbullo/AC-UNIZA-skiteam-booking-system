@@ -1,27 +1,40 @@
 from rest_framework import serializers
-from family.models import Child, Parent
+from family.models import Child, Parent, Family
+
 
 #
-# class ChildSerializer(serializers.HyperlinkedModelSerializer):
-#     parent_id = serializers.PrimaryKeyRelatedField(queryset=Parent.objects.all(), source='parent.user.id')
-#     title = serializers.CharField()
-#
-#     class Meta:
-#         model = Child
-#         fields = ('url', 'id', 'child_name')
-#
-#     def create(self, validated_data):
-#         subject = Child.objects.create(parent=validated_data['parent']['id'], child_name=validated_data['child_name'])
-#
-#         return subject
-#
-#
-# class ParentSerializer(serializers.HyperlinkedModelSerializer):
-#     children = ChildSerializer(many=True, read_only=True)
-#
-#     class Meta:
-#         model = Parent
-#
+class ChildSerializer(serializers.ModelSerializer):
+    parent_id = serializers.PrimaryKeyRelatedField(queryset=Parent.objects.all(), source='parent.user.id')
+
+    class Meta:
+        model = Child
+        fields = "__all__"
+
+    # def create(self, validated_data):
+    #     subject = Child.objects.create(parent=validated_data['parent']['id'], child_name=validated_data['child_name'])
+    #
+    #     return subject
+
+
+class ParentSerializer(serializers.ModelSerializer):
+    children = ChildSerializer(many=True, read_only=True)
+    title = serializers.CharField()
+
+    class Meta:
+        model = Parent
+        fields = "__all__"
+
+
+class FamilySerializer(serializers.ModelSerializer):
+    # children = ChildSerializer(many=True, read_only=True)
+    articles = serializers.HyperlinkedRelatedField(many=True,
+                                                   read_only=True,
+                                                   view_name="parent-list")
+
+    class Meta:
+        model = Family
+        fields = "__all__"
+
 #     fields = ('url', 'id', 'name', 'children')
 # class ArticleSerializer(serializers.Serializer):
 #     id = serializers.IntegerField(read_only=True)
