@@ -12,7 +12,7 @@ class FamilyListCreateAPIView(APIView):
 
     def get(self, request):
         articles = Family.objects.all()
-        serializer = FamilySerializer(articles, many=True)
+        serializer = FamilySerializer(articles, many=True, context={'request': request})
         return Response(serializer.data)
 
     # def post(self, request):
@@ -27,7 +27,17 @@ class ChildListCreateAPIView(APIView):
 
     def get(self, request):
         articles = Child.objects.all()
-        serializer = ChildSerializer(articles, many=True)
+        serializer = ChildSerializer(articles, many=True, context={'request': request})
+        return Response(serializer.data)
+
+
+class ChildDetailAPIView(APIView):
+    def get_object(self, pk):
+        return get_object_or_404(Child, pk=pk)
+
+    def get(self, request, pk):
+        article = self.get_object(pk)
+        serializer = ChildSerializer(article)
         return Response(serializer.data)
 
 
@@ -35,7 +45,18 @@ class ParentListCreateAPIView(APIView):
 
     def get(self, request):
         articles = Parent.objects.all()
-        serializer = ParentSerializer(articles, many=True)
+        serializer = ParentSerializer(articles, many=True, context={'request': request})
+        return Response(serializer.data)
+
+
+class ParentDetailAPIView(APIView):
+    def get_object(self, pk):
+        article = get_object_or_404(Parent, pk=pk)
+        return article
+
+    def get(self, request, pk):
+        article = self.get_object(pk)
+        serializer = ParentSerializer(article)
         return Response(serializer.data)
 
 # class ArticleDetailAPIView(APIView):

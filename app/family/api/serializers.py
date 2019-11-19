@@ -2,9 +2,8 @@ from rest_framework import serializers
 from family.models import Child, Parent, Family
 
 
-#
 class ChildSerializer(serializers.ModelSerializer):
-    parent_id = serializers.PrimaryKeyRelatedField(queryset=Parent.objects.all(), source='parent.user.id')
+    # parent_id = serializers.PrimaryKeyRelatedField(queryset=Parent.objects.all(), source='parent.user.id')
 
     class Meta:
         model = Child
@@ -17,7 +16,7 @@ class ChildSerializer(serializers.ModelSerializer):
 
 
 class ParentSerializer(serializers.ModelSerializer):
-    children = ChildSerializer(many=True, read_only=True)
+    # children = ChildSerializer(many=True, read_only=True)
     title = serializers.CharField()
 
     class Meta:
@@ -26,10 +25,14 @@ class ParentSerializer(serializers.ModelSerializer):
 
 
 class FamilySerializer(serializers.ModelSerializer):
-    # children = ChildSerializer(many=True, read_only=True)
-    articles = serializers.HyperlinkedRelatedField(many=True,
+    # parents = ParentSerializer(many=True, read_only=True)
+    parents = serializers.HyperlinkedRelatedField(many=True,
+                                                  read_only=True,
+                                                  view_name="parent-detail")
+
+    children = serializers.HyperlinkedRelatedField(many=True,
                                                    read_only=True,
-                                                   view_name="parent-list")
+                                                   view_name="child-detail")
 
     class Meta:
         model = Family

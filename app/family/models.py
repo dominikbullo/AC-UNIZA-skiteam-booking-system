@@ -24,13 +24,13 @@ class Family(models.Model):
 
 class Person(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    family = models.ForeignKey(Family, on_delete=models.CASCADE)
 
     class Meta:
         abstract = True
 
 
 class Parent(Person):
+    family = models.ForeignKey(Family, on_delete=models.CASCADE, related_name="parents")
     title = models.CharField(max_length=30, blank=True)
 
     def __str__(self):
@@ -38,7 +38,9 @@ class Parent(Person):
 
 
 class Child(Person):
-    parent = models.ForeignKey(Parent, on_delete=models.CASCADE, related_name='children')
+    family = models.ForeignKey(Family, on_delete=models.CASCADE, related_name="children")
+
+    # parent = models.ForeignKey(Parent, on_delete=models.CASCADE, related_name='children')
 
     def __str__(self):
         return self.user.username
