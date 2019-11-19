@@ -1,28 +1,28 @@
 from rest_framework import serializers
 from family.models import Child, Parent
 
-
-class ChildSerializer(serializers.HyperlinkedModelSerializer):
-    parent_id = serializers.PrimaryKeyRelatedField(queryset=Parent.objects.all(), source='parent.user.id')
-    title = serializers.CharField()
-
-    class Meta:
-        model = Child
-        fields = ('url', 'id', 'child_name')
-
-    def create(self, validated_data):
-        subject = Child.objects.create(parent=validated_data['parent']['id'], child_name=validated_data['child_name'])
-
-        return subject
-
-
-class ParentSerializer(serializers.HyperlinkedModelSerializer):
-    children = ChildSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Parent
-
-    fields = ('url', 'id', 'name', 'children')
+#
+# class ChildSerializer(serializers.HyperlinkedModelSerializer):
+#     parent_id = serializers.PrimaryKeyRelatedField(queryset=Parent.objects.all(), source='parent.user.id')
+#     title = serializers.CharField()
+#
+#     class Meta:
+#         model = Child
+#         fields = ('url', 'id', 'child_name')
+#
+#     def create(self, validated_data):
+#         subject = Child.objects.create(parent=validated_data['parent']['id'], child_name=validated_data['child_name'])
+#
+#         return subject
+#
+#
+# class ParentSerializer(serializers.HyperlinkedModelSerializer):
+#     children = ChildSerializer(many=True, read_only=True)
+#
+#     class Meta:
+#         model = Parent
+#
+#     fields = ('url', 'id', 'name', 'children')
 # class ArticleSerializer(serializers.Serializer):
 #     id = serializers.IntegerField(read_only=True)
 #     author = serializers.CharField()
