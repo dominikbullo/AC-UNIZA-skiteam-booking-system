@@ -14,24 +14,29 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 
-from users.api.views import ProfileList
+from rest_framework.routers import DefaultRouter
+
+from users.api.views import ProfileViewSet
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    # USERS & PROFILES
-    path('accounts/', include('users.urls')),
+    path("", include('allauth.urls')),
 
-    path('', include('users.urls')),
+    # Login via REST
+    path("api/rest-auth/", include("rest_auth.urls")),
+    path("api/profiles/", include("users.api.urls")),
 
-    path("api/", include("users.api.urls")),
+    # # Registration via REST
+    # path("api/rest-auth/signup/", include("rest_auth.registration.urls")),
+
+    path("api/user/", include("users.api.urls")),
     path("api/family/", include("family.api.urls")),
-    # path("api/", include("events.api.urls")),
 
     # FAMILY
-    path("family/", include("family.urls")),
+    # path("family/", include("family.urls")),
     # path("api/family/", include("family.api.urls")),
 
     # everything else go to IndexTemplateView aka index.html od dev index page
