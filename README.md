@@ -10,11 +10,16 @@ Web app for complete managing a sports club events, recording child statistics b
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 ### Prerequisites
 
-What things you need to install the software and how to install them
+In order to run this container you'll need [Docker](https://docs.docker.com/install/#desktop) and [Docker Compose](https://docs.docker.com/compose/install/) installed.
+#### Docker
+* [Windows](https://docs.docker.com/docker-for-windows/install/)
+* [Mac](https://docs.docker.com/docker-for-mac/install/)
+* [Linux](https://docs.docker.com/install/#server)
 
-```
-Give examples
-```
+#### Docker Compose
+**On desktop systems like Docker Desktop for Mac and Windows, Docker Compose is included as part of those desktop installs.**
+
+* [Manual](https://docs.docker.com/mac/started/)
 
 ### Installing
 
@@ -54,9 +59,13 @@ Explain what these tests test and why
 Give an example
 ```
 
-## Deployment
+## Start app
 
-Add additional notes about how to deploy this on a live system
+```
+docker-compose up
+```
+
+The API will then be available at http://localhost:8000
 
 ## Built With
 
