@@ -8,8 +8,7 @@ django = "*"
 djangorestframework = "*"
 django-rest-auth = "*"
 django-allauth = "*"
-django-registration = "*"
-django-crispy-forms = "*"
+django-widget-tweaks = "*"
 pillow = "*"
 
 [dev-packages]

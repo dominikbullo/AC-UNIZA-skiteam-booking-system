@@ -1,14 +1,48 @@
 {% extends 'auth_layout.html' %}
-{% load crispy_forms_tags %}
+{% load static %}
 
 {% block auth %}
-    <h1>Management System</h1>
-    <div class="login-form-container">
-        <form method="POST">
-            {% csrf_token %}
-            {{ form|crispy }}
-            <button type="submit" class="btn btn-sm btn-outline-primary">Register</button>
-        </form>
-        <p class="mt-2">Or <a href="{% url 'account_login' %}">Login</a></p>
+    <form method="post" novalidate xmlns="">
+        {% csrf_token %}
+        <span class="login100-form-title p-b-55">
+						Sign up
+					</span>
+        <fieldset class="form-group">
+            {% include 'form_layout.html' with form=form %}
+        </fieldset>
+
+        <div class="contact100-form-checkbox m-l-4">
+            <input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
+            {#            TODO allow GDPR and so on #}
+            {#            <label class="label-checkbox100" for="ckb1"> Remember me </label>#}
+        </div>
+        <div class="container-login100-form-btn p-t-25">
+            <button class="login100-form-btn">
+                Login
+            </button>
+        </div>
+        {#        <div class="text-center w-full p-t-42 p-b-22">#}
+        {#        						<span class="txt1">#}
+        {#        							Or login with#}
+        {#        						</span>#}
+        {#        </div>#}
+        {##}
+        {#        <a href="#" class="btn-face m-b-10">#}
+        {#            <i class="fa fa-facebook-official"></i>#}
+        {#            Facebook#}
+        {#        </a>#}
+        {##}
+        {#        <a href="#" class="btn-google m-b-10">#}
+        {#            <img src="{% static "images/icons/icon-google.png" %}" alt="GOOGLE">#}
+        {#            Google#}
+        {#        </a>#}
+    </form>
+
+    <div class="text-center w-full p-t-50">
+						<span class="txt1">
+							Already a member?
+						</span>
+
+        <a class="txt1 bo1 hov1" href="{% url 'account_login' %}"> Log in </a>
     </div>
 {% endblock %}
