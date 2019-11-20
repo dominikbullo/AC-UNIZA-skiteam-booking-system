@@ -59,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'app.middleware.LoginRequiredMiddleware',
 ]
 
 ROOT_URLCONF = 'app.urls'
@@ -123,7 +124,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-LOGIN_URL = "/accounts/login/"
+LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = LOGIN_URL
 
@@ -195,6 +196,10 @@ ACCOUNT_FORMS = {
     'signup': 'users.forms.CustomSignupForm',
     # 'login': 'users.forms.CustomLoginForm',
 }
+
+LOGIN_EXEMPT_URLS = (
+    r'^api/',  # allow any URL under /legal/*
+)
 try:
     from .local_settings import *
 except ImportError:
