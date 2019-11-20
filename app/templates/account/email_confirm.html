@@ -1,31 +1,47 @@
-{% extends "account/base.html" %}
-
+{% extends 'auth_layout.html' %}
+{% load static %}
 {% load i18n %}
 {% load account %}
 
-{% block head_title %}{% trans "Confirm E-mail Address" %}{% endblock %}
 
+{% block auth %}
 
-{% block content %}
-<h1>{% trans "Confirm E-mail Address" %}</h1>
+    <span class="login100-form-title p-b-20">{% trans "Confirm E-mail Address" %}</span>
+    {% if confirmation %}
 
-{% if confirmation %}
+        {% user_display confirmation.email_address.user as user_display %}
+        <div class="text-center w-full p-t-25">
+						<span class="txt1">
+							{% blocktrans with confirmation.email_address.email as email %}Please confirm that
+                                <a href="mailto:{{ email }}">{{ email }}</a> is an e-mail address for user
+                                {{ user_display }}
+                                .{% endblocktrans %}
+						</span>
 
-{% user_display confirmation.email_address.user as user_display %}
+        </div>
+        <div class="container-login100-form-btn p-t-25">
+            <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+                {% csrf_token %}
+                <button class="login100-form-btn" type="submit">{% trans 'Confirm' %}</button>
+            </form>
+        </div>
 
-<p>{% blocktrans with confirmation.email_address.email as email %}Please confirm that <a href="mailto:{{ email }}">{{ email }}</a> is an e-mail address for user {{ user_display }}.{% endblocktrans %}</p>
+    {% else %}
 
-<form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
-{% csrf_token %}
-    <button type="submit">{% trans 'Confirm' %}</button>
-</form>
+        {% url 'account_email' as email_url %}
 
-{% else %}
-
-{% url 'account_email' as email_url %}
-
-<p>{% blocktrans %}This e-mail confirmation link expired or is invalid. Please <a href="{{ email_url }}">issue a new e-mail confirmation request</a>.{% endblocktrans %}</p>
-
-{% endif %}
-
+        <div class="text-center w-full p-t-20">
+						<span class="fs-20" style="color: red">
+                            {% blocktrans %}This e-mail confirmation link expired or is
+                                invalid.                                {% endblocktrans %}
+                        </span>
+        </div>
+        <div class="text-center w-full p-t-20">
+						<span class="txt1">
+                            {% blocktrans %}Please
+                                <a href="{{ email_url }}">issue a new e-mail confirmation request by logging in</a>
+                                .{% endblocktrans %}
+                        </span>
+        </div>
+    {% endif %}
 {% endblock %}

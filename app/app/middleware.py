@@ -1,5 +1,4 @@
 from django.contrib.auth.views import redirect_to_login
-from django.http import HttpResponseRedirect
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.conf import settings
 from django.utils.deprecation import MiddlewareMixin

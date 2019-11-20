@@ -1,12 +1,23 @@
-{% extends "account/base.html" %}
+{% extends 'auth_layout.html' %}
+{% load static %}
 
-{% load i18n %}
+{% block auth %}
+    {% csrf_token %}
+    <span class="login100-form-title p-b-20">
+						Verify Your E-mail Address First
+					</span>
+    <div class="text-center w-full">
+						<span class="txt1">
+							We have sent an e-mail to you for verification. Follow the link provided to finalize the signup
+        process.
+						</span>
 
-{% block head_title %}{% trans "Verify Your E-mail Address" %}{% endblock %}
+    </div>
+    <div class="text-center w-full p-t-20">
+						<span class="txt1">
+							Please contact us if you do not receive it within a few minutes.
+						</span>
 
-{% block content %}
-    <h1>{% trans "Verify Your E-mail Address" %}</h1>
-
-    <p>{% blocktrans %}We have sent an e-mail to you for verification. Follow the link provided to finalize the signup process. Please contact us if you do not receive it within a few minutes.{% endblocktrans %}</p>
-
+    </div>
 {% endblock %}
+
