@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
 
-    # 'crispy_forms',
     'widget_tweaks',
 ]
 
@@ -146,9 +145,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 # Custom User Model
 AUTH_USER_MODEL = "users.User"
 
-# django-crispy-forms
-CRISPY_TEMPLATE_PACK = "bootstrap4"
-
 SITE_ID = 1
 
 AUTHENTICATION_BACKENDS = (
@@ -171,14 +167,8 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 
-# # Custom allauth settings for testing!
-# ACCOUNT_EMAIL_VERIFICATION = "none"
-# ACCOUNT_EMAIL_REQUIRED = (True)
-
-# Use email as the primary identifier
-# ACCOUNT_AUTHENTICATION_METHOD = 'email'
-# ACCOUNT_EMAIL_REQUIRED = True
-# ACCOUNT_UNIQUE_EMAIL = True
+# Logout immediately without form
+ACCOUNT_LOGOUT_ON_GET = True
 
 # Make email verification mandatory to avoid junk email accounts
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
@@ -186,10 +176,6 @@ ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = False
 
 # Longer mail expiration
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 5
-
-# # Eliminate need to provide username, as it's a very old practice+
-# ACCOUNT_USERNAME_REQUIRED = False
-# ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 
 # Django-REST-Framework
 REST_FRAMEWORK = {
