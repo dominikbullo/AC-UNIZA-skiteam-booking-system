@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from django.urls import include
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
@@ -124,7 +126,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-LOGIN_URL = "/login/"
+LOGIN_URL = "/account/login/"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = LOGIN_URL
 
@@ -198,8 +200,10 @@ ACCOUNT_FORMS = {
 }
 
 LOGIN_EXEMPT_URLS = (
-    r'^api/',  # allow any URL under /legal/*
+    r'^api/',  # allow any URL under /api/*
+    r"account/",
 )
+
 try:
     from .local_settings import *
 except ImportError:

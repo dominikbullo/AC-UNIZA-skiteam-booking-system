@@ -23,7 +23,7 @@ from users.api.views import ProfileViewSet
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path("", include('allauth.urls')),
+    path("account/", include('allauth.urls')),
 
     # Login via REST
     path("api/rest-auth/", include("rest_auth.urls")),
