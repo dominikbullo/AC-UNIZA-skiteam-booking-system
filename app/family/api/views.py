@@ -1,11 +1,23 @@
 from rest_framework import status
+from rest_framework import generics, mixins, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.generics import get_object_or_404
+from rest_framework.filters import SearchFilter
 
 from family.models import Family, Parent, Child
 from family.api.serializers import FamilySerializer, ParentSerializer, ChildSerializer
+
+
+class FamilyViewSet(mixins.UpdateModelMixin,
+                    mixins.ListModelMixin,
+                    mixins.RetrieveModelMixin,
+                    viewsets.GenericViewSet):
+    queryset = Family.objects.all()
+    serializer_class = FamilySerializer
+    filter_backends = [SearchFilter]
+    search_fields = ["id"]
 
 
 class FamilyListCreateAPIView(APIView):

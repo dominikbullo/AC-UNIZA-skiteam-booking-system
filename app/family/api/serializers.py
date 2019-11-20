@@ -26,7 +26,7 @@ class ParentSerializer(serializers.ModelSerializer):
     #                                                read_only=True,
     #                                                view_name="child-detail")
 
-    user = serializers.StringRelatedField()
+    user = serializers.StringRelatedField(read_only=True)
 
     # More possible ways
     # user = UserDisplaySerializer(read_only=True)

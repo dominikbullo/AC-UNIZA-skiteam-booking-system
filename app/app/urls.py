@@ -27,18 +27,13 @@ urlpatterns = [
 
     # Login via REST
     path("api/rest-auth/", include("rest_auth.urls")),
-    path("api/profiles/", include("users.api.urls")),
 
     # # Registration via REST
     # path("api/rest-auth/signup/", include("rest_auth.registration.urls")),
 
-    path("api/user/", include("users.api.urls")),
-    path("api/family/", include("family.api.urls")),
-
-    # FAMILY
-    # path("family/", include("family.urls")),
-    # path("api/family/", include("family.api.urls")),
-
+    path("api/", include("users.api.urls")),
+    path("api/", include("family.api.urls")),
+    
     # everything else go to IndexTemplateView aka index.html od dev index page
     # re_path(r"^.*$", IndexTemplateView.as_view(), name="entry-point")
 ]
