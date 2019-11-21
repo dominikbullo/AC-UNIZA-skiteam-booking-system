@@ -1,6 +1,8 @@
 {% extends 'auth_layout.html' %}
 {% load i18n %}
 
+{% block head_title %}{% trans "Login" %}{% endblock %}
+
 {% block auth %}
     <form method="post" novalidate xmlns="">
         {% csrf_token %}

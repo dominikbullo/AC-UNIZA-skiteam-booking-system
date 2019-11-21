@@ -2,11 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% if title %}
-        <title>{{ title }} | Managements system </title>
-    {% else %}
-        <title>Managements system</title>
-    {% endif %}
+    <title>{% block head_title %}{% endblock %}</title>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">

@@ -1,6 +1,8 @@
 {% extends 'auth_layout.html' %}
 {% load i18n %}
 
+{% block head_title %}{% trans "Verify Your E-mail Address" %}{% endblock %}
+
 {% block auth %}
 
     <span class="login100-form-title" style="padding-bottom:55px">
@@ -9,13 +11,13 @@
 
     <div class="text-center w-full">
         <span class="txt1">
-            We have sent an e-mail to you for verification. Follow the link provided to finalize the signup process.
+           {% trans "We have sent an e-mail to you for verification. Follow the link provided to finalize the signup process." %}
         </span>
     </div>
 
     <div class="text-center w-full" style="padding-top:20px">
         <span class="txt1">
-            Please contact us if you do not receive it within a few minutes.
+            {% trans " Please contact us if you do not receive it within a few minutes." %}
         </span>
     </div>
 
