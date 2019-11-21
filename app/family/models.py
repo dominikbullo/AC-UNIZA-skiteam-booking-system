@@ -19,7 +19,7 @@ class Family(models.Model):
 
     class Meta:
         verbose_name_plural = "Families"
-        ordering = ['name']
+        ordering = ['id']
 
 
 class Person(models.Model):
@@ -27,6 +27,7 @@ class Person(models.Model):
 
     class Meta:
         abstract = True
+        ordering = ['user__date_joined']
 
 
 class Parent(Person):

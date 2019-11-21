@@ -22,5 +22,8 @@ class Profile(models.Model):
     # USER_TYPE_CHOICES is from from core.utils import USER_TYPE_CHOICES because i using it at m,any locations
     user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES, null=True, blank=True)
 
+    class Meta:
+        ordering = ['user__date_joined']
+
     def __str__(self):  # __unicode__ for Python 2
         return self.user.email
