@@ -2,15 +2,12 @@
 {% load i18n %}
 
 {% block head_title %}{% trans "Signup" %}{% endblock %}
+{% block form_title %}{% trans "Sign up" %}{% endblock %}
 
 {% block auth %}
+
     <form method="post" novalidate xmlns="">
         {% csrf_token %}
-
-        <span class="login100-form-title" style="padding-bottom:55px">
-            {% trans "Sign Up" %}
-        </span>
-
         <fieldset class="form-group">
             {% include 'form_layout.html' with form=form %}
         </fieldset>
@@ -20,6 +17,7 @@
         {#            TODO allow GDPR and so on #}
         {#            <label class="label-checkbox100" for="ckb1"> Remember me </label>#}
         {#        </div>#}
+
         <div class="container-login100-form-btn" style="padding-top:25px">
             <button class="login100-form-btn">
                 {% trans "Sign Up" %}

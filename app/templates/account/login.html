@@ -2,15 +2,11 @@
 {% load i18n %}
 
 {% block head_title %}{% trans "Login" %}{% endblock %}
+{% block form_title %}{% trans "Login" %}{% endblock %}
 
 {% block auth %}
     <form method="post" novalidate xmlns="">
         {% csrf_token %}
-
-        <span class="login100-form-title" style="padding-bottom:55px">
-            {% trans "Login" %}
-        </span>
-
         <fieldset class="form-group">
             {% include 'form_layout.html' with form=form %}
         </fieldset>

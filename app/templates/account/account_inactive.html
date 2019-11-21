@@ -2,14 +2,12 @@
 {% load i18n %}
 
 {% block head_title %}{% trans "Account Inactive" %}{% endblock %}
+{% block form_title %}{% trans "Account Inactive" %}{% endblock %}
 
 {% block auth %}
-    <span class="login100-form-title" style="padding-bottom:55px">
-        {% trans "Account Inactive" %}
-    </span>
 
     <div class="text-center w-full">
-        <span class="txt1">
+        <span class="txt_big">
             {% trans "This account is inactive." %}
         </span>
     </div>

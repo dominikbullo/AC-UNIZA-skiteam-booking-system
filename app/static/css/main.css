@@ -196,6 +196,14 @@ iframe {
     line-height: 1.4;
 }
 
+.txt_big {
+    font-family: Raleway-Regular;
+    font-weight: bold;
+    font-size: 25px;
+    color: #000000;
+    line-height: 1.4;
+}
+
 .bo1 {
     border-bottom: 1px solid #999999;
 }
