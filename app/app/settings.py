@@ -201,6 +201,8 @@ ACCOUNT_FORMS = {
 LOGIN_EXEMPT_URLS = (
     r'^api/',  # allow any URL under /api/*
     r"account/",
+    r"admin/",
+
 )
 
 try:
