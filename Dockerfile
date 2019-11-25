@@ -30,8 +30,8 @@ RUN mkdir /app
 WORKDIR /app
 COPY ./app /app
 
-# Create new user name user for security reasons
-# -D runnig apps only
-RUN adduser -D user
-# Switch user to user
-USER user
+## Create new user name user for security reasons
+## -D runnig apps only
+#RUN adduser -D user
+## Switch user to user
+#USER user
