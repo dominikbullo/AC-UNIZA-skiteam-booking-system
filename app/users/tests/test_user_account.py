@@ -59,3 +59,11 @@ class ModelsTest(TestCase):
 
         self.assertTrue(user.is_superuser)
         self.assertTrue(user.is_staff)
+
+# TODO User account tests
+# Registration
+# Reg without some parameters
+# Reg via API -> shoud be not possible
+# Reg via browser
+# what if user dont have username
+# TODO user must have username when admin is creating him manually

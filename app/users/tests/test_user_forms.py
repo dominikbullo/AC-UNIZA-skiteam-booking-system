@@ -23,3 +23,8 @@
 #         }
 #         response = self.client.post("/signup/", **payload)
 #         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+# TODO Forms test
+# validation of form
+# right messages
+# anti spam
