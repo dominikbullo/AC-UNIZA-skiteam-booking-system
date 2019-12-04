@@ -10,9 +10,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Build the Docker image
+    - name: Build the Docker imagel defined by Dockerfile
       run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
 
-    - name: Compose with Docker && test && flake8
-      run: |
-        docker-compose run web sh -c "python manage.py test && flake8 --exit-zero  --statistics"
+    - name: Build the services in the docker-compose.yml file.
+      run: docker-compose build
+
+    - name: Flake8
+      run: docker-compose run web sh -c "flake8 --exit-zero  --statistics"
+
+    - name: Test
+      run: docker-compose run web sh -c "python manage.py tests"
