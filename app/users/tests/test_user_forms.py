@@ -4,24 +4,24 @@
 #
 # class AccountHandling(TestCase):
 #     def test_signup_form(self):
-#         payload = {
+#         credentials = {
 #             "email": "test@test.sk",
 #             "password1": "testpass",
 #             "password2": "testpass",
 #             "first_name": "First",
 #             "last_name": "LAst"
 #         }
-#         response = self.client.post("/signup/", payload)
+#         response = self.client.post("/signup/", credentials)
 #         self.assertEqual(response.status_code, status.HTTP_200_OK)
 #
 #     def test_signup_form_without_email(self):
-#         payload = {
+#         credentials = {
 #             "password1": "testpass",
 #             "password2": "testpass",
 #             "first_name": "First",
 #             "last_name": "LAst"
 #         }
-#         response = self.client.post("/signup/", **payload)
+#         response = self.client.post("/signup/", **credentials)
 #         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 # TODO Forms test

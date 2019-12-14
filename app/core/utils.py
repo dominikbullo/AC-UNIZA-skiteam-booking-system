@@ -1,5 +1,6 @@
 import random
 import string
+from django.contrib.auth import get_user_model
 
 ALPHANUMERIC_CHARS = string.ascii_lowercase + string.digits
 STRING_LENGTH = 6
@@ -22,3 +23,7 @@ FAMILY_RELATION_CHOICE = (
     (3, 'Child'),
     (4, 'Sibling'),
 )
+
+
+def create_user(**params):
+    return get_user_model().objects.create_user(**params)

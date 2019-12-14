@@ -1,27 +1,24 @@
 import json
 
-from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
 
-
-def create_user(**params):
-    return get_user_model().objects.create_user(**params)
+from core.utils import create_user
 
 
 class ProfileViewSetTestCase(APITestCase):
     list_url = reverse("profile-list")
 
     def setUp(self):
-        """Test creating user with valid payload is successful"""
-        self.payload = {
+        """Test creating user with valid credentials is successful"""
+        self.credentials = {
             "username": "testuser",
             "email": "test@test.sk",
             "password": "testpass"
         }
-        self.user = create_user(**self.payload)
+        self.user = create_user(**self.credentials)
         self.token = Token.objects.get(user=self.user)
         self.api_authentication()
 
@@ -40,12 +37,12 @@ class ProfileViewSetTestCase(APITestCase):
     def test_profile_detail_retrieve(self):
         response = self.client.get(reverse("profile-detail", kwargs={"pk": 1}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["user"], self.payload["email"])
+        self.assertEqual(response.data["user"], self.credentials["email"])
 
     def test_profile_update_by_owner(self):
         data = {
             "id": 1,
-            "user": self.payload["email"],
+            "user": self.credentials["email"],
             "location": "Anchiano",
             "phone_number": "0902111111",
             "avatar": None,
@@ -91,34 +88,34 @@ class ProfileViewSetTestCase(APITestCase):
 #         self.client = APIClient()
 #
 #     def test_create_valid_user_success(self):
-#         """Test creating user with valid payload is successful"""
-#         payload = {
+#         """Test creating user with valid credentials is successful"""
+#         credentials = {
 #             "username": "testuser",
 #             "email": "test@test.sk",
 #             "password": "testpass"
 #         }
-#         create_user(**payload)
+#         create_user(**credentials)
 #
 #     # def test_user_exists(self):
 #     #     """Test creatinga  user that already exists fails"""
-#     #     payload = {"email": "test@test.sk", "password": "testpass"}
-#     #     create_user(**payload)
+#     #     credentials = {"email": "test@test.sk", "password": "testpass"}
+#     #     create_user(**credentials)
 #
 #     def test_password_too_short(self):
 #         """Test that the password must be more than 5 characters"""
-#         payload = {"email": "test@test.sk", "password": "pw"}
-#         # res = self.client.post(CREATE_USER_URL, payload)
+#         credentials = {"email": "test@test.sk", "password": "pw"}
+#         # res = self.client.post(CREATE_USER_URL, credentials)
 #
 #         # self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 #         user_exists = get_user_model().objects.filter(
-#             email=payload["email"]
+#             email=credentials["email"]
 #         ).exists()
 #         self.assertFalse(user_exists)
 #
 #     def test_create_token_no_user(self):
 #         """Test that token is not created if user doesn"t exist"""
-#         payload = {"email": "test@test.sk", "password": "testpass"}
-#         res = self.client.post(TOKEN_URL, payload)
+#         credentials = {"email": "test@test.sk", "password": "testpass"}
+#         res = self.client.post(TOKEN_URL, credentials)
 #
 #         self.assertNotIn("token", res.data)
 #         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
@@ -166,13 +163,13 @@ class ProfileViewSetTestCase(APITestCase):
 #
 #     def test_update_user_info(self):
 #         """Test updating the user profile for authenticated user"""
-#         payload = {"name": "new name", "password": "newpassword123"}
+#         credentials = {"name": "new name", "password": "newpassword123"}
 #
-#         res = self.client.patch(ME_URL, payload)
+#         res = self.client.patch(ME_URL, credentials)
 #
 #         self.user.refresh_from_db()
-#         self.assertEqual(self.user.name, payload["name"])
-#         self.assertTrue(self.user.check_password(payload["password"]))
+#         self.assertEqual(self.user.name, credentials["name"])
+#         self.assertTrue(self.user.check_password(credentials["password"]))
 #         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
 
