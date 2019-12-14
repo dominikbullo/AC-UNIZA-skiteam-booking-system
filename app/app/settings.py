@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 
     'widget_tweaks',
 ]
@@ -202,8 +203,19 @@ LOGIN_EXEMPT_URLS = (
     r'^api/',  # allow any URL under /api/*
     r"account/",
     r"admin/",
-
 )
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
 
 try:
     from .local_settings import *

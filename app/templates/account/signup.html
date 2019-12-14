@@ -1,5 +1,7 @@
 {% extends 'auth_layout.html' %}
 {% load i18n %}
+{% load static %}
+{% load socialaccount %}
 
 {% block head_title %}{% trans "Signup" %}{% endblock %}
 {% block form_title %}{% trans "Sign up" %}{% endblock %}
@@ -23,21 +25,21 @@
                 {% trans "Sign Up" %}
             </button>
         </div>
-        {#        <div class="text-center w-full p-t-42 p-b-22">#}
-        {#        						<span class="txt1">#}
-        {#        							Or login with#}
-        {#        						</span>#}
-        {#        </div>#}
+        <div class="text-center w-full " style="padding:25px 0 15px 0">
+                						<span class="txt1">
+                							Or login with
+                						</span>
+        </div>
         {##}
         {#        <a href="#" class="btn-face m-b-10">#}
         {#            <i class="fa fa-facebook-official"></i>#}
         {#            Facebook#}
         {#        </a>#}
         {##}
-        {#        <a href="#" class="btn-google m-b-10">#}
-        {#            <img src="{% static "images/icons/icon-google.png" %}" alt="GOOGLE">#}
-        {#            Google#}
-        {#        </a>#}
+        <a href="{% provider_login_url 'google' %}" class="btn-google">
+            <img src="{% static "images/icons/icon-google.png" %}" alt="GOOGLE">
+            Google
+        </a>
     </form>
 
     <div class="text-center w-full" style="padding-top:20px">
