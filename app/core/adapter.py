@@ -1,5 +1,10 @@
+import warnings
+
 from allauth.account.models import EmailAddress
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
+from django.shortcuts import resolve_url
+
+from app import settings
 
 
 class MySocialAccountAdapter(DefaultSocialAccountAdapter):

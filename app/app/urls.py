@@ -19,6 +19,7 @@ from django.urls import path, include, re_path
 from core.views import IndexTemplateView
 
 urlpatterns = [
+    path('', IndexTemplateView.as_view(), name="entry-point"),
     path('admin/', admin.site.urls),
 
     path("account/", include('allauth.urls')),
@@ -33,7 +34,7 @@ urlpatterns = [
     path("api/", include("family.api.urls")),
 
     # everything else go to IndexTemplateView aka index.html od dev index page
-    re_path(r"^.*$", IndexTemplateView.as_view(), name="entry-point")
+    # re_path(r"^.*$", IndexTemplateView.as_view(), name="entry-point")
 ]
 
 from django.conf.urls.static import static
