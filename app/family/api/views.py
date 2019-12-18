@@ -20,6 +20,27 @@ class FamilyViewSet(mixins.UpdateModelMixin,
     search_fields = ["id"]
 
 
+class ParentViewSet(mixins.UpdateModelMixin,
+                    mixins.ListModelMixin,
+                    mixins.RetrieveModelMixin,
+                    viewsets.GenericViewSet):
+    queryset = Parent.objects.all()
+    serializer_class = ParentSerializer
+
+    # filter_backends = [SearchFilter]
+    # search_fields = ["user"]
+
+
+class ChildViewSet(mixins.UpdateModelMixin,
+                   mixins.ListModelMixin,
+                   mixins.RetrieveModelMixin,
+                   viewsets.GenericViewSet):
+    queryset = Child.objects.all()
+    serializer_class = ChildSerializer
+    # filter_backends = [SearchFilter]
+    # search_fields = ["user"]
+
+
 class FamilyListCreateAPIView(APIView):
 
     def get(self, request):
