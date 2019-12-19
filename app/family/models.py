@@ -41,6 +41,11 @@ class Parent(Person):
 class Child(Person):
     family = models.ForeignKey(Family, on_delete=models.CASCADE, related_name="children")
 
+    # i need to add user when creating child, and then, create child, add to family of user which creating it, and
+    # add this user as parent of this child
+    # whaever goes here -> it appiers at reguest
+    # test = models.CharField(max_length=30, blank=True)
+
     # parent = models.ForeignKey(Parent, on_delete=models.CASCADE, related_name='children')
 
     def __str__(self):

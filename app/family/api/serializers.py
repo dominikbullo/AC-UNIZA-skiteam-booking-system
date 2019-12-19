@@ -3,8 +3,18 @@ from family.models import Child, Parent, Family
 
 
 class ChildSerializer(serializers.ModelSerializer):
-    user = serializers.StringRelatedField()
-    family = serializers.StringRelatedField()
+    # user = serializers.StringRelatedField(read_only=True)
+    user = serializers.HyperlinkedRelatedField(read_only=True,
+                                               view_name="profile-detail")
+    family = serializers.HyperlinkedRelatedField(read_only=True,
+                                                 view_name="family-detail")
+
+    # family = serializers.StringRelatedField()
+
+    def create(self, validated_data):
+        print("Creating new child with name", validated_data["name"])
+        print(validated_data)
+        return Child.objects.create(**validated_data)
 
     class Meta:
         model = Child
@@ -17,22 +27,22 @@ class ChildSerializer(serializers.ModelSerializer):
 
 
 class ParentSerializer(serializers.ModelSerializer):
-    from users.api.serializers import UserDisplaySerializer
     # I dont need that for now, because, i wil be searching family. Because if parent have all child,
     # then all parents must have these child and when I want to merge Mother and Father into one family, i just change
     # one of them family id. with all child if they have some
-
     # children = serializers.HyperlinkedRelatedField(many=True,
     #                                                read_only=True,
     #                                                view_name="child-detail")
 
-    user = serializers.StringRelatedField(read_only=True)
+    # user = serializers.StringRelatedField(read_only=True)
+    user = serializers.HyperlinkedRelatedField(read_only=True, view_name="profile-detail")
+    family = serializers.StringRelatedField(read_only=True)
+
+    # def validate(self, data):
+    #     raise serializers.ValidationError('Not a multiple of ten')
 
     # More possible ways
     # user = UserDisplaySerializer(read_only=True)
-    # user = serializers.HyperlinkedRelatedField(many=True,
-    #                                            read_only=True,
-    #                                            view_name="current-user")
 
     class Meta:
         model = Parent
@@ -49,22 +59,10 @@ class FamilySerializer(serializers.ModelSerializer):
                                                    read_only=True,
                                                    view_name="child-detail")
 
-    def create(self, validated_data):
-        print("Creating new family with name", validated_data["name"])
-        print(validated_data)
-        return Family.objects.create(**validated_data)
-
-    def update(self, instance, validated_data):
-        pass
-
-    def validate_family_name(self, value):
-        pass
-
     class Meta:
         model = Family
         fields = "__all__"
 
-#     fields = ('url', 'id', 'name', 'children')
 # class ArticleSerializer(serializers.Serializer):
 #     id = serializers.IntegerField(read_only=True)
 #     author = serializers.CharField()
