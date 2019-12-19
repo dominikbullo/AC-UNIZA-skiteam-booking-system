@@ -49,6 +49,17 @@ class FamilySerializer(serializers.ModelSerializer):
                                                    read_only=True,
                                                    view_name="child-detail")
 
+    def create(self, validated_data):
+        print("Creating new family with name", validated_data["name"])
+        print(validated_data)
+        return Family.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        pass
+
+    def validate_family_name(self, value):
+        pass
+
     class Meta:
         model = Family
         fields = "__all__"
