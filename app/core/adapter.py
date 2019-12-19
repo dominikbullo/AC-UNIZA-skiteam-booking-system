@@ -45,6 +45,9 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
         try:
             existing_email = EmailAddress.objects.get(email__iexact=email.email, verified=True)
         except EmailAddress.DoesNotExist:
+            # easy fast fix
+            # TODO issue https://github.com/dominikbullo/sport_club_management_system/issues/7
+            # raise ImmediateHttpResponse(redirect('/accounts/login'))
             return
 
         # if it does, bounce back to the login page
