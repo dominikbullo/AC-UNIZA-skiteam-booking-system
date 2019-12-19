@@ -25,5 +25,5 @@ class Profile(models.Model):
     class Meta:
         ordering = ['user__date_joined']
 
-    def __str__(self):  # __unicode__ for Python 2
+    def __str__(self):
         return self.user.email
