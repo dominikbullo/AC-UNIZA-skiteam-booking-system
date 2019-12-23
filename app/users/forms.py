@@ -3,16 +3,28 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 from allauth.account.forms import LoginForm, SignupForm
 
+from app import settings
 from users.models import User
 
 
-class CustomUserCreationForm(UserCreationForm):
+class FullNameRequiredMixin(object):
+    def __init__(self, *args, **kwargs):
+        super(FullNameRequiredMixin, self).__init__(*args, **kwargs)
+        # make user first and last name field required
+        # https: // stackoverflow.com / questions / 41967640 / how - to - make - email - field - required - in -the - django - user - admin / 41969315
+        # TODO allow after testing
+        if not settings.DEBUG:
+            self.fields['first_name'].required = True
+            self.fields['last_name'].required = True
+
+
+class CustomUserCreationForm(FullNameRequiredMixin, UserCreationForm):
     class Meta:
         model = User
         fields = ('username', "email", 'first_name', 'last_name')
 
 
-class CustomUserChangeForm(UserChangeForm):
+class CustomUserChangeForm(FullNameRequiredMixin, UserChangeForm):
     class Meta:
         model = User
         fields = ('username', 'email')
