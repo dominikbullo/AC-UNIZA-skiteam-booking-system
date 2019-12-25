@@ -12,7 +12,6 @@ urlpatterns = [
     path("", include(router.urls)),
 
     path("user/avatar/", AvatarUpdateView.as_view(), name="avatar-update"),
-    # TODO not safe for now -> need testing
     path("user/full-info/", CurrentUserAPIView.as_view(), name="current-user"),
     # I don't need to create token, because i already have it when creating user
     # path('create/', CreateUserView.as_view(), name='create'),
