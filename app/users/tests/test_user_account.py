@@ -24,12 +24,12 @@ class LogInTest(TestCase):
     def test_changing_username(self):
         self.assertEqual(self.user.username, self.credentials["username"])
 
-    def test_generating_original_custom_username(self):
-        username1 = update_username_from_email_for_testing(self.credentials["email"])
-        user1 = create_user(**self.credentials)
-
-        self.assertNotEqual(user1.username, self.credentials["username"])
-        self.assertEqual(user1.username, username1)
+    # def test_generating_original_custom_username(self):
+    #     username1 = update_username_from_email_for_testing(self.credentials["email"])
+    #     user1 = create_user(**self.credentials)
+    #
+    #     self.assertNotEqual(user1.username, self.credentials["username"])
+    #     self.assertEqual(user1.username, username1)
 
     def test_login_via_username(self):
         logged_in = self.client.login(username=self.credentials['username'], password=self.credentials['password'])
