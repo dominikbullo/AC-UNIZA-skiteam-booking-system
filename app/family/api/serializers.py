@@ -1,24 +1,59 @@
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from family.models import Child, Parent, Family
+
+from core.utils import create_user
+
+
+class UserSerializer(serializers.ModelSerializer):
+    """Serializer for the users object"""
+    first_name = serializers.CharField(required=True, trim_whitespace=True)
+    last_name = serializers.CharField(required=True, trim_whitespace=True)
+
+    class Meta:
+        model = get_user_model()
+        fields = ("email", "username", "first_name", "last_name", "password")
+        extra_kwargs = {
+            'password': {'write_only': True, 'min_length': 5},
+        }
+
+    def validate(self, attrs):
+        # Check to see if any users already exist with this email as a username.
+        if attrs["email"] != "":
+            if get_user_model().objects.get(email=attrs["email"]):
+                raise serializers.ValidationError({
+                    'email': 'Another user has already been registered with this email.'
+                })
+
+    def create(self, validated_data):
+        """Create a new user with encrypted password and return it"""
+        print(validated_data)
+        return get_user_model().objects.create_user(**validated_data)
 
 
 class ChildSerializer(serializers.ModelSerializer):
     # user = serializers.StringRelatedField(read_only=True)
-    user = serializers.HyperlinkedRelatedField(read_only=True,
-                                               view_name="profile-detail")
+    # user = UserSerializer()
+    user = UserSerializer(required=True)
+    # user = serializers.HyperlinkedRelatedField(read_only=True,
+    #                                            view_name="profile-detail")
     family = serializers.HyperlinkedRelatedField(read_only=True,
                                                  view_name="family-detail")
 
     # family = serializers.StringRelatedField()
 
     def create(self, validated_data):
-        print("Creating new child with name", validated_data["name"])
+        # print("Creating new child with name", validated_data["name"])
         print(validated_data)
-        return Child.objects.create(**validated_data)
+        # TODO Add family as parent
+        # TODO doesnt have mail -> disable verification
+        user = get_user_model().objects.create_user(**validated_data["user"])
+        return Child.objects.create(user=user, family_id=1)
 
     class Meta:
         model = Child
         fields = "__all__"
+        extra_kwargs = {'password': {'write_only': True, 'min_length': 5}}
 
     # def create(self, validated_data):
     #     subject = Child.objects.create(parent=validated_data['parent']['id'], child_name=validated_data['child_name'])
@@ -36,13 +71,15 @@ class ParentSerializer(serializers.ModelSerializer):
 
     # user = serializers.StringRelatedField(read_only=True)
     user = serializers.HyperlinkedRelatedField(read_only=True, view_name="profile-detail")
-    family = serializers.StringRelatedField(read_only=True)
+    family = serializers.StringRelatedField()
 
     # def validate(self, data):
     #     raise serializers.ValidationError('Not a multiple of ten')
 
     # More possible ways
     # user = UserDisplaySerializer(read_only=True)
+    # def create(self, validated_data):
+    #     create_user()
 
     class Meta:
         model = Parent

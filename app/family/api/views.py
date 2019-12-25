@@ -1,5 +1,7 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, generics, status
 from rest_framework.filters import SearchFilter
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from family.models import Family, Parent, Child
 from family.api.serializers import FamilySerializer, ParentSerializer, ChildSerializer
@@ -7,7 +9,7 @@ from family.api.permissions import IsOwnerOrReadOnly, IsOwnFamilyOrReadOnly
 
 
 # https://github.com/LondonAppDeveloper/recipe-app-api/blob/master/app/recipe/views.py
-class FamilyViewSet(viewsets.ModelViewSet):
+class FamiliesViewSet(viewsets.ModelViewSet):
     # TODO permissions
     queryset = Family.objects.all()
     serializer_class = FamilySerializer
@@ -16,7 +18,7 @@ class FamilyViewSet(viewsets.ModelViewSet):
     search_fields = ["name"]
 
 
-class ParentViewSet(viewsets.ModelViewSet):
+class ParentsViewSet(viewsets.ModelViewSet):
     # TODO permissions
     queryset = Parent.objects.all()
     serializer_class = ParentSerializer
@@ -24,7 +26,7 @@ class ParentViewSet(viewsets.ModelViewSet):
     search_fields = ["user"]
 
 
-class ChildViewSet(viewsets.ModelViewSet):
+class ChildrenViewSet(viewsets.ModelViewSet):
     # TODO permissions
     queryset = Child.objects.all()
     serializer_class = ChildSerializer

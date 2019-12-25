@@ -162,10 +162,10 @@ AUTHENTICATION_BACKENDS = (
 # ONLY for development/testing use console
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+# In signup for parent
+ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
-
-ACCOUNT_USERNAME_REQUIRED = False
 
 ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
@@ -174,7 +174,7 @@ ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_LOGOUT_ON_GET = True
 
 # Make email verification mandatory to avoid junk email accounts
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = False
 
 # Longer mail expiration

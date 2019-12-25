@@ -40,6 +40,7 @@ class Parent(Person):
 
 class Child(Person):
     family = models.ForeignKey(Family, on_delete=models.CASCADE, related_name="children")
+    name = models.CharField(max_length=100, blank=True)
 
     # i need to add user when creating child, and then, create child, add to family of user which creating it, and
     # add this user as parent of this child

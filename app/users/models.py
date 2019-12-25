@@ -9,14 +9,20 @@ class User(AbstractUser):
     pass
 
     def __str__(self):
-        return self.email
+        return self.name_or_username
+
+    @property
+    def name_or_username(self):
+        if self.email != "":
+            return self.email
+        return self.username
 
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    phone_number = models.CharField(max_length=30)
     location = models.CharField(max_length=30, blank=True)
     birth_date = models.DateField(null=True, blank=True)
-    phone_number = models.CharField(max_length=30, blank=True)
     avatar = models.ImageField(null=True, blank=True)
 
     # USER_TYPE_CHOICES is from from core.utils import USER_TYPE_CHOICES because i using it at m,any locations
@@ -26,4 +32,8 @@ class Profile(models.Model):
         ordering = ['user__date_joined']
 
     def __str__(self):
-        return self.user.email
+        return self.user.name_or_username
+
+    @property
+    def full_name(self):
+        return "%s %s" % (self.user.first_name, self.user.last_name)

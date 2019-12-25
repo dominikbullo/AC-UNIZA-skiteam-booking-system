@@ -12,10 +12,6 @@ class FullNameRequiredMixin(object):
         super(FullNameRequiredMixin, self).__init__(*args, **kwargs)
         # make user first and last name field required
         # https: // stackoverflow.com / questions / 41967640 / how - to - make - email - field - required - in -the - django - user - admin / 41969315
-        # TODO allow after testing
-        if not settings.DEBUG:
-            self.fields['first_name'].required = True
-            self.fields['last_name'].required = True
 
 
 class CustomUserCreationForm(FullNameRequiredMixin, UserCreationForm):
