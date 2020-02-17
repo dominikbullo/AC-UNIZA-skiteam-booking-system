@@ -175,7 +175,7 @@ ACCOUNT_LOGOUT_ON_GET = True
 
 # Make email verification mandatory to avoid junk email accounts
 ACCOUNT_EMAIL_VERIFICATION = 'optional'
-ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = False
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 
 # Longer mail expiration
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 5
@@ -199,7 +199,6 @@ REST_FRAMEWORK = {
     # 10 could be a good value to assign in production. Remember: this currently also applies to answers
     'PAGE_SIZE': 10
 }
-
 ACCOUNT_FORMS = {
     'signup': 'users.forms.CustomSignupForm',
     # 'login': 'users.forms.CustomLoginForm',

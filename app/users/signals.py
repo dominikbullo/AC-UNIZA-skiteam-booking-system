@@ -4,6 +4,7 @@ from django.dispatch import receiver
 
 from rest_framework.authtoken.models import Token
 
+from family.models import Parent, Family
 from users.models import Profile, User
 
 
@@ -11,6 +12,13 @@ from users.models import Profile, User
 def create_profile(sender, instance, created, **kwargs):
     # print("Created: ", created)
     if created:
+        # TODO Create Family & Parent only if is parent!
+        if instance.is_parent:
+            family = Family.objects.create(name=instance.username)
+            Parent.objects.create(user=instance, family=family)
+
+        # TODO write family id to the profile
+        # TODO set attribute to parent
         # Create profile for every user
         Profile.objects.create(user=instance)
 

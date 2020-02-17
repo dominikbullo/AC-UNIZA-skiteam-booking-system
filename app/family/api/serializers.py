@@ -53,7 +53,8 @@ class ChildSerializer(serializers.ModelSerializer):
     class Meta:
         model = Child
         fields = "__all__"
-        extra_kwargs = {'password': {'write_only': True, 'min_length': 5}}
+        extra_kwargs = {'password': {'write_only': True, 'min_length': 5},
+                        "first_name": {"required": True}}
 
     # def create(self, validated_data):
     #     subject = Child.objects.create(parent=validated_data['parent']['id'], child_name=validated_data['child_name'])

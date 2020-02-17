@@ -1,4 +1,4 @@
-from rest_framework import viewsets, generics, status
+from rest_framework import viewsets, generics, status, mixins
 from rest_framework.filters import SearchFilter
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -18,7 +18,10 @@ class FamiliesViewSet(viewsets.ModelViewSet):
     search_fields = ["name"]
 
 
-class ParentsViewSet(viewsets.ModelViewSet):
+class ParentsViewSet(mixins.UpdateModelMixin,
+                     mixins.ListModelMixin,
+                     mixins.RetrieveModelMixin,
+                     viewsets.GenericViewSet):
     # TODO permissions
     queryset = Parent.objects.all()
     serializer_class = ParentSerializer
