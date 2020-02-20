@@ -6,10 +6,12 @@ from core.views import IndexTemplateView
 
 from users.api.urls import router as user_router
 from family.api.urls import router as family_router
+from events.api.urls import router as events_router
 
 router = router.DefaultRouter()
 router.extend(user_router)
 router.extend(family_router)
+router.extend(events_router)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,6 +29,7 @@ urlpatterns = [
 
     path("api/", include("users.api.urls")),
     path("api/", include("family.api.urls")),
+    path("api/", include("events.api.urls")),
 
     # everything else go to IndexTemplateView aka index.html od dev index page
     # re_path(r"^.*$", IndexTemplateView.as_view(), name="entry-point")
