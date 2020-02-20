@@ -8,8 +8,6 @@ from core.utils import USER_TYPE_CHOICES
 class User(AbstractUser):
     is_parent = models.BooleanField(default=False)
 
-    pass
-
     def __str__(self):
         return self.name_or_username
 
