@@ -31,10 +31,22 @@ const router = new Router({
         // =============================================================================
         // Theme Routes
         // =============================================================================
+        // {
+        //   path: '/',
+        //   name: 'home',
+        //   component: () => import('@/views/pages/Home.vue')
+        // },
         {
           path: '/',
-          name: 'home',
-          component: () => import('@/views/pages/Home.vue')
+          redirect: '/dashboard/analytics'
+        },
+        {
+          path: '/dashboard/analytics',
+          name: 'dashboard-analytics',
+          component: () => import('./views/DashboardAnalytics.vue'),
+          meta: {
+            rule: 'editor'
+          }
         },
         {
           path: '/page2',

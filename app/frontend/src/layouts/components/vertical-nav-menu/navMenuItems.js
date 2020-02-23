@@ -83,6 +83,12 @@ export default [
     i18n: 'Pages',
     items: [
       {
+        url: "/page2",
+        name: "Page 2",
+        slug: "page2",
+        icon: "FileIcon",
+      },
+      {
         url: '/pages/profile',
         isDisabled: true,
         slug: 'page-profile',
