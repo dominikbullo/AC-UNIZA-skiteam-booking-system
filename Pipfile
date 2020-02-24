@@ -10,6 +10,7 @@ django-rest-auth = "*"
 django-allauth = "*"
 django-widget-tweaks = "*"
 pillow = "*"
+django-webpack-loader = "*"
 
 [dev-packages]
 bump2version = "*"

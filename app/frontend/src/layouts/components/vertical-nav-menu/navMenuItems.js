@@ -202,36 +202,6 @@ export default [
     items: [
       {
         url: null,
-        name: 'Menu Levels',
-        icon: 'MenuIcon',
-        i18n: 'MenuLevels',
-        submenu: [
-          {
-            url: null,
-            name: 'Menu Level 2.1',
-            i18n: 'MenuLevel2p1'
-          },
-          {
-            url: null,
-            name: 'Menu Level 2.2',
-            i18n: 'MenuLevel2p2',
-            submenu: [
-              {
-                url: null,
-                name: 'Menu Level 3.1',
-                i18n: 'MenuLevel3p1'
-              },
-              {
-                url: null,
-                name: 'Menu Level 3.2',
-                i18n: 'MenuLevel3p2'
-              }
-            ]
-          }
-        ]
-      },
-      {
-        url: null,
         name: 'Disabled Menu',
         icon: 'EyeOffIcon',
         i18n: 'DisabledMenu',
