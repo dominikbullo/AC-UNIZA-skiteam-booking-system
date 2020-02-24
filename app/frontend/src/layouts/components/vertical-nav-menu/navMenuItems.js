@@ -42,7 +42,6 @@ export default [
     items: [
       {
         url: '/apps/calendar/vue-simple-calendar',
-        isDisabled: true,
         name: 'Calendar',
         slug: 'calendar-simple-calendar',
         icon: 'CalendarIcon',

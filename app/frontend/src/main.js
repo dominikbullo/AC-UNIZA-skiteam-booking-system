@@ -20,6 +20,7 @@ Vue.use(Vuesax)
 
 // axios
 import axios from "./axios.js"
+
 Vue.prototype.$http = axios
 
 // mock
@@ -28,6 +29,8 @@ import './fake-db/index.js'
 // Theme Configurations
 import '../themeConfig.js'
 
+// Vuexy Admin Filters
+import './filters/filters'
 
 // Globally Registered Components
 import './globalComponents.js'
@@ -50,7 +53,8 @@ import store from './store/store'
 
 
 // Vuejs - Vue wrapper for hammerjs
-import { VueHammer } from 'vue2-hammer'
+import {VueHammer} from 'vue2-hammer'
+
 Vue.use(VueHammer)
 
 
@@ -71,7 +75,7 @@ require('./assets/css/iconfont.css')
 Vue.config.productionTip = false
 
 new Vue({
-    router,
-    store,
-    render: h => h(App)
+  router,
+  store,
+  render: h => h(App)
 }).$mount('#app')
