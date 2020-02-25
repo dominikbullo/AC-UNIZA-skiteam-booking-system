@@ -128,7 +128,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-LOGIN_URL = "/account/login/"
+LOGIN_URL = "/accounts/login/"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = LOGIN_URL
 
@@ -207,7 +207,8 @@ ACCOUNT_FORMS = {
 
 LOGIN_EXEMPT_URLS = (
     r'^api/',  # allow any URL under /api/*
-    r"account/",
+    # r"account/",
+    r"accounts/",
     r"admin/",
 )
 

@@ -3,6 +3,12 @@ from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 
 
 class MySocialAccountAdapter(DefaultSocialAccountAdapter):
+    def authentication_error(self, request, provider_id, error, exception, extra_context):
+        print(provider_id)
+        print(error.__str__())
+        print(exception.__str__())
+        print(extra_context)
+
     def pre_social_login(self, request, sociallogin):
         """
         Invoked just after a user successfully authenticates via a
@@ -14,7 +20,7 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
         - social account has no email or email is unknown, just go on
         - social account's email exists, link social account to existing user
         """
-
+        print("pre social login")
         # Ignore existing social accounts, just do this stuff for new ones
         if sociallogin.is_existing:
             return

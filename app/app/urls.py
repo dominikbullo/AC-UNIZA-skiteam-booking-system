@@ -17,7 +17,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', IndexTemplateView.as_view(), name="entry-point"),
 
-    path("account/", include('allauth.urls')),
+    path("accounts/", include('allauth.urls')),
 
     # Login via REST
     path("api/rest-auth/", include("rest_auth.urls")),
