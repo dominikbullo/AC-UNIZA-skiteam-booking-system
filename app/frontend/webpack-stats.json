@@ -1,1 +1,1 @@
-{"status":"done","publicPath":"http://localhost:8080/","chunks":{"null":[{"name":"11.bundle.js","publicPath":"http://localhost:8080/11.bundle.js","path":"E:\\Moje projekty\\Python\\ManagementSystem\\app\\frontend\\dist\\11.bundle.js"}],"app":[{"name":"bundle.js","publicPath":"http://localhost:8080/bundle.js","path":"E:\\Moje projekty\\Python\\ManagementSystem\\app\\frontend\\dist\\bundle.js"}]}}
+{"status":"compiling","publicPath":"http://localhost:8080/"}

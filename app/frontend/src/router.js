@@ -38,15 +38,20 @@ const router = new Router({
         // },
         {
           path: '/',
-          redirect: '/dashboard/analytics'
+          redirect: '/dashboard'
         },
         {
-          path: '/dashboard/analytics',
-          name: 'dashboard-analytics',
+          path: '/dashboard',
+          name: 'dashboard',
           component: () => import('./views/DashboardAnalytics.vue'),
           meta: {
             rule: 'editor'
           }
+        },
+        {
+          path: '/home',
+          name: 'home',
+          component: () => import('@/views/pages/Home.vue')
         },
         {
           path: '/page2',
