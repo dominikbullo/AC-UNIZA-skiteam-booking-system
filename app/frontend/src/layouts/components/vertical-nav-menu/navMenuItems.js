@@ -28,12 +28,12 @@ export default [
   //   i18n: "Email",
   // },
   {
-    url: "/",
+    url: '/',
     name: 'Dashboard',
     tag: '2',
     tagColor: 'warning',
     icon: 'HomeIcon',
-    i18n: 'Dashboard',
+    i18n: 'Dashboard'
   },
   {
     header: 'Apps',
@@ -82,10 +82,10 @@ export default [
     i18n: 'Pages',
     items: [
       {
-        url: "/page2",
-        name: "Page 2",
-        slug: "page2",
-        icon: "FileIcon",
+        url: '/page2',
+        name: 'Page 2',
+        slug: 'page2',
+        icon: 'FileIcon'
       },
       {
         url: '/pages/profile',
@@ -233,4 +233,3 @@ export default [
     ]
   }
 ]
-

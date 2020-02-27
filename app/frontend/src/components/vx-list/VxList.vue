@@ -19,26 +19,38 @@
 
 <script>
 export default {
-    name: "vx-list",
-    props: {
-        list: {
-            type: Array,
-            required: true,
-        },
-        icon: {
-            type: String,
-            default: "ChevronsRightIcon",
-        },
+  name: 'vx-list',
+  props: {
+    list: {
+      type: Array,
+      required: true
     },
-    computed: {
-      rtlSpecificIcon() {
-        let i = this.icon
-        if(this.$vs.rtl) {
-          i.includes("Left") ? i=i.replace("Left", "Right") : i.includes("Right") ? i=i.replace("Right", "Left") : null
-        }
-        return i
-      }
+    icon: {
+      type: String,
+      default: 'ChevronsRightIcon'
     }
+  },
+  computed: {
+    rtlSpecificIcon () {
+      let i = this.icon
+      if (this.$vs.rtl) {
+
+        if (i.includes('Left')) {
+          i = i.replace('Left', 'Right')
+        } else if (i.includes('Right')) {
+          i = i.replace('Right', 'Left')
+        }
+
+
+        if (i.includes('Left')) {
+          i = i.replace('Left', 'Right')
+        } else if (i.includes('Right')) {
+          i = i.replace('Right', 'Left')
+        }
+      }
+      return i
+    }
+  }
 }
 </script>
 

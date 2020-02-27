@@ -35,7 +35,7 @@ vSelect.props.components.default = () => ({
         icon: 'XIcon',
         svgClasses: 'w-4 h-4 mt-1'
       }
-    }),
+    })
   },
   OpenIndicator: {
     render: createElement => createElement('feather-icon', {
@@ -43,8 +43,8 @@ vSelect.props.components.default = () => ({
         icon: 'ChevronDownIcon',
         svgClasses: 'w-5 h-5'
       }
-    }),
-  },
-});
+    })
+  }
+})
 
 Vue.component(vSelect)

@@ -25,7 +25,7 @@
 
 <script>
 export default {
-  name: "vx-timeline",
+  name: 'vx-timeline',
   props: {
     data: {
       type: Array,

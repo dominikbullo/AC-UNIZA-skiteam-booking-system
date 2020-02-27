@@ -10,6 +10,7 @@
 
 <template>
   <div
+    v-if="canSee"
     class="vs-sidebar--item"
     :class="[
       {'vs-sidebar-item-active'            : activeLink},
@@ -40,7 +41,7 @@
 export default {
   name: 'v-nav-menu-item',
   props: {
-    icon        : { type: String,                 default: ""               },
+    icon        : { type: String,                 default: ''               },
     iconSmall   : { type: Boolean,                default: false            },
     iconPack    : { type: String,                 default: 'material-icons' },
     href        : { type: [String, null],         default: '#'              },
@@ -49,11 +50,15 @@ export default {
     index       : { type: [String, Number],       default: null             },
     featherIcon : { type: Boolean,                default: true             },
     target      : { type: String,                 default: '_self'          },
-    isDisabled  : { type: Boolean,                default: false            },
+    isDisabled  : { type: Boolean,                default: false            }
   },
   computed: {
-    activeLink() {
-      return ((this.to == this.$route.path) || (this.$route.meta.parent == this.slug) && this.to) ? true : false
+    canSee () {
+      this.$acl.check(this.$store.state.AppActiveUser.userRole)
+      return this.to ? this.$acl.check(this.$router.match(this.to).meta.rule) : true
+    },
+    activeLink () {
+      return !!((this.to === this.$route.path || this.$route.meta.parent === this.slug) && this.to)
     }
   }
 }

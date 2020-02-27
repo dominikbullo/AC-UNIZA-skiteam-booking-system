@@ -55,84 +55,84 @@ export default {
   components: {
     VuePerfectScrollbar
   },
-  data() {
+  data () {
     return {
       unreadNotifications: [
-          {
-            index    : 0,
-            title    : 'New Message',
-            msg      : 'Are your going to meet me tonight?',
-            icon     : 'MessageSquareIcon',
-            time     : this.randomDate({sec: 10}),
-            category : 'primary'
-          },
-          { index    : 1,
-            title    : 'New Order Recieved',
-            msg      : 'You got new order of goods.',
-            icon     : 'PackageIcon',
-            time     : this.randomDate({sec: 40}),
-            category : 'success'
-          },
-          { index    : 2,
-            title    : 'Server Limit Reached!',
-            msg      : 'Server have 99% CPU usage.',
-            icon     : 'AlertOctagonIcon',
-            time     : this.randomDate({min: 1}),
-            category : 'danger'
-          },
-          { index    : 3,
-            title    : 'New Mail From Peter',
-            msg      : 'Cake sesame snaps cupcake',
-            icon     : 'MailIcon',
-            time     : this.randomDate({min: 6}),
-            category : 'primary'
-          },
-          { index    : 4,
-            title    : 'Bruce\'s Party',
-            msg      : 'Chocolate cake oat cake tiramisu',
-            icon     : 'CalendarIcon',
-            time     : this.randomDate({hr: 2}),
-            category : 'warning'
-          },
+        {
+          index    : 0,
+          title    : 'New Message',
+          msg      : 'Are your going to meet me tonight?',
+          icon     : 'MessageSquareIcon',
+          time     : this.randomDate({sec: 10}),
+          category : 'primary'
+        },
+        { index    : 1,
+          title    : 'New Order Recieved',
+          msg      : 'You got new order of goods.',
+          icon     : 'PackageIcon',
+          time     : this.randomDate({sec: 40}),
+          category : 'success'
+        },
+        { index    : 2,
+          title    : 'Server Limit Reached!',
+          msg      : 'Server have 99% CPU usage.',
+          icon     : 'AlertOctagonIcon',
+          time     : this.randomDate({min: 1}),
+          category : 'danger'
+        },
+        { index    : 3,
+          title    : 'New Mail From Peter',
+          msg      : 'Cake sesame snaps cupcake',
+          icon     : 'MailIcon',
+          time     : this.randomDate({min: 6}),
+          category : 'primary'
+        },
+        { index    : 4,
+          title    : 'Bruce\'s Party',
+          msg      : 'Chocolate cake oat cake tiramisu',
+          icon     : 'CalendarIcon',
+          time     : this.randomDate({hr: 2}),
+          category : 'warning'
+        }
       ],
       settings: {
         maxScrollbarLength: 60,
-        wheelSpeed: .60,
-      },
+        wheelSpeed: .60
+      }
     }
   },
   computed: {
-    scrollbarTag() { return this.$store.getters.scrollbarTag }
+    scrollbarTag () { return this.$store.getters.scrollbarTag }
   },
   methods: {
-    elapsedTime(startTime) {
-      let x        = new Date(startTime)
-      let now      = new Date()
-      var timeDiff = now - x
+    elapsedTime (startTime) {
+      const x        = new Date(startTime)
+      const now      = new Date()
+      let timeDiff = now - x
       timeDiff    /= 1000
 
-      var seconds = Math.round(timeDiff)
+      const seconds = Math.round(timeDiff)
       timeDiff    = Math.floor(timeDiff / 60)
 
-      var minutes = Math.round(timeDiff % 60)
+      const minutes = Math.round(timeDiff % 60)
       timeDiff    = Math.floor(timeDiff / 60)
 
-      var hours   = Math.round(timeDiff % 24)
+      const hours   = Math.round(timeDiff % 24)
       timeDiff    = Math.floor(timeDiff / 24)
 
-      var days    = Math.round(timeDiff % 365)
+      const days    = Math.round(timeDiff % 365)
       timeDiff    = Math.floor(timeDiff / 365)
 
-      var years   = timeDiff
+      const years   = timeDiff
 
       if (years > 0) {
-        return years + (years > 1 ? ' Years ' : ' Year ') + 'ago'
+        return `${years + (years > 1 ? ' Years ' : ' Year ')}ago`
       } else if (days > 0) {
-        return days + (days > 1 ? ' Days ' : ' Day ') + 'ago'
+        return `${days + (days > 1 ? ' Days ' : ' Day ')}ago`
       } else if (hours > 0) {
-        return hours + (hours > 1 ? ' Hrs ' : ' Hour ') + 'ago'
+        return `${hours + (hours > 1 ? ' Hrs ' : ' Hour ')}ago`
       } else if (minutes > 0) {
-        return minutes + (minutes > 1 ? ' Mins ' : ' Min ') + 'ago'
+        return `${minutes + (minutes > 1 ? ' Mins ' : ' Min ')}ago`
       } else if (seconds > 0) {
         return seconds + (seconds > 1 ? ' sec ago' : 'just now')
       }
@@ -140,8 +140,8 @@ export default {
       return 'Just Now'
     },
     // Method for creating dummy notification time
-    randomDate({ hr, min, sec }) {
-      let date = new Date()
+    randomDate ({ hr, min, sec }) {
+      const date = new Date()
 
       if (hr) date.setHours(date.getHours() - hr)
       if (min) date.setMinutes(date.getMinutes() - min)

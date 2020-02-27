@@ -80,7 +80,6 @@
             <!-- /THEME COLORS -->
 
 
-
             <vs-divider />
 
             <!-- THEME -->
@@ -225,13 +224,13 @@ import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 
 export default {
   props: {
-    footerType       : { type: String,  required: true, },
-    hideScrollToTop  : { type: Boolean, required: true, },
-    navbarType       : { type: String,  required: true, },
-    navbarColor      : { type: String,  required: true, default: "#fff", },
-    routerTransition : { type: String,  required: true, }
+    footerType       : { type: String,  required: true },
+    hideScrollToTop  : { type: Boolean, required: true },
+    navbarType       : { type: String,  required: true },
+    navbarColor      : { type: String,  required: true, default: '#fff' },
+    routerTransition : { type: String,  required: true }
   },
-  data() {
+  data () {
     return {
       active             : false,
       customPrimaryColor : '#3DC9B3',
@@ -242,94 +241,94 @@ export default {
         { text: 'Fade Bottom', value: 'fade-bottom' },
         { text: 'Fade',        value: 'fade'        },
         { text: 'Zoom Out',    value: 'zoom-out'    },
-        { text: 'None',        value: 'none'        },
+        { text: 'None',        value: 'none'        }
       ],
       settings: {
         maxScrollbarLength : 60,
-        wheelSpeed         : .60,
+        wheelSpeed         : .60
       },
-      themeColors: ['#7367F0', '#28C76F', '#EA5455', '#FF9F43', '#1E1E1E'],
+      themeColors: ['#7367F0', '#28C76F', '#EA5455', '#FF9F43', '#1E1E1E']
     }
   },
   watch: {
-    layoutType(val) {
+    layoutType (val) {
 
       // Reset unsupported options
-      if(val === "horizontal") {
-        this.themeMode === "semi-dark" ? this.themeMode = "light" : null
-        this.navbarType === "hidden" ? this.navbarTypeLocal = "floating" : null
-        this.$emit('updateNavbarColor', "#fff")
+      if (val === 'horizontal') {
+        if (this.themeMode === 'semi-dark') this.themeMode = 'light'
+        if (this.navbarType === 'hidden')   this.navbarTypeLocal = 'floating'
+        this.$emit('updateNavbarColor', '#fff')
       }
     }
   },
   computed: {
     footerTypeLocal: {
-      get()    { return this.footerType; },
-      set(val) { this.$emit('updateFooter', val) }
+      get ()    { return this.footerType },
+      set (val) { this.$emit('updateFooter', val) }
     },
     hideScrollToTopLocal: {
-      get()    { return this.hideScrollToTop },
-      set(val) { this.$emit('toggleHideScrollToTop', val) }
+      get ()    { return this.hideScrollToTop },
+      set (val) { this.$emit('toggleHideScrollToTop', val) }
     },
-    navbarColorInitial() {
+    navbarColorInitial () {
       return this.$store.state.theme === 'dark' ? '#10163a' : '#fff'
     },
-    navbarColorOptionClasses() {
+    navbarColorOptionClasses () {
       return (color) => {
-        let classes = {}
-        if (color == this.navbarColorLocal)   classes['shadow-outline'] = true
-        if (this.navbarTypeLocal == 'static') classes['cursor-not-allowed'] = true
+        const classes = {}
+        if (color === this.navbarColorLocal)   classes['shadow-outline'] = true
+        if (this.navbarTypeLocal === 'static') classes['cursor-not-allowed'] = true
         return classes
       }
     },
     navbarColorLocal: {
-      get() { return this.navbarColor },
-      set(val) {
-        if (this.navbarType == 'static') return
+      get () { return this.navbarColor },
+      set (val) {
+        if (this.navbarType === 'static') return
         this.$emit('updateNavbarColor', val)
       }
     },
     navbarTypeLocal: {
-      get()    { return this.navbarType },
-      set(val) { this.$emit('updateNavbar', val) }
+      get ()    { return this.navbarType },
+      set (val) { this.$emit('updateNavbar', val) }
     },
     layoutType: {
-      get()    { return this.$store.state.mainLayoutType },
-      set(val) { this.$store.commit("UPDATE_MAIN_LAYOUT_TYPE", val) }
+      get ()    { return this.$store.state.mainLayoutType },
+      set (val) { this.$store.commit('UPDATE_MAIN_LAYOUT_TYPE', val) }
     },
     primaryColor: {
-      get()    { return this.$store.state.themePrimaryColor },
-      set(val) { this.$store.commit('UPDATE_PRIMARY_COLOR', val) }
+      get ()    { return this.$store.state.themePrimaryColor },
+      set (val) { this.$store.commit('UPDATE_PRIMARY_COLOR', val) }
     },
     reduced_sidebar: {
-      get()    { return this.$store.state.reduceButton },
-      set(val) { this.$store.commit('TOGGLE_REDUCE_BUTTON', val) }
+      get ()    { return this.$store.state.reduceButton },
+      set (val) { this.$store.commit('TOGGLE_REDUCE_BUTTON', val) }
     },
     routerTransitionLocal: {
-      get()    { return this.routerTransition },
-      set(val) { this.$emit('updateRouterTransition', val) }
+      get ()    { return this.routerTransition },
+      set (val) { this.$emit('updateRouterTransition', val) }
     },
     rtl: {
-      get()    { return this.$vs.rtl },
-      set(val) { this.$vs.rtl = val  }
+      get ()    { return this.$vs.rtl },
+      set (val) { this.$vs.rtl = val  }
     },
     themeMode: {
-      get()    { return this.$store.state.theme },
-      set(val) { this.$store.dispatch('updateTheme', val) }
+      get ()    { return this.$store.state.theme },
+      set (val) { this.$store.dispatch('updateTheme', val) }
     },
-    scrollbarTag() { return this.$store.state.is_touch_device ? 'div' : 'VuePerfectScrollbar' },
-    windowWidth() {
+    scrollbarTag () { return this.$store.state.is_touch_device ? 'div' : 'VuePerfectScrollbar' },
+    windowWidth () {
       return this.$store.state.windowWidth
     }
   },
   methods: {
-    updatePrimaryColor(color) {
-      this.primaryColor = color;
-      this.$vs.theme({ primary: color });
+    updatePrimaryColor (color) {
+      this.primaryColor = color
+      this.$vs.theme({ primary: color })
     }
   },
   components: {
-    VuePerfectScrollbar,
+    VuePerfectScrollbar
   }
 }
 

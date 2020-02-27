@@ -1,11 +1,11 @@
 <!-- =========================================================================================
-	File Name: VerticalNavMenuGroup.vue
-	Description: Vertical NavMenu Group Component. Extends vuesax framework's 'vs-sidebar-group' component
-	Component Name: VerticalNavMenuGroup
-	----------------------------------------------------------------------------------------
-	Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
-	Author: Pixinvent
-	Author URL: http://www.themeforest.net/user/pixinvent
+  File Name: VerticalNavMenuGroup.vue
+  Description: Vertical NavMenu Group Component. Extends vuesax framework's 'vs-sidebar-group' component
+  Component Name: VerticalNavMenuGroup
+  ----------------------------------------------------------------------------------------
+  Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
+  Author: Pixinvent
+  Author URL: http://www.themeforest.net/user/pixinvent
 ========================================================================================== -->
 
 
@@ -31,7 +31,7 @@
             :svgClasses = "{ 'w-3 h-3' : this.groupIndex % 1 != 0 }" />
 
           <!-- Group Name -->
-          <span v-show="!verticalNavMenuItemsMin" class="truncate mr-3 select-none">{{ group.name }}</span>
+          <span v-show="!verticalNavMenuItemsMin" class="truncate mr-3 select-none">{{ $t(group.i18n) || group.name }}</span>
 
           <!-- Group Tag -->
           <vs-chip class="ml-auto mr-4" :color="group.tagColor" v-if="group.tag && !verticalNavMenuItemsMin">{{ group.tag }}</vs-chip>
@@ -45,7 +45,7 @@
           svg-classes= "w-4 h-4" />
 
         <!-- Group Tooltip -->
-        <span class="vs-sidebar--tooltip">{{ group.name }}</span>
+        <span class="vs-sidebar--tooltip">{{ $t(group.i18n) || group.name }}</span>
       </div>
       <!-- /Group Label -->
 
@@ -71,7 +71,7 @@
             :icon   = "itemIcon(groupIndex + '.' + index)"
             :slug   = "groupItem.slug"
             :target = "groupItem.target">
-              <span class="truncate">{{ groupItem.name }}</span>
+              <span class="truncate">{{ $t(groupItem.i18n) || groupItem.name }}</span>
               <vs-chip class="ml-auto" :color="groupItem.tagColor" v-if="groupItem.tag">{{ groupItem.tag }}</vs-chip>
           </v-nav-menu-item>
 
@@ -91,7 +91,7 @@ export default {
     openHover  : { type: Boolean, default: false },
     open       : { type: Boolean, default: false },
     group      : { type: Object },
-    groupIndex : { type: Number },
+    groupIndex : { type: Number }
   },
   components: {
     VNavMenuItem
@@ -101,26 +101,25 @@ export default {
     openItems : false
   }),
   computed: {
-    verticalNavMenuItemsMin() { return this.$store.state.verticalNavMenuItemsMin },
-    styleItems() {
+    verticalNavMenuItemsMin () { return this.$store.state.verticalNavMenuItemsMin },
+    styleItems () {
       return { maxHeight: this.maxHeight }
     },
-    itemIcon() {
+    itemIcon () {
       return (index) => {
-        if (!((index.match(/\./g) || []).length > 1)) return "CircleIcon"
+        if (!((index.match(/\./g) || []).length > 1)) return 'CircleIcon'
       }
     },
-    isGroupActive() {
+    isGroupActive () {
       return (item) => {
         const path        = this.$route.fullPath
         let open          = false
         const routeParent = this.$route.meta ? this.$route.meta.parent : undefined
 
-        let func = (item) => {
+        const func = (item) => {
           if (item.submenu) {
             item.submenu.forEach((item) => {
-              if ((path == item.url || routeParent == item.slug) && item.url) { open = true}
-              else if (item.submenu) { func(item) }
+              if ((path === item.url || routeParent === item.slug) && item.url) { open = true } else if (item.submenu) { func(item) }
             })
           }
         }
@@ -128,14 +127,14 @@ export default {
         func(item)
         return open
       }
-    },
+    }
   },
   watch: {
     // OPEN & CLOSES DROPDOWN ON ROUTE CHANGE
-    '$route'() {
+    '$route' () {
       if (this.verticalNavMenuItemsMin) return
 
-      let scrollHeight = this.scrollHeight
+      const scrollHeight = this.scrollHeight
 
       // Collapse Group
       if (this.openItems && !this.open) {
@@ -154,12 +153,12 @@ export default {
         }, 300)
       }
     },
-    maxHeight() {
-      this.openItems = this.maxHeight != '0px'
+    maxHeight () {
+      this.openItems = this.maxHeight !== '0px'
     },
     // OPEN AND CLOSES DROPDOWN MENU ON NavMenu COLLAPSE AND DEFAULT VIEW
-    '$store.state.verticalNavMenuItemsMin'(val) {
-      let scrollHeight = this.$refs.items.scrollHeight
+    '$store.state.verticalNavMenuItemsMin' (val) {
+      const scrollHeight = this.$refs.items.scrollHeight
 
       if (!val && this.open) {
 
@@ -184,12 +183,12 @@ export default {
     }
   },
   methods: {
-    clickGroup() {
+    clickGroup () {
       if (!this.openHover) {
 
-        let thisScrollHeight = this.$refs.items.scrollHeight
+        const thisScrollHeight = this.$refs.items.scrollHeight
 
-        if (this.maxHeight == '0px') {
+        if (this.maxHeight === '0px') {
           this.maxHeight = `${thisScrollHeight}px`
           setTimeout(() => {
             this.maxHeight = 'none'
@@ -204,7 +203,7 @@ export default {
 
         this.$parent.$children.map((child) => {
           if (child.isGroupActive) {
-            if (child !== this && (!child.open) && child.maxHeight != '0px') {
+            if (child !== this && !child.open && child.maxHeight !== '0px') {
               setTimeout(() => {
                 child.maxHeight = `${0}px`
               }, 50)
@@ -213,23 +212,23 @@ export default {
         })
       }
     },
-    mouseover() {
+    mouseover () {
       if (this.openHover) {
-        let scrollHeight = this.$refs.items.scrollHeight
+        const scrollHeight = this.$refs.items.scrollHeight
         this.maxHeight   = `${scrollHeight}px`
       }
     },
-    mouseout() {
+    mouseout () {
       if (this.openHover) {
-        let scrollHeight = 0
+        const scrollHeight = 0
         this.maxHeight   = `${scrollHeight}px`
       }
     }
   },
-  mounted() {
+  mounted () {
     this.openItems = this.open
     if (this.open) { this.maxHeight = 'none' }
-  },
+  }
 }
 
 </script>

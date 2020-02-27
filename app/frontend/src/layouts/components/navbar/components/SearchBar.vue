@@ -27,6 +27,36 @@
           </div>
         </template>
 
+        <!-- Files Suggestion -->
+        <template v-slot:files="{ suggestion }">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <div class="img-container w-8 mr-3 flex">
+                <img :src="require(`@/assets/images/file-icons/${suggestion.file_ext}.png`)" :alt="suggestion.file_name" class="responsive">
+              </div>
+              <div class="leading-none mt-1">
+                <p class="mb-1">{{ suggestion.file_name }}</p>
+                <small>by {{ suggestion.from }}</small>
+              </div>
+            </div>
+            <small>{{ suggestion.size }}</small>
+          </div>
+        </template>
+
+        <!-- Contacts Suggestion -->
+        <template v-slot:contacts="{ suggestion }">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <img :src="suggestion.img" :alt="suggestion.name" class="w-8 h-8 mr-3 rounded-full">
+              <div class="leading-none mt-1">
+                <p>{{ suggestion.name }}</p>
+                <small>{{ suggestion.email }}</small>
+              </div>
+            </div>
+            <small>{{ suggestion.time }}</small>
+          </div>
+        </template>
+
         <!-- No Items Slot -->
         <template v-slot:noResult="{ group_name }">
           <div class="flex items-center">
@@ -44,31 +74,31 @@
           @click="showFullSearch = false" />
       </div>
     </div>
-    <feather-icon icon="SearchIcon" @click="showFullSearch = true" class="cursor-pointer navbar-fuzzy-search mr-4" />
+    <feather-icon icon="SearchIcon" @click="showFullSearch = true" class="cursor-pointer navbar-fuzzy-search ml-4" />
   </div>
 </template>
 
 <script>
-import VxAutoSuggest from '@/components/vx-auto-suggest/VxAutoSuggest.vue';
+import VxAutoSuggest from '@/components/vx-auto-suggest/VxAutoSuggest.vue'
 
 export default {
   components: {
     VxAutoSuggest
   },
-  data() {
+  data () {
     return {
       navbarSearchAndPinList: this.$store.state.navbarSearchAndPinList,
-      showFullSearch: false,
+      showFullSearch: false
     }
   },
   methods: {
-    selected(item) {
-      item.pages ?  this.$router.push(item.pages.url).catch(() => {}) : null
-      this.showFullSearch = false;
+    selected (item) {
+      if (item.pages) this.$router.push(item.pages.url).catch(() => {})
+      this.showFullSearch = false
     },
-    hnd_search_query_update(query) {
+    hnd_search_query_update (query) {
       // Show overlay if any character is entered
-      this.$store.commit('TOGGLE_CONTENT_OVERLAY', query ? true : false)
+      this.$store.commit('TOGGLE_CONTENT_OVERLAY', !!query)
     }
   }
 }

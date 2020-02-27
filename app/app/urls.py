@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include, re_path
+from django.conf.urls import url
 
 from core import router
 from core.views import IndexTemplateView
@@ -7,6 +8,7 @@ from core.views import IndexTemplateView
 from users.api.urls import router as user_router
 from family.api.urls import router as family_router
 from events.api.urls import router as events_router
+from users.api.views import CreateTokenView
 
 router = router.DefaultRouter()
 router.extend(user_router)
@@ -20,10 +22,8 @@ urlpatterns = [
     path("accounts/", include('allauth.urls')),
 
     # Login via REST
-    path("api/rest-auth/", include("rest_auth.urls")),
-
-    # # Registration via REST
-    # path("api/rest-auth/signup/", include("rest_auth.registration.urls")),
+    path("api/auth/", include("rest_auth.urls")),
+    path("api/auth/register/", include("rest_auth.registration.urls")),
 
     path("api/", include(router.urls)),
 

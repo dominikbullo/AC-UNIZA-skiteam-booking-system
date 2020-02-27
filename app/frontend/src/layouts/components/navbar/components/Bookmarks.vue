@@ -74,74 +74,76 @@ export default {
   props: {
     navbarColor: {
       type: String,
-      default: "#fff",
-    },
+      default: '#fff'
+    }
   },
   components: {
     draggable,
     VxAutoSuggest
   },
-  data() {
+  data () {
     return {
-      showBookmarkPagesDropdown : false,
+      showBookmarkPagesDropdown : false
     }
   },
   watch: {
-    '$route'() {
+    '$route' () {
       if (this.showBookmarkPagesDropdown) this.showBookmarkPagesDropdown = false
     }
   },
   computed: {
-    navbarSearchAndPinList() {
-      return {pages: this.$store.state.navbarSearchAndPinList["pages"]}
+    navbarSearchAndPinList () {
+      return {pages: this.$store.state.navbarSearchAndPinList['pages']}
     },
-    starredPages() {
+    starredPages () {
       return this.$store.state.starredPages
     },
     starredPagesLimited: {
-      get() {
+      get () {
         return this.starredPages.slice(0, 10)
       },
-      set(list) {
+      set (list) {
         this.$store.dispatch('arrangeStarredPagesLimited', list)
       }
     },
     starredPagesMore: {
-      get() {
+      get () {
         return this.starredPages.slice(10)
       },
-      set(list) {
+      set (list) {
         this.$store.dispatch('arrangeStarredPagesMore', list)
       }
     },
-    textColor() {
-      return {'text-white': this.$store.state.mainLayoutType === 'vertical' && this.navbarColor != (this.$store.state.theme === 'dark' ? "#10163a" : "#fff") }
+    textColor () {
+      return {'text-white': this.$store.state.mainLayoutType === 'vertical' && this.navbarColor !== (this.$store.state.theme === 'dark' ? '#10163a' : '#fff') }
     }
   },
   methods: {
-    selected(obj) {
+    selected (obj) {
       this.$store.commit('TOGGLE_CONTENT_OVERLAY', false)
       this.showBookmarkPagesDropdown = false
       this.$router.push(obj.pages.url).catch(() => {})
     },
-    actionClicked(item) {
+    actionClicked (item) {
       this.$store.dispatch('updateStarredPage', { url: item.url, val: !item.is_bookmarked })
       // this.$refs.bookmarkAutoSuggest.filterData()
     },
-    outside: function() {
+    outside () {
       this.showBookmarkPagesDropdown = false
     },
-    hnd_search_query_update(query) {
+    hnd_search_query_update (query) {
       // Show overlay if any character is entered
-      this.$store.commit('TOGGLE_CONTENT_OVERLAY', query ? true : false)
+      this.$store.commit('TOGGLE_CONTENT_OVERLAY', !!query)
     }
   },
   directives: {
     'click-outside': {
-      bind: function(el, binding) {
+      bind (el, binding) {
         const bubble = binding.modifiers.bubble
         const handler = (e) => {
-          if (bubble || (!el.contains(e.target) && el !== e.target)) {
+          /* eslint-disable no-mixed-operators */
+          if (bubble || !el.contains(e.target) && el !== e.target) {
+          /* eslint-enable no-mixed-operators */
             binding.value(e)
           }
         }
@@ -149,7 +151,7 @@ export default {
         document.addEventListener('click', handler)
       },
 
-      unbind: function(el) {
+      unbind (el) {
         document.removeEventListener('click', el.__vueClickOutside__)
         el.__vueClickOutside__ = null
 
