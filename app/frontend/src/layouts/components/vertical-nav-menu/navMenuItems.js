@@ -28,7 +28,7 @@ export default [
   //   i18n: "Email",
   // },
   {
-    url: '/',
+    url: '/dashboard',
     name: 'Dashboard',
     tag: '2',
     tagColor: 'warning',
@@ -41,12 +41,26 @@ export default [
     i18n: 'Apps',
     items: [
       {
-        url: '/apps/calendar/vue-simple-calendar',
-        name: 'Calendar',
-        slug: 'calendar-simple-calendar',
+        url: null,
+        name: 'Events',
         icon: 'CalendarIcon',
-        tagColor: 'success',
-        i18n: 'Calendar'
+        i18n: 'Events',
+        submenu: [
+          {
+            url: '/apps/event/list',
+            name: 'List',
+            slug: 'app-event-list',
+            i18n: 'List'
+          },
+          {
+            url: '/apps/calendar/vue-simple-calendar',
+            name: 'Calendar',
+            slug: 'calendar-simple-calendar',
+            icon: 'CalendarIcon',
+            tagColor: 'success',
+            i18n: 'Calendar'
+          }
+        ]
       },
       {
         url: null,
@@ -55,7 +69,8 @@ export default [
         i18n: 'User',
         submenu: [
           {
-            url: '/apps/user/user-list',
+            url: null,
+            isDisabled: true,
             name: 'List',
             slug: 'app-user-list',
             i18n: 'List'
@@ -170,7 +185,6 @@ export default [
         tag: '3',
         tagColor: 'success',
         i18n: 'Charts',
-        isDisabled: true,
         submenu: [
           {
             url: '/charts-and-maps/charts/apex-charts',
