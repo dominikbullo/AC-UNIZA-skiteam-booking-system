@@ -29,10 +29,10 @@ class RedirectionsTest(TestCase):
 
     def test_public_adresses(self):
         TEST_ADRESSES = [
-            "account/login",
-            "account/signup",
-            "account/confirm-email",
-            "account/password/reset"
+            # "account/login",
+            # "account/signup",
+            # "account/confirm-email",
+            # "account/password/reset"
         ]
 
         for address in TEST_ADRESSES:

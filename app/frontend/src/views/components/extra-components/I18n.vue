@@ -17,16 +17,8 @@
                     <span class="mr-2">English</span>
                 </vs-radio>
 
-                <vs-radio v-model="locale" vs-value="fr" class="mt-3">
-                    <span class="mr-2">French</span>
-                </vs-radio>
-
-                <vs-radio v-model="locale" vs-value="de" class="mt-3">
-                    <span class="mr-2">German</span>
-                </vs-radio>
-
-                <vs-radio v-model="locale" vs-value="pt" class="mt-3">
-                    <span class="mr-2">Portuguese</span>
+                <vs-radio v-model="locale" vs-value="sk" class="mt-3">
+                    <span class="mr-2">Slovak</span>
                 </vs-radio>
             </div>
 
