@@ -67,7 +67,7 @@ export default {
     document.documentElement.style.setProperty('--vh', `${vh}px`)
   },
   async created () {
-
+    // TODO get token
     // jwt
     jwt.init()
 
@@ -76,9 +76,6 @@ export default {
 
     window.addEventListener('resize', this.handleWindowResize)
     window.addEventListener('scroll', this.handleScroll)
-
-    // Auth0
-    try       { await this.$auth.renewTokens() } catch (e) { console.error(e) }
 
   },
   destroyed () {

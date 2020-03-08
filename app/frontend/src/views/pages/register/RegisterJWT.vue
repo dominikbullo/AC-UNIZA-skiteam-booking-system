@@ -13,10 +13,20 @@ Author URL: http://www.themeforest.net/user/pixinvent
     <vs-input
       v-validate="'required|alpha_dash|min:3'"
       data-vv-validate-on="blur"
-      label-placeholder="Name"
-      name="displayName"
-      placeholder="Name"
-      v-model="displayName"
+      label-placeholder="Meno"
+      name="name"
+      placeholder="Meno"
+      v-model="first_name"
+      class="w-full" />
+    <span class="text-danger text-sm">{{ errors.first('displayName') }}</span>
+
+    <vs-input
+      v-validate="'required|alpha_dash|min:3'"
+      data-vv-validate-on="blur"
+      label-placeholder="Priezvisko"
+      name="surname"
+      placeholder="Priezvisko"
+      v-model="surname"
       class="w-full" />
     <span class="text-danger text-sm">{{ errors.first('displayName') }}</span>
 
@@ -37,8 +47,8 @@ Author URL: http://www.themeforest.net/user/pixinvent
       data-vv-validate-on="blur"
       v-validate="'required|min:6|max:10'"
       name="password"
-      label-placeholder="Password"
-      placeholder="Password"
+      label-placeholder="Heslo"
+      placeholder="Heslo"
       v-model="password"
       class="w-full mt-6" />
     <span class="text-danger text-sm">{{ errors.first('password') }}</span>
@@ -49,7 +59,7 @@ Author URL: http://www.themeforest.net/user/pixinvent
       data-vv-validate-on="blur"
       data-vv-as="password"
       name="confirm_password"
-      label-placeholder="Confirm Password"
+      label-placeholder="Potvrdiť heslo"
       placeholder="Confirm Password"
       v-model="confirm_password"
       class="w-full mt-6" />
@@ -65,7 +75,8 @@ Author URL: http://www.themeforest.net/user/pixinvent
 export default {
   data () {
     return {
-      displayName: '',
+      first_name: '',
+      surnname: '',
       email: '',
       password: '',
       confirm_password: '',

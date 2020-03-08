@@ -1,6 +1,5 @@
 // axios
 import axios from 'axios'
-import querystring from 'querystring';
 
 // RES
 // https://stackoverflow.com/questions/51374367/axios-is-not-defined-in-vue-js-cli
@@ -33,7 +32,8 @@ instance.interceptors.response.use(function (response) {
   return Promise.reject(error)
 })
 
-instance.defaults.xsrfHeaderName = "X-CSRFToken"
+//https://stackoverflow.com/questions/54836387/getting-django-vue-cors-and-csrf-working-with-a-real-world-example
+instance.defaults.xsrfHeaderName = 'X-CSRFToken'
 instance.defaults.xsrfCookieName = 'csrftoken'
 
 

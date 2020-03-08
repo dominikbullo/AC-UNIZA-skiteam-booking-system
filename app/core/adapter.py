@@ -20,7 +20,6 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
         - social account has no email or email is unknown, just go on
         - social account's email exists, link social account to existing user
         """
-        print("pre social login")
         # Ignore existing social accounts, just do this stuff for new ones
         if sociallogin.is_existing:
             return

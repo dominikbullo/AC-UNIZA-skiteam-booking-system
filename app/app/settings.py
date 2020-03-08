@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 from django.urls import include
@@ -53,7 +54,11 @@ INSTALLED_APPS = [
 
     'widget_tweaks',
     'webpack_loader',
+    'corsheaders'
 ]
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ALLOW_CREDENTIALS = True
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -63,8 +68,22 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'app.middleware.LoginRequiredMiddleware',
+    # 'app.middleware.LoginRequiredMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
+# TODO
+# **Dont forget to add your client's address to the CORS whitelist. This will make sure the server accepts request from
+# the specified source only
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000',
+    'http://localhost:8000',
+    'http://localhost:8080',
+]
+
+# allow all requests containing any of the default headers(as in django docs) or content-type header
+CORS_ALLOW_HEADERS = default_headers + (
+    'contenttype',
+)
 
 ROOT_URLCONF = 'app.urls'
 
@@ -188,7 +207,6 @@ SOCIALACCOUNT_ADAPTER = 'core.adapter.MySocialAccountAdapter'
 
 # Django-REST-Framework
 REST_FRAMEWORK = {
-    # 2 authentication types
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
@@ -207,7 +225,6 @@ ACCOUNT_FORMS = {
 
 LOGIN_EXEMPT_URLS = (
     r'^api/',  # allow any URL under /api/*
-    # r"account/",
     r"accounts/",
     r"admin/",
 )

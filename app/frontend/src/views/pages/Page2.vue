@@ -7,22 +7,20 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        email: ''
-      }
-    },
-    created() {
-      this.$http.get('/user/full-info/')
-        .then(res => {
-          // console.log(res);
-          const data = res.data.results
-          // console.log(data);
-        })
-        .catch(error => console.log(error))
+export default {
+  data () {
+    return {
+      email: ''
     }
+  },
+  created () {
+    this.$http.get('/user/full-info/')
+      .then(res => {
+        this.email = res.data.email
+      })
+      .catch(error => console.log(error))
   }
+}
 </script>
 
 <style scoped>
