@@ -95,7 +95,7 @@ const mutations = {
 
   // Updates user info in state and localstorage
   UPDATE_USER_INFO (state, payload) {
-
+    console.log("payload",payload)
     // Get Data localStorage
     const userInfo = JSON.parse(localStorage.getItem('userInfo')) || state.AppActiveUser
 

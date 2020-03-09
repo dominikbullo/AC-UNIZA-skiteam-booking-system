@@ -11,8 +11,8 @@ django-allauth = "*"
 django-widget-tweaks = "*"
 pillow = "*"
 django-webpack-loader = "*"
-djangorestframework-simplejwt = "*"
-django-cors-headers = "*"
+django-oauth-toolkit = "*"
+django-cors-middleware = "*"
 
 [dev-packages]
 bump2version = "*"

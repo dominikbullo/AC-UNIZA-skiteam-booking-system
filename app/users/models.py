@@ -6,6 +6,7 @@ from core.utils import USER_TYPE_CHOICES
 
 
 class User(AbstractUser):
+    preferred_locale = models.CharField(max_length=2, blank=True, null=True)
     is_parent = models.BooleanField(default=False)
 
     def __str__(self):

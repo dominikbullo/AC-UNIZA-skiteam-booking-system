@@ -49,14 +49,18 @@ export default {
       password: pwd
     })
   },
-  registerUser (name, email, pwd) {
+  registerUserEmail (email, pwd) {
     return axios.post('/auth/register/', {
       email,
-      password: pwd
+      password1: pwd,
+      password2: pwd
     })
   },
-  refreshToken () {
-    return axios.post('/auth/token/refresh/',
-      { accessToken: localStorage.getItem('access') })
+  registerUserUsername (username, email, pwd) {
+    return axios.post('/auth/register/', {
+      username,
+      password1: pwd,
+      password2: pwd
+    })
   }
 }

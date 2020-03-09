@@ -8,13 +8,14 @@
 ==========================================================================================*/
 
 import jwt from '../../http/requests/auth/jwt/index.js'
+import drf from '../../http/requests/auth/drf/index.js'
 
 
 import router from '@/router'
 import response from '@chenfengyuan/vue-countdown'
 
 export default {
-  updateUsername ({commit}, payload) {
+  updateUsername ({ commit }, payload) {
     payload.user.updateProfile({
       displayName: payload.displayName
     }).then(() => {
@@ -23,7 +24,7 @@ export default {
       // update in localstorage
       const newUserData = Object.assign({}, payload.user.providerData[0])
       newUserData.displayName = payload.displayName
-      commit('UPDATE_USER_INFO', newUserData, {root: true})
+      commit('UPDATE_USER_INFO', newUserData, { root: true })
 
       // If reload is required to get fresh data after update
       // Reload current page
@@ -44,11 +45,11 @@ export default {
 
 
   // JWT
-  loginJWT ({commit}, payload) {
+  loginJWT ({ commit }, payload) {
 
     return new Promise((resolve, reject) => {
-      jwt.login(payload.userDetails.email, payload.userDetails.password)
-        .then(response => {
+      jwt.login(payload.userDetails.email, payload.userDetails.password).
+        then(response => {
 
           if (response.data.userData) {
             // Navigate User to homepage
@@ -57,55 +58,75 @@ export default {
             localStorage.setItem('accessToken', response.data.accessToken)
 
             // Update user details
-            commit('UPDATE_USER_INFO', response.data.userData, {root: true})
+            commit('UPDATE_USER_INFO', response.data.userData, { root: true })
 
             // Set bearer token in axios
             commit('SET_BEARER', response.data.accessToken)
 
             resolve(response)
           } else {
-            reject({message: 'Wrong Email or Password'})
+            reject({ message: 'Wrong Email or Password' })
           }
 
-        })
-        .catch(error => {
+        }).
+        catch(error => {
           reject(error)
         })
     })
   },
-  registerUserJWT ({commit}, payload) {
+  registerUserJWT ({ commit }, payload) {
 
-    const {displayName, email, password, confirmPassword} = payload.userDetails
+    const { displayName, email, password, confirmPassword } = payload.userDetails
 
     return new Promise((resolve, reject) => {
 
       // Check confirm password
       if (password !== confirmPassword) {
-        reject({message: 'Password doesn\'t match. Please try again.'})
+        reject({ message: 'Password doesn\'t match. Please try again.' })
       }
 
-      jwt.registerUser(displayName, email, password)
-        .then(response => {
+      jwt.registerUser(displayName, email, password).then(response => {
+        // Redirect User
+        router.push(router.currentRoute.query.to || '/')
+
+        // Update data in localStorage
+        localStorage.setItem('accessToken', response.data.accessToken)
+        commit('UPDATE_USER_INFO', response.data.userData, { root: true })
+
+        resolve(response)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+  registerUserDRF ({ commit }, payload) {
+    const { first_name, last_name, email, password, confirmPassword } = payload.userDetails
+
+    console.log(payload.userDetails)
+
+    return new Promise((resolve, reject) => {
+      // Check confirm password
+      if (password !== confirmPassword) {
+        reject({ message: 'Password doesn\'t match. Please try again.' })
+      }
+
+      drf.registerUserEmail(email, password).
+        then(response => {
+          // Update data in localStorage
+          // TODO response.token
+          localStorage.setItem('accessToken', response.data.key)
+
+          commit('UPDATE_USER_INFO', response.data.user, { root: true })
+
           // Redirect User
           router.push(router.currentRoute.query.to || '/')
 
-          // Update data in localStorage
-          localStorage.setItem('accessToken', response.data.accessToken)
-          commit('UPDATE_USER_INFO', response.data.userData, {root: true})
-
           resolve(response)
-        })
-        .catch(error => {
+        }).
+        catch(error => {
+          console.log('this error?')
           reject(error)
         })
-    })
-  },
-  fetchAccessToken () {
-    return new Promise((resolve) => {
-      jwt.refreshToken().then(response => {
-        console.log("refreshing token")
-        resolve(response)
-      })
     })
   }
 }

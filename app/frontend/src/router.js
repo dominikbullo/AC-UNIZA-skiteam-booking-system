@@ -1896,6 +1896,28 @@ router.afterEach(() => {
     appLoading.style.display = 'none'
   }
 })
+router.beforeEach((to, from, next) => {
+  // redirect to login page if not logged in and trying to access a restricted page
+  const publicPages = [
+    '/pages/login',
+    'pages/forgot-password',
+    '/pages/error-404',
+    '/pages/error-500',
+    '/pages/register',
+    '/pages/comingsoon'
+  ]
+  const authRequired = !publicPages.includes(to.path)
+  const loggedIn = localStorage.getItem('userInfo')
+
+  if (authRequired && !loggedIn) {
+    return next({
+      path: '/pages/login',
+      query: { returnUrl: to.path }
+    })
+  }
+
+  next()
+})
 //
 // router.beforeEach((to, from, next) => {
 //   firebase.auth().onAuthStateChanged(() => {

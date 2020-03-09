@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "59e0b64cba886c5018ebe82dec80436deb4f4440986b52de747626fedd09df29"
+            "sha256": "3b47578ef59eebeb78534b033565ed5ca94aa3e76bdb10111df6fd7c41b3b913"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -59,13 +59,21 @@
             "index": "pypi",
             "version": "==0.41.0"
         },
-        "django-cors-headers": {
+        "django-cors-middleware": {
             "hashes": [
-                "sha256:a5960addecc04527ab26617e51b8ed42f0adab4594b24bb0f3c33e2bd3857c3f",
-                "sha256:a785b5f446f6635810776d9f5f5d23e6a2a2f728ea982648370afaf0dfdf2627"
+                "sha256:5bbdea85e22909d596e26f6e0dbc174d5521429fa3943ae02a2c6c48e76c88c7",
+                "sha256:856dbe4d7aae65844ccc68acb49c6da7dbf7cbacaf5bcf37019f4c0c60b3be84"
             ],
             "index": "pypi",
-            "version": "==3.2.1"
+            "version": "==1.5.0"
+        },
+        "django-oauth-toolkit": {
+            "hashes": [
+                "sha256:2c1e27f6c9b67782c86acbe38954b102e0593ba799cc69782f78448154127b6e",
+                "sha256:3c5233eaa3abdbc40c5a04c0eadea77cce098d3f91195272ab151bf68e6496b6"
+            ],
+            "index": "pypi",
+            "version": "==1.3.0"
         },
         "django-rest-auth": {
             "hashes": [
@@ -97,14 +105,6 @@
             ],
             "index": "pypi",
             "version": "==3.11.0"
-        },
-        "djangorestframework-simplejwt": {
-            "hashes": [
-                "sha256:288ee78618d906f26abf6282b639b8f1806ce1d9a7578897a125cf79c609f259",
-                "sha256:c315be70aa12a5f5790c0ab9acd426c3a58eebea65a77d0893248c5144a5080c"
-            ],
-            "index": "pypi",
-            "version": "==4.4.0"
         },
         "idna": {
             "hashes": [
@@ -147,13 +147,6 @@
             ],
             "index": "pypi",
             "version": "==7.0.0"
-        },
-        "pyjwt": {
-            "hashes": [
-                "sha256:5c6eca3c2940464d106b99ba83b00c6add741c9becaec087fb7ccdefea71350e",
-                "sha256:8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96"
-            ],
-            "version": "==1.7.1"
         },
         "python3-openid": {
             "hashes": [

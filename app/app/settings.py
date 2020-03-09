@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-from corsheaders.defaults import default_headers
+# from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 from django.urls import include
@@ -46,19 +46,33 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_auth',
 
+    # https://django-rest-auth.readthedocs.io/en/latest/api_endpoints.html
     'allauth',
     'allauth.account',
+    'rest_auth.registration',
+
+    # https://github.com/adamchainz/django-cors-headers#cors_allow_headers
+    'corsheaders',
+
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.facebook',
 
-    'widget_tweaks',
+    # 'widget_tweaks',
     'webpack_loader',
-    'corsheaders'
 ]
-CORS_ORIGIN_ALLOW_ALL = False
+
+CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'users.api.serializers.CustomRegisterSerializer',
+}
+REST_AUTH_SERIALIZERS = {
+    'TOKEN_SERIALIZER': 'users.api.serializers.TokenSerializer',
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -68,6 +82,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
     # 'app.middleware.LoginRequiredMiddleware',
     'corsheaders.middleware.CorsMiddleware',
 ]
@@ -80,10 +95,10 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:8080',
 ]
 
-# allow all requests containing any of the default headers(as in django docs) or content-type header
-CORS_ALLOW_HEADERS = default_headers + (
-    'contenttype',
-)
+# # allow all requests containing any of the default headers(as in django docs) or content-type header
+# CORS_ALLOW_HEADERS = default_headers + (
+#     'contenttype',
+# )
 
 ROOT_URLCONF = 'app.urls'
 
@@ -147,13 +162,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-LOGIN_URL = "/accounts/login/"
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = LOGIN_URL
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
-
 STATIC_URL = '/static/'
 if not DEBUG:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
@@ -206,27 +214,25 @@ SOCIALACCOUNT_EMAIL_REQUIRED = True
 SOCIALACCOUNT_ADAPTER = 'core.adapter.MySocialAccountAdapter'
 
 # Django-REST-Framework
+# https://medium.com/@apogiatzis/create-a-restful-api-with-users-and-jwt-authentication-using-django-1-11-drf-part-2-eb6fdcf71f45
 REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     # 10 could be a good value to assign in production. Remember: this currently also applies to answers
     'PAGE_SIZE': 10
-}
-ACCOUNT_FORMS = {
-    'signup': 'users.forms.CustomSignupForm',
-    # 'login': 'users.forms.CustomLoginForm',
 }
 
 LOGIN_EXEMPT_URLS = (
     r'^api/',  # allow any URL under /api/*
     r"accounts/",
     r"admin/",
+    r"public/",
 )
 
 SOCIALACCOUNT_PROVIDERS = {
