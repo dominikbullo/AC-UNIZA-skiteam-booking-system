@@ -5,19 +5,21 @@ from re import compile
 
 
 class RedirectionsTest(TestCase):
-    def test_redirect_to_login(self):
-        addresses_to_redirect = [
-            "anything",
-            "dashboard",
-            "login",
-            "register",
-        ]
-        for address in addresses_to_redirect:
-            response = self.client.get("/" + address + "/")
-
-            self.assertEqual(response.status_code, 302)
-            login_url = settings.LOGIN_URL + "?next=/" + address + "/"
-            self.assertEqual(response['Location'], login_url)
+    # Cannot test these --because single SPA
+    # TODO try to find
+    # def test_redirect_to_login(self):
+    #     addresses_to_redirect = [
+    #         "anything",
+    #         "dashboard",
+    #         "login",
+    #         "register",
+    #     ]
+    #     for address in addresses_to_redirect:
+    #         response = self.client.get("/" + address + "/")
+    #
+    #         self.assertEqual(response.status_code, 302)
+    #         login_url = settings.LOGIN_URL + "?next=/" + address + "/"
+    #         self.assertEqual(response['Location'], login_url)
 
     # def process_request(self, request):
     #     assert hasattr(request, 'user')
