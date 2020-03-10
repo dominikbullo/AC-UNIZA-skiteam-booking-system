@@ -160,3 +160,4 @@ src/.DS_Store
 src/assets/.DS_Store
 src/assets/scss/.DS_Store
 src/assets/scss/vuexy/.DS_Store
+/app/frontend/src/fake-db/

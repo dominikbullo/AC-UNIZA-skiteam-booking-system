@@ -43,7 +43,7 @@
 
 <script>
 import RegisterJwt from './RegisterJWT.vue'
-import RegisterDjango from './RegisterDajngoRest'
+import RegisterDjango from './RegisterDRF'
 
 export default {
   components: {

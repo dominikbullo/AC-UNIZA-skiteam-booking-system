@@ -44,7 +44,7 @@ export default [
         url: null,
         name: 'Events',
         icon: 'CalendarIcon',
-        i18n: 'Events',
+        i18n: 'Event',
         submenu: [
           {
             url: '/apps/event/list',

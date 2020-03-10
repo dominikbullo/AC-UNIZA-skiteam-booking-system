@@ -53,7 +53,7 @@ export default {
     }
   },
   components: {
-    Bookmarks,
+    // Bookmarks,
     I18n,
     SearchBar,
     NotificationDropDown,

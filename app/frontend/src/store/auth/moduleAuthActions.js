@@ -130,7 +130,7 @@ export default {
 
         }).
         catch(error => {
-          reject(error)
+          reject({ message: 'Wrong Email or Password' })
         })
     })
   },

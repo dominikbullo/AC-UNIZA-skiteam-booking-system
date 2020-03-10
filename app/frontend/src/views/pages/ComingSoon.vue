@@ -20,7 +20,7 @@
         <img src="@/assets/images/pages/rocket.png" alt="coming-soon" class="mx-auto mb-2" width="150">
 
         <div class="count-down text-center">
-          <countdown :time="new Date('03/09/2021 00:00:00').getTime() - new Date().getTime()">
+          <countdown :time="new Date('03/31/2020 00:00:00').getTime() - new Date().getTime()">
 
             <template slot-scope="props">
 
@@ -48,15 +48,15 @@
           </countdown>
         </div>
 
-        <vs-divider position="center">Subscribe</vs-divider>
+<!--        <vs-divider position="center">Subscribe</vs-divider>-->
 
-        <div class="subscription">
+<!--        <div class="subscription">-->
 
-          <span>If you would like to be notified when our app is live, Please subscribe to our mailing list.</span>
-          <vs-input type="email" label-placeholder="Email" v-model="value1" class="w-full mb-4" />
-          <vs-button class="w-full">Subscribe</vs-button>
+<!--          <span>If you would like to be notified when our app is live, Please subscribe to our mailing list.</span>-->
+<!--          <vs-input type="email" label-placeholder="Email" v-model="value1" class="w-full mb-4" />-->
+<!--          <vs-button class="w-full">Subscribe</vs-button>-->
 
-        </div>
+<!--        </div>-->
       </vx-card>
     </div>
   </div>

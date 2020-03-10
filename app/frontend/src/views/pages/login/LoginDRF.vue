@@ -45,6 +45,10 @@ export default {
       checkbox_remember_me: true
     }
   },
+  created () {
+    // redirect from login if is already logged
+    if (!this.checkLogin()) return
+  },
   computed: {
     validateForm () {
       return !this.errors.any()
