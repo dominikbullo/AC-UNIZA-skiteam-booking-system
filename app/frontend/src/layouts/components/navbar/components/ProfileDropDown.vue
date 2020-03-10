@@ -19,7 +19,7 @@
             class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
             @click="$router.push('/pages/profile').catch(() => {})">
             <feather-icon icon="UserIcon" svgClasses="w-4 h-4" />
-            <span class="ml-2">Profile</span>
+            <span class="ml-2">{{ $t('Profile') }}</span>
           </li>
 
 <!--          <li-->
@@ -56,7 +56,7 @@
             class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
             @click="logout">
             <feather-icon icon="LogOutIcon" svgClasses="w-4 h-4" />
-            <span class="ml-2">Logout</span>
+            <span class="ml-2">{{ $t('Logout') }}</span>
           </li>
         </ul>
       </vs-dropdown-menu>
