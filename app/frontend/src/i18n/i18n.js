@@ -15,7 +15,7 @@ import i18nData from './i18nData'
 Vue.use(VueI18n)
 
 export default new VueI18n({
-  locale: 'en', // set default locale
-  fallbackLocale: 'sk',
+  locale: 'sk', // set default locale
+  fallbackLocale: 'en',
   messages: i18nData
 })
