@@ -3,7 +3,7 @@
 
     <div class="text-right leading-tight hidden sm:block">
       <p class="font-semibold">{{ activeUserInfo.displayName }}</p>
-      <small>Available</small>
+      <small>{{ activeUserInfo.userRole }}</small>
     </div>
 
     <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
@@ -22,33 +22,33 @@
             <span class="ml-2">Profile</span>
           </li>
 
-          <li
-            class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
-            @click="$router.push('/apps/email').catch(() => {})">
-            <feather-icon icon="MailIcon" svgClasses="w-4 h-4" />
-            <span class="ml-2">Inbox</span>
-          </li>
+<!--          <li-->
+<!--            class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"-->
+<!--            @click="$router.push('/apps/email').catch(() => {})">-->
+<!--            <feather-icon icon="MailIcon" svgClasses="w-4 h-4" />-->
+<!--            <span class="ml-2">Inbox</span>-->
+<!--          </li>-->
 
-          <li
-            class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
-            @click="$router.push('/apps/todo').catch(() => {})">
-            <feather-icon icon="CheckSquareIcon" svgClasses="w-4 h-4" />
-            <span class="ml-2">Tasks</span>
-          </li>
+<!--          <li-->
+<!--            class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"-->
+<!--            @click="$router.push('/apps/todo').catch(() => {})">-->
+<!--            <feather-icon icon="CheckSquareIcon" svgClasses="w-4 h-4" />-->
+<!--            <span class="ml-2">Tasks</span>-->
+<!--          </li>-->
 
-          <li
-            class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
-            @click="$router.push('/apps/chat').catch(() => {})">
-            <feather-icon icon="MessageSquareIcon" svgClasses="w-4 h-4" />
-            <span class="ml-2">Chat</span>
-          </li>
+<!--          <li-->
+<!--            class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"-->
+<!--            @click="$router.push('/apps/chat').catch(() => {})">-->
+<!--            <feather-icon icon="MessageSquareIcon" svgClasses="w-4 h-4" />-->
+<!--            <span class="ml-2">Chat</span>-->
+<!--          </li>-->
 
-          <li
-            class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
-            @click="$router.push('/apps/eCommerce/wish-list').catch(() => {})">
-            <feather-icon icon="HeartIcon" svgClasses="w-4 h-4" />
-            <span class="ml-2">Wish List</span>
-          </li>
+<!--          <li-->
+<!--            class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"-->
+<!--            @click="$router.push('/apps/eCommerce/wish-list').catch(() => {})">-->
+<!--            <feather-icon icon="HeartIcon" svgClasses="w-4 h-4" />-->
+<!--            <span class="ml-2">Wish List</span>-->
+<!--          </li>-->
 
           <vs-divider class="m-1" />
 
@@ -79,13 +79,17 @@ export default {
   },
   methods: {
     logout () {
-      // If JWT login
+      // CRSF token
+      // https://laracasts.com/discuss/channels/laravel/how-to-refresh-xcsrf-token-after-logout-in-spa
       if (localStorage.getItem('accessToken')) {
         localStorage.removeItem('accessToken')
-        this.$router.push('/pages/login').catch(() => {})
       }
+      // https://docs.djangoproject.com/en/3.0/ref/csrf/
+      this.$http.post('/auth/logout/').then(({data}) => {
+        delete this.$http.defaults.headers.common['X-CSRFToken']
+        delete this.$http.defaults.headers.common['Authorization']
+      })
 
-      this.$http.post('/accounts/logout/')
       // Change role on logout. Same value as initialRole of acj.js
       this.$acl.change('admin')
       localStorage.removeItem('userInfo')

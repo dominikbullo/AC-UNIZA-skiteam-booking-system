@@ -10,8 +10,8 @@ const baseURL = '/api'
 
 const instance = axios.create({
   baseURL,
-  timeout: 10000
-  // params: {} // do not remove this, its added to add params later in the config
+  timeout: 10000,
+  params: {} // do not remove this, its added to add params later in the config
 })
 
 // Add a request interceptor
@@ -35,6 +35,5 @@ instance.interceptors.response.use(function (response) {
 //https://stackoverflow.com/questions/54836387/getting-django-vue-cors-and-csrf-working-with-a-real-world-example
 instance.defaults.xsrfHeaderName = 'X-CSRFToken'
 instance.defaults.xsrfCookieName = 'csrftoken'
-
 
 export default instance

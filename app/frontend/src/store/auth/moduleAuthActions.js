@@ -99,6 +99,41 @@ export default {
       })
     })
   },
+  fetchAccessTokenJWT () {
+    return new Promise((resolve) => {
+      jwt.refreshToken().then(response => { resolve(response) })
+    })
+  },
+  loginDRF ({ commit }, payload) {
+    return new Promise((resolve, reject) => {
+      drf.login(payload.userDetails.email, payload.userDetails.password).
+        then(response => {
+
+          // TODO if verified
+          if (response.data.user) {
+            // Set accessToken
+            localStorage.setItem('accessToken', response.data.key)
+
+            // Update user details
+            commit('UPDATE_USER_INFO', response.data.user, { root: true })
+
+            // Set bearer token in axios
+            commit('SET_BEARER', response.data.key)
+
+            // Navigate User to homepage
+            router.push(router.currentRoute.query.to || '/')
+
+            resolve(response)
+          } else {
+            reject({ message: 'Wrong Email or Password' })
+          }
+
+        }).
+        catch(error => {
+          reject(error)
+        })
+    })
+  },
   registerUserDRF ({ commit }, payload) {
     const { first_name, last_name, email, password, confirmPassword } = payload.userDetails
 
@@ -110,8 +145,8 @@ export default {
         reject({ message: 'Password doesn\'t match. Please try again.' })
       }
 
-      drf.registerUserEmail(email, password).
-        then(response => {
+      drf.registerUserEmail(email, password)
+        .then(response => {
           // Update data in localStorage
           // TODO response.token
           localStorage.setItem('accessToken', response.data.key)
@@ -122,9 +157,11 @@ export default {
           router.push(router.currentRoute.query.to || '/')
 
           resolve(response)
-        }).
-        catch(error => {
-          console.log('this error?')
+        })
+        .catch(error => {
+          // TODO why?!
+          // How to display serializers validation error in vue
+          // https://github.com/axios/axios/issues/960
           reject(error)
         })
     })

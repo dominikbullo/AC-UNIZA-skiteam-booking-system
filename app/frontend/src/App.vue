@@ -17,6 +17,7 @@
 <script>
 import themeConfig from '@/../themeConfig.js'
 import jwt         from '@/http/requests/auth/jwt/index.js'
+import drf         from '@/http/requests/auth/drf/index.js'
 
 export default {
   data () {
@@ -69,7 +70,8 @@ export default {
   async created () {
     // TODO get token
     // jwt
-    jwt.init()
+    // jwt.init()
+    drf.init()
 
     const dir = this.$vs.rtl ? 'rtl' : 'ltr'
     document.documentElement.setAttribute('dir', dir)

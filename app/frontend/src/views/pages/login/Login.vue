@@ -29,9 +29,12 @@
                 </div>
 
                 <vs-tabs>
+                  <vs-tab label="DRF">
+                    <login-d-r-f></login-d-r-f>
+                  </vs-tab>
+                  <vs-tab label="JWT">
                     <login-jwt></login-jwt>
-<!--                  <vs-tab label="JWT">-->
-<!--                  </vs-tab>-->
+                  </vs-tab>
                 </vs-tabs>
 
               </div>
@@ -46,24 +49,26 @@
 
 <script>
 import LoginJwt from './LoginJWT.vue'
+import LoginDRF from './LoginDRF.vue'
 
 export default {
   components: {
+    LoginDRF,
     LoginJwt
   }
 }
 </script>
 
 <style lang="scss">
-.login-tabs-container {
-  min-height: 505px;
+  .login-tabs-container {
+    min-height: 505px;
 
-  .con-tab {
-    padding-bottom: 14px;
-  }
+    .con-tab {
+      padding-bottom: 14px;
+    }
 
-  .con-slot-tabs {
-    margin-top: 1rem;
+    .con-slot-tabs {
+      margin-top: 1rem;
+    }
   }
-}
 </style>

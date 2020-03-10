@@ -119,7 +119,26 @@ export default {
         },
         notify: this.$vs.notify
       }
-      this.$store.dispatch('auth/registerUserDRF', payload)
+
+      this.$store.dispatch('auth/registerUserDRF', payload).then(() => {
+        this.$vs.loading.close()
+      }).catch(error => {
+        this.$vs.loading.close()
+        // for every error in error notify
+        // console.log('maybeeeeeeeeee3', error.response.data)
+
+        // TODO -> into formular not as notifyier
+        //https://stackoverflow.com/questions/29626729/how-to-function-call-using-this-inside-foreach-loop/29626762
+        Object.keys(error.response.data).forEach(function (key) {
+          this.$vs.notify({
+            title: 'Error',
+            text: error.response.data[key][0],
+            iconPack: 'feather',
+            icon: 'icon-alert-circle',
+            color: 'danger'
+          })
+        }, this)
+      })
     }
   }
 }

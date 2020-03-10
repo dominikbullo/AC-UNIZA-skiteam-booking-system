@@ -17,6 +17,7 @@ export default {
   init () {
     axios.interceptors.response.use(function (response) {
       return response
+    //  TODO if error ? then login again probbably
     }, function (error) {
       // const { config, response: { status } } = error
       const { config, response } = error
@@ -26,7 +27,7 @@ export default {
       if (response && response.status === 401) {
         if (!isAlreadyFetchingAccessToken) {
           isAlreadyFetchingAccessToken = true
-          store.dispatch('auth/fetchAccessToken').then((access_token) => {
+          store.dispatch('auth/fetchAccessTokenDRF').then((access_token) => {
             isAlreadyFetchingAccessToken = false
             onAccessTokenFetched(access_token)
           })
@@ -56,6 +57,19 @@ export default {
       password2: pwd
     })
   },
+  // https://laracasts.com/discuss/channels/laravel/how-to-refresh-xcsrf-token-after-logout-in-spa
+  // refreshTokens () {
+  //   return new Promise((resolve, reject) => {
+  //     axios.get('/refreshtokens')
+  //       .then(response => {
+  //         axios.defaults.headers.common['X-CSRF-TOKEN'] = response.data.csrfToken
+  //         resolve(response)
+  //       })
+  //       .catch(error => {
+  //         reject(error)
+  //       })
+  //   })
+  // },
   registerUserUsername (username, email, pwd) {
     return axios.post('/auth/register/', {
       username,
