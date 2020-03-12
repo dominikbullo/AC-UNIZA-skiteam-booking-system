@@ -236,7 +236,7 @@
 <script>
 import VueApexCharts from 'vue-apexcharts'
 import StatisticsCardLine from '@/components/statistics-cards/StatisticsCardLine.vue'
-import analyticsData from './ui-elements/card/analyticsData.js'
+import analyticsData from '../ui-elements/card/analyticsData.js'
 import ChangeTimeDurationDropdown from '@/components/ChangeTimeDurationDropdown.vue'
 import VxTimeline from '@/components/timeline/VxTimeline'
 

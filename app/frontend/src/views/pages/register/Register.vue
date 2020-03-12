@@ -27,10 +27,9 @@
                   <vs-tab label="Django">
                     <register-django></register-django>
                   </vs-tab>
-                  <vs-tab label="JWT">
-                    <register-jwt></register-jwt>
+                  <vs-tab label="Social">
+                    <!--                    <register-django></register-django>-->
                   </vs-tab>
-
                 </vs-tabs>
               </div>
             </div>
@@ -42,12 +41,10 @@
 </template>
 
 <script>
-import RegisterJwt from './RegisterJWT.vue'
 import RegisterDjango from './RegisterDRF'
 
 export default {
   components: {
-    RegisterJwt,
     RegisterDjango
   }
 }

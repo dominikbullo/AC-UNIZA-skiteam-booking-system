@@ -37,6 +37,11 @@
               <user-edit-tab-social class="mt-4" :data="user_data" />
             </div>
           </vs-tab>
+          <vs-tab label="Family" icon-pack="feather" icon="icon-users">
+            <div class="tab-text">
+              <user-edit-tab-social class="mt-4" :data="user_data" />
+            </div>
+          </vs-tab>
         </vs-tabs>
 
       </div>
@@ -86,7 +91,7 @@ export default {
             this.user_not_found = true
             return
           }
-          console.error(err) 
+          console.error(err)
         })
     }
   },
