@@ -16,7 +16,6 @@
 
 <script>
 import themeConfig from '@/../themeConfig.js'
-import jwt         from '@/http/requests/auth/jwt/index.js'
 import drf         from '@/http/requests/auth/drf/index.js'
 
 export default {
@@ -68,7 +67,6 @@ export default {
     document.documentElement.style.setProperty('--vh', `${vh}px`)
   },
   async created () {
-    // TODO get token
     // jwt
     // jwt.init()
     drf.init()

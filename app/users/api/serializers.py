@@ -1,23 +1,16 @@
 from allauth.account.models import EmailAddress
+from django.contrib.auth import get_user_model
 from rest_auth.models import TokenModel
 from rest_framework import serializers
 from users.models import User, Profile
-
-from django.contrib.auth import get_user_model, authenticate
-from django.utils.translation import ugettext_lazy as _
+from rest_auth.registration.serializers import RegisterSerializer
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserDisplaySerializer(serializers.ModelSerializer):
     """Serializer for the users object"""
     verified_email = serializers.SerializerMethodField()
 
-    class Meta:
-        model = get_user_model()
-        fields = ('email', "username", 'password', "first_name", "last_name", "verified_email")
-        extra_kwargs = {
-            'password': {'write_only': True, 'min_length': 5},
-            'username': {'read_only': True, }
-        }
+    user_role = serializers.CharField(source='get_user_role_display')
 
     def get_verified_email(self, obj):
         try:
@@ -26,52 +19,13 @@ class UserSerializer(serializers.ModelSerializer):
         except EmailAddress.DoesNotExist:
             return None
 
-    def create(self, validated_data):
-        """Create a new user with encrypted password and return it"""
-        return get_user_model().objects.create_user(**validated_data)
-
-    def update(self, instance, validated_data):
-        """Update a user, setting the password correctly and return it"""
-        password = validated_data.pop('password', None)
-        user = super().update(instance, validated_data)
-
-        if password:
-            user.set_password(password)
-            user.save()
-
-        return user
-
-
-class AuthTokenSerializer(serializers.Serializer):
-    """Serializer for the user authentication object"""
-    email = serializers.CharField()
-    password = serializers.CharField(
-        style={'input_type': 'password'},
-        trim_whitespace=False
-    )
-
-    def validate(self, attrs):
-        """Validate and authenticate the user"""
-        email = attrs.get('email')
-        password = attrs.get('password')
-
-        user = authenticate(
-            request=self.context.get('request'),
-            username=email,
-            password=password
-        )
-        if not user:
-            msg = _('Unable to authenticate with provided credentials')
-            raise serializers.ValidationError(msg, code='authentication')
-
-        attrs['user'] = user
-        return attrs
-
-
-class UserDisplaySerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = '__all__'
+        model = get_user_model()
+        fields = ('email', "username", 'password', 'first_name', "last_name", "verified_email", "user_role")
+        extra_kwargs = {
+            'password': {'write_only': True, 'min_length': 5},
+            'username': {'read_only': True},
+        }
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -89,26 +43,42 @@ class ProfileAvatarSerializer(serializers.ModelSerializer):
         fields = ("avatar",)
 
 
-from rest_auth.registration.serializers import RegisterSerializer
-
-
 class CustomRegisterSerializer(RegisterSerializer):
-    # preferred_locale = serializers.CharField(
-    #     required=False,
-    #     max_length=2,
-    # )
+    username = serializers.CharField(read_only=True, required=False)
+    email = serializers.EmailField(required=True)
+    first_name = serializers.CharField(required=True)
+    last_name = serializers.CharField(required=True)
+    profile = ProfileSerializer(required=True)
+
+    def update(self, instance, validated_data):
+        pass
+
+    def create(self, validated_data):
+        pass
 
     def get_cleaned_data(self):
-        data_dict = super().get_cleaned_data()
-        data_dict['preferred_locale'] = self.validated_data.get('preferred_locale', '')
-        return data_dict
+        super(CustomRegisterSerializer, self).get_cleaned_data()
+
+        return {
+            'email'        : self.validated_data.get('email', ''),
+            'first_name'   : self.validated_data.get('first_name', ''),
+            'last_name'    : self.validated_data.get('last_name', ''),
+            'password1'    : self.validated_data.get('password1', ''),
+            'date_of_birth': self.validated_data.get('date_of_birth', ''),
+        }
+
+
+class CustomRegisterChildSerializer(CustomRegisterSerializer):
+    # TODO on validation i can create username from email, but this is fine for now
+    username = serializers.CharField(required=True)
+    email = serializers.EmailField(required=False)
 
 
 class TokenSerializer(serializers.ModelSerializer):
     """
     Serializer for Token model.
     """
-    user = UserSerializer(many=False, read_only=True)  # this is add by myself.
+    user = UserDisplaySerializer(many=False, read_only=True)  # this is add by myself.
 
     class Meta:
         model = TokenModel

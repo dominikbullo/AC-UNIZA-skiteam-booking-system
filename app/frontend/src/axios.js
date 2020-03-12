@@ -1,5 +1,6 @@
 // axios
 import axios from 'axios'
+import Qs from 'qs'
 
 // RES
 // https://stackoverflow.com/questions/51374367/axios-is-not-defined-in-vue-js-cli
@@ -16,6 +17,14 @@ const instance = axios.create({
 
 // Add a request interceptor
 instance.interceptors.request.use(function (config) {
+  config.paramsSerializer = params => {
+    // Qs is not included in the Axios package
+    console.log('Request Interceptordasdasdasdass', config)
+    return Qs.stringify(params, {
+      arrayFormat: 'brackets',
+      encode: false
+    })
+  }
   console.log('Request Interceptors', config)
   return config
 }, function (error) {

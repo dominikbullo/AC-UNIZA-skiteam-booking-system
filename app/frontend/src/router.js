@@ -43,30 +43,34 @@ const router = new Router({
         // =============================================================================
         // Theme Routes
         // =============================================================================
+
+        // =============================================================================
+        // Dashboards
+        // =============================================================================
         {
           path: '/',
           redirect: '/dashboard'
         },
         {
-          path: '/dashboard/analytics',
-          name: 'dashboard-analytics',
-          component: () => import('./views/DashboardAnalytics.vue'),
+          path: '/dashboard',
+          name: 'dashboard',
+          component: () => import('./views/dashboards/DashboardAdmin.vue'),
           meta: {
             rule: 'editor'
           }
         },
         {
-          path: '/dashboard',
+          path: '/admin/dashboard',
           name: 'dashboard',
-          component: () => import('./views/DashboardECommerce.vue'),
+          component: () => import('./views/dashboards/DashboardAdmin.vue'),
           meta: {
             rule: 'admin'
           }
         },
         {
-          path: '/page2',
-          name: 'page-2',
-          component: () => import('@/views/pages/Page2.vue'),
+          path: '/testpage',
+          name: 'testpage',
+          component: () => import('@/views/pages/TestPage.vue'),
           meta: {
             rule: 'editor'
           }
@@ -1904,8 +1908,10 @@ router.beforeEach((to, from, next) => {
     '/pages/error-404',
     '/pages/error-500',
     '/pages/register',
+    '/pages/not-authorized',
     '/pages/comingsoon'
   ]
+
   const authRequired = !publicPages.includes(to.path)
   const loggedIn = localStorage.getItem('userInfo')
 

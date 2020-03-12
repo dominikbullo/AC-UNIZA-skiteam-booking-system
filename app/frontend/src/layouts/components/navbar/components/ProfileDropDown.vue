@@ -17,9 +17,9 @@
 
           <li
             class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
-            @click="$router.push('/pages/profile').catch(() => {})">
+            @click="$router.push('/pages/user-settings').catch(() => {})">
             <feather-icon icon="UserIcon" svgClasses="w-4 h-4" />
-            <span class="ml-2">{{ $t('Profile') }}</span>
+            <span class="ml-2">{{ $t('Account') }}</span>
           </li>
 
 <!--          <li-->
@@ -85,8 +85,8 @@ export default {
         localStorage.removeItem('accessToken')
       }
       // https://docs.djangoproject.com/en/3.0/ref/csrf/
-      this.$http.post('/auth/logout/').then(({data}) => {
-        delete this.$http.defaults.headers.common['X-CSRFToken']
+      this.$http.post('/auth/logout/').then(() => {
+        // delete this.$http.defaults.headers.common['X-CSRFToken']
         delete this.$http.defaults.headers.common['Authorization']
       })
 

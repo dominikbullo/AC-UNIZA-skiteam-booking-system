@@ -30,10 +30,18 @@ export default [
   {
     url: '/dashboard',
     name: 'Dashboard',
-    tag: '2',
+    // tag: '2',
     tagColor: 'warning',
     icon: 'HomeIcon',
     i18n: 'Dashboard'
+  },
+  {
+    url: '/admin/dashboard',
+    name: 'Admin dashboard',
+    // tag: '2',
+    tagColor: 'warning',
+    icon: 'HomeIcon',
+    i18n: 'Admin dashboard'
   },
   {
     header: 'Apps',
@@ -70,7 +78,6 @@ export default [
         submenu: [
           {
             url: null,
-            isDisabled: true,
             name: 'List',
             slug: 'app-user-list',
             i18n: 'List'
@@ -97,9 +104,9 @@ export default [
     i18n: 'Pages',
     items: [
       {
-        url: '/page2',
-        name: 'Page 2',
-        slug: 'page2',
+        url: '/testpage',
+        name: 'Test Page',
+        slug: 'test-page',
         icon: 'FileIcon'
       },
       {

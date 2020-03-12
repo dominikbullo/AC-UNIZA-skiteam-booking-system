@@ -15,9 +15,10 @@ function addSubscriber (callback) {
 
 export default {
   init () {
+    // TODO get token
     axios.interceptors.response.use(function (response) {
       return response
-    //  TODO if error ? then login again probbably
+      //  TODO if error ? then login again probbably
     }, function (error) {
       // const { config, response: { status } } = error
       const { config, response } = error
@@ -46,30 +47,24 @@ export default {
   },
   login (email, pwd) {
     return axios.post('/auth/login/', {
-      email,
+      username: email,
       password: pwd
     })
   },
-  registerUserEmail (email, pwd) {
+  registerUserEmail (first_name, last_name, birth_date, email, gender, pwd) {
     return axios.post('/auth/register/', {
       email,
+      first_name,
+      last_name,
       password1: pwd,
-      password2: pwd
+      password2: pwd,
+      profile: {
+        birth_date,
+        gender
+      }
+
     })
   },
-  // https://laracasts.com/discuss/channels/laravel/how-to-refresh-xcsrf-token-after-logout-in-spa
-  // refreshTokens () {
-  //   return new Promise((resolve, reject) => {
-  //     axios.get('/refreshtokens')
-  //       .then(response => {
-  //         axios.defaults.headers.common['X-CSRF-TOKEN'] = response.data.csrfToken
-  //         resolve(response)
-  //       })
-  //       .catch(error => {
-  //         reject(error)
-  //       })
-  //   })
-  // },
   registerUserUsername (username, email, pwd) {
     return axios.post('/auth/register/', {
       username,

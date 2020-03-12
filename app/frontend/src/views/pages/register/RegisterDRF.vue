@@ -1,3 +1,4 @@
+<!--TODO Add gender picker-->
 <template>
   <div class="clearfix">
     <vs-input
@@ -7,8 +8,8 @@
       name="name"
       placeholder="Meno"
       v-model="first_name"
-      class="w-full"/>
-    <span class="text-danger text-sm">{{ errors.first('displayName') }}</span>
+      class="w-full mt-6"/>
+    <span class="text-danger text-sm">{{ errors.first('first_name') }}</span>
 
     <vs-input
       v-validate="'required|alpha_dash|min:3'"
@@ -17,8 +18,28 @@
       name="last_name"
       placeholder="Priezvisko"
       v-model="last_name"
-      class="w-full"/>
-    <span class="text-danger text-sm">{{ errors.first('displayName') }}</span>
+      class="w-full mt-6"/>
+    <span class="text-danger text-sm">{{ errors.first('last_name') }}</span>
+
+    <vs-input
+      v-validate="'required|date_format:dd.MM.yyyy'"
+      data-vv-validate-on="blur"
+      label-placeholder="Dátum narodenia"
+      name="birth_date"
+      placeholder="Dátum narodenia"
+      v-model="birth_date"
+      class="w-full mt-6"/>
+    <span class="text-danger text-sm">{{ errors.first('birth_date') }}</span>
+
+    <!--    <datepicker v-model="birth_date"-->
+    <!--                name="birth_date"-->
+    <!--                class="w-full mt-6"-->
+    <!--                z-index="11111"-->
+    <!--                :language="sk"-->
+    <!--                placeholder="Dátum narodenia"-->
+    <!--                format="dd.MM.yyyy"-->
+    <!--                @closed="datepickerClosedFunction">-->
+    <!--    </datepicker>-->
 
     <vs-input
       v-validate="'required|email'"
@@ -62,12 +83,20 @@
 </template>
 
 <script>
+
+import Datepicker from 'vuejs-datepicker'
+
 export default {
+  components: {
+    Datepicker
+  },
   data () {
     return {
       first_name: 'DefaultMeno',
       last_name: 'DefaultPriezvisko',
+      birth_date: '09.12.1996',
       email: 'admin123@test.sk',
+      gender: 'M',
       password: 'testing321',
       confirm_password: 'testing321',
       isTermsConditionAccepted: true
@@ -75,17 +104,30 @@ export default {
   },
   computed: {
     validateForm () {
-      // TODO validate
-      return true
-      // return !this.errors.any()
-      //   && this.displayName !== ''
-      //   && this.email !== ''
-      //   && this.password !== ''
-      //   && this.confirm_password !== ''
-      //   && this.isTermsConditionAccepted === true
+
+      // TODO watch validation
+      // return true
+      return !this.errors.any()
+        && this.first_name !== ''
+        && this.last_name !== ''
+        && this.birth_date !== ''
+        && this.email !== ''
+        && this.password !== ''
+        && this.confirm_password !== ''
+        && this.isTermsConditionAccepted === true
     }
   },
   methods: {
+    datepickerClosedFunction () {
+      // need to validate
+      this.$vs.notify({
+        title: 'Datepicker',
+        text: this.birth_date,
+        iconPack: 'feather',
+        icon: 'icon-alert-circle',
+        color: 'success'
+      })
+    },
     checkLogin () {
       // If user is already logged in notify
       if (this.$store.state.auth.isUserLoggedIn()) {
@@ -113,7 +155,9 @@ export default {
         userDetails: {
           first_name: this.first_name,
           last_name: this.last_name,
+          birth_date: this.birth_date,
           email: this.email,
+          gender: this.gender,
           password: this.password,
           confirmPassword: this.confirm_password
         },
@@ -124,14 +168,13 @@ export default {
         this.$vs.loading.close()
       }).catch(error => {
         this.$vs.loading.close()
-        // for every error in error notify
-        // console.log('maybeeeeeeeeee3', error.response.data)
-
-        // TODO -> into formular not as notifyier
         //https://stackoverflow.com/questions/29626729/how-to-function-call-using-this-inside-foreach-loop/29626762
+        // TODO -> into formu not as notifier
+
         Object.keys(error.response.data).forEach(function (key) {
+          console.log(error.response.data)
           this.$vs.notify({
-            title: 'Error',
+            title: `Error in ${key}`,
             text: error.response.data[key][0],
             iconPack: 'feather',
             icon: 'icon-alert-circle',

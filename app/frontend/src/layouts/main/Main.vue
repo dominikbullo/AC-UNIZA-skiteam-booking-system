@@ -29,7 +29,7 @@
 
     <v-nav-menu
       :navMenuItems="navMenuItems"
-      title="Vuexy"
+      title="AC UNIZA Ski Team"
       parent=".layout--main"/>
 
     <div id="content-area" :class="[contentAreaClass, {'show-overlay': bodyOverlay}]">

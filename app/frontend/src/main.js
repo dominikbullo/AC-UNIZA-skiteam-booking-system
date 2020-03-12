@@ -20,10 +20,14 @@ Vue.use(Vuesax)
 
 // axios
 import axios from './axios.js'
+
 Vue.prototype.$http = axios
 
 // API Calls
 import './http/requests'
+
+// mock
+import './fake-db/index.js'
 
 // Theme Configurations
 import '../themeConfig.js'
@@ -62,22 +66,28 @@ import './filters/filters'
 
 // Clipboard
 import VueClipboard from 'vue-clipboard2'
+
 Vue.use(VueClipboard)
 
 
 // Tour
 import VueTour from 'vue-tour'
+
 Vue.use(VueTour)
 require('vue-tour/dist/vue-tour.css')
 
 
 // VeeValidate
 import VeeValidate from 'vee-validate'
-Vue.use(VeeValidate)
+
+Vue.use(VeeValidate, {
+  behavior: 'eager' // if the field has an error and the user just entered a valid value, remove the error
+})
 
 
 // Google Maps
 import * as VueGoogleMaps from 'vue2-google-maps'
+
 Vue.use(VueGoogleMaps, {
   load: {
     // Add your API key here
@@ -88,6 +98,7 @@ Vue.use(VueGoogleMaps, {
 
 // Vuejs - Vue wrapper for hammerjs
 import { VueHammer } from 'vue2-hammer'
+
 Vue.use(VueHammer)
 
 
