@@ -4,15 +4,20 @@ from allauth.account.adapter import DefaultAccountAdapter
 
 
 class CustomAccountAdapter(DefaultAccountAdapter):
+    """ Saving user and also profile details"""
 
     def save_user(self, request, user, form, commit=False):
         user = super().save_user(request, user, form, commit)
         user.save()
 
-        # user.profile.birth_date = "09.12.1996"
-        # user.profile.birth_date = self.cleaned_data["birth_date"]
-        user.profile.gender = "M"
-        # user.profile.gender = self.cleaned_data["gender"]
+        # TODO for key matching...
+        try:
+            # user.profile.birth_date = request.data["profile"]["birth_date"]
+            user.profile.gender = request.data["profile"]["gender"]
+        except Exception as e:
+            print(e)
+            pass
+
         user.profile.save()
         return user
 
