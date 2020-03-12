@@ -1,7 +1,11 @@
+from allauth.account.adapter import get_adapter
 from allauth.account.models import EmailAddress
+from allauth.account.utils import setup_user_email
 from django.contrib.auth import get_user_model
 from rest_auth.models import TokenModel
 from rest_framework import serializers
+
+from app import settings
 from users.models import User, Profile
 from rest_auth.registration.serializers import RegisterSerializer
 
@@ -44,28 +48,35 @@ class ProfileAvatarSerializer(serializers.ModelSerializer):
 
 
 class CustomRegisterSerializer(RegisterSerializer):
-    username = serializers.CharField(read_only=True, required=False)
-    email = serializers.EmailField(required=True)
+    # Doesn't need to explicit say this
+    # username = serializers.CharField(read_only=True, required=False)
+    # email = serializers.EmailField(required=True)
+
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
+
     profile = ProfileSerializer(required=True)
-
-    def update(self, instance, validated_data):
-        pass
-
-    def create(self, validated_data):
-        pass
 
     def get_cleaned_data(self):
         super(CustomRegisterSerializer, self).get_cleaned_data()
 
+        # TODO return profile data 12.03
         return {
-            'email'        : self.validated_data.get('email', ''),
-            'first_name'   : self.validated_data.get('first_name', ''),
-            'last_name'    : self.validated_data.get('last_name', ''),
-            'password1'    : self.validated_data.get('password1', ''),
-            'date_of_birth': self.validated_data.get('date_of_birth', ''),
+            'email'     : self.validated_data.get('email', ''),
+            'first_name': self.validated_data.get('first_name', ''),
+            'last_name' : self.validated_data.get('last_name', ''),
+            'password1' : self.validated_data.get('password1', ''),
+            'birth_date': self.validated_data.get('birth_date', ''),
+            'gender'    : self.validated_data.get('gender', ''),
         }
+
+    # def validate_date_of_birthday(self, date_of_birthday):
+    #     age = relativedelta(datetime.now(), date_of_birthday).years
+    #
+    #     if age < 18:
+    #         raise serializers.ValidationError('Must be at least 18 years old to register.')
+    #     else:
+    #         return date_of_birthday
 
 
 class CustomRegisterChildSerializer(CustomRegisterSerializer):

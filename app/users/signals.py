@@ -19,10 +19,10 @@ def create_profile(sender, instance, created, **kwargs):
         # TODO Create Family & Parent only if is parent!
         family = Family.objects.create(name=instance.username)
         Parent.objects.create(user=instance, family=family)
-
-        # TODO write family id to the profile
-        # TODO set attribute to parent
-        # Create profile for every user
+        #
+        # # TODO write family id to the profile
+        # # TODO set attribute to parent
+        # # Create profile for every user
         Profile.objects.create(user=instance)
 
         # RES: https://www.django-rest-framework.org/api-guide/authentication/

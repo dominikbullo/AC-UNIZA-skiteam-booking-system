@@ -3,6 +3,7 @@ from rest_framework import serializers
 from family.models import Child, Parent, Family
 
 from users.api.serializers import CustomRegisterChildSerializer, ProfileSerializer
+from users.models import Profile
 
 
 class ChildSerializer(serializers.ModelSerializer):
@@ -12,20 +13,11 @@ class ChildSerializer(serializers.ModelSerializer):
                                                  view_name="family-detail")
 
     def create(self, validated_data):
-        print("validated_data", validated_data)
-        try:
-            if validated_data["user"]["username"]:
-                print("with username")
-        except KeyError:
-            if validated_data["user"]["email"] == "":
-                print("with username and email")
-                raise serializers.ValidationError('Email or Username is required')
-
-        # TODO Add family as parent
-        # # TODO doesnt have mail -> disable verification
-        # if validated_data["user"]["email"] == "" and validated_data["user"]["username"] == "":
-        validated_data["user"]["username"] = "tes"
-
+        user = super().create(validated_data)
+        # TODO 12.03. Custom create_user method and UserManager
+        # TODO email into allauth
+        # user = get_user_model().objects.create_user(**validated_data["user"])
+        #
         user = get_user_model().objects.create_user(**validated_data["user"])
         return Child.objects.create(user=user, family_id=1)
 

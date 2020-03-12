@@ -1,5 +1,20 @@
 from allauth.account.models import EmailAddress
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
+from allauth.account.adapter import DefaultAccountAdapter
+
+
+class CustomAccountAdapter(DefaultAccountAdapter):
+
+    def save_user(self, request, user, form, commit=False):
+        user = super().save_user(request, user, form, commit)
+        user.save()
+
+        # user.profile.birth_date = "09.12.1996"
+        # user.profile.birth_date = self.cleaned_data["birth_date"]
+        user.profile.gender = "M"
+        # user.profile.gender = self.cleaned_data["gender"]
+        user.profile.save()
+        return user
 
 
 class MySocialAccountAdapter(DefaultSocialAccountAdapter):

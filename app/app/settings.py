@@ -64,17 +64,6 @@ INSTALLED_APPS = [
     'webpack_loader',
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True
-CORS_ALLOW_CREDENTIALS = True
-
-REST_AUTH_REGISTER_SERIALIZERS = {
-    'REGISTER_SERIALIZER': 'users.api.serializers.CustomRegisterSerializer',
-}
-REST_AUTH_SERIALIZERS = {
-    # TODO USER_DETAILS_SERIALIZER
-    'TOKEN_SERIALIZER': 'users.api.serializers.TokenSerializer',
-}
-
 OLD_PASSWORD_FIELD_ENABLED = True
 
 MIDDLEWARE = [
@@ -216,10 +205,23 @@ ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 5
 # SOCIALACCOUNT_EMAIL_REQUIRED = True
 # SOCIALACCOUNT_ADAPTER = 'core.adapter.MySocialAccountAdapter'
 
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+ACCOUNT_ADAPTER = 'core.adapter.CustomAccountAdapter'
+
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'users.api.serializers.CustomRegisterSerializer',
+}
+REST_AUTH_SERIALIZERS = {
+    # TODO USER_DETAILS_SERIALIZER
+    'TOKEN_SERIALIZER': 'users.api.serializers.TokenSerializer',
+}
+DATE_INPUT_FORMATS = ["%d.%m.%Y"]
+
 # Django-REST-Framework
 # https://medium.com/@apogiatzis/create-a-restful-api-with-users-and-jwt-authentication-using-django-1-11-drf-part-2-eb6fdcf71f45
 REST_FRAMEWORK = {
-    "DATE_INPUT_FORMATS"            : ["%d.%m.%Y"],
+    "DATE_INPUT_FORMATS"            : DATE_INPUT_FORMATS,
     'DEFAULT_PERMISSION_CLASSES'    : (
         'rest_framework.permissions.IsAuthenticated',
     ),
