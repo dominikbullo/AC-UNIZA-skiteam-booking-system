@@ -19,13 +19,13 @@ class FullNameRequiredMixin(object):
 class CustomUserCreationForm(FullNameRequiredMixin, UserCreationForm):
     class Meta:
         model = User
-        fields = ('username', "email", 'first_name', 'last_name')
+        fields = ("email", 'first_name', 'last_name')
 
 
 class CustomUserChangeForm(FullNameRequiredMixin, UserChangeForm):
     class Meta:
         model = User
-        fields = ('username', 'email')
+        fields = ('email',)
 
 
 from allauth.account.forms import SignupForm

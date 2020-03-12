@@ -48,10 +48,7 @@ class ProfileAvatarSerializer(serializers.ModelSerializer):
 
 
 class CustomRegisterSerializer(RegisterSerializer):
-    # Doesn't need to explicit say this
-    # username = serializers.CharField(read_only=True, required=False)
-    # email = serializers.EmailField(required=True)
-
+    username = serializers.CharField(read_only=True, required=False)
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
 
@@ -60,7 +57,6 @@ class CustomRegisterSerializer(RegisterSerializer):
     def get_cleaned_data(self):
         super(CustomRegisterSerializer, self).get_cleaned_data()
 
-        # TODO return profile data 12.03
         return {
             'email'     : self.validated_data.get('email', ''),
             'first_name': self.validated_data.get('first_name', ''),
@@ -70,19 +66,14 @@ class CustomRegisterSerializer(RegisterSerializer):
             'gender'    : self.validated_data.get('gender', ''),
         }
 
-    # def validate_date_of_birthday(self, date_of_birthday):
-    #     age = relativedelta(datetime.now(), date_of_birthday).years
-    #
-    #     if age < 18:
-    #         raise serializers.ValidationError('Must be at least 18 years old to register.')
-    #     else:
-    #         return date_of_birthday
 
-
-class CustomRegisterChildSerializer(CustomRegisterSerializer):
-    # TODO on validation i can create username from email, but this is fine for now
-    username = serializers.CharField(required=True)
-    email = serializers.EmailField(required=False)
+# def validate_date_of_birthday(self, date_of_birthday):
+#     age = relativedelta(datetime.now(), date_of_birthday).years
+#
+#     if age < 18:
+#         raise serializers.ValidationError('Must be at least 18 years old to register.')
+#     else:
+#         return date_of_birthday
 
 
 class TokenSerializer(serializers.ModelSerializer):

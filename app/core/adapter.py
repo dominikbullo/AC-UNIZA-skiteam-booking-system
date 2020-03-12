@@ -2,6 +2,9 @@ from allauth.account.models import EmailAddress
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth.account.adapter import DefaultAccountAdapter
 
+from family.models import Family, Parent
+from users.models import Profile
+
 
 class CustomAccountAdapter(DefaultAccountAdapter):
     """ Saving user and also profile details"""
@@ -12,13 +15,23 @@ class CustomAccountAdapter(DefaultAccountAdapter):
 
         # TODO for key matching...
         try:
+            print("data")
+            # Profile.objects.filter(user=user).update(**request.data["profile"])
             # user.profile.birth_date = request.data["profile"]["birth_date"]
-            user.profile.gender = request.data["profile"]["gender"]
+            # user.profile.gender = request.data["profile"]["gender"]
         except Exception as e:
             print(e)
             pass
 
         user.profile.save()
+
+        # TODO family creator
+        family = Family.objects.create(name=user.username)
+        family.save()
+
+        parent = Parent.objects.create(user=user, family=family)
+        parent.save()
+
         return user
 
 

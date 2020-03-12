@@ -1,24 +1,35 @@
+from allauth.account.adapter import get_adapter
+from allauth.account.utils import setup_user_email
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from family.models import Child, Parent, Family
 
-from users.api.serializers import CustomRegisterChildSerializer, ProfileSerializer
+from users.api.serializers import CustomRegisterSerializer
 from users.models import Profile
 
 
-class ChildSerializer(serializers.ModelSerializer):
-    user = CustomRegisterChildSerializer(required=True)
+# class CustomRegisterChildSerializer(CustomRegisterSerializer):
+#     # TODO on validation i can create username from email, but this is fine for now
+#     username = serializers.CharField(required=True)
+#     email = serializers.EmailField(required=False, allow_null=True)
 
-    family = serializers.HyperlinkedRelatedField(read_only=True,
-                                                 view_name="family-detail")
+
+# https://stackoverflow.com/questions/33659994/django-rest-framework-create-user-and-user-profile
+class ChildSerializer(serializers.ModelSerializer):
+    user = CustomRegisterSerializer(required=True)
+
+    family = serializers.HyperlinkedRelatedField(read_only=True, view_name="family-detail")
 
     def create(self, validated_data):
-        user = super().create(validated_data)
-        # TODO 12.03. Custom create_user method and UserManager
-        # TODO email into allauth
-        # user = get_user_model().objects.create_user(**validated_data["user"])
-        #
-        user = get_user_model().objects.create_user(**validated_data["user"])
+        # delete profile data to handle user creation
+
+        user = get_user_model().objects.create_child_user(**validated_data["user"])
+        user.save()
+
+        # Update profile
+        Profile.objects.filter(user=user).update(**validated_data["user"].pop('profile'))
+        # profile.save()
+
         return Child.objects.create(user=user, family_id=1)
 
     class Meta:
