@@ -2,7 +2,6 @@ from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import AbstractUser, Group, PermissionsMixin
 from django.db import models
 
-from app import settings
 from core.utils import USER_TYPE_CHOICES, GENDER_CHOICES
 
 
@@ -12,21 +11,21 @@ from core.utils import USER_TYPE_CHOICES, GENDER_CHOICES
 # TODO 13.03 -> this would be problem
 class UserManager(BaseUserManager):
     # This creating user for child
-    def create_user(self, username, email, password=None, **extra_fields):
+    def create_user(self, email, username=None, password=None, **extra_fields):
         """Creates and saves a new user"""
-        if not username:
-            raise ValueError('Users must have an username')
+        # if not username:
+        #     raise ValueError('Users must have an username')
 
         if not email:
             raise ValueError('Users must have an email address')
 
-        user = self.model(email=self.normalize_email(email), **extra_fields)
+        user = self.model(email=self.normalize_email(email))
         user.set_password(password)
         user.save(using=self._db)
 
         return user
 
-    def create_child_user(self, email, password1=None, **extra_fields):
+    def create_child_user(self, email, username=None, password1=None, **extra_fields):
         """Creates and saves a new user"""
         # TODO set user role
         user_payload = {
@@ -42,7 +41,7 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_staff_user(self, email, password, **extra_fields):
+    def create_staff_user(self, email, password, username=None, **extra_fields):
         """
         Creates and saves a staff user with the given email and password.
         """
@@ -55,9 +54,9 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, username, email, password):
+    def create_superuser(self, email, password, username=None):
         """Creates and saves a new super user"""
-        user = self.create_user(username, email, password)
+        user = self.create_user(email, password)
         user.is_staff = True
         user.is_superuser = True
         user.save(using=self._db)
@@ -77,7 +76,7 @@ class User(AbstractUser):
 
     user_role = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES, null=True, blank=True)
 
-    objects = UserManager()
+    # objects = UserManager()
 
     def __str__(self):
         return self.name_or_username
@@ -93,7 +92,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=30, blank=True)
     location = models.CharField(max_length=30, blank=True)
-    birth_date = models.DateField(null=False, blank=False)
+    birth_date = models.DateField(null=True, blank=True)
     avatar = models.ImageField(null=True, blank=True)
 
     # USER_TYPE_CHOICES is from from core.utils import USER_TYPE_CHOICES because i using it at m,any locations
