@@ -28,8 +28,8 @@ urlpatterns = [
     path("api/", include("events.api.urls")),
 
     # everything else go to IndexTemplateView aka index.html od dev index page
+    # path('', IndexTemplateView.as_view(), name="entry-point"),
     re_path(r"^.*$", IndexTemplateView.as_view(), name="entry-point"),
-    path('', IndexTemplateView.as_view(), name="entry-point"),
 ]
 from django.conf.urls.static import static
 from django.conf import settings

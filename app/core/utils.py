@@ -17,6 +17,19 @@ USER_TYPE_CHOICES = (
     (3, 'Coach'),
     (4, 'Admin'),
 )
+USER_TYPE_CHOICES_NEW_TEST = (
+    ("unidentified", "Unidentified"),
+    ("child", 'Child'),
+    ("parent", 'Parent'),
+    ("coach", 'Coach'),
+    ("editor", 'Editor'),
+    ("admin", 'Admin'),
+)
+GENDER_CHOICES = (
+    ('M', 'Male'),
+    ('F', 'Female'),
+)
+
 FAMILY_RELATION_CHOICE = (
     (1, 'Partner'),
     (2, 'Parent'),

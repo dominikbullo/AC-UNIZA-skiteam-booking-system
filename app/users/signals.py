@@ -11,6 +11,11 @@ from users.models import Profile, User
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_profile(sender, instance, created, **kwargs):
     if created:
+        print("sender", sender)
+        print("instance", instance)
+        print("created", created)
+        # print("**kwargs", **kwargs)
+
         # TODO Create Family & Parent only if is parent!
         family = Family.objects.create(name=instance.username)
         Parent.objects.create(user=instance, family=family)

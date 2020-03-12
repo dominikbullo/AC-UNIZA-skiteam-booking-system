@@ -71,8 +71,11 @@ REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'users.api.serializers.CustomRegisterSerializer',
 }
 REST_AUTH_SERIALIZERS = {
+    # TODO USER_DETAILS_SERIALIZER
     'TOKEN_SERIALIZER': 'users.api.serializers.TokenSerializer',
 }
+
+OLD_PASSWORD_FIELD_ENABLED = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -104,11 +107,11 @@ ROOT_URLCONF = 'app.urls'
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
+        'BACKEND' : 'django.template.backends.django.DjangoTemplates',
+        'DIRS'    : [os.path.join(BASE_DIR, 'templates')]
         ,
         'APP_DIRS': True,
-        'OPTIONS': {
+        'OPTIONS' : {
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
@@ -127,7 +130,7 @@ WSGI_APPLICATION = 'app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME'  : os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -195,28 +198,29 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 
-ACCOUNT_SESSION_REMEMBER = True
+# ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 
-# Logout immediately without form
-ACCOUNT_LOGOUT_ON_GET = True
+# # Logout immediately without form
+# ACCOUNT_LOGOUT_ON_GET = True
 
 # Make email verification mandatory to avoid junk email accounts
-ACCOUNT_EMAIL_VERIFICATION = 'optional'
-ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+# ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+# ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 
 # Longer mail expiration
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 5
 
-SOCIALACCOUNT_QUERY_EMAIL = ACCOUNT_EMAIL_REQUIRED
-SOCIALACCOUNT_AUTO_SIGNUP = True
-SOCIALACCOUNT_EMAIL_REQUIRED = True
-SOCIALACCOUNT_ADAPTER = 'core.adapter.MySocialAccountAdapter'
+# SOCIALACCOUNT_QUERY_EMAIL = ACCOUNT_EMAIL_REQUIRED
+# SOCIALACCOUNT_AUTO_SIGNUP = True
+# SOCIALACCOUNT_EMAIL_REQUIRED = True
+# SOCIALACCOUNT_ADAPTER = 'core.adapter.MySocialAccountAdapter'
 
 # Django-REST-Framework
 # https://medium.com/@apogiatzis/create-a-restful-api-with-users-and-jwt-authentication-using-django-1-11-drf-part-2-eb6fdcf71f45
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': (
+    "DATE_INPUT_FORMATS"            : ["%d.%m.%Y"],
+    'DEFAULT_PERMISSION_CLASSES'    : (
         'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -224,9 +228,9 @@ REST_FRAMEWORK = {
         # TODO only in dev
         'rest_framework.authentication.SessionAuthentication',
     ),
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_PAGINATION_CLASS'      : 'rest_framework.pagination.PageNumberPagination',
     # 10 could be a good value to assign in production. Remember: this currently also applies to answers
-    'PAGE_SIZE': 10
+    'PAGE_SIZE'                     : 10
 }
 
 LOGIN_EXEMPT_URLS = (
@@ -238,7 +242,7 @@ LOGIN_EXEMPT_URLS = (
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
-        'SCOPE': [
+        'SCOPE'      : [
             'profile',
             'email',
         ],
@@ -251,7 +255,7 @@ SOCIALACCOUNT_PROVIDERS = {
 WEBPACK_LOADER = {
     'DEFAULT': {
         'BUNDLE_DIR_NAME': 'dist/',
-        'STATS_FILE': os.path.join(BASE_DIR, 'frontend', 'webpack-stats.json'),
+        'STATS_FILE'     : os.path.join(BASE_DIR, 'frontend', 'webpack-stats.json'),
     }
 }
 
