@@ -10,23 +10,17 @@ class CustomAccountAdapter(DefaultAccountAdapter):
     """ Saving user and also profile details"""
 
     def save_user(self, request, user, form, commit=False):
+        # Create user
         user = super().save_user(request, user, form, commit)
         user.save()
 
-        # TODO for key matching...
-        try:
-            print("data")
-            # Profile.objects.filter(user=user).update(**request.data["profile"])
-            # user.profile.birth_date = request.data["profile"]["birth_date"]
-            # user.profile.gender = request.data["profile"]["gender"]
-        except Exception as e:
-            print(e)
-            pass
-
+        # Create profile user with data already received
+        profile_date = request.data.pop('profile')
+        Profile.objects.create(user=user, **profile_date)
         user.profile.save()
 
-        # TODO family creator
-        family = Family.objects.create(name=user.username)
+        # Create new family for user, because i don't know on register nothing about him
+        family = Family.objects.create(name=user.email)
         family.save()
 
         parent = Parent.objects.create(user=user, family=family)

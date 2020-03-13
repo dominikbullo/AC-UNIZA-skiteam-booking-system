@@ -6,7 +6,7 @@ from rest_auth.models import TokenModel
 from rest_framework import serializers
 
 from app import settings
-from users.models import User, Profile
+from users.models import Profile, User
 from rest_auth.registration.serializers import RegisterSerializer
 
 
@@ -63,6 +63,11 @@ class CustomRegisterSerializer(RegisterSerializer):
             'last_name' : self.validated_data.get('last_name', ''),
             'password1' : self.validated_data.get('password1', ''),
         }
+
+    # def save(self, request):
+    #     user = super(CustomRegisterSerializer, self).save(request)
+    #     print(user.email)
+    #     return user
 
 
 # def validate_date_of_birthday(self, date_of_birthday):
