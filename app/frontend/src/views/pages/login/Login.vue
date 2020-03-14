@@ -17,23 +17,24 @@
           <div class="vx-row no-gutter justify-center items-center">
 
             <div class="vx-col hidden lg:block lg:w-1/2">
-              <img src="@/assets/images/pages/login.png" alt="login" class="mx-auto">
+              <img src="@/assets/images/logo/logo1_medium.png" alt="login" class="mx-auto">
             </div>
+
 
             <div class="vx-col sm:w-full md:w-full lg:w-1/2 d-theme-dark-bg">
               <div class="px-8 pt-8 login-tabs-container">
 
                 <div class="vx-card__title mb-4">
-                  <h4 class="mb-4">Login</h4>
-                  <p>Welcome back, please login to your account.</p>
+                  <h4 class="mb-4">{{ $t('Login') }}</h4>
+                  <p>{{ $t('message.login') }}.</p>
                 </div>
 
                 <vs-tabs>
                   <vs-tab label="DRF">
                     <login-d-r-f></login-d-r-f>
                   </vs-tab>
-                  <vs-tab label="JWT">
-                    <login-jwt></login-jwt>
+                  <vs-tab :label="$t('Social')">
+                    <!--                    <login-jwt></login-jwt>-->
                   </vs-tab>
                 </vs-tabs>
 

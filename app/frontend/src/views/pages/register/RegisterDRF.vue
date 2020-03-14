@@ -4,9 +4,9 @@
     <vs-input
       v-validate="'required|alpha_dash|min:3'"
       data-vv-validate-on="blur"
-      label-placeholder="Meno"
+      :label-placeholder="$t('Name')"
       name="name"
-      placeholder="Meno"
+      :placeholder="$t('Name')"
       v-model="first_name"
       class="w-full mt-6"/>
     <span class="text-danger text-sm">{{ errors.first('first_name') }}</span>
@@ -14,40 +14,43 @@
     <vs-input
       v-validate="'required|alpha_dash|min:3'"
       data-vv-validate-on="blur"
-      label-placeholder="Priezvisko"
+      :label-placeholder="$t('Surname')"
       name="last_name"
-      placeholder="Priezvisko"
+      :placeholder="$t('Surname')"
       v-model="last_name"
       class="w-full mt-6"/>
     <span class="text-danger text-sm">{{ errors.first('last_name') }}</span>
 
-    <vs-input
-      v-validate="'required|date_format:dd.MM.yyyy'"
-      data-vv-validate-on="blur"
-      label-placeholder="Dátum narodenia"
-      name="birth_date"
-      placeholder="Dátum narodenia"
-      v-model="birth_date"
-      class="w-full mt-6"/>
-    <span class="text-danger text-sm">{{ errors.first('birth_date') }}</span>
+    <!--    <vs-input-->
+    <!--      v-validate="'required|date_format:dd.MM.yyyy'"-->
+    <!--      data-vv-validate-on="blur"-->
+    <!--      :label-placeholder="$t('BirthDate')"-->
+    <!--      name="birth_date"-->
+    <!--      :placeholder="$t('BirthDate')"-->
+    <!--      v-model="birth_date"-->
+    <!--      class="w-full mt-6"/>-->
+    <!--    <span class="text-danger text-sm">{{ errors.first('birth_date') }}</span>-->
 
-    <!--    <datepicker v-model="birth_date"-->
-    <!--                name="birth_date"-->
-    <!--                class="w-full mt-6"-->
-    <!--                z-index="11111"-->
-    <!--                :language="sk"-->
-    <!--                placeholder="Dátum narodenia"-->
-    <!--                format="dd.MM.yyyy"-->
-    <!--                @closed="datepickerClosedFunction">-->
-    <!--    </datepicker>-->
+    <!-- TODO language and format -->
+    <datepicker v-model="birth_date"
+                name="birth_date"
+                class="w-full mt-6"
+                z-index="11111"
+                :language="sk"
+                :label-placeholder="$t('BirthDate')"
+                :placeholder="$t('BirthDate')"
+                format="dd.MM.yyyy"
+                @closed="datepickerClosedFunction">
+    </datepicker>
+    <span class="text-danger text-sm">{{ errors.first('birth_date') }}</span>
 
     <vs-input
       v-validate="'required|email'"
       data-vv-validate-on="blur"
       name="email"
       type="email"
-      label-placeholder="Email"
-      placeholder="Email"
+      :label-placeholder="$t('Email')"
+      :placeholder="$t('Email')"
       v-model="email"
       class="w-full mt-6"/>
     <span class="text-danger text-sm">{{ errors.first('email') }}</span>
@@ -58,8 +61,8 @@
       data-vv-validate-on="blur"
       v-validate="'required|min:6'"
       name="password"
-      label-placeholder="Heslo"
-      placeholder="Heslo"
+      :label-placeholder="$t('Password')"
+      :placeholder="$t('Password')"
       v-model="password"
       class="w-full mt-6"/>
     <span class="text-danger text-sm">{{ errors.first('password') }}</span>
@@ -70,15 +73,16 @@
       data-vv-validate-on="blur"
       data-vv-as="password"
       name="confirm_password"
-      label-placeholder="Potvrdiť heslo"
-      placeholder="Confirm Password"
+      :label-placeholder="$t('ConfirmPassword')"
+      :placeholder="$t('ConfirmPassword')"
       v-model="confirm_password"
       class="w-full mt-6"/>
     <span class="text-danger text-sm">{{ errors.first('confirm_password') }}</span>
 
-    <vs-checkbox v-model="isTermsConditionAccepted" class="mt-6">I accept the terms & conditions.</vs-checkbox>
-    <vs-button type="border" to="/pages/login" class="mt-6">Login</vs-button>
-    <vs-button class="float-right mt-6" @click="registerUserDRF" :disabled="!validateForm">Register</vs-button>
+    <vs-checkbox v-model="isTermsConditionAccepted" class="mt-6">{{ $t('message.terms_accept') }}.</vs-checkbox>
+    <vs-button type="border" to="/pages/login" class="mt-6">{{ $t('Login') }}</vs-button>
+    <vs-button class="float-right mt-6" @click="registerUserDRF" :disabled="!validateForm">{{$t('Register')}}
+    </vs-button>
   </div>
 </template>
 
