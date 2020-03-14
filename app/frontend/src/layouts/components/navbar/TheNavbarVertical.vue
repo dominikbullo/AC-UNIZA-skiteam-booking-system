@@ -19,7 +19,14 @@
         <!-- SM - OPEN SIDEBAR BUTTON -->
         <feather-icon class="sm:inline-flex xl:hidden cursor-pointer p-2" icon="MenuIcon" @click.stop="showSidebar" />
 
-        <bookmarks :navbarColor="navbarColor" v-if="windowWidth >= 992" />
+      <div class="demo-alignment mb-base">
+        <vs-radio v-model="userRole" vs-value="admin" >admin </vs-radio>
+        <vs-radio v-model="userRole" vs-value="editor">editor</vs-radio>
+        <vs-radio v-model="userRole" vs-value="coach" >coach </vs-radio>
+        <vs-radio v-model="userRole" vs-value="parent">parent</vs-radio>
+        <vs-radio v-model="userRole" vs-value="child" >child </vs-radio>
+        <vs-radio v-model="userRole" vs-value="public">public</vs-radio>
+      </div>
 
         <vs-spacer />
 
@@ -46,6 +53,20 @@ import ProfileDropDown      from './components/ProfileDropDown.vue'
 
 export default {
   name: 'the-navbar-vertical',
+  data () {
+    return {
+      email: '',
+      userRole: this.$acl.get[0]
+    }
+  },
+  watch: {
+    userRole (val) {
+      this.$store.dispatch('updateUserRole', {
+        aclChangeRole: this.$acl.change,
+        userRole: val
+      })
+    }
+  },
   props: {
     navbarColor: {
       type: String,

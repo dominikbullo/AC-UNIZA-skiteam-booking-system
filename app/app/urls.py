@@ -17,9 +17,7 @@ router.extend(events_router)
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    # url(r'^account/', include('allauth.urls')),
-
-    path("api/auth/", include('core.auth')),
+    path("api/rest-auth/", include('core.auth')),
 
     path("api/", include(router.urls)),
 

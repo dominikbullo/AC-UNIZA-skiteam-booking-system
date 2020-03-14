@@ -13,6 +13,9 @@ pillow = "*"
 django-webpack-loader = "*"
 django-oauth-toolkit = "*"
 django-cors-middleware = "*"
+drf-user = "*"
+drfaddons = "*"
+django-filter = "*"
 
 [dev-packages]
 bump2version = "*"

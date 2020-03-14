@@ -85,7 +85,7 @@ export default {
         localStorage.removeItem('accessToken')
       }
       // https://docs.djangoproject.com/en/3.0/ref/csrf/
-      this.$http.post('/auth/logout/').then(() => {
+      this.$http.post('/rest-auth/logout/').then(() => {
         // delete this.$http.defaults.headers.common['X-CSRFToken']
         delete this.$http.defaults.headers.common['Authorization']
       })

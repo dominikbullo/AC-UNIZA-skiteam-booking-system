@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "3b47578ef59eebeb78534b033565ed5ca94aa3e76bdb10111df6fd7c41b3b913"
+            "sha256": "42bd970b1603f4db2c1f8c3a79a024b7e1ddbce551bbd79b04bfc7f6150e3c1a"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -18,10 +18,10 @@
     "default": {
         "asgiref": {
             "hashes": [
-                "sha256:7e06d934a7718bf3975acbf87780ba678957b87c7adc056f13b6215d610695a0",
-                "sha256:ea448f92fc35a0ef4b1508f53a04c4670255a3f33d22a81c8fc9c872036adbe5"
+                "sha256:3e4192eaec0758b99722f0b0666d5fbfaa713054d92e8de5b58ba84ec5ce696f",
+                "sha256:c8f49dd3b42edcc51d09dd2eea8a92b3cfc987ff7e6486be734b4d0cbfd5d315"
             ],
-            "version": "==3.2.3"
+            "version": "==3.2.5"
         },
         "certifi": {
             "hashes": [
@@ -67,6 +67,14 @@
             "index": "pypi",
             "version": "==1.5.0"
         },
+        "django-filter": {
+            "hashes": [
+                "sha256:6f4e4bc1a11151178520567b50320e5c32f8edb552139d93ea3e30613b886f56",
+                "sha256:86c3925020c27d072cdae7b828aaa5d165c2032a629abbe3c3a1be1edae61c58"
+            ],
+            "index": "pypi",
+            "version": "==2.0.0"
+        },
         "django-oauth-toolkit": {
             "hashes": [
                 "sha256:2c1e27f6c9b67782c86acbe38954b102e0593ba799cc69782f78448154127b6e",
@@ -82,6 +90,12 @@
             "index": "pypi",
             "version": "==0.9.5"
         },
+        "django-sendsms": {
+            "hashes": [
+                "sha256:b9a839d8635fb1c21896be985f59f2ca46040b22085372212dec86224047d202"
+            ],
+            "version": "==0.3.1"
+        },
         "django-webpack-loader": {
             "hashes": [
                 "sha256:7a3c88201aa54481f9399465615cbe7b9aece8081496a6d0287b7cb8e232f447",
@@ -92,11 +106,11 @@
         },
         "django-widget-tweaks": {
             "hashes": [
-                "sha256:65c960f3d75008a285e4b10f4d21f9eae4160fd77a0f6097ad545185f8648bd6",
-                "sha256:f2e2c9c9be1ccc59061e248dcc2144f4906d594abe1a563902f4bdf6aa14e432"
+                "sha256:a4ab4877744238e493c162a1bde2ebcae499d338e45072ebf5569c0664644bf9",
+                "sha256:bb81ca73ff17080192801c9bf3abba3b70d44ea0f1fcfd57778edb75f387c82e"
             ],
             "index": "pypi",
-            "version": "==1.4.5"
+            "version": "==1.4.6"
         },
         "djangorestframework": {
             "hashes": [
@@ -105,6 +119,29 @@
             ],
             "index": "pypi",
             "version": "==3.11.0"
+        },
+        "djangorestframework-jwt": {
+            "hashes": [
+                "sha256:5efe33032f3a4518a300dc51a51c92145ad95fb6f4b272e5aa24701db67936a7",
+                "sha256:ab15dfbbe535eede8e2e53adaf52ef0cf018ee27dbfad10cbc4cbec2ab63d38c"
+            ],
+            "version": "==1.11.0"
+        },
+        "drf-user": {
+            "hashes": [
+                "sha256:14c6b8e532dac93041e7d564cba4cd2a260e5f2062fd957e511f7da75440b4d3",
+                "sha256:ffb9a87bbd9e38c2db6c7d487842d0e7fcbec841333a13a7799ef7d060c4bbeb"
+            ],
+            "index": "pypi",
+            "version": "==0.0.8"
+        },
+        "drfaddons": {
+            "hashes": [
+                "sha256:5a8039d3232697cc77be1ad2a96b45e3449130b31af0216296929fe23a2a0961",
+                "sha256:d324cadc5cd9920e9b66b4eeab6aa870f20e57b35a92c0bbc64bc85c93e656da"
+            ],
+            "index": "pypi",
+            "version": "==0.1.3"
         },
         "idna": {
             "hashes": [
@@ -147,6 +184,13 @@
             ],
             "index": "pypi",
             "version": "==7.0.0"
+        },
+        "pyjwt": {
+            "hashes": [
+                "sha256:5c6eca3c2940464d106b99ba83b00c6add741c9becaec087fb7ccdefea71350e",
+                "sha256:8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96"
+            ],
+            "version": "==1.7.1"
         },
         "python3-openid": {
             "hashes": [

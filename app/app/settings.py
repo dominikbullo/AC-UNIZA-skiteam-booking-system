@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     # https://github.com/adamchainz/django-cors-headers#cors_allow_headers
     'corsheaders',
 
+    # https://django-rest-auth.readthedocs.io/en/latest/installation.html
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.facebook',
@@ -207,7 +208,7 @@ ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 5
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
-ACCOUNT_ADAPTER = 'core.adapter.CustomAccountAdapter'
+# ACCOUNT_ADAPTER = 'core.adapter.CustomAccountAdapter'
 
 REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'users.api.serializers.CustomRegisterSerializer',

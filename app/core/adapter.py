@@ -1,32 +1,5 @@
 from allauth.account.models import EmailAddress
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
-from allauth.account.adapter import DefaultAccountAdapter
-
-from family.models import Family, Parent
-from users.models import Profile
-
-
-class CustomAccountAdapter(DefaultAccountAdapter):
-    """ Saving user and also profile details"""
-
-    def save_user(self, request, user, form, commit=False):
-        # Create user
-        user = super().save_user(request, user, form, commit)
-        user.save()
-
-        # Create profile user with data already received
-        profile_date = request.data.pop('profile')
-        Profile.objects.create(user=user, **profile_date)
-        user.profile.save()
-
-        # Create new family for user, because i don't know on register nothing about him
-        family = Family.objects.create(name=user.email)
-        family.save()
-
-        parent = Parent.objects.create(user=user, family=family)
-        parent.save()
-
-        return user
 
 
 class MySocialAccountAdapter(DefaultSocialAccountAdapter):

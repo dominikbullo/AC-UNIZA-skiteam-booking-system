@@ -5,9 +5,23 @@ from django.contrib.auth import get_user_model
 from rest_auth.models import TokenModel
 from rest_framework import serializers
 
-from app import settings
+from family.models import Family, Parent
 from users.models import Profile, User
 from rest_auth.registration.serializers import RegisterSerializer
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    avatar = serializers.ImageField(read_only=True)
+
+    class Meta:
+        model = Profile
+        exclude = ('id', "user")
+
+
+class ProfileAvatarSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ("avatar",)
 
 
 class UserDisplaySerializer(serializers.ModelSerializer):
@@ -15,6 +29,13 @@ class UserDisplaySerializer(serializers.ModelSerializer):
     verified_email = serializers.SerializerMethodField()
 
     user_role = serializers.CharField(source='get_user_role_display')
+    profile = ProfileSerializer(required=True)
+
+    @property
+    def is_verified(self):
+        if self.get_verified_email(get_user_model()):
+            return True
+        return False
 
     def get_verified_email(self, obj):
         try:
@@ -25,26 +46,13 @@ class UserDisplaySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = get_user_model()
-        fields = ('email', "username", 'password', 'first_name', "last_name", "verified_email", "user_role")
+        # todo teturn is verified as tru false
+        fields = (
+            'email', "username", 'password', 'first_name', "last_name", "verified_email", "user_role", "profile")
         extra_kwargs = {
             'password': {'write_only': True, 'min_length': 5},
             'username': {'read_only': True},
         }
-
-
-class ProfileSerializer(serializers.ModelSerializer):
-    user = serializers.StringRelatedField(read_only=True)
-    avatar = serializers.ImageField(read_only=True)
-
-    class Meta:
-        model = Profile
-        fields = "__all__"
-
-
-class ProfileAvatarSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Profile
-        fields = ("avatar",)
 
 
 class CustomRegisterSerializer(RegisterSerializer):
@@ -54,6 +62,7 @@ class CustomRegisterSerializer(RegisterSerializer):
 
     profile = ProfileSerializer(required=True)
 
+    # TODO this
     def get_cleaned_data(self):
         super(CustomRegisterSerializer, self).get_cleaned_data()
 
@@ -64,10 +73,18 @@ class CustomRegisterSerializer(RegisterSerializer):
             'password1' : self.validated_data.get('password1', ''),
         }
 
-    # def save(self, request):
-    #     user = super(CustomRegisterSerializer, self).save(request)
-    #     print(user.email)
-    #     return user
+    def custom_signup(self, request, user):
+        profile_data = request.data.pop('profile')
+        Profile.objects.create(user=user, **profile_data)
+        user.profile.save()
+
+        # TODO family_creator
+        # TODO only if parent
+        family = Family.objects.create(name=user.email)
+        family.save()
+
+        parent = Parent.objects.create(user=user, family=family)
+        parent.save()
 
 
 # def validate_date_of_birthday(self, date_of_birthday):

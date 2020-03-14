@@ -46,13 +46,13 @@ export default {
     })
   },
   login (email, pwd) {
-    return axios.post('/auth/login/', {
+    return axios.post('/rest-auth/login/', {
       username: email,
       password: pwd
     })
   },
   registerUserEmail (first_name, last_name, birth_date, email, gender, pwd) {
-    return axios.post('/auth/register/', {
+    return axios.post('/rest-auth/register/', {
       email,
       first_name,
       last_name,
@@ -66,7 +66,7 @@ export default {
     })
   },
   registerUserUsername (username, email, pwd) {
-    return axios.post('/auth/register/', {
+    return axios.post('/rest-auth/register/', {
       username,
       password1: pwd,
       password2: pwd

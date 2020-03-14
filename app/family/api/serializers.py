@@ -1,3 +1,5 @@
+from collections import OrderedDict
+
 from allauth.account.adapter import get_adapter
 from allauth.account.utils import setup_user_email
 from django.contrib.auth import get_user_model
@@ -8,29 +10,47 @@ from users.api.serializers import CustomRegisterSerializer
 from users.models import Profile
 
 
-# class CustomRegisterChildSerializer(CustomRegisterSerializer):
-#     # TODO on validation i can create username from email, but this is fine for now
-#     username = serializers.CharField(required=True)
-#     email = serializers.EmailField(required=False, allow_null=True)
+class CustomRegisterChildSerializer(CustomRegisterSerializer):
+    # TODO on validation i can create username from email, but this is fine for now
+    username = serializers.CharField(required=True)
+    email = serializers.CharField(required=False)
+
+    # https://github.com/Tivix/django-rest-auth/issues/464
+    def get_cleaned_data(self):
+        return {
+            'name'    : self.validated_data.get('name', ''),
+            'password': self.validated_data.get('password1', ''),
+            'email'   : self.validated_data.get('email', '')
+        }
 
 
 # https://stackoverflow.com/questions/33659994/django-rest-framework-create-user-and-user-profile
 class ChildSerializer(serializers.ModelSerializer):
-    user = CustomRegisterSerializer(required=True)
+    user = CustomRegisterChildSerializer(required=True)
 
     family = serializers.HyperlinkedRelatedField(read_only=True, view_name="family-detail")
 
     def create(self, validated_data):
-        # delete profile data to handle user creation
+        profile_data = validated_data["user"].pop('profile')
+        password = validated_data["user"].pop('password1')
+        # self.validated_data.get('name', '')
+        validated_data["user"].pop('password2')
 
-        user = get_user_model().objects.create_child_user(**validated_data["user"])
+        user = get_user_model().objects.create(**validated_data["user"])
+        user.set_password(password)
         user.save()
 
-        # Update profile
-        Profile.objects.filter(user=user).update(**validated_data["user"].pop('profile'))
-        # profile.save()
+        Profile.objects.create(user=user, **profile_data)
+        user.profile.save()
 
-        return Child.objects.create(user=user, family_id=1)
+        try:
+            print("Parent is:", validated_data["parent"])
+        except:
+            print("youre fucked")
+
+        # TODO Here i can add user/owner/family
+        child = Child.objects.create(user=user, family_id=1)
+        return child
 
     class Meta:
         model = Child
