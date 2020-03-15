@@ -1,7 +1,5 @@
-from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include, re_path
-from rest_auth.registration.views import VerifyEmailView
 
 from core import router
 from core.views import IndexTemplateView

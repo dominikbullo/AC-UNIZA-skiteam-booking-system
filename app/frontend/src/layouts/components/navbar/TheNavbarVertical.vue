@@ -17,26 +17,23 @@
       <vs-navbar class="vx-navbar navbar-custom navbar-skelton" :color="navbarColorLocal" :class="textColor">
 
         <!-- SM - OPEN SIDEBAR BUTTON -->
-        <feather-icon class="sm:inline-flex xl:hidden cursor-pointer p-2" icon="MenuIcon" @click.stop="showSidebar" />
+        <feather-icon class="sm:inline-flex xl:hidden cursor-pointer p-2" icon="MenuIcon" @click.stop="showSidebar"/>
 
-      <div class="demo-alignment mb-base">
-        <vs-radio v-model="userRole" vs-value="admin" >admin </vs-radio>
-        <vs-radio v-model="userRole" vs-value="editor">editor</vs-radio>
-        <vs-radio v-model="userRole" vs-value="coach" >coach </vs-radio>
-        <vs-radio v-model="userRole" vs-value="parent">parent</vs-radio>
-        <vs-radio v-model="userRole" vs-value="child" >child </vs-radio>
-        <vs-radio v-model="userRole" vs-value="public">public</vs-radio>
-      </div>
+        <div class="demo-alignment mb-base">
+          <vs-radio v-model="userRole" vs-value="admin">admin</vs-radio>
+          <vs-radio v-model="userRole" vs-value="editor">editor</vs-radio>
+          <!--Đ-->
+        </div>
 
-        <vs-spacer />
+        <vs-spacer/>
 
-        <i18n />
+        <i18n/>
 
-        <search-bar />
+        <search-bar/>
 
-        <notification-drop-down />
+        <notification-drop-down/>
 
-        <profile-drop-down />
+        <profile-drop-down/>
 
       </vs-navbar>
     </div>
@@ -45,11 +42,11 @@
 
 
 <script>
-import Bookmarks            from './components/Bookmarks.vue'
-import I18n                 from './components/I18n.vue'
-import SearchBar            from './components/SearchBar.vue'
+import Bookmarks from './components/Bookmarks.vue'
+import I18n from './components/I18n.vue'
+import SearchBar from './components/SearchBar.vue'
 import NotificationDropDown from './components/NotificationDropDown.vue'
-import ProfileDropDown      from './components/ProfileDropDown.vue'
+import ProfileDropDown from './components/ProfileDropDown.vue'
 
 export default {
   name: 'the-navbar-vertical',
@@ -96,9 +93,9 @@ export default {
 
     // NAVBAR STYLE
     classObj () {
-      if      (this.verticalNavMenuWidth === 'default') return 'navbar-default'
+      if (this.verticalNavMenuWidth === 'default') return 'navbar-default'
       else if (this.verticalNavMenuWidth === 'reduced') return 'navbar-reduced'
-      else if (this.verticalNavMenuWidth)               return 'navbar-full'
+      else if (this.verticalNavMenuWidth) return 'navbar-full'
     }
   },
   methods: {

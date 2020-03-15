@@ -30,6 +30,7 @@ class ProfileViewSet(mixins.UpdateModelMixin,
                      mixins.ListModelMixin,
                      mixins.RetrieveModelMixin,
                      viewsets.GenericViewSet):
+    """ Will be used when all users can see each other """
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
     permission_classes = [IsAuthenticated, IsOwnProfileOrReadOnly]
@@ -41,11 +42,11 @@ class UsersViewSet(mixins.UpdateModelMixin,
                    mixins.ListModelMixin,
                    mixins.RetrieveModelMixin,
                    viewsets.GenericViewSet):
+    """ Used when changing info about user """
     queryset = get_user_model().objects.all()
     serializer_class = UserDisplaySerializer
-    permission_classes = [IsAuthenticated, IsOwnProfileOrReadOnly]
     filter_backends = [SearchFilter]
-    search_fields = ["user"]
+    search_fields = ["username"]
 
 
 class FacebookLogin(SocialLoginView):

@@ -1135,7 +1135,7 @@ const router = new Router({
               },
               { title: 'Pages' },
               {
-                title: 'User Settings',
+                title: 'User Account',
                 active: true
               }
             ],

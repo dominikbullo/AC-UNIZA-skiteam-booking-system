@@ -31,12 +31,6 @@ class UserDisplaySerializer(serializers.ModelSerializer):
     user_role = serializers.CharField(source='get_user_role_display')
     profile = ProfileSerializer(required=True)
 
-    @property
-    def is_verified(self):
-        if self.get_verified_email(get_user_model()):
-            return True
-        return False
-
     def get_verified_email(self, obj):
         try:
             email_address = EmailAddress.objects.get(user_id=obj.id)
@@ -48,7 +42,8 @@ class UserDisplaySerializer(serializers.ModelSerializer):
         model = get_user_model()
         # todo teturn is verified as tru false
         fields = (
-            'email', "username", 'password', 'first_name', "last_name", "verified_email", "user_role", "profile")
+            'id', 'email', "username", 'password', 'first_name', "last_name", "verified_email", "user_role", "profile"
+        )
         extra_kwargs = {
             'password': {'write_only': True, 'min_length': 5},
             'username': {'read_only': True},
