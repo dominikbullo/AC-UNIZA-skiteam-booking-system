@@ -136,7 +136,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'User' },
+              {title: 'User'},
               {
                 title: 'List',
                 active: true
@@ -156,7 +156,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'User' },
+              {title: 'User'},
               {
                 title: 'View',
                 active: true
@@ -176,7 +176,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'User' },
+              {title: 'User'},
               {
                 title: 'Edit',
                 active: true
@@ -199,7 +199,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Data List' },
+              {title: 'Data List'},
               {
                 title: 'List View',
                 active: true
@@ -219,7 +219,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Data List' },
+              {title: 'Data List'},
               {
                 title: 'Thumb View',
                 active: true
@@ -239,7 +239,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Grid' },
+              {title: 'Grid'},
               {
                 title: 'Vuesax',
                 active: true
@@ -259,7 +259,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Grid' },
+              {title: 'Grid'},
               {
                 title: 'Tailwind',
                 active: true
@@ -298,7 +298,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Card' },
+              {title: 'Card'},
               {
                 title: 'Basic Cards',
                 active: true
@@ -318,7 +318,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Card' },
+              {title: 'Card'},
               {
                 title: 'Statistics Cards',
                 active: true
@@ -338,7 +338,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Card' },
+              {title: 'Card'},
               {
                 title: 'Analytics Card',
                 active: true
@@ -358,7 +358,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Card' },
+              {title: 'Card'},
               {
                 title: 'Card Actions',
                 active: true
@@ -378,7 +378,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Card' },
+              {title: 'Card'},
               {
                 title: 'Card Colors',
                 active: true
@@ -440,7 +440,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Components' },
+              {title: 'Components'},
               {
                 title: 'Alert',
                 active: true
@@ -460,7 +460,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Components' },
+              {title: 'Components'},
               {
                 title: 'Avatar',
                 active: true
@@ -480,7 +480,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Components' },
+              {title: 'Components'},
               {
                 title: 'Breadcrumb',
                 active: true
@@ -500,7 +500,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Components' },
+              {title: 'Components'},
               {
                 title: 'Button',
                 active: true
@@ -520,7 +520,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Components' },
+              {title: 'Components'},
               {
                 title: 'Button Group',
                 active: true
@@ -540,7 +540,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Components' },
+              {title: 'Components'},
               {
                 title: 'Chip',
                 active: true
@@ -560,7 +560,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Components' },
+              {title: 'Components'},
               {
                 title: 'Collapse',
                 active: true
@@ -580,7 +580,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Components' },
+              {title: 'Components'},
               {
                 title: 'Dialogs',
                 active: true
@@ -600,7 +600,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Components' },
+              {title: 'Components'},
               {
                 title: 'Divider',
                 active: true
@@ -620,7 +620,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Components' },
+              {title: 'Components'},
               {
                 title: 'Dropdown',
                 active: true
@@ -640,7 +640,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Components' },
+              {title: 'Components'},
               {
                 title: 'List',
                 active: true
@@ -660,7 +660,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Components' },
+              {title: 'Components'},
               {
                 title: 'Loading',
                 active: true
@@ -680,7 +680,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Components' },
+              {title: 'Components'},
               {
                 title: 'Navbar',
                 active: true
@@ -700,7 +700,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Components' },
+              {title: 'Components'},
               {
                 title: 'Notifications',
                 active: true
@@ -720,7 +720,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Components' },
+              {title: 'Components'},
               {
                 title: 'Pagination',
                 active: true
@@ -740,7 +740,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Components' },
+              {title: 'Components'},
               {
                 title: 'Popup',
                 active: true
@@ -760,7 +760,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Components' },
+              {title: 'Components'},
               {
                 title: 'Progress',
                 active: true
@@ -780,7 +780,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Components' },
+              {title: 'Components'},
               {
                 title: 'Sidebar',
                 active: true
@@ -800,7 +800,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Components' },
+              {title: 'Components'},
               {
                 title: 'Slider',
                 active: true
@@ -820,7 +820,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Components' },
+              {title: 'Components'},
               {
                 title: 'Tabs',
                 active: true
@@ -840,7 +840,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Components' },
+              {title: 'Components'},
               {
                 title: 'Tooltip',
                 active: true
@@ -860,7 +860,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Components' },
+              {title: 'Components'},
               {
                 title: 'Upload',
                 active: true
@@ -888,7 +888,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Form Elements' },
+              {title: 'Form Elements'},
               {
                 title: 'Select',
                 active: true
@@ -908,7 +908,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Form Elements' },
+              {title: 'Form Elements'},
               {
                 title: 'Switch',
                 active: true
@@ -928,7 +928,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Form Elements' },
+              {title: 'Form Elements'},
               {
                 title: 'Checkbox',
                 active: true
@@ -948,7 +948,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Form Elements' },
+              {title: 'Form Elements'},
               {
                 title: 'Radio',
                 active: true
@@ -968,7 +968,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Form Elements' },
+              {title: 'Form Elements'},
               {
                 title: 'Input',
                 active: true
@@ -988,7 +988,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Form Elements' },
+              {title: 'Form Elements'},
               {
                 title: 'Number Input',
                 active: true
@@ -1008,7 +1008,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Form Elements' },
+              {title: 'Form Elements'},
               {
                 title: 'Textarea',
                 active: true
@@ -1029,7 +1029,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Forms' },
+              {title: 'Forms'},
               {
                 title: 'Form Layouts',
                 active: true
@@ -1049,7 +1049,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Extra Components' },
+              {title: 'Extra Components'},
               {
                 title: 'Form Wizard',
                 active: true
@@ -1069,7 +1069,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Extra Components' },
+              {title: 'Extra Components'},
               {
                 title: 'Form Validation',
                 active: true
@@ -1089,7 +1089,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Extra Components' },
+              {title: 'Extra Components'},
               {
                 title: 'Form Input Group',
                 active: true
@@ -1113,7 +1113,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Pages' },
+              {title: 'Pages'},
               {
                 title: 'Profile',
                 active: true
@@ -1133,9 +1133,29 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Pages' },
+              {title: 'Pages'},
               {
                 title: 'User Account',
+                active: true
+              }
+            ],
+            pageTitle: 'Settings',
+            rule: 'editor'
+          }
+        },
+        {
+          path: '/pages/family-settings',
+          name: 'page-family-settings',
+          component: () => import('@/views/pages/family-settings/FamilySettings.vue'),
+          meta: {
+            breadcrumb: [
+              {
+                title: 'Home',
+                url: '/'
+              },
+              {title: 'Pages'},
+              {
+                title: 'Family',
                 active: true
               }
             ],
@@ -1153,7 +1173,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Pages' },
+              {title: 'Pages'},
               {
                 title: 'FAQ',
                 active: true
@@ -1173,7 +1193,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Pages' },
+              {title: 'Pages'},
               {
                 title: 'KnowledgeBase',
                 active: true
@@ -1193,7 +1213,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Pages' },
+              {title: 'Pages'},
               {
                 title: 'KnowledgeBase',
                 url: '/pages/knowledge-base'
@@ -1217,7 +1237,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Pages' },
+              {title: 'Pages'},
               {
                 title: 'KnowledgeBase',
                 url: '/pages/knowledge-base'
@@ -1245,7 +1265,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Pages' },
+              {title: 'Pages'},
               {
                 title: 'Search',
                 active: true
@@ -1265,7 +1285,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Pages' },
+              {title: 'Pages'},
               {
                 title: 'Invoice',
                 active: true
@@ -1289,7 +1309,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Charts & Maps' },
+              {title: 'Charts & Maps'},
               {
                 title: 'Apex Charts',
                 active: true
@@ -1309,7 +1329,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Charts & Maps' },
+              {title: 'Charts & Maps'},
               {
                 title: 'chartjs',
                 active: true
@@ -1329,7 +1349,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Charts & Maps' },
+              {title: 'Charts & Maps'},
               {
                 title: 'echarts',
                 active: true
@@ -1349,7 +1369,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Charts & Maps' },
+              {title: 'Charts & Maps'},
               {
                 title: 'Google Map',
                 active: true
@@ -1374,7 +1394,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Extra Components' },
+              {title: 'Extra Components'},
               {
                 title: 'Select',
                 active: true
@@ -1394,7 +1414,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Extra Components' },
+              {title: 'Extra Components'},
               {
                 title: 'Quill Editor',
                 active: true
@@ -1414,7 +1434,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Extra Components' },
+              {title: 'Extra Components'},
               {
                 title: 'Drag & Drop',
                 active: true
@@ -1434,7 +1454,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Extra Components' },
+              {title: 'Extra Components'},
               {
                 title: 'Datepicker',
                 active: true
@@ -1454,7 +1474,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Extra Components' },
+              {title: 'Extra Components'},
               {
                 title: 'Datetime Picker',
                 active: true
@@ -1474,7 +1494,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Extensions' },
+              {title: 'Extensions'},
               {
                 title: 'Access Control',
                 active: true
@@ -1494,7 +1514,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Extensions' },
+              {title: 'Extensions'},
               {
                 title: 'I18n',
                 active: true
@@ -1514,7 +1534,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Extensions' },
+              {title: 'Extensions'},
               {
                 title: 'Carousel',
                 active: true
@@ -1534,7 +1554,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Extensions' },
+              {title: 'Extensions'},
               {
                 title: 'Clipboard',
                 active: true
@@ -1554,7 +1574,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Extensions' },
+              {title: 'Extensions'},
               {
                 title: 'Context Menu',
                 active: true
@@ -1574,7 +1594,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Extensions' },
+              {title: 'Extensions'},
               {
                 title: 'Star Ratings',
                 active: true
@@ -1594,7 +1614,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Extensions' },
+              {title: 'Extensions'},
               {
                 title: 'Autocomplete',
                 active: true
@@ -1614,7 +1634,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Extensions' },
+              {title: 'Extensions'},
               {
                 title: 'Tree',
                 active: true
@@ -1634,8 +1654,8 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Extensions' },
-              { title: 'Import/Export' },
+              {title: 'Extensions'},
+              {title: 'Import/Export'},
               {
                 title: 'Import',
                 active: true
@@ -1655,8 +1675,8 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Extensions' },
-              { title: 'Import/Export' },
+              {title: 'Extensions'},
+              {title: 'Import/Export'},
               {
                 title: 'Export',
                 active: true
@@ -1676,8 +1696,8 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Extensions' },
-              { title: 'Import/Export' },
+              {title: 'Extensions'},
+              {title: 'Import/Export'},
               {
                 title: 'Export Selected',
                 active: true

@@ -85,19 +85,6 @@ export default [
     i18n: 'Pages',
     items: [
       {
-        url: '/testpage',
-        name: 'Test Page',
-        slug: 'test-page',
-        icon: 'FileIcon'
-      },
-      {
-        url: '/pages/profile',
-        slug: 'page-profile',
-        name: 'Profile',
-        icon: 'UserIcon',
-        i18n: 'Profile'
-      },
-      {
         url: '/pages/user-settings',
         slug: 'page-user-settings',
         name: 'Account',
@@ -105,18 +92,31 @@ export default [
         i18n: 'Account'
       },
       {
-        url: '/pages/family',
+        url: '/pages/family-settings',
         slug: 'family-settings',
         name: 'Family',
-        icon: 'SettingsIcon',
+        icon: 'UsersIcon',
         i18n: 'Family'
+      },
+      {
+        url: '/testpage',
+        name: 'Test Page',
+        slug: 'test-page',
+        icon: 'FileIcon'
       }
+      // , {
+      //   url: '/pages/profile',
+      //   slug: 'page-profile',
+      //   name: 'Profile',
+      //   icon: 'UserIcon',
+      //   i18n: 'Profile'
+      // }
     ]
   },
   {
     header: 'Charts',
     icon: 'PieChartIcon',
-    i18n: 'ChartsAndMaps',
+    i18n: 'Charts',
     items: [
       {
         url: null,
