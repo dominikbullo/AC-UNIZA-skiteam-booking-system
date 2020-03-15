@@ -1724,7 +1724,7 @@ const router = new Router({
           }
         },
         {
-          path: '/reset-password',
+          path: '/reset-password/:uid/:token',
           name: 'page-reset-password',
           component: () => import('@/views/pages/ResetPassword.vue'),
           meta: {
@@ -1796,30 +1796,31 @@ router.afterEach(() => {
     appLoading.style.display = 'none'
   }
 })
-router.beforeEach((to, from, next) => {
-  // redirect to login page if not logged in and trying to access a restricted page
-  const publicPages = [
-    '/login',
-    '/forgot-password',
-    '/register',
-    '/pages/error-404',
-    '/pages/error-500',
-    '/pages/not-authorized',
-    '/pages/comingsoon'
-  ]
-
-  const authRequired = !publicPages.includes(to.path)
-  const loggedIn = localStorage.getItem('userInfo')
-
-  if (authRequired && !loggedIn) {
-    return next({
-      path: '/pages/comingsoon',
-      query: { returnUrl: to.path }
-    })
-  }
-
-  next()
-})
+// RELEASE: redirect
+// router.beforeEach((to, from, next) => {
+//   // redirect to login page if not logged in and trying to access a restricted page
+//   const publicPages = [
+//     '/login',
+//     '/forgot-password',
+//     '/register',
+//     '/pages/error-404',
+//     '/pages/error-500',
+//     '/pages/not-authorized',
+//     '/pages/comingsoon'
+//   ]
+//
+//   const authRequired = !publicPages.includes(to.path)
+//   const loggedIn = localStorage.getItem('userInfo')
+//
+//   if (authRequired && !loggedIn) {
+//     return next({
+//       path: '/pages/comingsoon',
+//       query: { returnUrl: to.path }
+//     })
+//   }
+//
+//   next()
+// })
 //
 // router.beforeEach((to, from, next) => {
 //   firebase.auth().onAuthStateChanged(() => {

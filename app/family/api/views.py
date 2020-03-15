@@ -35,16 +35,9 @@ class ChildrenViewSet(viewsets.ModelViewSet):
     search_fields = ["user"]
 
     # VIEW because i need to know user who is in the request
-    # https://stackoverflow.com/questions/34797050/django-rest-framework-create-child-of-nested-relationship
-    # https://stackoverflow.com/questions/41094013/when-to-use-serializers-create-and-modelviewsets-create-perform-create
-    # https://stackoverflow.com/questions/58437374/django-rest-auth-calling-registerview-from-other-viewset-sensitive-post-parame
-
-    # def create(self, request, *args, **kwargs):
-    #     # user = Rei(self.request)
-    #     # Create user
-    #     # Create child(user=user, parent=request.user, family=request.user.family
-    #     # return response
-    #     pass
+    # RES: https://stackoverflow.com/questions/34797050/django-rest-framework-create-child-of-nested-relationship
+    # RES: https://stackoverflow.com/questions/41094013/when-to-use-serializers-create-and-modelviewsets-create-perform-create
+    # RES: https://stackoverflow.com/questions/58437374/django-rest-auth-calling-registerview-from-other-viewset-sensitive-post-parame
 
     # Sending parent of child (user which created him)
     def perform_create(self, serializer):

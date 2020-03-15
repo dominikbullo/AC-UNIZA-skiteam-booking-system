@@ -192,7 +192,6 @@ ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
-# ACCOUNT_ADAPTER = 'core.adapter.CustomAccountAdapter'
 
 REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'users.api.serializers.CustomRegisterSerializer',
