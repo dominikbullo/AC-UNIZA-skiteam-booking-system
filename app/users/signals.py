@@ -31,5 +31,4 @@ from users.models import Profile
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def generate_token(sender, instance, created, **kwargs):
     if created:
-        print("Generate token: ", created)
         Token.objects.create(user=instance)

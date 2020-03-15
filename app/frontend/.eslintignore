@@ -4,3 +4,4 @@ src/layouts/components/vx-tooltip/VxTooltip.vue
 tailwind.config.js
 tailwind-v0.js
 docs/*
+src/layouts/components/Logo.vue

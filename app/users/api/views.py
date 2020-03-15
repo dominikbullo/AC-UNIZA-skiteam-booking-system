@@ -1,18 +1,20 @@
+from allauth.account.models import EmailConfirmation, EmailConfirmationHMAC
 from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
+
 from django.contrib.auth import get_user_model
+from django.http import HttpResponseRedirect
 
 from rest_auth.registration.views import SocialLoginView
+
 from rest_framework import generics, mixins, viewsets
-from rest_framework.permissions import IsAuthenticated
-
 from rest_framework.filters import SearchFilter
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.views import APIView
 
-from users.api.serializers import (ProfileAvatarSerializer, ProfileSerializer, CustomRegisterSerializer,
-                                   UserDisplaySerializer)
-from users.api.permissions import IsOwnerOrReadOnly, IsOwnProfileOrReadOnly
+from users.api.permissions import IsOwnProfileOrReadOnly
+from users.api.serializers import ProfileAvatarSerializer, ProfileSerializer, UserDisplaySerializer
+
 from users.models import Profile
-
-from rest_framework import generics, authentication, permissions
 
 
 class AvatarUpdateView(generics.UpdateAPIView):
@@ -49,9 +51,40 @@ class UsersViewSet(mixins.UpdateModelMixin,
 class FacebookLogin(SocialLoginView):
     adapter_class = FacebookOAuth2Adapter
 
+
 # from rest_auth.registration.views import SocialLoginView
 # from allauth.socialaccount.providers.google.views import GoogleOAuth2RestAdapter
 #
 # # https://github.com/Tivix/django-rest-auth/issues/403
 # class GoogleLogin(SocialLoginView):
 #     adapter_class = GoogleOAuth2RestAdapter
+
+
+class ConfirmEmailView(APIView):
+    # TODO handle succes and failure
+
+    permission_classes = [AllowAny]
+
+    def get(self, *args, **kwargs):
+        self.object = confirmation = self.get_object()
+        confirmation.confirm(self.request)
+        # A React Router Route will handle the failure scenario
+        return HttpResponseRedirect('/login')
+
+    def get_object(self, queryset=None):
+        key = self.kwargs['key']
+        email_confirmation = EmailConfirmationHMAC.from_key(key)
+        if not email_confirmation:
+            if queryset is None:
+                queryset = self.get_queryset()
+            try:
+                email_confirmation = queryset.get(key=key.lower())
+            except EmailConfirmation.DoesNotExist:
+                # A React Router Route will handle the failure scenario
+                return HttpResponseRedirect('/login/failure/')
+        return email_confirmation
+
+    def get_queryset(self):
+        qs = EmailConfirmation.objects.all_valid()
+        qs = qs.select_related("email_address__user")
+        return qs

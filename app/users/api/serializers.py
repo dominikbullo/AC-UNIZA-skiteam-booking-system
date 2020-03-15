@@ -62,38 +62,39 @@ class CustomRegisterSerializer(RegisterSerializer):
 
     profile = ProfileSerializer(required=True)
 
-    # TODO this
+    # FIXME get cleaned data -> normalize_email(email)
     def get_cleaned_data(self):
-        super(CustomRegisterSerializer, self).get_cleaned_data()
-
-        return {
-            'email'     : self.validated_data.get('email', ''),
+        default = super(CustomRegisterSerializer, self).get_cleaned_data()
+        mine = {
             'first_name': self.validated_data.get('first_name', ''),
             'last_name' : self.validated_data.get('last_name', ''),
-            'password1' : self.validated_data.get('password1', ''),
         }
 
+        return {**default, **mine}
+
     def custom_signup(self, request, user):
+        # TODO: ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+        #       Don't create user on request only after mail verifications
+
         profile_data = request.data.pop('profile')
         Profile.objects.create(user=user, **profile_data)
         user.profile.save()
 
-        # TODO family_creator
-        # TODO only if parent
+        # TODO family_creator only if parent
         family = Family.objects.create(name=user.email)
         family.save()
 
         parent = Parent.objects.create(user=user, family=family)
         parent.save()
 
-
-# def validate_date_of_birthday(self, date_of_birthday):
-#     age = relativedelta(datetime.now(), date_of_birthday).years
-#
-#     if age < 18:
-#         raise serializers.ValidationError('Must be at least 18 years old to register.')
-#     else:
-#         return date_of_birthday
+        # # TODO: Validate date of birthday only 18 +
+        # def validate_date_of_birthday(self, date_of_birthday):
+        #     age = relativedelta(datetime.now(), date_of_birthday).years
+        #
+        #     if age < 18:
+        #         raise serializers.ValidationError('Must be at least 18 years old to register.')
+        #     else:
+        #         return date_of_birthday
 
 
 class TokenSerializer(serializers.ModelSerializer):
