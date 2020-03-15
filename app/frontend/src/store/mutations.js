@@ -100,7 +100,8 @@ const mutations = {
     const userInfo = JSON.parse(localStorage.getItem('userInfo')) || state.AppActiveUser
 
     // TODO if exist
-    payload.displayName = `${payload.first_name  } ${  payload.last_name}`
+    // When changing permission this change to undefined
+    payload.displayName = `${payload.first_name} ${payload.last_name}`
 
     for (const property of Object.keys(payload)) {
 

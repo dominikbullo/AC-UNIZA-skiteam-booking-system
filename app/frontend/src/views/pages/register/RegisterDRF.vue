@@ -2,23 +2,23 @@
 <template>
   <div class="clearfix">
     <vs-input
-      v-validate="'required|alpha_dash|min:3'"
-      data-vv-validate-on="blur"
       :label-placeholder="$t('Name')"
-      name="name"
       :placeholder="$t('Name')"
+      class="w-full mt-6"
+      data-vv-validate-on="blur"
+      name="name"
       v-model="first_name"
-      class="w-full mt-6"/>
+      v-validate="'required|alpha_dash|min:3'"/>
     <span class="text-danger text-sm">{{ errors.first('first_name') }}</span>
 
     <vs-input
-      v-validate="'required|alpha_dash|min:3'"
-      data-vv-validate-on="blur"
       :label-placeholder="$t('Surname')"
-      name="last_name"
       :placeholder="$t('Surname')"
+      class="w-full mt-6"
+      data-vv-validate-on="blur"
+      name="last_name"
       v-model="last_name"
-      class="w-full mt-6"/>
+      v-validate="'required|alpha_dash|min:3'"/>
     <span class="text-danger text-sm">{{ errors.first('last_name') }}</span>
 
     <!--    <vs-input-->
@@ -31,57 +31,58 @@
     <!--      class="w-full mt-6"/>-->
     <!--    <span class="text-danger text-sm">{{ errors.first('birth_date') }}</span>-->
 
-    <!-- TODO language and format -->
-    <datepicker v-model="birth_date"
-                name="birth_date"
-                class="w-full mt-6"
-                z-index="11111"
-                :language="sk"
+    <!-- FIXME language and format -->
+    <!-- RES https://www.npmjs.com/package/vue-moment-->
+    <datepicker :format="customFormatter"
                 :label-placeholder="$t('BirthDate')"
+                :language="sk"
                 :placeholder="$t('BirthDate')"
-                format="dd.MM.yyyy"
-                @closed="datepickerClosedFunction">
+                @closed="datepickerClosedFunction"
+                class="w-full mt-6"
+                name="birth_date"
+                v-model="birth_date"
+                z-index="11111">
     </datepicker>
     <span class="text-danger text-sm">{{ errors.first('birth_date') }}</span>
 
     <vs-input
-      v-validate="'required|email'"
+      :label-placeholder="$t('Email')"
+      :placeholder="$t('Email')"
+      class="w-full mt-6"
       data-vv-validate-on="blur"
       name="email"
       type="email"
-      :label-placeholder="$t('Email')"
-      :placeholder="$t('Email')"
       v-model="email"
-      class="w-full mt-6"/>
+      v-validate="'required|email'"/>
     <span class="text-danger text-sm">{{ errors.first('email') }}</span>
 
     <vs-input
-      ref="password"
-      type="password"
-      data-vv-validate-on="blur"
-      v-validate="'required|min:6'"
-      name="password"
       :label-placeholder="$t('Password')"
       :placeholder="$t('Password')"
+      class="w-full mt-6"
+      data-vv-validate-on="blur"
+      name="password"
+      ref="password"
+      type="password"
       v-model="password"
-      class="w-full mt-6"/>
+      v-validate="'required|min:6'"/>
     <span class="text-danger text-sm">{{ errors.first('password') }}</span>
 
     <vs-input
-      type="password"
-      v-validate="'min:6|confirmed:password'"
-      data-vv-validate-on="blur"
-      data-vv-as="password"
-      name="confirm_password"
       :label-placeholder="$t('ConfirmPassword')"
       :placeholder="$t('ConfirmPassword')"
+      class="w-full mt-6"
+      data-vv-as="password"
+      data-vv-validate-on="blur"
+      name="confirm_password"
+      type="password"
       v-model="confirm_password"
-      class="w-full mt-6"/>
+      v-validate="'min:6|confirmed:password'"/>
     <span class="text-danger text-sm">{{ errors.first('confirm_password') }}</span>
 
-    <vs-checkbox v-model="isTermsConditionAccepted" class="mt-6">{{ $t('message.terms_accept') }}.</vs-checkbox>
-    <vs-button type="border" to="/pages/login" class="mt-6">{{ $t('Login') }}</vs-button>
-    <vs-button class="float-right mt-6" @click="registerUserDRF" :disabled="!validateForm">{{$t('Register')}}
+    <vs-checkbox class="mt-6" v-model="isTermsConditionAccepted">{{ $t('message.terms_accept') }}.</vs-checkbox>
+    <vs-button class="mt-6" to="/login" type="border">{{ $t('Login') }}</vs-button>
+    <vs-button :disabled="!validateForm" @click="registerUserDRF" class="float-right mt-6">{{$t('Register')}}
     </vs-button>
   </div>
 </template>
@@ -154,7 +155,6 @@ export default {
     registerUserDRF () {
       // If form is not validated or user is already login return
       if (!this.validateForm || !this.checkLogin()) return
-
       const payload = {
         userDetails: {
           first_name: this.first_name,

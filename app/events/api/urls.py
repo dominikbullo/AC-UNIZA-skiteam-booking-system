@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 
 from events.api.views import EventsViewSet
 
-# TODO because reverse in tests, but there must be better way
+# Because reverse in tests, but there must be better way
 app_name = 'events'
 
 # https://www.django-rest-framework.org/api-guide/routers/

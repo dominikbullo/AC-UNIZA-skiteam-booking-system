@@ -20,13 +20,6 @@
 
 
 export default [
-  // {
-  //   url: "/apps/email",
-  //   name: "Email",
-  //   slug: "email",
-  //   icon: "MailIcon",
-  //   i18n: "Email",
-  // },
   {
     url: '/dashboard',
     name: 'Dashboard',
@@ -34,14 +27,6 @@ export default [
     tagColor: 'warning',
     icon: 'HomeIcon',
     i18n: 'Dashboard'
-  },
-  {
-    url: '/admin/dashboard',
-    name: 'Admin dashboard',
-    // tag: '2',
-    tagColor: 'warning',
-    icon: 'HomeIcon',
-    i18n: 'Admin dashboard'
   },
   {
     header: 'Apps',
@@ -52,7 +37,8 @@ export default [
         url: null,
         name: 'Events',
         icon: 'CalendarIcon',
-        i18n: 'Event',
+        // eslint-disable-next-line no-invalid-this
+        i18n: 'Events',
         submenu: [
           {
             url: '/apps/event/list',
@@ -61,9 +47,9 @@ export default [
             i18n: 'List'
           },
           {
-            url: '/apps/calendar/vue-simple-calendar',
+            url: '/apps/calendar',
             name: 'Calendar',
-            slug: 'calendar-simple-calendar',
+            slug: 'calendar',
             icon: 'CalendarIcon',
             tagColor: 'success',
             i18n: 'Calendar'
@@ -72,21 +58,16 @@ export default [
       },
       {
         url: null,
-        name: 'User',
-        icon: 'UserIcon',
-        i18n: 'User',
+        name: 'Users',
+        icon: 'UsersIcon',
+        // eslint-disable-next-line no-invalid-this
+        i18n: 'Users',
         submenu: [
           {
-            url: null,
-            name: 'List',
+            url: '/apps/user/user-list',
+            name: 'app-user-list',
             slug: 'app-user-list',
             i18n: 'List'
-          },
-          {
-            url: '/apps/user/user-view/268',
-            name: 'View',
-            slug: 'app-user-view',
-            i18n: 'View'
           },
           {
             url: '/apps/user/user-edit/268',
@@ -111,7 +92,6 @@ export default [
       },
       {
         url: '/pages/profile',
-        isDisabled: true,
         slug: 'page-profile',
         name: 'Profile',
         icon: 'UserIcon',
@@ -120,63 +100,16 @@ export default [
       {
         url: '/pages/user-settings',
         slug: 'page-user-settings',
-        name: 'User Settings',
+        name: 'Account',
         icon: 'SettingsIcon',
-        i18n: 'UserSettings'
+        i18n: 'Account'
       },
       {
-        url: '/pages/search',
-        isDisabled: true,
-        slug: 'page-search',
-        name: 'Search',
-        icon: 'SearchIcon',
-        i18n: 'Search'
-      },
-      {
-        url: null,
-        name: 'Miscellaneous',
-        icon: 'CoffeeIcon',
-        i18n: 'Miscellaneous',
-        submenu: [
-          {
-            url: '/pages/not-authorized',
-            name: 'Not Authorized',
-            slug: 'page-not-authorized',
-            icon: 'XCircleIcon',
-            i18n: 'NotAuthorized',
-            target: '_blank'
-          },
-          {
-            url: '/pages/maintenance',
-            name: 'Maintenance',
-            slug: 'page-maintenance',
-            icon: 'AnchorIcon',
-            i18n: 'Maintenance',
-            target: '_blank'
-          },
-          {
-            url: '/pages/comingsoon',
-            slug: 'page-coming-soon',
-            name: 'Coming Soon',
-            icon: 'ClockIcon',
-            i18n: 'ComingSoon',
-            target: '_blank'
-          },
-          {
-            url: '/pages/error-404',
-            name: '404',
-            slug: 'page-error-404',
-            i18n: '404',
-            target: '_blank'
-          },
-          {
-            url: '/pages/error-500',
-            name: '500',
-            slug: 'page-error-500',
-            i18n: '500',
-            target: '_blank'
-          }
-        ]
+        url: '/pages/family',
+        slug: 'family-settings',
+        name: 'Family',
+        icon: 'SettingsIcon',
+        i18n: 'Family'
       }
     ]
   },
@@ -215,18 +148,83 @@ export default [
       }
     ]
   },
+  // TODO show this only for admins
+  // everything wit /admin/
+  {
+    header: 'Admin',
+    icon: 'PackageIcon',
+    i18n: 'Admin',
+    items: [
+      {
+        url: '/admin/dashboard',
+        name: 'Admin dashboard',
+        // tag: '2',
+        tagColor: 'warning',
+        icon: 'HomeIcon',
+        i18n: 'Admin dashboard'
+      },
+      {
+        url: null,
+        name: 'Events',
+        icon: 'CalendarIcon',
+        i18n: 'Event',
+        submenu: [
+          {
+            url: '/apps/event/list',
+            name: 'List',
+            slug: 'app-event-list',
+            i18n: 'List'
+          },
+          {
+            url: '/apps/calendar/vue-simple-calendar',
+            name: 'Calendar',
+            slug: 'calendar-simple-calendar',
+            icon: 'CalendarIcon',
+            tagColor: 'success',
+            i18n: 'Calendar'
+          }
+        ]
+      },
+      {
+        url: null,
+        name: 'User',
+        icon: 'UserIcon',
+        i18n: 'User',
+        submenu: [
+          {
+            url: '/apps/user/user-list',
+            name: 'List',
+            slug: 'app-user-list',
+            i18n: 'List'
+          },
+          {
+            url: '/apps/user/user-view/268',
+            name: 'View',
+            slug: 'app-user-view',
+            i18n: 'View'
+          },
+          {
+            url: '/apps/user/user-edit/268',
+            name: 'Edit',
+            slug: 'app-user-edit',
+            i18n: 'Edit'
+          }
+        ]
+      }
+    ]
+  },
   {
     header: 'Others',
     icon: 'MoreHorizontalIcon',
     i18n: 'Others',
     items: [
-      {
-        url: null,
-        name: 'Disabled Menu',
-        icon: 'EyeOffIcon',
-        i18n: 'DisabledMenu',
-        isDisabled: true
-      },
+      // {
+      //   url: null,
+      //   name: 'Disabled Menu',
+      //   icon: 'EyeOffIcon',
+      //   i18n: 'DisabledMenu',
+      //   isDisabled: true
+      // },
       {
         url: null,
         name: 'Support',

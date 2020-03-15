@@ -11,24 +11,24 @@
 
   <div id="page-user-list">
 
-    <vx-card ref="filterCard" title="Filters" class="user-list-filters mb-8" actionButtons @refresh="resetColFilters" @remove="resetColFilters">
+    <vx-card ref="filterCard" :title="$t('Filters')" class="user-list-filters mb-8" actionButtons @refresh="resetColFilters" @remove="resetColFilters">
       <div class="vx-row">
         <div class="vx-col md:w-1/4 sm:w-1/2 w-full">
           <label class="text-sm opacity-75">Role</label>
           <v-select :options="roleOptions" :clearable="false" :dir="$vs.rtl ? 'rtl' : 'ltr'" v-model="roleFilter" class="mb-4 md:mb-0" />
         </div>
-        <div class="vx-col md:w-1/4 sm:w-1/2 w-full">
-          <label class="text-sm opacity-75">Status</label>
-          <v-select :options="statusOptions" :clearable="false" :dir="$vs.rtl ? 'rtl' : 'ltr'" v-model="statusFilter" class="mb-4 md:mb-0" />
-        </div>
+<!--        <div class="vx-col md:w-1/4 sm:w-1/2 w-full">-->
+<!--          <label class="text-sm opacity-75">Status</label>-->
+<!--          <v-select :options="statusOptions" :clearable="false" :dir="$vs.rtl ? 'rtl' : 'ltr'" v-model="statusFilter" class="mb-4 md:mb-0" />-->
+<!--        </div>-->
         <div class="vx-col md:w-1/4 sm:w-1/2 w-full">
           <label class="text-sm opacity-75">Verified</label>
           <v-select :options="isVerifiedOptions" :clearable="false" :dir="$vs.rtl ? 'rtl' : 'ltr'" v-model="isVerifiedFilter" class="mb-4 sm:mb-0" />
         </div>
-        <div class="vx-col md:w-1/4 sm:w-1/2 w-full">
-          <label class="text-sm opacity-75">Department</label>
-          <v-select :options="departmentOptions" :clearable="false" :dir="$vs.rtl ? 'rtl' : 'ltr'" v-model="departmentFilter" />
-        </div>
+<!--        <div class="vx-col md:w-1/4 sm:w-1/2 w-full">-->
+<!--          <label class="text-sm opacity-75">Department</label>-->
+<!--          <v-select :options="departmentOptions" :clearable="false" :dir="$vs.rtl ? 'rtl' : 'ltr'" v-model="departmentFilter" />-->
+<!--        </div>-->
       </div>
     </vx-card>
 
@@ -52,11 +52,11 @@
               <vs-dropdown-item @click="gridApi.paginationSetPageSize(20)">
                 <span>20</span>
               </vs-dropdown-item>
-              <vs-dropdown-item @click="gridApi.paginationSetPageSize(25)">
-                <span>25</span>
+              <vs-dropdown-item @click="gridApi.paginationSetPageSize(50)">
+                <span>50</span>
               </vs-dropdown-item>
-              <vs-dropdown-item @click="gridApi.paginationSetPageSize(30)">
-                <span>30</span>
+              <vs-dropdown-item @click="gridApi.paginationSetPageSize(100)">
+                <span>100</span>
               </vs-dropdown-item>
             </vs-dropdown-menu>
           </vs-dropdown>
@@ -221,20 +221,26 @@ export default {
         },
         {
           headerName: 'Username',
-          field: 'username',
+          field: 'user.username',
           filter: true,
           width: 210,
           cellRendererFramework: 'CellRendererLink'
         },
         {
           headerName: 'Email',
-          field: 'email',
+          field: 'user.email',
           filter: true,
-          width: 225
+          width: 210,
         },
         {
-          headerName: 'Name',
-          field: 'name',
+          headerName: 'First Name',
+          field: 'user.first_name',
+          filter: true,
+          width: 200
+        },
+        {
+          headerName: 'Surname',
+          field: 'user.last_name',
           filter: true,
           width: 200
         },
@@ -250,16 +256,16 @@ export default {
           filter: true,
           width: 150
         },
-        {
-          headerName: 'Status',
-          field: 'status',
-          filter: true,
-          width: 150,
-          cellRendererFramework: 'CellRendererStatus'
-        },
+        // {
+        //   headerName: 'Status',
+        //   field: 'status',
+        //   filter: true,
+        //   width: 150,
+        //   cellRendererFramework: 'CellRendererStatus'
+        // },
         {
           headerName: 'Verified',
-          field: 'is_verified',
+          field: 'user.verified_email',
           filter: true,
           width: 125,
           cellRendererFramework: 'CellRendererVerified',
@@ -369,7 +375,9 @@ export default {
       this.$store.registerModule('userManagement', moduleUserManagement)
       moduleUserManagement.isRegistered = true
     }
-    this.$store.dispatch('userManagement/fetchUsers').catch(err => { console.error(err) })
+    this.$store.dispatch('userManagement/fetchProfiles').catch(err => { console.error(err) })
+    // OR
+    // this.$store.dispatch('userManagement/fetchProfiles').catch(err => { console.error(err) })
   }
 }
 

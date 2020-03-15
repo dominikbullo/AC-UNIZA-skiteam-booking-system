@@ -30,9 +30,10 @@ function loadLocaleMessages () {
 }
 
 export default new VueI18n({
-  // locale: process.env.VUE_APP_I18N_LOCALE || 'en',
-  // TODO: Change on production
-  locale: process.env.VUE_APP_I18N_LOCALE || 'sk',
+  // RELEASE: Slovak language
+  // locale: process.env.VUE_APP_I18N_LOCALE || 'sk',
+
+  locale: process.env.VUE_APP_I18N_LOCALE || 'en',
   fallbackLocale: process.env.VUE_APP_I18N_FALLBACK_LOCALE || 'en',
   messages: loadLocaleMessages()
 })

@@ -102,7 +102,7 @@ export default {
     },
     registerUser () {
       if (!this.checkLogin()) return
-      this.$router.push('/pages/register').catch(() => {
+      this.$router.push('/register').catch(() => {
       })
     }
   }

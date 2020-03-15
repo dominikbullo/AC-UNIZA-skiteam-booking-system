@@ -16,6 +16,7 @@ function addSubscriber (callback) {
 export default {
   init () {
     // TODO get token
+    // FIXME get token
     axios.interceptors.response.use(function (response) {
       return response
       //  TODO if error ? then login again probbably

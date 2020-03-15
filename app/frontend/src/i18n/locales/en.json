@@ -141,6 +141,9 @@
   "Name": "Name",
   "Surname": "Surname",
   "ConfirmPassword": "Confirm Password",
+  "Users": "Users",
+  "Filters": "Filters",
+  "AddEvent": "AddEvent",
 
   "errors": {
      "internal1": "this is internal 1 error message"

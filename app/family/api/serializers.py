@@ -11,11 +11,11 @@ from users.models import Profile
 
 
 class CustomRegisterChildSerializer(CustomRegisterSerializer):
-    # TODO on validation i can create username from email, but this is fine for now
+    # IDEA: on validation i can create username from email, but this is fine for now
     username = serializers.CharField(required=True)
     email = serializers.CharField(required=False)
 
-    # https://github.com/Tivix/django-rest-auth/issues/464
+    # RES: https://github.com/Tivix/django-rest-auth/issues/464
     def get_cleaned_data(self):
         return {
             'name'    : self.validated_data.get('name', ''),
@@ -24,7 +24,7 @@ class CustomRegisterChildSerializer(CustomRegisterSerializer):
         }
 
 
-# https://stackoverflow.com/questions/33659994/django-rest-framework-create-user-and-user-profile
+# RES: https://stackoverflow.com/questions/33659994/django-rest-framework-create-user-and-user-profile
 class ChildSerializer(serializers.ModelSerializer):
     user = CustomRegisterChildSerializer(required=True)
 
@@ -33,7 +33,6 @@ class ChildSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         profile_data = validated_data["user"].pop('profile')
         password = validated_data["user"].pop('password1')
-        # self.validated_data.get('name', '')
         validated_data["user"].pop('password2')
 
         user = get_user_model().objects.create(**validated_data["user"])
@@ -43,6 +42,7 @@ class ChildSerializer(serializers.ModelSerializer):
         Profile.objects.create(user=user, **profile_data)
         user.profile.save()
 
+        # RELEASE: Delete
         try:
             print("Parent is:", validated_data["parent"])
         except:

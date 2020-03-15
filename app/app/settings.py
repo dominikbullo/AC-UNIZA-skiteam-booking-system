@@ -79,9 +79,9 @@ MIDDLEWARE = [
     # 'app.middleware.LoginRequiredMiddleware',
     'corsheaders.middleware.CorsMiddleware',
 ]
-# TODO
-# **Dont forget to add your client's address to the CORS whitelist. This will make sure the server accepts request from
-# the specified source only
+# RELEASE: Dont forget to add your client's address to the CORS whitelist.
+#   This will make sure the server accepts request from the specified source only
+
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
     'http://localhost:8000',
@@ -188,23 +188,7 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 
-# ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
-
-# # Logout immediately without form
-# ACCOUNT_LOGOUT_ON_GET = True
-
-# Make email verification mandatory to avoid junk email accounts
-# ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-# ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
-
-# Longer mail expiration
-ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 5
-
-# SOCIALACCOUNT_QUERY_EMAIL = ACCOUNT_EMAIL_REQUIRED
-# SOCIALACCOUNT_AUTO_SIGNUP = True
-# SOCIALACCOUNT_EMAIL_REQUIRED = True
-# SOCIALACCOUNT_ADAPTER = 'core.adapter.MySocialAccountAdapter'
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
@@ -225,37 +209,19 @@ DATE_INPUT_FORMATS = [
 # https://medium.com/@apogiatzis/create-a-restful-api-with-users-and-jwt-authentication-using-django-1-11-drf-part-2-eb6fdcf71f45
 REST_FRAMEWORK = {
     "DATE_INPUT_FORMATS"            : DATE_INPUT_FORMATS,
-    'DEFAULT_PERMISSION_CLASSES'    : (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
-        # TODO only in dev
-        'rest_framework.authentication.SessionAuthentication',
-    ),
+    'DEFAULT_PERMISSION_CLASSES'    : ('rest_framework.permissions.IsAuthenticated',),
+    'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework.authentication.TokenAuthentication',
+                                       # RELEASE Delete SessionAuthentication
+                                       'rest_framework.authentication.SessionAuthentication',
+                                       ),
     'DEFAULT_PAGINATION_CLASS'      : 'rest_framework.pagination.PageNumberPagination',
     # 10 could be a good value to assign in production. Remember: this currently also applies to answers
     'PAGE_SIZE'                     : 10
 }
 
 LOGIN_EXEMPT_URLS = (
-    r'^api/',  # allow any URL under /api/*
-    r"accounts/",
-    r"admin/",
     r"public/",
 )
-
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'SCOPE'      : [
-            'profile',
-            'email',
-        ],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
-        }
-    }
-}
 
 WEBPACK_LOADER = {
     'DEFAULT': {

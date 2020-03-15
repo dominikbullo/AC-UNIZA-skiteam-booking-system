@@ -118,116 +118,12 @@ const router = new Router({
           }
         },
         {
-          path: '/apps/calendar/vue-simple-calendar',
+          path: '/apps/calendar',
           name: 'calendar-simple-calendar',
           component: () => import('./views/apps/calendar/SimpleCalendar.vue'),
           meta: {
             rule: 'editor',
             no_scroll: true
-          }
-        },
-        {
-          path: '/apps/eCommerce/shop',
-          name: 'ecommerce-shop',
-          component: () => import('./views/apps/eCommerce/ECommerceShop.vue'),
-          meta: {
-            breadcrumb: [
-              {
-                title: 'Home',
-                url: '/'
-              },
-              { title: 'eCommerce' },
-              {
-                title: 'Shop',
-                active: true
-              }
-            ],
-            pageTitle: 'Shop',
-            rule: 'editor'
-          }
-        },
-        {
-          path: '/apps/eCommerce/wish-list',
-          name: 'ecommerce-wish-list',
-          component: () => import('./views/apps/eCommerce/ECommerceWishList.vue'),
-          meta: {
-            breadcrumb: [
-              {
-                title: 'Home',
-                url: '/'
-              },
-              {
-                title: 'eCommerce',
-                url: '/apps/eCommerce/shop'
-              },
-              {
-                title: 'Wish List',
-                active: true
-              }
-            ],
-            pageTitle: 'Wish List',
-            rule: 'editor'
-          }
-        },
-        {
-          path: '/apps/eCommerce/checkout',
-          name: 'ecommerce-checkout',
-          component: () => import('./views/apps/eCommerce/ECommerceCheckout.vue'),
-          meta: {
-            breadcrumb: [
-              {
-                title: 'Home',
-                url: '/'
-              },
-              {
-                title: 'eCommerce',
-                url: '/apps/eCommerce/shop'
-              },
-              {
-                title: 'Checkout',
-                active: true
-              }
-            ],
-            pageTitle: 'Checkout',
-            rule: 'editor'
-          }
-        },
-        /*
-                  Below route is for demo purpose
-                  You can use this route in your app
-                    {
-                        path: '/apps/eCommerce/item/',
-                        name: 'ecommerce-item-detail-view',
-                        redirect: '/apps/eCommerce/shop',
-                    }
-                */
-        {
-          path: '/apps/eCommerce/item/',
-          redirect: '/apps/eCommerce/item/5546604'
-        },
-        {
-          path: '/apps/eCommerce/item/:item_id',
-          name: 'ecommerce-item-detail-view',
-          component: () => import('./views/apps/eCommerce/ECommerceItemDetailView.vue'),
-          meta: {
-            breadcrumb: [
-              {
-                title: 'Home',
-                url: '/'
-              },
-              { title: 'eCommerce' },
-              {
-                title: 'Shop',
-                url: { name: 'ecommerce-shop' }
-              },
-              {
-                title: 'Item Details',
-                active: true
-              }
-            ],
-            parent: 'ecommerce-item-detail-view',
-            pageTitle: 'Item Details',
-            rule: 'editor'
           }
         },
         {
@@ -287,7 +183,7 @@ const router = new Router({
               }
             ],
             pageTitle: 'User Edit',
-            rule: 'editor'
+            rule: 'admin'
           }
         },
         // =============================================================================
@@ -1804,7 +1700,7 @@ const router = new Router({
         // PAGES
         // =============================================================================
         {
-          path: '/pages/login',
+          path: '/login',
           name: 'page-login',
           component: () => import('@/views/pages/login/Login.vue'),
           meta: {
@@ -1812,7 +1708,7 @@ const router = new Router({
           }
         },
         {
-          path: '/pages/register',
+          path: '/register',
           name: 'page-register',
           component: () => import('@/views/pages/register/Register.vue'),
           meta: {
@@ -1820,7 +1716,7 @@ const router = new Router({
           }
         },
         {
-          path: '/pages/forgot-password',
+          path: '/forgot-password',
           name: 'page-forgot-password',
           component: () => import('@/views/pages/ForgotPassword.vue'),
           meta: {
@@ -1828,7 +1724,7 @@ const router = new Router({
           }
         },
         {
-          path: '/pages/reset-password',
+          path: '/reset-password',
           name: 'page-reset-password',
           component: () => import('@/views/pages/ResetPassword.vue'),
           meta: {
@@ -1903,11 +1799,11 @@ router.afterEach(() => {
 router.beforeEach((to, from, next) => {
   // redirect to login page if not logged in and trying to access a restricted page
   const publicPages = [
-    '/pages/login',
-    '/pages/forgot-password',
+    '/login',
+    '/forgot-password',
+    '/register',
     '/pages/error-404',
     '/pages/error-500',
-    '/pages/register',
     '/pages/not-authorized',
     '/pages/comingsoon'
   ]

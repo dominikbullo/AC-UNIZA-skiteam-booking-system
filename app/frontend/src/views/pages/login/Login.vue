@@ -49,13 +49,11 @@
 
 
 <script>
-import LoginJwt from './LoginJWT.vue'
 import LoginDRF from './LoginDRF.vue'
 
 export default {
   components: {
-    LoginDRF,
-    LoginJwt
+    LoginDRF
   }
 }
 </script>

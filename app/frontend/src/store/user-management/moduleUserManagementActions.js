@@ -22,9 +22,9 @@ export default {
   // },
   fetchUsers ({ commit }) {
     return new Promise((resolve, reject) => {
-      axios.get('/api/user-management/users')
+      axios.get('/profiles/')
         .then((response) => {
-          commit('SET_USERS', response.data)
+          commit('SET_USERS', response.data.results)
           resolve(response)
         })
         .catch((error) => { reject(error) })
@@ -32,7 +32,26 @@ export default {
   },
   fetchUser (context, userId) {
     return new Promise((resolve, reject) => {
-      axios.get(`/api/user-management/users/${userId}`)
+      axios.get(`/users/${userId}`)
+        .then((response) => {
+          resolve(response)
+        })
+        .catch((error) => { reject(error) })
+    })
+  },
+  fetchProfiles ({ commit }) {
+    return new Promise((resolve, reject) => {
+      axios.get('/profiles/')
+        .then((response) => {
+          commit('SET_USERS', response.data.results)
+          resolve(response)
+        })
+        .catch((error) => { reject(error) })
+    })
+  },
+  fetchprofile (context, userId) {
+    return new Promise((resolve, reject) => {
+      axios.get(`/profiles/${userId}`)
         .then((response) => {
           resolve(response)
         })
@@ -41,7 +60,7 @@ export default {
   },
   removeRecord ({ commit }, userId) {
     return new Promise((resolve, reject) => {
-      axios.delete(`/api/user-management/users/${userId}`)
+      axios.delete(`/api/user-management/users/${userId}/`)
         .then((response) => {
           commit('REMOVE_RECORD', userId)
           resolve(response)
