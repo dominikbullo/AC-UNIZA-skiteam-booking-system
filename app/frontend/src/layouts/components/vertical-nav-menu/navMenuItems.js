@@ -226,6 +226,13 @@ export default [
       //   isDisabled: true
       // },
       {
+        url: '/pages/faq',
+        slug: 'page-faq',
+        name: 'FAQ',
+        icon: 'HelpCircleIcon',
+        i18n: 'FAQ'
+      },
+      {
         url: null,
         name: 'Support',
         icon: 'SmileIcon',

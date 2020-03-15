@@ -18,12 +18,8 @@ import actions from './actions'
 
 Vue.use(Vuex)
 
-// import moduleTodo from './todo/moduleTodo.js'
-// import moduleCalendar from './calendar/moduleCalendar.js'
-// import moduleChat from './chat/moduleChat.js'
-// import moduleEmail from './email/moduleEmail.js'
+import moduleCalendar from './calendar/moduleCalendar.js'
 import moduleAuth from './auth/moduleAuth.js'
-import moduleECommerce from './eCommerce/moduleECommerce.js'
 
 
 export default new Vuex.Store({
@@ -32,12 +28,8 @@ export default new Vuex.Store({
   state,
   actions,
   modules: {
-    // todo: moduleTodo,
-    // calendar: moduleCalendar,
-    // chat: moduleChat,
-    // email: moduleEmail,
-    auth: moduleAuth,
-    eCommerce: moduleECommerce
+    calendar: moduleCalendar,
+    auth: moduleAuth
   },
   strict: process.env.NODE_ENV !== 'production'
 })
