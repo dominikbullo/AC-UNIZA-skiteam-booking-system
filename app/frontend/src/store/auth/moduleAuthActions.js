@@ -15,7 +15,7 @@ import router from '@/router'
 import response from '@chenfengyuan/vue-countdown'
 
 export default {
-  updateUsername ({ commit }, payload) {
+  updateUsername ({commit}, payload) {
     payload.user.updateProfile({
       displayName: payload.displayName
     }).then(() => {
@@ -24,7 +24,7 @@ export default {
       // update in localstorage
       const newUserData = Object.assign({}, payload.user.providerData[0])
       newUserData.displayName = payload.displayName
-      commit('UPDATE_USER_INFO', newUserData, { root: true })
+      commit('UPDATE_USER_INFO', newUserData, {root: true})
 
       // If reload is required to get fresh data after update
       // Reload current page
@@ -42,39 +42,50 @@ export default {
       })
     })
   },
-  loginDRF ({ commit }, payload) {
+  // logoutDRF: ({commit, payload}) => {
+  //   return new Promise((resolve, reject) => {
+  //     if (localStorage.getItem('accessToken')) {
+  //       localStorage.removeItem('accessToken')
+  //     }
+  //     // remove the axios default header
+  //     drf.logout().then(() => {
+  //       // delete this.$http.defaults.headers.common['X-CSRFToken']
+  //       delete this.$http.defaults.headers.common['Authorization']
+  //     })
+  //     resolve()
+  //   })
+  // },
+  loginDRF ({commit}, payload) {
     return new Promise((resolve, reject) => {
-      drf.login(payload.userDetails.email, payload.userDetails.password).
-        then(response => {
+      drf.login(payload.userDetails.email, payload.userDetails.password).then(response => {
 
-          // TODO if verified
-          if (response.data.user) {
-            // TODO display name add to response
+        // TODO if verified
+        if (response.data.user) {
+          // TODO display name add to response
 
-            // Set accessToken
-            localStorage.setItem('accessToken', response.data.key)
+          // Set accessToken
+          localStorage.setItem('accessToken', response.data.key)
 
-            // Update user details
-            commit('UPDATE_USER_INFO', response.data.user, { root: true })
+          // Update user details
+          commit('UPDATE_USER_INFO', response.data.user, {root: true})
 
-            // Set bearer token in axios
-            commit('SET_BEARER', response.data.key)
+          // Set bearer token in axios
+          commit('SET_BEARER', response.data.key)
 
-            // Navigate User to homepage
-            router.push(router.currentRoute.query.to || '/')
+          // Navigate User to homepage
+          router.push(router.currentRoute.query.to || '/')
 
-            resolve(response)
-          } else {
-            reject({ message: 'Wrong Email or Password' })
-          }
+          resolve(response)
+        } else {
+          reject({message: 'Wrong Email or Password'})
+        }
 
-        }).
-        catch(error => {
-          reject({ message: 'Wrong Email or Password' })
-        })
+      }).catch(error => {
+        reject({message: 'Wrong Email or Password'})
+      })
     })
   },
-  registerUserDRF ({ commit }, payload) {
+  registerUserDRF ({commit}, payload) {
     // TODO cleaner
     // for (const property of Object.keys(payload)) {
     //
@@ -97,7 +108,7 @@ export default {
     return new Promise((resolve, reject) => {
       // Check confirm password
       if (password !== confirmPassword) {
-        reject({ message: 'Password doesn\'t match. Please try again.' })
+        reject({message: 'Password doesn\'t match. Please try again.'})
       }
 
       drf.registerUserEmail(
@@ -112,19 +123,18 @@ export default {
         // TODO response.token
         localStorage.setItem('accessToken', response.data.key)
 
-        commit('UPDATE_USER_INFO', response.data.user, { root: true })
+        commit('UPDATE_USER_INFO', response.data.user, {root: true})
 
         // Redirect User
         router.push(router.currentRoute.query.to || '/')
 
         resolve(response)
-      }).
-        catch(error => {
-          // TODO why?!
-          // How to display serializers validation error in vue
-          // https://github.com/axios/axios/issues/960
-          reject(error)
-        })
+      }).catch(error => {
+        // TODO why?!
+        // How to display serializers validation error in vue
+        // https://github.com/axios/axios/issues/960
+        reject(error)
+      })
     })
   }
 }

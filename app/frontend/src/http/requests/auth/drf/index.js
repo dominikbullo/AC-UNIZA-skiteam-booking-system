@@ -22,7 +22,7 @@ export default {
       //  TODO if error ? then login again probbably
     }, function (error) {
       // const { config, response: { status } } = error
-      const { config, response } = error
+      const {config, response} = error
       const originalRequest = config
 
       // if (status === 401) {
@@ -45,6 +45,9 @@ export default {
       }
       return Promise.reject(error)
     })
+  },
+  logout () {
+    return axios.post('/rest-auth/logout/', {})
   },
   login (email, pwd) {
     return axios.post('/rest-auth/login/', {
