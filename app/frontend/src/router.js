@@ -51,11 +51,24 @@ const router = new Router({
           path: '/',
           redirect: '/dashboard'
         },
+
         {
           path: '/dashboard',
           name: 'dashboard',
           component: () => import('./views/dashboards/DashboardAdmin.vue'),
           meta: {
+            // breadcrumb: [
+            //   {
+            //     title: 'Home',
+            //     url: '/'
+            //   },
+            //   {title: 'Family'},
+            //   {
+            //     title: 'Child',
+            //     active: true
+            //   }
+            // ],
+            // pageTitle: 'Dashboard',
             rule: 'editor'
           }
         },

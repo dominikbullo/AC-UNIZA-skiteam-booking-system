@@ -60,9 +60,9 @@ class FacebookLogin(SocialLoginView):
 # class GoogleLogin(SocialLoginView):
 #     adapter_class = GoogleOAuth2RestAdapter
 
-
-class ConfirmEmailView(APIView):
-    # TODO handle succes and failure
+# RES: https://stackoverflow.com/questions/53305849/django-rest-auth-key-error-on-email-confirmation
+class CustomConfirmEmailView(APIView):
+    # TODO handle success and failure
 
     permission_classes = [AllowAny]
 
@@ -70,7 +70,7 @@ class ConfirmEmailView(APIView):
         self.object = confirmation = self.get_object()
         confirmation.confirm(self.request)
         # A React Router Route will handle the failure scenario
-        return HttpResponseRedirect('/login')
+        return HttpResponseRedirect('/login/success')
 
     def get_object(self, queryset=None):
         key = self.kwargs['key']

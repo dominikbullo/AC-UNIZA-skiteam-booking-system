@@ -201,7 +201,7 @@ REST_AUTH_SERIALIZERS = {
     'TOKEN_SERIALIZER': 'users.api.serializers.TokenSerializer',
 }
 DATE_INPUT_FORMATS = [
-    ("%Y-%m-%d"),
+    ("%d.%m.%Y"),
 ]
 
 # Django-REST-Framework

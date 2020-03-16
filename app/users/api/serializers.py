@@ -1,3 +1,5 @@
+import datetime
+
 from allauth.account.adapter import get_adapter
 from allauth.account.models import EmailAddress
 from allauth.account.utils import setup_user_email
@@ -12,6 +14,18 @@ from rest_auth.registration.serializers import RegisterSerializer
 
 class ProfileSerializer(serializers.ModelSerializer):
     avatar = serializers.ImageField(read_only=True)
+
+    def to_representation(self, instance):
+        representation = super(ProfileSerializer, self).to_representation(instance)
+
+        # Because i have date in DB as format YYYY-MM-DD, if i getting it i need to reformat
+        # Same in login
+        try:
+            representation['birth_date'] = instance.birth_date.strftime("%d.%m.%Y")
+        except AttributeError as e:
+            print("User doesn't have birth date!")
+            print(e)
+        return representation
 
     class Meta:
         model = Profile
@@ -72,6 +86,11 @@ class CustomRegisterSerializer(RegisterSerializer):
         #       Don't create user on request only after mail verifications
 
         profile_data = request.data.pop('profile')
+        # profile_data["birth_date"] = datetime.datetime.strptime(
+        #     profile_data["birth_date"], '%d.%m.%Y').date().strftime('%Y-%m-%d')
+        
+        profile_data["birth_date"] = datetime.datetime.strptime(profile_data["birth_date"], '%d.%m.%Y').date()
+
         Profile.objects.create(user=user, **profile_data)
         user.profile.save()
 

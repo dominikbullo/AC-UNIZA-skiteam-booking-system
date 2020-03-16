@@ -50,12 +50,10 @@
 <script>
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
-import vSelect from 'vue-select'
 
 export default {
   components: {
-    flatPickr,
-    vSelect
+    flatPickr
   },
   data () {
     return {

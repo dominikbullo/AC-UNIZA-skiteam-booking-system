@@ -31,18 +31,10 @@
     <!--      class="w-full mt-6"/>-->
     <!--    <span class="text-danger text-sm">{{ errors.first('birth_date') }}</span>-->
 
-    <!-- FIXME language and format -->
-    <!-- RES https://www.npmjs.com/package/vue-moment-->
-    <datepicker :format="customFormatter"
-                :label-placeholder="$t('BirthDate')"
-                :language="sk"
-                :placeholder="$t('BirthDate')"
-                @closed="datepickerClosedFunction"
-                class="w-full mt-6"
-                name="birth_date"
-                v-model="birth_date"
-                z-index="11111">
-    </datepicker>
+    <!-- RES: https://flatpickr.js.org/formatting/ -->
+    <label style="font-size: 10px">{{ $t('BirthDate') }}</label>
+    <flat-pickr v-model="birth_date" :config="{ dateFormat: 'd.m.Y',maxDate: new Date().fp_incr(14) }"
+                class="w-full"/>
     <span class="text-danger text-sm">{{ errors.first('birth_date') }}</span>
 
     <vs-input
@@ -90,10 +82,13 @@
 <script>
 
 import Datepicker from 'vuejs-datepicker'
+import flatPickr from 'vue-flatpickr-component'
+import 'flatpickr/dist/flatpickr.css'
 
 export default {
   components: {
-    Datepicker
+    Datepicker,
+    flatPickr
   },
   data () {
     return {
