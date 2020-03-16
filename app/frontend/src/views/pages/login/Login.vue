@@ -34,7 +34,7 @@
                     <login-d-r-f></login-d-r-f>
                   </vs-tab>
                   <vs-tab :label="$t('Social')">
-                    <!--                    <login-jwt></login-jwt>-->
+                    <h1>Not implemented yet</h1>
                   </vs-tab>
                 </vs-tabs>
 

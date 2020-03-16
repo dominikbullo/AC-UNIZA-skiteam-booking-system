@@ -59,8 +59,14 @@ export default {
     return new Promise((resolve, reject) => {
       drf.login(payload.userDetails.email, payload.userDetails.password).then(response => {
 
-        // TODO if verified
         if (response.data.user) {
+
+        //  FIXME: If children doesn't have email then skip verification
+        // if user has verified email
+          if (!response.data.user.verified_email) {
+            return reject({message: 'User not verified!'})
+          }
+
           // TODO display name add to response
 
           // Set accessToken
@@ -80,7 +86,8 @@ export default {
           reject({message: 'Wrong Email or Password'})
         }
 
-      }).catch(error => {
+      }
+      ).catch(error => {
         reject({message: 'Wrong Email or Password'})
       })
     })
