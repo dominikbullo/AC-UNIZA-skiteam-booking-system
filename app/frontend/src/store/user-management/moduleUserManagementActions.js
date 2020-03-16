@@ -10,19 +10,9 @@
 import axios from '@/axios.js'
 
 export default {
-  // addItem({ commit }, item) {
-  //   return new Promise((resolve, reject) => {
-  //     axios.post("/api/data-list/products/", {item: item})
-  //       .then((response) => {
-  //         commit('ADD_ITEM', Object.assign(item, {id: response.data.id}))
-  //         resolve(response)
-  //       })
-  //       .catch((error) => { reject(error) })
-  //   })
-  // },
   fetchUsers ({ commit }) {
     return new Promise((resolve, reject) => {
-      axios.get('/profiles/')
+      axios.get('/users/')
         .then((response) => {
           commit('SET_USERS', response.data.results)
           resolve(response)
@@ -49,7 +39,7 @@ export default {
         .catch((error) => { reject(error) })
     })
   },
-  fetchprofile (context, userId) {
+  fetchProfile (context, userId) {
     return new Promise((resolve, reject) => {
       axios.get(`/profiles/${userId}`)
         .then((response) => {

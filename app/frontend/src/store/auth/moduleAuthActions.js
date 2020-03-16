@@ -7,12 +7,9 @@
   Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
 
-import jwt from '../../http/requests/auth/jwt/index.js'
 import drf from '../../http/requests/auth/drf/index.js'
 
-
 import router from '@/router'
-import response from '@chenfengyuan/vue-countdown'
 
 export default {
   updateUsername ({commit}, payload) {
@@ -87,7 +84,7 @@ export default {
         }
 
       }
-      ).catch(error => {
+      ).catch(() => {
         reject({message: 'Wrong Email or Password'})
       })
     })
@@ -126,7 +123,6 @@ export default {
         gender,
         password
       ).then(response => {
-        // Update data in localStorage
         // TODO response.token
         localStorage.setItem('accessToken', response.data.key)
 
@@ -137,7 +133,7 @@ export default {
 
         resolve(response)
       }).catch(error => {
-        // TODO why?!
+        // TODO send error messages
         // How to display serializers validation error in vue
         // https://github.com/axios/axios/issues/960
         reject(error)

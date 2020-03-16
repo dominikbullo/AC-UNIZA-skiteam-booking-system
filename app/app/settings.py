@@ -214,8 +214,9 @@ REST_FRAMEWORK = {
                                        'rest_framework.authentication.SessionAuthentication',
                                        ),
     'DEFAULT_PAGINATION_CLASS'      : 'rest_framework.pagination.PageNumberPagination',
-    # 10 could be a good value to assign in production. Remember: this currently also applies to answers
-    'PAGE_SIZE'                     : 10
+
+    # FIXME on front
+    'PAGE_SIZE'                     : 100
 }
 
 LOGIN_EXEMPT_URLS = (

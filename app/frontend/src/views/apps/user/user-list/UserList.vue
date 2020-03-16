@@ -159,9 +159,14 @@ export default {
     vSelect,
 
     // Cell Renderer
+
+    // eslint-disable-next-line vue/no-unused-components
     CellRendererLink,
+    // eslint-disable-next-line vue/no-unused-components
     CellRendererStatus,
+    // eslint-disable-next-line vue/no-unused-components
     CellRendererVerified,
+    // eslint-disable-next-line vue/no-unused-components
     CellRendererActions
   },
   data () {
@@ -214,33 +219,33 @@ export default {
           headerName: 'ID',
           field: 'id',
           width: 125,
-          filter: true,
+          // filter: true,
           checkboxSelection: true,
           headerCheckboxSelectionFilteredOnly: true,
           headerCheckboxSelection: true
         },
         {
           headerName: 'Username',
-          field: 'user.username',
+          field: 'username',
           filter: true,
           width: 210,
           cellRendererFramework: 'CellRendererLink'
         },
         {
           headerName: 'Email',
-          field: 'user.email',
+          field: 'email',
           filter: true,
-          width: 210,
+          width: 210
         },
         {
           headerName: 'First Name',
-          field: 'user.first_name',
+          field: 'first_name',
           filter: true,
           width: 200
         },
         {
           headerName: 'Surname',
-          field: 'user.last_name',
+          field: 'last_name',
           filter: true,
           width: 200
         },
@@ -265,17 +270,11 @@ export default {
         // },
         {
           headerName: 'Verified',
-          field: 'user.verified_email',
+          field: 'verified_email',
           filter: true,
           width: 125,
           cellRendererFramework: 'CellRendererVerified',
           cellClass: 'text-center'
-        },
-        {
-          headerName: 'Department',
-          field: 'department',
-          filter: true,
-          width: 150
         },
         {
           headerName: 'Actions',
@@ -375,7 +374,7 @@ export default {
       this.$store.registerModule('userManagement', moduleUserManagement)
       moduleUserManagement.isRegistered = true
     }
-    this.$store.dispatch('userManagement/fetchProfiles').catch(err => { console.error(err) })
+    this.$store.dispatch('userManagement/fetchUsers').catch(err => { console.error(err) })
     // OR
     // this.$store.dispatch('userManagement/fetchProfiles').catch(err => { console.error(err) })
   }
