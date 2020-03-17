@@ -23,8 +23,8 @@ class ProfileSerializer(serializers.ModelSerializer):
         try:
             representation['birth_date'] = instance.birth_date.strftime("%d.%m.%Y")
         except AttributeError as e:
-            print("User doesn't have birth date!")
             print(e)
+            print("User doesn't have birth date!")
         return representation
 
     class Meta:
@@ -88,7 +88,7 @@ class CustomRegisterSerializer(RegisterSerializer):
         profile_data = request.data.pop('profile')
         # profile_data["birth_date"] = datetime.datetime.strptime(
         #     profile_data["birth_date"], '%d.%m.%Y').date().strftime('%Y-%m-%d')
-        
+
         profile_data["birth_date"] = datetime.datetime.strptime(profile_data["birth_date"], '%d.%m.%Y').date()
 
         Profile.objects.create(user=user, **profile_data)
