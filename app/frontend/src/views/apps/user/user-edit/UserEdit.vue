@@ -13,7 +13,8 @@
     <vs-alert color="danger" title="User Not Found" :active.sync="user_not_found">
       <span>User record with id: {{ $route.params.userId }} not found. </span>
       <span>
-        <span>Check </span><router-link :to="{name:'page-user-list'}" class="text-inherit underline">All Users</router-link>
+        <span>Check </span><router-link :to="{name:'page-user-list'}"
+                                        class="text-inherit underline">All Users</router-link>
       </span>
     </vs-alert>
 
@@ -24,22 +25,22 @@
         <vs-tabs v-model="activeTab" class="tab-action-btn-fill-conatiner">
           <vs-tab label="Account" icon-pack="feather" icon="icon-user">
             <div class="tab-text">
-              <user-edit-tab-account class="mt-4" :data="user_data" />
+              <user-edit-tab-account class="mt-4" :data="user_data"/>
             </div>
           </vs-tab>
           <vs-tab label="Information" icon-pack="feather" icon="icon-info">
             <div class="tab-text">
-              <user-edit-tab-information class="mt-4" :data="user_data" />
+              <user-edit-tab-information class="mt-4" :data="user_data"/>
             </div>
           </vs-tab>
           <vs-tab label="Social" icon-pack="feather" icon="icon-share-2">
             <div class="tab-text">
-              <user-edit-tab-social class="mt-4" :data="user_data" />
+              <user-edit-tab-social class="mt-4" :data="user_data"/>
             </div>
           </vs-tab>
           <vs-tab label="Family" icon-pack="feather" icon="icon-users">
             <div class="tab-text">
-              <user-edit-tab-social class="mt-4" :data="user_data" />
+              <user-edit-tab-social class="mt-4" :data="user_data"/>
             </div>
           </vs-tab>
         </vs-tabs>
@@ -51,9 +52,9 @@
 </template>
 
 <script>
-import UserEditTabAccount     from './UserEditTabAccount.vue'
+import UserEditTabAccount from './UserEditTabAccount.vue'
 import UserEditTabInformation from './UserEditTabInformation.vue'
-import UserEditTabSocial      from './UserEditTabSocial.vue'
+import UserEditTabSocial from './UserEditTabSocial.vue'
 
 // Store Module
 import moduleUserManagement from '@/store/user-management/moduleUserManagement.js'
@@ -84,8 +85,10 @@ export default {
   },
   methods: {
     fetch_user_data (userId) {
-      this.$store.dispatch('userManagement/fetchUser', userId)
-        .then(res => { this.user_data = res.data })
+      this.$store.dispatch('userManagement/fetchDefaultUser', userId)
+        .then(res => {
+          this.user_data = res.data
+        })
         .catch(err => {
           if (err.response.status === 404) {
             this.user_not_found = true

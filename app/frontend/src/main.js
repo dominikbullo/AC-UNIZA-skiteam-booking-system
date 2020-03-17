@@ -80,9 +80,7 @@ require('vue-tour/dist/vue-tour.css')
 // VeeValidate
 import VeeValidate from 'vee-validate'
 
-Vue.use(VeeValidate, {
-  behavior: 'eager' // if the field has an error and the user just entered a valid value, remove the error
-})
+Vue.use(VeeValidate, {})
 
 
 // Google Maps

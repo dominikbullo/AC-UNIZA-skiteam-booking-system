@@ -1,41 +1,30 @@
 <!--TODO Add gender picker-->
 <template>
   <div class="clearfix">
-    <vs-input
-      :label-placeholder="$t('Name')"
-      :placeholder="$t('Name')"
-      class="w-full mt-6"
-      data-vv-validate-on="blur"
-      name="name"
-      v-model="first_name"
-      v-validate="'required|alpha_dash|min:3'"/>
-    <span class="text-danger text-sm">{{ errors.first('first_name') }}</span>
-
-    <vs-input
-      :label-placeholder="$t('Surname')"
-      :placeholder="$t('Surname')"
-      class="w-full mt-6"
-      data-vv-validate-on="blur"
-      name="last_name"
-      v-model="last_name"
-      v-validate="'required|alpha_dash|min:3'"/>
-    <span class="text-danger text-sm">{{ errors.first('last_name') }}</span>
-
-    <!--    <vs-input-->
-    <!--      v-validate="'required|date_format:dd.MM.yyyy'"-->
-    <!--      data-vv-validate-on="blur"-->
-    <!--      :label-placeholder="$t('BirthDate')"-->
-    <!--      name="birth_date"-->
-    <!--      :placeholder="$t('BirthDate')"-->
-    <!--      v-model="birth_date"-->
-    <!--      class="w-full mt-6"/>-->
-    <!--    <span class="text-danger text-sm">{{ errors.first('birth_date') }}</span>-->
-
-    <!-- RES: https://flatpickr.js.org/formatting/ -->
-    <label style="font-size: 10px">{{ $t('BirthDate') }}</label>
-    <flat-pickr v-model="birth_date" :config="{ dateFormat: 'd.m.Y',maxDate: new Date().fp_incr(14) }"
-                class="w-full"/>
-    <span class="text-danger text-sm">{{ errors.first('birth_date') }}</span>
+    <div class="vx-row">
+      <div class="vx-col sm:w-1/2 w-full mb-2">
+        <vs-input
+          :label-placeholder="$t('Name')"
+          :placeholder="$t('Name')"
+          class="w-full mt-6"
+          data-vv-validate-on="blur"
+          name="name"
+          v-model="first_name"
+          v-validate="'required|alpha_dash|min:3'"/>
+        <span class="text-danger text-sm">{{ errors.first('first_name') }}</span>
+      </div>
+      <div class="vx-col sm:w-1/2 w-full mb-2">
+        <vs-input
+          :label-placeholder="$t('Surname')"
+          :placeholder="$t('Surname')"
+          class="w-full mt-6"
+          data-vv-validate-on="blur"
+          name="last_name"
+          v-model="last_name"
+          v-validate="'required|alpha_dash|min:3'"/>
+        <span class="text-danger text-sm">{{ errors.first('last_name') }}</span>
+      </div>
+    </div>
 
     <vs-input
       :label-placeholder="$t('Email')"
@@ -47,6 +36,12 @@
       v-model="email"
       v-validate="'required|email'"/>
     <span class="text-danger text-sm">{{ errors.first('email') }}</span>
+
+    <!-- RES: https://flatpickr.js.org/formatting/ -->
+    <label style="font-size: 10px">{{ $t('BirthDate') }}</label>
+    <flat-pickr :config="{ dateFormat: 'd.m.Y',maxDate: new Date().fp_incr(14) }" class="w-full"
+                v-model="birth_date"/>
+    <span class="text-danger text-sm">{{ errors.first('birth_date') }}</span>
 
     <vs-input
       :label-placeholder="$t('Password')"
@@ -95,7 +90,7 @@ export default {
       first_name: 'DefaultMeno',
       last_name: 'DefaultPriezvisko',
       birth_date: '09.12.1996',
-      email: 'admin123@test.sk',
+      email: new Date(),
       gender: 'M',
       password: 'testing321',
       confirm_password: 'testing321',

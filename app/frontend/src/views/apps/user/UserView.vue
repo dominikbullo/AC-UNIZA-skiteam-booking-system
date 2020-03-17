@@ -13,7 +13,8 @@
     <vs-alert color="danger" title="User Not Found" :active.sync="user_not_found">
       <span>User record with id: {{ $route.params.userId }} not found. </span>
       <span>
-        <span>Check </span><router-link :to="{name:'page-user-list'}" class="text-inherit underline">All Users</router-link>
+        <span>Check </span><router-link :to="{name:'page-user-list'}"
+                                        class="text-inherit underline">All Users</router-link>
       </span>
     </vs-alert>
 
@@ -27,7 +28,7 @@
           <!-- Avatar Col -->
           <div class="vx-col" id="avatar-col">
             <div class="img-container mb-4">
-              <img :src="user_data.avatar" class="rounded w-full" />
+              <img :src="user_data.avatar" class="rounded w-full"/>
             </div>
           </div>
 
@@ -69,8 +70,12 @@
           </div>
           <!-- /Information - Col 2 -->
           <div class="vx-col w-full flex" id="account-manage-buttons">
-            <vs-button icon-pack="feather" icon="icon-edit" class="mr-4" :to="{name: 'app-user-edit', params: { userId: $route.params.userId }}">Edit</vs-button>
-            <vs-button type="border" color="danger" icon-pack="feather" icon="icon-trash" @click="confirmDeleteRecord">Delete</vs-button>
+            <vs-button icon-pack="feather" icon="icon-edit" class="mr-4"
+                       :to="{name: 'app-user-edit', params: { userId: $route.params.userId }}">Edit
+            </vs-button>
+            <vs-button type="border" color="danger" icon-pack="feather" icon="icon-trash" @click="confirmDeleteRecord">
+              Delete
+            </vs-button>
           </div>
 
         </div>
@@ -95,7 +100,7 @@
               </tr>
               <tr>
                 <td class="font-semibold">Languages</td>
-                <td>{{ user_data.languages_known.join(", ") }}</td>
+                <td>{{ user_data.languages_known.join(', ') }}</td>
               </tr>
               <tr>
                 <td class="font-semibold">Gender</td>
@@ -103,7 +108,7 @@
               </tr>
               <tr>
                 <td class="font-semibold">Contact</td>
-                <td>{{ user_data.contact_options.join(", ") }}</td>
+                <td>{{ user_data.contact_options.join(', ') }}</td>
               </tr>
             </table>
           </vx-card>
@@ -147,10 +152,10 @@
         <div class="vx-row">
           <div class="vx-col w-full">
             <div class="flex items-end px-3">
-              <feather-icon svgClasses="w-6 h-6" icon="LockIcon" class="mr-2" />
+              <feather-icon svgClasses="w-6 h-6" icon="LockIcon" class="mr-2"/>
               <span class="font-medium text-lg leading-none">Permissions</span>
             </div>
-            <vs-divider />
+            <vs-divider/>
           </div>
         </div>
 
@@ -162,13 +167,15 @@
                 our data structure. You just have to loop over above variable to get table headers.
                 Below we made it simple. So, everyone can understand.
                -->
-              <th class="font-semibold text-base text-left px-3 py-2" v-for="heading in ['Module', 'Read', 'Write', 'Create', 'Delete']" :key="heading">{{ heading }}</th>
+              <th class="font-semibold text-base text-left px-3 py-2"
+                  v-for="heading in ['Module', 'Read', 'Write', 'Create', 'Delete']" :key="heading">{{ heading }}
+              </th>
             </tr>
 
             <tr v-for="(val, name) in user_data.permissions" :key="name">
               <td class="px-3 py-2">{{ name }}</td>
               <td v-for="(permission, name) in val" class="px-3 py-2" :key="name+permission">
-                <vs-checkbox v-model="val[name]" class="pointer-events-none" />
+                <vs-checkbox v-model="val[name]" class="pointer-events-none"/>
               </td>
             </tr>
           </table>
@@ -193,7 +200,7 @@ export default {
     userAddress () {
       let str = ''
       for (const field in this.user_data.location) {
-        str += `${field  } `
+        str += `${field} `
       }
       return str
     }
@@ -211,7 +218,7 @@ export default {
     },
     deleteRecord () {
       /* Below two lines are just for demo purpose */
-      this.$router.push({name:'app-user-list'})
+      this.$router.push({name: 'app-user-list'})
       this.showDeleteSuccess()
 
       /* UnComment below lines for enabling true flow if deleting user */
@@ -235,14 +242,16 @@ export default {
     }
 
     const userId = this.$route.params.userId
-    this.$store.dispatch('userManagement/fetchUser', userId)
-      .then(res => { this.user_data = res.data })
+    this.$store.dispatch('userManagement/fetchDefaultUser', userId)
+      .then(res => {
+        this.user_data = res.data
+      })
       .catch(err => {
         if (err.response.status === 404) {
           this.user_not_found = true
           return
         }
-        console.error(err) 
+        console.error(err)
       })
   }
 }
@@ -250,56 +259,56 @@ export default {
 </script>
 
 <style lang="scss">
-#avatar-col {
-  width: 10rem;
-}
+  #avatar-col {
+    width: 10rem;
+  }
 
-#page-user-view {
-  table {
-    td {
-      vertical-align: top;
-      min-width: 140px;
-      padding-bottom: .8rem;
-      word-break: break-all;
-    }
-
-    &:not(.permissions-table) {
+  #page-user-view {
+    table {
       td {
-        @media screen and (max-width:370px) {
-          display: block;
+        vertical-align: top;
+        min-width: 140px;
+        padding-bottom: .8rem;
+        word-break: break-all;
+      }
+
+      &:not(.permissions-table) {
+        td {
+          @media screen and (max-width: 370px) {
+            display: block;
+          }
         }
       }
     }
   }
-}
 
-// #account-info-col-1 {
-//   // flex-grow: 1;
-//   width: 30rem !important;
-//   @media screen and (min-width:1200px) {
-//     & {
-//       flex-grow: unset !important;
-//     }
-//   }
-// }
-
-
-@media screen and (min-width:1201px) and (max-width:1211px),
-only screen and (min-width:636px) and (max-width:991px) {
-  #account-info-col-1 {
-    width: calc(100% - 12rem) !important;
-  }
-
-  // #account-manage-buttons {
-  //   width: 12rem !important;
-  //   flex-direction: column;
-
-  //   > button {
-  //     margin-right: 0 !important;
-  //     margin-bottom: 1rem;
+  // #account-info-col-1 {
+  //   // flex-grow: 1;
+  //   width: 30rem !important;
+  //   @media screen and (min-width:1200px) {
+  //     & {
+  //       flex-grow: unset !important;
+  //     }
   //   }
   // }
 
-}
+
+  @media screen and (min-width: 1201px) and (max-width: 1211px),
+  only screen and (min-width: 636px) and (max-width: 991px) {
+    #account-info-col-1 {
+      width: calc(100% - 12rem) !important;
+    }
+
+    // #account-manage-buttons {
+    //   width: 12rem !important;
+    //   flex-direction: column;
+
+    //   > button {
+    //     margin-right: 0 !important;
+    //     margin-bottom: 1rem;
+    //   }
+    // }
+
+  }
 
 </style>

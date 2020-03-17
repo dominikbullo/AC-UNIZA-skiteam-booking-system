@@ -35,9 +35,28 @@ export default [
     items: [
       {
         url: null,
+        name: 'Family',
+        icon: 'UsersIcon',
+        i18n: 'Family',
+        submenu: [
+          {
+            url: '/apps/family/list',
+            name: 'List',
+            slug: 'app-family-list',
+            i18n: 'List'
+          },
+          {
+            url: '/apps/family/edit/:id',
+            name: 'Edit',
+            slug: 'app-family-edit',
+            i18n: 'Edit'
+          }
+        ]
+      },
+      {
+        url: null,
         name: 'Events',
         icon: 'CalendarIcon',
-        // eslint-disable-next-line no-invalid-this
         i18n: 'Events',
         submenu: [
           {
@@ -47,9 +66,15 @@ export default [
             i18n: 'List'
           },
           {
+            url: '/apps/event/edit',
+            name: 'Edit',
+            slug: 'app-event-list',
+            i18n: 'Edit'
+          },
+          {
             url: '/apps/calendar',
             name: 'Calendar',
-            slug: 'calendar',
+            slug: 'app-event-calendar',
             icon: 'CalendarIcon',
             tagColor: 'success',
             i18n: 'Calendar'
@@ -60,7 +85,6 @@ export default [
         url: null,
         name: 'Users',
         icon: 'UsersIcon',
-        // eslint-disable-next-line no-invalid-this
         i18n: 'Users',
         submenu: [
           {
@@ -71,6 +95,16 @@ export default [
           },
           {
             url: '/apps/user/user-edit/268',
+            name: 'Edit Default User',
+            slug: 'app-user-edit-default'
+          },
+          {
+            url: '/apps/user/user-view/268',
+            name: 'app-user-view',
+            slug: 'app-user-view'
+          },
+          {
+            url: '/apps/user/user-edit/:id',
             name: 'Edit',
             slug: 'app-user-edit',
             i18n: 'Edit'
@@ -92,7 +126,7 @@ export default [
         i18n: 'Account'
       },
       {
-        url: '/pages/family-settings',
+        url: '/pages/family',
         slug: 'family-settings',
         name: 'Family',
         icon: 'UsersIcon',
@@ -150,69 +184,69 @@ export default [
   },
   // TODO show this only for admins
   // everything wit /admin/
-  {
-    header: 'Admin',
-    icon: 'PackageIcon',
-    i18n: 'Admin',
-    items: [
-      {
-        url: '/admin/dashboard',
-        name: 'Admin dashboard',
-        // tag: '2',
-        tagColor: 'warning',
-        icon: 'HomeIcon',
-        i18n: 'Admin dashboard'
-      },
-      {
-        url: null,
-        name: 'Events',
-        icon: 'CalendarIcon',
-        i18n: 'Event',
-        submenu: [
-          {
-            url: '/apps/event/list',
-            name: 'List',
-            slug: 'app-event-list',
-            i18n: 'List'
-          },
-          {
-            url: '/apps/calendar/vue-simple-calendar',
-            name: 'Calendar',
-            slug: 'calendar-simple-calendar',
-            icon: 'CalendarIcon',
-            tagColor: 'success',
-            i18n: 'Calendar'
-          }
-        ]
-      },
-      {
-        url: null,
-        name: 'User',
-        icon: 'UserIcon',
-        i18n: 'User',
-        submenu: [
-          {
-            url: '/apps/user/user-list',
-            name: 'List',
-            slug: 'app-user-list',
-            i18n: 'List'
-          },
-          {
-            url: '/apps/user/user-view/268',
-            name: 'View',
-            slug: 'app-user-view',
-            i18n: 'View'
-          },
-          {
-            url: '/apps/user/user-edit/268',
-            name: 'Edit',
-            slug: 'app-user-edit',
-            i18n: 'Edit'
-          }
-        ]
-      }
-    ]
-  },
+  // {
+  //   header: 'Admin',
+  //   icon: 'PackageIcon',
+  //   i18n: 'Admin',
+  //   items: [
+  //     {
+  //       url: '/admin/dashboard',
+  //       name: 'Admin dashboard',
+  //       // tag: '2',
+  //       tagColor: 'warning',
+  //       icon: 'HomeIcon',
+  //       i18n: 'Admin dashboard'
+  //     },
+  //     {
+  //       url: null,
+  //       name: 'Events',
+  //       icon: 'CalendarIcon',
+  //       i18n: 'Event',
+  //       submenu: [
+  //         {
+  //           url: '/apps/event/list',
+  //           name: 'List',
+  //           slug: 'app-event-list',
+  //           i18n: 'List'
+  //         },
+  //         {
+  //           url: '/apps/calendar/vue-simple-calendar',
+  //           name: 'Calendar',
+  //           slug: 'calendar-simple-calendar',
+  //           icon: 'CalendarIcon',
+  //           tagColor: 'success',
+  //           i18n: 'Calendar'
+  //         }
+  //       ]
+  //     },
+  //     {
+  //       url: null,
+  //       name: 'User',
+  //       icon: 'UserIcon',
+  //       i18n: 'User',
+  //       submenu: [
+  //         {
+  //           url: '/apps/user/user-list',
+  //           name: 'List',
+  //           slug: 'app-user-list',
+  //           i18n: 'List'
+  //         },
+  //         {
+  //           url: '/apps/user/user-view/268',
+  //           name: 'View',
+  //           slug: 'app-user-view',
+  //           i18n: 'View'
+  //         },
+  //         {
+  //           url: '/apps/user/user-edit/268',
+  //           name: 'Edit',
+  //           slug: 'app-user-edit',
+  //           i18n: 'Edit'
+  //         }
+  //       ]
+  //     }
+  //   ]
+  // },
   {
     header: 'Others',
     icon: 'MoreHorizontalIcon',

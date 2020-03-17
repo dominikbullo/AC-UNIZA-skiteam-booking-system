@@ -51,7 +51,6 @@ const router = new Router({
           path: '/',
           redirect: '/dashboard'
         },
-
         {
           path: '/dashboard',
           name: 'dashboard',
@@ -93,6 +92,90 @@ const router = new Router({
         // =============================================================================
         // Application Routes
         // =============================================================================
+
+        // Family APP
+        {
+          path: '/apps/family/list',
+          name: 'app-family-list',
+          component: () => import('@/views/apps/family/family-list/FamilyList.vue'),
+          meta: {
+            breadcrumb: [
+              {
+                title: 'Home',
+                url: '/'
+              },
+              {title: 'Family'},
+              {
+                title: 'List',
+                active: true
+              }
+            ],
+            pageTitle: 'Family List',
+            rule: 'editor'
+          }
+        },
+        {
+          path: '/apps/family/view/:familyID',
+          name: 'app-family-view',
+          component: () => import('@/views/apps/user/UserView.vue'),
+          meta: {
+            breadcrumb: [
+              {
+                title: 'Home',
+                url: '/'
+              },
+              {title: 'Family'},
+              {
+                title: 'View',
+                active: true
+              }
+            ],
+            pageTitle: 'Family View',
+            rule: 'editor'
+          }
+        },
+        {
+          path: '/apps/family/edit/:userId',
+          name: 'app-family-edit',
+          component: () => import('@/views/apps/user/user-edit/UserEdit.vue'),
+          meta: {
+            breadcrumb: [
+              {
+                title: 'Home',
+                url: '/'
+              },
+              {title: 'User'},
+              {
+                title: 'Edit',
+                active: true
+              }
+            ],
+            pageTitle: 'User Edit',
+            rule: 'admin'
+          }
+        },
+
+        // User APP
+        {
+          path: '/apps/user/user-edit/:userId',
+          name: 'app-user-edit',
+          component: () => import('@/views/apps/user/user-edit/UserEdit.vue'),
+          meta: {
+            breadcrumb: [
+              {
+                title: 'Home',
+                url: '/'
+              },
+              {title: 'User'},
+              {
+                title: 'Edit',
+                active: true
+              }
+            ],
+            pageTitle: 'User Edit',
+            rule: 'admin'
+          }
+        },
         {
           path: '/apps/calendar',
           name: 'calendar-simple-calendar',
