@@ -8,17 +8,16 @@
 ========================================================================================== -->
 
 <template>
-
-  <div id="page-user-list">
+  <div id="page-family-list">
     <div class="vx-card p-6">
       <div class="flex flex-wrap items-center">
 
         <!-- ITEMS PER PAGE -->
         <div class="flex-grow">
-          <vs-dropdown vs-trigger-click class="cursor-pointer">
+          <vs-dropdown class="cursor-pointer" vs-trigger-click>
             <div
               class="p-4 border border-solid d-theme-border-grey-light rounded-full d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium">
-              <span class="mr-2">{{ currentPage * paginationPageSize - (paginationPageSize - 1) }} - {{ usersData.length - currentPage * paginationPageSize > 0 ? currentPage * paginationPageSize : usersData.length }} of {{ usersData.length }}</span>
+              <span class="mr-2">{{ currentPage * paginationPageSize - (paginationPageSize - 1) }} - {{ familyMembers.length - currentPage * paginationPageSize > 0 ? currentPage * paginationPageSize : familyMembers.length }} of {{ familyMembers.length }}</span>
               <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4"/>
             </div>
             <!-- <vs-button class="btn-drop" type="line" color="primary" icon-pack="feather" icon="icon-chevron-down"></vs-button> -->
@@ -41,13 +40,13 @@
         </div>
 
         <!-- TABLE ACTION COL-2: SEARCH & EXPORT AS CSV -->
-        <vs-input class="sm:mr-4 mr-0 sm:w-auto w-full sm:order-normal order-3 sm:mt-0 mt-4" v-model="searchQuery"
-                  @input="updateSearchQuery" placeholder="Search..."/>
+        <vs-input @input="updateSearchQuery" class="sm:mr-4 mr-0 sm:w-auto w-full sm:order-normal order-3 sm:mt-0 mt-4"
+                  placeholder="Search..." v-model="searchQuery"/>
         <!-- <vs-button class="mb-4 md:mb-0" @click="gridApi.exportDataAsCsv()">Export as CSV</vs-button> -->
 
         <vs-button
-          class="sm:mr-4 mr-0 sm:w-auto w-full sm:order-normal order-2 sm:mt-0 mt-4"
           @click="activePrompt = true"
+          class="sm:mr-4 mr-0 sm:w-auto w-full sm:order-normal order-2 sm:mt-0 mt-4"
           icon="icon-plus" icon-pack="feather"
           v-show="$acl.check('editor')">
           {{ $t('AddChild') }}
@@ -57,8 +56,6 @@
           :active.sync="activePrompt"
           :is-valid="validateForm"
           @accept="addChild"
-          @cancel="clearFields"
-          @close="clearFields"
           accept-text="Add Child"
           button-cancel="border"
           title="Add Child">
@@ -125,6 +122,16 @@
                               v-model="childData.profile.birth_date"/>
                   <span class="text-danger text-sm">{{ errors.first('childData.profile.birth_date') }}</span>
 
+                  <div>
+                    <label style="font-size: 10px">{{ $t('Gender') }}</label>
+                    <div class="demo-alignment mb-base">
+                      <vs-radio class="mt-2" v-model=" childData.profile.gender" vs-value="M">{{ $t('Male') }}
+                      </vs-radio>
+                      <vs-radio class="mt-2" v-model="childData.profile.gender" vs-value="F">{{ $t('Female') }}
+                      </vs-radio>
+                    </div>
+                  </div>
+
                   <vs-input
                     :label-placeholder="$t('Password')"
                     :placeholder="$t('Password')"
@@ -156,7 +163,7 @@
         </vs-prompt>
 
         <!-- ACTION - DROPDOWN -->
-        <vs-dropdown vs-trigger-click class="cursor-pointer">
+        <vs-dropdown class="cursor-pointer" vs-trigger-click>
 
           <div
             class="p-3 shadow-drop rounded-lg  d-theme-dark-light-bg cursor-pointer flex items-end justify-center text-lg font-medium w-32">
@@ -168,28 +175,28 @@
 
             <vs-dropdown-item>
                 <span class="flex items-center">
-                  <feather-icon icon="TrashIcon" svgClasses="h-4 w-4" class="mr-2"/>
+                  <feather-icon class="mr-2" icon="TrashIcon" svgClasses="h-4 w-4"/>
                   <span>Delete</span>
                 </span>
             </vs-dropdown-item>
 
             <vs-dropdown-item>
                 <span class="flex items-center">
-                  <feather-icon icon="ArchiveIcon" svgClasses="h-4 w-4" class="mr-2"/>
+                  <feather-icon class="mr-2" icon="ArchiveIcon" svgClasses="h-4 w-4"/>
                   <span>Archive</span>
                 </span>
             </vs-dropdown-item>
 
             <vs-dropdown-item>
                 <span class="flex items-center">
-                  <feather-icon icon="FileIcon" svgClasses="h-4 w-4" class="mr-2"/>
+                  <feather-icon class="mr-2" icon="FileIcon" svgClasses="h-4 w-4"/>
                   <span>Print</span>
                 </span>
             </vs-dropdown-item>
 
             <vs-dropdown-item>
                 <span class="flex items-center">
-                  <feather-icon icon="SaveIcon" svgClasses="h-4 w-4" class="mr-2"/>
+                  <feather-icon class="mr-2" icon="SaveIcon" svgClasses="h-4 w-4"/>
                   <span>CSV</span>
                 </span>
             </vs-dropdown-item>
@@ -198,29 +205,29 @@
         </vs-dropdown>
       </div>
 
-
+      <!-- RES: Height https://www.ag-grid.com/javascript-grid-width-and-height/-->
       <!-- AgGrid Table -->
       <ag-grid-vue
-        ref="agGridTable"
-        :components="components"
-        :gridOptions="gridOptions"
-        class="ag-theme-material w-100 my-4 ag-grid-table"
-        :columnDefs="columnDefs"
-        :defaultColDef="defaultColDef"
-        :rowData="usersData"
-        rowSelection="multiple"
-        colResizeDefault="shift"
         :animateRows="true"
+        :columnDefs="columnDefs"
+        :components="components"
+        :defaultColDef="defaultColDef"
+        :enableRtl="$vs.rtl"
         :floatingFilter="true"
+        :gridOptions="gridOptions"
         :pagination="true"
         :paginationPageSize="paginationPageSize"
+        :rowData="familyMembers"
         :suppressPaginationPanel="true"
-        :enableRtl="$vs.rtl">
+        class="ag-theme-material w-100 my-4 ag-grid-table"
+        colResizeDefault="shift"
+        ref="agGridTable"
+        rowSelection="multiple">
       </ag-grid-vue>
 
       <vs-pagination
-        :total="totalPages"
         :max="7"
+        :total="totalPages"
         v-model="currentPage"/>
 
     </div>
@@ -235,14 +242,13 @@ import vSelect from 'vue-select'
 
 
 // Store Module
-import moduleUserManagement from '@/store/user-management/moduleUserManagement.js'
+import moduleFamily from '@/store/family/moduleFamily.js'
 
 // Cell Renderer
 import CellRendererLink from './cell-renderer/CellRendererLink.vue'
 import CellRendererStatus from './cell-renderer/CellRendererStatus.vue'
 import CellRendererVerified from './cell-renderer/CellRendererVerified.vue'
 import CellRendererActions from './cell-renderer/CellRendererActions.vue'
-// import FamilyAddNew from '../FamilyAddNew.vue'
 
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
@@ -283,12 +289,17 @@ export default {
 
       // AgGrid
       gridApi: null,
-      gridOptions: {},
+      gridOptions:
+        {},
+
       defaultColDef: {
         sortable: true,
-        resizable: true,
-        suppressMenu: true
+        resizable:
+          true,
+        suppressMenu:
+          true
       },
+
       columnDefs: [
         {
           headerName: 'ID',
@@ -325,12 +336,6 @@ export default {
           width: 200
         },
         {
-          headerName: 'Country',
-          field: 'country',
-          filter: true,
-          width: 150
-        },
-        {
           headerName: 'Role',
           field: 'role',
           filter: true,
@@ -347,7 +352,7 @@ export default {
           headerName: 'Verified',
           field: 'verified_email',
           filter: true,
-          width: 125,
+          width: 110,
           cellRendererFramework: 'CellRendererVerified',
           cellClass: 'text-center'
         },
@@ -360,12 +365,13 @@ export default {
       ],
 
       // Cell Renderer Components
-      components: {
-        CellRendererLink,
-        CellRendererStatus,
-        CellRendererVerified,
-        CellRendererActions
-      }
+      components:
+        {
+          CellRendererLink,
+          CellRendererStatus,
+          CellRendererVerified,
+          CellRendererActions
+        }
     }
   },
   watch: {
@@ -384,8 +390,8 @@ export default {
     }
   },
   computed: {
-    usersData () {
-      return this.$store.state.userManagement.users
+    familyMembers () {
+      return this.$store.state.family.members
     },
     paginationPageSize () {
       if (this.gridApi) return this.gridApi.paginationGetPageSize()
@@ -441,23 +447,53 @@ export default {
     },
     clearFields () {
       Object.assign(this.childData, {
-        title: '',
-        desc: '',
-        isCompleted: false,
-        isImportant: false,
-        isStarred: false,
-        tags: []
+        username: '',
+        email: '',
+        password1: '',
+        password2: '',
+        first_name: '',
+        last_name: '',
+        profile: {
+          birth_date: new Date(),
+          gender: 'M'
+        }
       })
     },
     addChild () {
+      // if (!this.this.$validator.validateAll() || this.checkLogin())
       this.$validator.validateAll().then(result => {
-        console.log(result)
         if (result) {
-          this.$store.dispatch('family/addChild', Object.assign({}, this.childData))
-          this.clearFields()
-          // this.closeComponent()
+          this.$store.dispatch('family/addChild', Object.assign({}, this.childData)).then(() => {
+            this.clearFields()
+
+            this.$vs.notify({
+              color: 'success',
+              title: 'User Deleted',
+              text: 'The selected user was successfully deleted'
+            })
+
+          }).catch(error => {
+            this.$vs.loading.close()
+            // this.multipleNotify(error.response.data)
+          })
         }
       })
+    },
+    // RES: https://stackoverflow.com/questions/29516136/how-to-print-all-values-of-a-nested-object
+    multipleNotify (obj) {
+      for (const key in obj) {
+        if (typeof obj[key] === 'object') {
+          this.multipleNotify(obj[key])
+        } else {
+          this.$vs.notify({
+            title: 'Error',
+            text: obj[key],
+            iconPack: 'feather',
+            icon: 'icon-alert-circle',
+            color: 'danger'
+          })
+        }
+      }
     }
   },
   mounted () {
@@ -474,29 +510,15 @@ export default {
     }
   },
   created () {
-    if (!moduleUserManagement.isRegistered) {
-      this.$store.registerModule('userManagement', moduleUserManagement)
-      moduleUserManagement.isRegistered = true
+    if (!moduleFamily.isRegistered) {
+      this.$store.registerModule('family', moduleFamily)
+      moduleFamily.isRegistered = true
     }
-    this.$store.dispatch('userManagement/fetchUsers').catch(err => {
-      console.error(err)
-    })
-    // OR
-    // this.$store.dispatch('userManagement/fetchProfiles').catch(err => { console.error(err) })
+    // const filter = this.$route.params.filter
+    // this.$store.dispatch('family/fetchFamily', {filter})
+    this.$store.dispatch('family/fetchFamily')
   }
+
 }
 
 </script>
-
-<style lang="scss">
-  #page-user-list {
-    .user-list-filters {
-      .vs__actions {
-        position: absolute;
-        right: 0;
-        top: 50%;
-        transform: translateY(-58%);
-      }
-    }
-  }
-</style>

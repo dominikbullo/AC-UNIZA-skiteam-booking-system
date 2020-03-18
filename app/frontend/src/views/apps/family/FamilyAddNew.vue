@@ -170,11 +170,35 @@ export default {
       })
     },
     addChild () {
+      // if (!this.this.$validator.validateAll() || this.checkLogin())
       this.$validator.validateAll().then(result => {
         if (result) {
-          this.$store.dispatch('family/addChild', Object.assign({}, this.childData))
-          this.clearFields()
-          // this.closeComponent()
+          this.$vs.loading.open()
+          this.$store.dispatch('family/addChild', Object.assign({}, this.childData)).then(() => {
+            this.$vs.loading.close()
+            this.clearFields()
+
+            this.$vs.notify({
+              color: 'success',
+              title: 'User Deleted',
+              text: 'The selected user was successfully deleted'
+            })
+
+          }).catch(error => {
+            this.$vs.loading.close()
+            console.log('tototo je error', error)
+
+            Object.keys(error.response.data).forEach(function (key) {
+              console.log(error.response.data)
+              this.$vs.notify({
+                title: `Error in ${key}`,
+                text: error.response.data[key][0],
+                iconPack: 'feather',
+                icon: 'icon-alert-circle',
+                color: 'danger'
+              })
+            }, this)
+          })
         }
       })
     },

@@ -9,6 +9,9 @@
 
 export default {
   children: [],
+  members: [],
+  searchQuery: '',
+  filter: null,
   childrenSearchQuery: '',
   childrenFilter: null
 }

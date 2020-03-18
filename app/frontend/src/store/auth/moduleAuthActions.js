@@ -56,36 +56,35 @@ export default {
     return new Promise((resolve, reject) => {
       drf.login(payload.userDetails.email, payload.userDetails.password).then(response => {
 
-          if (response.data.user) {
+        if (response.data.user) {
 
-            //  FIXME: If children doesn't have email then skip verification
-            // if user has verified email
-            // RELEASE : User must be verified!
-            // if (!response.data.user.verified_email) {
-            //   return reject({message: 'User not verified!'})
-            // }
+          //  FIXME: If children doesn't have email then skip verification
+          // if user has verified email
+          // RELEASE : User must be verified!
+          // if (!response.data.user.verified_email) {
+          //   return reject({message: 'User not verified!'})
+          // }
 
-            // TODO display name add to response
+          // TODO display name add to response
 
-            // Set accessToken
-            localStorage.setItem('accessToken', response.data.key)
+          // Set accessToken
+          localStorage.setItem('accessToken', response.data.key)
 
-            // Update user details
-            commit('UPDATE_USER_INFO', response.data.user, {root: true})
+          // Update user details
+          commit('UPDATE_USER_INFO', response.data.user, {root: true})
 
-            // Set bearer token in axios
-            commit('SET_BEARER', response.data.key)
+          // Set bearer token in axios
+          commit('SET_BEARER', response.data.key)
 
-            // Navigate User to homepage
-            router.push(router.currentRoute.query.to || '/')
+          // Navigate User to homepage
+          router.push(router.currentRoute.query.to || '/')
 
-            resolve(response)
-          } else {
-            reject({message: 'Wrong Email or Password'})
-          }
-
+          resolve(response)
+        } else {
+          reject({message: 'Wrong Email or Password'})
         }
-      ).catch(() => {
+        
+      }).catch(() => {
         reject({message: 'Wrong Email or Password'})
       })
     })

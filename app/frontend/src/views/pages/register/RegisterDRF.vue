@@ -42,7 +42,13 @@
     <flat-pickr :config="{ dateFormat: 'd.m.Y',maxDate: new Date().fp_incr(14) }" class="w-full"
                 v-model="birth_date"/>
     <span class="text-danger text-sm">{{ errors.first('birth_date') }}</span>
-
+    <div>
+      <label style="font-size: 10px">{{ $t('Gender') }}</label>
+      <div class="demo-alignment mb-base">
+        <vs-radio class="mt-2" v-model="gender" vs-value="M">{{ $t('Male') }}</vs-radio>
+        <vs-radio class="mt-2" v-model="gender" vs-value="F">{{ $t('Female') }}</vs-radio>
+      </div>
+    </div>
     <vs-input
       :label-placeholder="$t('Password')"
       :placeholder="$t('Password')"
@@ -89,8 +95,8 @@ export default {
     return {
       first_name: 'DefaultMeno',
       last_name: 'DefaultPriezvisko',
-      birth_date: '09.12.1996',
-      email: new Date(),
+      birth_date: new Date(),
+      email: '',
       gender: 'M',
       password: 'testing321',
       confirm_password: 'testing321',

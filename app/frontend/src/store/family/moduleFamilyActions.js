@@ -13,22 +13,25 @@ export default {
   addChild ({commit}, payload) {
     console.log(payload)
     return new Promise((resolve, reject) => {
-      console.log('adding child, post ')
+
       axios.post('/children/', {user: payload})
         .then((response) => {
-          // commit('ADD_TASK', Object.assign(payload, {id: response.data.id}))
+          commit('ADD_MEMBER', Object.assign(payload, {id: response.data.id}))
           resolve(response)
         })
         .catch((error) => {
-          reject(error)
         })
     })
   },
-  updateTask ({commit}, task) {
+  fetchFamily ({commit}, payload) {
     return new Promise((resolve, reject) => {
-      axios.post(`/api/apps/todo/task/${task.id}`, {task})
+      // console.log(payload.filter)
+      // axios.get('/families/', {params: {filter: payload.filter}})
+      // TODO family id
+      axios.get('/families/23/')
         .then((response) => {
-          commit('UPDATE_TASK', response.data)
+          console.log(response.data)
+          commit('SET_FAMILY_MEMBERS', response.data)
           resolve(response)
         })
         .catch((error) => {

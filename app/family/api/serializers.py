@@ -13,7 +13,7 @@ from users.models import Profile
 class CustomRegisterChildSerializer(CustomRegisterSerializer):
     # IDEA: on validation i can create username from email, but this is fine for now
     username = serializers.CharField(required=True)
-    email = serializers.CharField(required=False)
+    email = serializers.CharField(required=False, allow_blank=True)
 
     # RES: https://github.com/Tivix/django-rest-auth/issues/464
     def get_cleaned_data(self):
@@ -42,14 +42,25 @@ class ChildSerializer(serializers.ModelSerializer):
         Profile.objects.create(user=user, **profile_data)
         user.profile.save()
 
+        # TODO Here i can add user/owner/family
         # RELEASE: Delete
         try:
             print("Parent is:", validated_data["parent"])
         except:
             print("youre fucked")
 
-        # TODO Here i can add user/owner/family
-        child = Child.objects.create(user=user, family_id=1)
+        if not validated_data.get("parent", None):
+            # TODO doesn't pass parent
+            return None
+
+        parent = Parent.objects.get(user=validated_data.get("parent"))
+        # TODO doesn't found parent
+
+        child = Child.objects.create(user=user, family_id=parent.family_id)
+        # # TODO try save there
+        # user.save()
+        # user.profile.save()
+        child.save()
         return child
 
     class Meta:
@@ -85,14 +96,16 @@ class ParentSerializer(serializers.ModelSerializer):
 
 
 class FamilySerializer(serializers.ModelSerializer):
-    # parents = ParentSerializer(many=True, read_only=True)
-    parents = serializers.HyperlinkedRelatedField(many=True,
-                                                  read_only=True,
-                                                  view_name="family:parent-detail")
+    parents = ParentSerializer(many=True, read_only=True)
+    children = ChildSerializer(many=True, read_only=True)
 
-    children = serializers.HyperlinkedRelatedField(many=True,
-                                                   read_only=True,
-                                                   view_name="family:child-detail")
+    # parents = serializers.HyperlinkedRelatedField(many=True,
+    #                                               read_only=True,
+    #                                               view_name="family:parent-detail")
+
+    # children = serializers.HyperlinkedRelatedField(many=True,
+    #                                                read_only=True,
+    #                                                view_name="family:child-detail")
 
     class Meta:
         model = Family

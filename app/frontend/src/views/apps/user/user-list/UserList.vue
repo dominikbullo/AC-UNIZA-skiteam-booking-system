@@ -11,24 +11,27 @@
 
   <div id="page-user-list">
 
-    <vx-card ref="filterCard" :title="$t('Filters')" class="user-list-filters mb-8" actionButtons @refresh="resetColFilters" @remove="resetColFilters">
+    <vx-card ref="filterCard" :title="$t('Filters')" class="user-list-filters mb-8" actionButtons
+             @refresh="resetColFilters" @remove="resetColFilters">
       <div class="vx-row">
         <div class="vx-col md:w-1/4 sm:w-1/2 w-full">
           <label class="text-sm opacity-75">Role</label>
-          <v-select :options="roleOptions" :clearable="false" :dir="$vs.rtl ? 'rtl' : 'ltr'" v-model="roleFilter" class="mb-4 md:mb-0" />
+          <v-select :options="roleOptions" :clearable="false" :dir="$vs.rtl ? 'rtl' : 'ltr'" v-model="roleFilter"
+                    class="mb-4 md:mb-0"/>
         </div>
-<!--        <div class="vx-col md:w-1/4 sm:w-1/2 w-full">-->
-<!--          <label class="text-sm opacity-75">Status</label>-->
-<!--          <v-select :options="statusOptions" :clearable="false" :dir="$vs.rtl ? 'rtl' : 'ltr'" v-model="statusFilter" class="mb-4 md:mb-0" />-->
-<!--        </div>-->
+        <!--        <div class="vx-col md:w-1/4 sm:w-1/2 w-full">-->
+        <!--          <label class="text-sm opacity-75">Status</label>-->
+        <!--          <v-select :options="statusOptions" :clearable="false" :dir="$vs.rtl ? 'rtl' : 'ltr'" v-model="statusFilter" class="mb-4 md:mb-0" />-->
+        <!--        </div>-->
         <div class="vx-col md:w-1/4 sm:w-1/2 w-full">
           <label class="text-sm opacity-75">Verified</label>
-          <v-select :options="isVerifiedOptions" :clearable="false" :dir="$vs.rtl ? 'rtl' : 'ltr'" v-model="isVerifiedFilter" class="mb-4 sm:mb-0" />
+          <v-select :options="isVerifiedOptions" :clearable="false" :dir="$vs.rtl ? 'rtl' : 'ltr'"
+                    v-model="isVerifiedFilter" class="mb-4 sm:mb-0"/>
         </div>
-<!--        <div class="vx-col md:w-1/4 sm:w-1/2 w-full">-->
-<!--          <label class="text-sm opacity-75">Department</label>-->
-<!--          <v-select :options="departmentOptions" :clearable="false" :dir="$vs.rtl ? 'rtl' : 'ltr'" v-model="departmentFilter" />-->
-<!--        </div>-->
+        <!--        <div class="vx-col md:w-1/4 sm:w-1/2 w-full">-->
+        <!--          <label class="text-sm opacity-75">Department</label>-->
+        <!--          <v-select :options="departmentOptions" :clearable="false" :dir="$vs.rtl ? 'rtl' : 'ltr'" v-model="departmentFilter" />-->
+        <!--        </div>-->
       </div>
     </vx-card>
 
@@ -39,9 +42,10 @@
         <!-- ITEMS PER PAGE -->
         <div class="flex-grow">
           <vs-dropdown vs-trigger-click class="cursor-pointer">
-            <div class="p-4 border border-solid d-theme-border-grey-light rounded-full d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium">
+            <div
+              class="p-4 border border-solid d-theme-border-grey-light rounded-full d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium">
               <span class="mr-2">{{ currentPage * paginationPageSize - (paginationPageSize - 1) }} - {{ usersData.length - currentPage * paginationPageSize > 0 ? currentPage * paginationPageSize : usersData.length }} of {{ usersData.length }}</span>
-              <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" />
+              <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4"/>
             </div>
             <!-- <vs-button class="btn-drop" type="line" color="primary" icon-pack="feather" icon="icon-chevron-down"></vs-button> -->
             <vs-dropdown-menu>
@@ -63,52 +67,55 @@
         </div>
 
         <!-- TABLE ACTION COL-2: SEARCH & EXPORT AS CSV -->
-          <vs-input class="sm:mr-4 mr-0 sm:w-auto w-full sm:order-normal order-3 sm:mt-0 mt-4" v-model="searchQuery" @input="updateSearchQuery" placeholder="Search..." />
-          <!-- <vs-button class="mb-4 md:mb-0" @click="gridApi.exportDataAsCsv()">Export as CSV</vs-button> -->
+        <vs-input class="sm:mr-4 mr-0 sm:w-auto w-full sm:order-normal order-3 sm:mt-0 mt-4" v-model="searchQuery"
+                  @input="updateSearchQuery" placeholder="Search..."/>
+        <!-- <vs-button class="mb-4 md:mb-0" @click="gridApi.exportDataAsCsv()">Export as CSV</vs-button> -->
 
-          <!-- ACTION - DROPDOWN -->
-          <vs-dropdown vs-trigger-click class="cursor-pointer">
+        <!-- ACTION - DROPDOWN -->
+        <vs-dropdown vs-trigger-click class="cursor-pointer">
 
-            <div class="p-3 shadow-drop rounded-lg d-theme-dark-light-bg cursor-pointer flex items-end justify-center text-lg font-medium w-32">
-              <span class="mr-2 leading-none">Actions</span>
-              <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" />
-            </div>
+          <div
+            class="p-3 shadow-drop rounded-lg d-theme-dark-light-bg cursor-pointer flex items-end justify-center text-lg font-medium w-32">
+            <span class="mr-2 leading-none">Actions</span>
+            <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4"/>
+          </div>
 
-            <vs-dropdown-menu>
+          <vs-dropdown-menu>
 
-              <vs-dropdown-item>
+            <vs-dropdown-item>
                 <span class="flex items-center">
-                  <feather-icon icon="TrashIcon" svgClasses="h-4 w-4" class="mr-2" />
+                  <feather-icon icon="TrashIcon" svgClasses="h-4 w-4" class="mr-2"/>
                   <span>Delete</span>
                 </span>
-              </vs-dropdown-item>
+            </vs-dropdown-item>
 
-              <vs-dropdown-item>
+            <vs-dropdown-item>
                 <span class="flex items-center">
-                  <feather-icon icon="ArchiveIcon" svgClasses="h-4 w-4" class="mr-2" />
+                  <feather-icon icon="ArchiveIcon" svgClasses="h-4 w-4" class="mr-2"/>
                   <span>Archive</span>
                 </span>
-              </vs-dropdown-item>
+            </vs-dropdown-item>
 
-              <vs-dropdown-item>
+            <vs-dropdown-item>
                 <span class="flex items-center">
-                  <feather-icon icon="FileIcon" svgClasses="h-4 w-4" class="mr-2" />
+                  <feather-icon icon="FileIcon" svgClasses="h-4 w-4" class="mr-2"/>
                   <span>Print</span>
                 </span>
-              </vs-dropdown-item>
+            </vs-dropdown-item>
 
-              <vs-dropdown-item>
+            <vs-dropdown-item>
                 <span class="flex items-center">
-                  <feather-icon icon="SaveIcon" svgClasses="h-4 w-4" class="mr-2" />
+                  <feather-icon icon="SaveIcon" svgClasses="h-4 w-4" class="mr-2"/>
                   <span>CSV</span>
                 </span>
-              </vs-dropdown-item>
+            </vs-dropdown-item>
 
-            </vs-dropdown-menu>
-          </vs-dropdown>
+          </vs-dropdown-menu>
+        </vs-dropdown>
       </div>
 
 
+      <!-- domLayout="autoHeight" -->
       <!-- AgGrid Table -->
       <ag-grid-vue
         ref="agGridTable"
@@ -131,7 +138,7 @@
       <vs-pagination
         :total="totalPages"
         :max="7"
-        v-model="currentPage" />
+        v-model="currentPage"/>
 
     </div>
   </div>
@@ -139,7 +146,7 @@
 </template>
 
 <script>
-import { AgGridVue } from 'ag-grid-vue'
+import {AgGridVue} from 'ag-grid-vue'
 import '@/assets/scss/vuexy/extraComponents/agGridStyleOverride.scss'
 import vSelect from 'vue-select'
 
@@ -173,35 +180,92 @@ export default {
     return {
 
       // Filter Options
-      roleFilter: { label: 'All', value: 'all' },
+      roleFilter: {
+        label: 'All',
+        value: 'all'
+      },
       roleOptions: [
-        { label: 'All', value: 'all' },
-        { label: 'Admin', value: 'admin' },
-        { label: 'User', value: 'user' },
-        { label: 'Staff', value: 'staff' }
+        {
+          label: 'All',
+          value: 'all'
+        },
+        {
+          label: 'Admin',
+          value: 'admin'
+        },
+        {
+          label: 'User',
+          value: 'user'
+        },
+        {
+          label: 'Staff',
+          value: 'staff'
+        }
       ],
 
-      statusFilter: { label: 'All', value: 'all' },
+      statusFilter: {
+        label: 'All',
+        value: 'all'
+      },
       statusOptions: [
-        { label: 'All', value: 'all' },
-        { label: 'Active', value: 'active' },
-        { label: 'Deactivated', value: 'deactivated' },
-        { label: 'Blocked', value: 'blocked' }
+        {
+          label: 'All',
+          value: 'all'
+        },
+        {
+          label: 'Active',
+          value: 'active'
+        },
+        {
+          label: 'Deactivated',
+          value: 'deactivated'
+        },
+        {
+          label: 'Blocked',
+          value: 'blocked'
+        }
       ],
 
-      isVerifiedFilter: { label: 'All', value: 'all' },
+      isVerifiedFilter: {
+        label: 'All',
+        value: 'all'
+      },
       isVerifiedOptions: [
-        { label: 'All', value: 'all' },
-        { label: 'Yes', value: 'yes' },
-        { label: 'No', value: 'no' }
+        {
+          label: 'All',
+          value: 'all'
+        },
+        {
+          label: 'Yes',
+          value: 'yes'
+        },
+        {
+          label: 'No',
+          value: 'no'
+        }
       ],
 
-      departmentFilter: { label: 'All', value: 'all' },
+      departmentFilter: {
+        label: 'All',
+        value: 'all'
+      },
       departmentOptions: [
-        { label: 'All', value: 'all' },
-        { label: 'Sales', value: 'sales' },
-        { label: 'Development', value: 'development' },
-        { label: 'Management', value: 'management' }
+        {
+          label: 'All',
+          value: 'all'
+        },
+        {
+          label: 'Sales',
+          value: 'sales'
+        },
+        {
+          label: 'Development',
+          value: 'development'
+        },
+        {
+          label: 'Management',
+          value: 'management'
+        }
       ],
 
       searchQuery: '',
@@ -336,7 +400,10 @@ export default {
       let modelObj = null
 
       if (val !== 'all') {
-        modelObj = { type: 'equals', filter: val }
+        modelObj = {
+          type: 'equals',
+          filter: val
+        }
       }
 
       filter.setModel(modelObj)
@@ -348,7 +415,10 @@ export default {
       this.gridApi.onFilterChanged()
 
       // Reset Filter Options
-      this.roleFilter = this.statusFilter = this.isVerifiedFilter = this.departmentFilter = { label: 'All', value: 'all' }
+      this.roleFilter = this.statusFilter = this.isVerifiedFilter = this.departmentFilter = {
+        label: 'All',
+        value: 'all'
+      }
 
       this.$refs.filterCard.removeRefreshAnimation()
     },
@@ -366,7 +436,7 @@ export default {
     ================================================================= */
     if (this.$vs.rtl) {
       const header = this.$refs.agGridTable.$el.querySelector('.ag-header-container')
-      header.style.left = `-${  String(Number(header.style.transform.slice(11, -3)) + 9)  }px`
+      header.style.left = `-${String(Number(header.style.transform.slice(11, -3)) + 9)}px`
     }
   },
   created () {
@@ -374,7 +444,9 @@ export default {
       this.$store.registerModule('userManagement', moduleUserManagement)
       moduleUserManagement.isRegistered = true
     }
-    this.$store.dispatch('userManagement/fetchUsers').catch(err => { console.error(err) })
+    this.$store.dispatch('userManagement/fetchUsers').catch(err => {
+      console.error(err)
+    })
     // OR
     // this.$store.dispatch('userManagement/fetchProfiles').catch(err => { console.error(err) })
   }
@@ -383,14 +455,22 @@ export default {
 </script>
 
 <style lang="scss">
-#page-user-list {
-  .user-list-filters {
-    .vs__actions {
-      position: absolute;
-      right: 0;
-      top: 50%;
-      transform: translateY(-58%);
+  #page-user-list {
+    .user-list-filters {
+      .vs__actions {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-58%);
+      }
     }
+
+    /*.ag-grid-table {*/
+
+    /*  height: calc(var(--vh, 1vh) * 100 - 30rem);*/
+    /*  @media screen and (max-height: 800px) {*/
+    /*    height: 620px;*/
+    /*  }*/
+    /*}*/
   }
-}
 </style>
