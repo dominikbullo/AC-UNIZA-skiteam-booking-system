@@ -25,7 +25,7 @@
             :is-valid="validateForm"
             @accept="addChild"
             @cancel="clearFields"
-            @close="clearFields"
+            @close="close"
             accept-text="Add Child"
             button-cancel="border"
             title="Add Child">
@@ -161,12 +161,7 @@ export default {
         birth_date: new Date(),
         phone_number: '',
         location: '',
-        gender: '',
-
-        isCompleted: false,
-        isImportant: false,
-        isStarred: false,
-        tags: []
+        gender: ''
       }
     }
   },
@@ -212,7 +207,7 @@ export default {
     addChild () {
       this.$validator.validateAll().then(result => {
         if (result) {
-          this.$store.dispatch('family-management/addChild', Object.assign({}, this.childData))
+          this.$store.dispatch('family/addChild', Object.assign({}, this.childData))
           this.clearFields()
         }
       })

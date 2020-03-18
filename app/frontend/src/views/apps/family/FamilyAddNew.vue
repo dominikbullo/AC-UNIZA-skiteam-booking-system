@@ -1,19 +1,11 @@
 <template>
   <div>
-    <vs-button
-      class="sm:mr-4 mr-0 sm:w-auto w-full sm:order-normal order-2 sm:mt-0 mt-4"
-      @click="activePrompt = true"
-      icon="icon-plus" icon-pack="feather"
-      v-show="$acl.check('editor')">
-      {{ $t('AddChild') }}
-    </vs-button>
-
     <vs-prompt
-      :active.sync="activePrompt"
+      :bind="activePrompt"
       :is-valid="validateForm"
       @accept="addChild"
-      @cancel="clearFields"
-      @close="clearFields"
+      @cancel="closeComponent"
+      @close="closeComponent"
       accept-text="Add Child"
       button-cancel="border"
       title="Add Child">
@@ -118,6 +110,12 @@ import 'flatpickr/dist/flatpickr.css'
 
 export default {
   name: 'FamilySettingsAddNew',
+  props: {
+    activePrompt: {
+      type: Boolean,
+      required: true
+    }
+  },
   components: {
     flatPickr
   },
@@ -125,7 +123,6 @@ export default {
     return {
       email: '',
       userRole: this.$acl.get[0],
-      activePrompt: true,
 
       childData: {
         username: '',
@@ -146,6 +143,21 @@ export default {
       }
     }
   },
+  computed: {
+    validateForm () {
+      return !this.errors.any()
+    },
+    computed: {
+      modalProp: {
+        get () {
+          return this.modal
+        },
+        set (val) {
+          this.$emit('update:activePrompt', val)
+        }
+      }
+    }
+  },
   methods: {
     clearFields () {
       Object.assign(this.childData, {
@@ -160,10 +172,15 @@ export default {
     addChild () {
       this.$validator.validateAll().then(result => {
         if (result) {
-          this.$store.dispatch('family-management/addChild', Object.assign({}, this.childData))
+          this.$store.dispatch('family/addChild', Object.assign({}, this.childData))
           this.clearFields()
+          // this.closeComponent()
         }
       })
+    },
+    closeComponent () {
+      // RES: https://vuejs.org/v2/guide/components-custom-events.html#sync-Modifier
+      this.activePrompt = false
     }
   }
 }

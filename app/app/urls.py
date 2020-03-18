@@ -18,9 +18,11 @@ urlpatterns = [
 
     path("api/rest-auth/", include('core.auth')),
 
-    path("api/", include("users.api.urls")),
-    path("api/", include("family.api.urls")),
-    path("api/", include("events.api.urls")),
+    path("api/", include(router.urls)),
+    
+    path("api/", include("users.api.urls", namespace="users")),
+    path("api/", include("family.api.urls", namespace="family")),
+    path("api/", include("events.api.urls", namespace="events")),
 
     # everything else go to IndexTemplateView aka index.html od dev index page
     # path('', IndexTemplateView.as_view(), name="entry-point"),

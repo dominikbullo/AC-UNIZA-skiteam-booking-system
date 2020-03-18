@@ -28,7 +28,7 @@ class CustomRegisterChildSerializer(CustomRegisterSerializer):
 class ChildSerializer(serializers.ModelSerializer):
     user = CustomRegisterChildSerializer(required=True)
 
-    family = serializers.HyperlinkedRelatedField(read_only=True, view_name="family-detail")
+    family = serializers.HyperlinkedRelatedField(read_only=True, view_name="family:family-detail")
 
     def create(self, validated_data):
         profile_data = validated_data["user"].pop('profile')
@@ -68,7 +68,7 @@ class ParentSerializer(serializers.ModelSerializer):
     #                                                view_name="child-detail")
 
     # user = serializers.StringRelatedField(read_only=True)
-    user = serializers.HyperlinkedRelatedField(read_only=True, view_name="profile-detail")
+    user = serializers.HyperlinkedRelatedField(read_only=True, view_name="users:profile-detail")
     family = serializers.StringRelatedField()
 
     # def validate(self, data):
@@ -88,11 +88,11 @@ class FamilySerializer(serializers.ModelSerializer):
     # parents = ParentSerializer(many=True, read_only=True)
     parents = serializers.HyperlinkedRelatedField(many=True,
                                                   read_only=True,
-                                                  view_name="parent-detail")
+                                                  view_name="family:parent-detail")
 
     children = serializers.HyperlinkedRelatedField(many=True,
                                                    read_only=True,
-                                                   view_name="child-detail")
+                                                   view_name="family:child-detail")
 
     class Meta:
         model = Family

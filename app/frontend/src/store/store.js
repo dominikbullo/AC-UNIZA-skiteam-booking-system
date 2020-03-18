@@ -18,8 +18,9 @@ import actions from './actions'
 
 Vue.use(Vuex)
 
-import moduleCalendar from './calendar/moduleCalendar.js'
 import moduleAuth from './auth/moduleAuth.js'
+import moduleFamily from './family/moduleFamily.js'
+import moduleCalendar from './calendar/moduleCalendar.js'
 
 
 export default new Vuex.Store({
@@ -28,8 +29,9 @@ export default new Vuex.Store({
   state,
   actions,
   modules: {
-    calendar: moduleCalendar,
-    auth: moduleAuth
+    auth: moduleAuth,
+    family: moduleFamily,
+    calendar: moduleCalendar
   },
   strict: process.env.NODE_ENV !== 'production'
 })

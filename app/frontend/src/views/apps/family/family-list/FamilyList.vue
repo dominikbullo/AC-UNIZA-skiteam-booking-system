@@ -45,8 +45,115 @@
                   @input="updateSearchQuery" placeholder="Search..."/>
         <!-- <vs-button class="mb-4 md:mb-0" @click="gridApi.exportDataAsCsv()">Export as CSV</vs-button> -->
 
+        <vs-button
+          class="sm:mr-4 mr-0 sm:w-auto w-full sm:order-normal order-2 sm:mt-0 mt-4"
+          @click="activePrompt = true"
+          icon="icon-plus" icon-pack="feather"
+          v-show="$acl.check('editor')">
+          {{ $t('AddChild') }}
+        </vs-button>
 
-        <family-add-new></family-add-new>
+        <vs-prompt
+          :active.sync="activePrompt"
+          :is-valid="validateForm"
+          @accept="addChild"
+          @cancel="clearFields"
+          @close="clearFields"
+          accept-text="Add Child"
+          button-cancel="border"
+          title="Add Child">
+          <div>
+            <form>
+              <div class="vx-row">
+                <div class="vx-col w-full">
+
+                  <!-- Name & Surname in one row -->
+                  <div class="vx-row">
+                    <div class="vx-col sm:w-1/2 w-full mb-2">
+                      <vs-input
+                        :label-placeholder="$t('Name')"
+                        :placeholder="$t('Name')"
+                        class="w-full mt-6"
+                        data-vv-validate-on="blur"
+                        name="name"
+                        type="text"
+                        v-model="childData.first_name"
+                        v-validate="'required|alpha_dash|min:3'"/>
+                      <span class="text-danger text-sm">{{ errors.first('childData.first_name') }}</span>
+                    </div>
+
+                    <div class="vx-col sm:w-1/2 w-full mb-2">
+                      <vs-input
+                        :label-placeholder="$t('Surname')"
+                        :placeholder="$t('Surname')"
+                        class="w-full mt-6"
+                        data-vv-validate-on="blur"
+                        name="email"
+                        type="text"
+                        v-model="childData.last_name"
+                        v-validate="'required|alpha_dash|min:3'"/>
+                      <span class="text-danger text-sm">{{ errors.first('childData.first_name') }}</span>
+                    </div>
+                  </div>
+
+                  <vs-input
+                    :label-placeholder="$t('Username')"
+                    :placeholder="$t('Username')"
+                    class="w-full mt-6"
+                    data-vv-validate-on="blur"
+                    name="email"
+                    type="text"
+                    v-model="childData.username"
+                    v-validate="'required|alpha_dash|min:3'"/>
+                  <span class="text-danger text-sm">{{ errors.first('childData.first_name') }}</span>
+
+                  <vs-input
+                    :label-placeholder="$t('Email')"
+                    :placeholder="$t('Email')"
+                    class="w-full mt-6"
+                    data-vv-validate-on="blur"
+                    name="email"
+                    type="email"
+                    v-model="childData.email"
+                    v-validate="'email'"/>
+                  <span class="text-danger text-sm">{{ errors.first('childData.email') }}</span>
+
+
+                  <!-- RES: https://flatpickr.js.org/formatting/ -->
+                  <label style="font-size: 10px">{{ $t('BirthDate') }}</label>
+                  <flat-pickr :config="{ dateFormat: 'd.m.Y',maxDate: new Date().fp_incr(14) }" class="w-full"
+                              v-model="childData.profile.birth_date"/>
+                  <span class="text-danger text-sm">{{ errors.first('childData.profile.birth_date') }}</span>
+
+                  <vs-input
+                    :label-placeholder="$t('Password')"
+                    :placeholder="$t('Password')"
+                    class="w-full mt-6"
+                    data-vv-validate-on="blur"
+                    name="password"
+                    ref="password"
+                    type="password"
+                    v-model="childData.password1"
+                    v-validate="'required|min:6'"/>
+                  <span class="text-danger text-sm">{{ errors.first('childData.password1') }}</span>
+
+                  <vs-input
+                    :label-placeholder="$t('ConfirmPassword')"
+                    :placeholder="$t('ConfirmPassword')"
+                    class="w-full mt-6"
+                    data-vv-as="password"
+                    data-vv-validate-on="blur"
+                    name="confirm_password"
+                    type="password"
+                    v-model="childData.password2"
+                    v-validate="'min:6|confirmed:password'"/>
+                  <span class="text-danger text-sm">{{ errors.first('childData.password2') }}</span>
+                </div>
+              </div>
+
+            </form>
+          </div>
+        </vs-prompt>
 
         <!-- ACTION - DROPDOWN -->
         <vs-dropdown vs-trigger-click class="cursor-pointer">
@@ -135,14 +242,16 @@ import CellRendererLink from './cell-renderer/CellRendererLink.vue'
 import CellRendererStatus from './cell-renderer/CellRendererStatus.vue'
 import CellRendererVerified from './cell-renderer/CellRendererVerified.vue'
 import CellRendererActions from './cell-renderer/CellRendererActions.vue'
-import FamilyAddNew from '../FamilyAddNew.vue'
+// import FamilyAddNew from '../FamilyAddNew.vue'
 
+import flatPickr from 'vue-flatpickr-component'
+import 'flatpickr/dist/flatpickr.css'
 
 export default {
   components: {
     AgGridVue,
+    flatPickr,
     vSelect,
-    FamilyAddNew,
 
     // Cell Renderer
     /* eslint-disable vue/no-unused-components */
@@ -158,21 +267,18 @@ export default {
       activePrompt: false,
 
       childData: {
-        username: '',
-        email: '',
-        password: '',
-        confirm_password: '',
-        first_name: '',
-        last_name: '',
-        birth_date: new Date(),
-        phone_number: '',
-        location: '',
-        gender: '',
-
-        isCompleted: false,
-        isImportant: false,
-        isStarred: false,
-        tags: []
+        username: 'testsets',
+        email: 'tes@tes.sk',
+        password1: 'testing321',
+        password2: 'testing321',
+        first_name: 'testing321',
+        last_name: 'testing321',
+        profile: {
+          birth_date: new Date(),
+          phone_number: '',
+          location: '',
+          gender: 'M'
+        }
       },
 
       // AgGrid
@@ -345,9 +451,11 @@ export default {
     },
     addChild () {
       this.$validator.validateAll().then(result => {
+        console.log(result)
         if (result) {
-          this.$store.dispatch('family-management/addChild', Object.assign({}, this.childData))
+          this.$store.dispatch('family/addChild', Object.assign({}, this.childData))
           this.clearFields()
+          // this.closeComponent()
         }
       })
     }
