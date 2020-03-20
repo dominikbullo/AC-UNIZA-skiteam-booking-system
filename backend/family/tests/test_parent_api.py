@@ -4,7 +4,7 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
 
-CHILD_LIST_URL = reverse('family:child-list')
+PARENT_LIST_URL = reverse('family:parent-list')
 
 
 class PublicIngredientsApiTests(TestCase):
@@ -15,6 +15,6 @@ class PublicIngredientsApiTests(TestCase):
 
     def test_login_required_family_list(self):
         """Test that login is required to access the endpoint"""
-        res = self.client.get(CHILD_LIST_URL)
+        res = self.client.get(PARENT_LIST_URL)
 
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)

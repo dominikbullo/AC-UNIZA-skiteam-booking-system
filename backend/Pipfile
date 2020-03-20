@@ -4,11 +4,12 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "*"
+django = ">=2.2*"
 djangorestframework = "*"
 django-rest-auth = "*"
 django-allauth = "*"
 django-widget-tweaks = "*"
+gunicorn = "*"
 pillow = "*"
 django-webpack-loader = "*"
 django-oauth-toolkit = "*"
@@ -16,6 +17,9 @@ django-cors-middleware = "*"
 drf-user = "*"
 drfaddons = "*"
 django-filter = "*"
+whitenoise = ">=4.0"
+dj-database-url = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 bump2version = "*"
