@@ -1,4 +1,5 @@
 import json
+from collections import OrderedDict
 
 from django.contrib.auth import get_user_model
 from django.urls import reverse
@@ -14,8 +15,8 @@ default_payload = {
     "email"     : "tsasdes@stes.sk",
     "password1" : "testing321",
     "password2" : "testing321",
-    "first_name": "testing321",
-    "last_name" : "testing321",
+    "first_name": "TestName",
+    "last_name" : "TestSurname",
     "profile"   : {
         "birth_date": "09.12.1996",
         "gender"    : "M"
@@ -30,7 +31,14 @@ def create_user(payload=None):
 
 
 def get_user(res):
-    return get_user_model().objects.get(email=res.data.get('user', None).get('email', None))
+    payload = {
+        "id"        : res.data["user"].get("id", None),
+        "username"  : res.data["user"].get("username", None),
+        "email"     : res.data["user"].get("email", None),
+        "first_name": res.data["user"].get("first_name", None),
+        "last_name" : res.data["user"].get("last_name", None),
+    }
+    return get_user_model().objects.get(**payload)
 
 
 def get_default_user():
@@ -50,7 +58,7 @@ class RegisterUserApiTests(APITestCase):
         """Test creating a new user with an email is successful"""
         res = create_user()
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
-        user = get_user_model().objects.get(email=res.data.get('user', None).get('email', None))
+        user = get_user(res)
         self.assertTrue(user.check_password(self.payload['password1']))
         self.assertNotIn('password', res.data)
 
