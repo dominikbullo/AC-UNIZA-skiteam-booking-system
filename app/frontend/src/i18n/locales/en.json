@@ -144,6 +144,11 @@
   "Users": "Users",
   "Filters": "Filters",
   "AddEvent": "AddEvent",
+  "Family": "Family",
+  "Username": "Username",
+  "Gender": "Gender",
+  "Male": "Male",
+  "Female": "Female",
 
   "errors": {
      "internal1": "this is internal 1 error message"
