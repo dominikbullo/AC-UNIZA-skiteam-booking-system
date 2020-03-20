@@ -53,13 +53,6 @@ class FacebookLogin(SocialLoginView):
     adapter_class = FacebookOAuth2Adapter
 
 
-# from rest_auth.registration.views import SocialLoginView
-# from allauth.socialaccount.providers.google.views import GoogleOAuth2RestAdapter
-#
-# # https://github.com/Tivix/django-rest-auth/issues/403
-# class GoogleLogin(SocialLoginView):
-#     adapter_class = GoogleOAuth2RestAdapter
-
 # RES: https://stackoverflow.com/questions/53305849/django-rest-auth-key-error-on-email-confirmation
 class CustomConfirmEmailView(APIView):
     # TODO handle success and failure

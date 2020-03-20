@@ -1,15 +1,16 @@
 import datetime
 
-from allauth.account.adapter import get_adapter
 from allauth.account.models import EmailAddress
 from allauth.account.utils import setup_user_email
+
 from django.contrib.auth import get_user_model
+
 from rest_auth.models import TokenModel
+from rest_auth.registration.serializers import RegisterSerializer
 from rest_framework import serializers
 
 from family.models import Family, Parent
-from users.models import Profile, User
-from rest_auth.registration.serializers import RegisterSerializer
+from users.models import Profile
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -29,6 +30,8 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
+        # RELEASE: exclude id of profile
+        # exclude = ('id', "user")
         exclude = ('id', "user")
 
 
@@ -54,10 +57,9 @@ class UserDisplaySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = get_user_model()
-        # todo teturn is verified as tru false
         fields = (
-            'id', 'email', "username", 'password', 'first_name', "last_name", "verified_email", "user_role", "profile"
-        )
+            'id', 'email', "username", 'password', 'first_name', "last_name", "verified_email", "user_role", "profile")
+        # exclude = ("password", "last_login", "is_superuser", "is_staff", "is_active",)
         extra_kwargs = {
             'password': {'write_only': True, 'min_length': 5},
             'username': {'read_only': True},

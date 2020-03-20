@@ -47,6 +47,7 @@ export default {
   },
   created () {
     // redirect from login if is already logged
+    // eslint-disable-next-line no-useless-return
     if (!this.checkLogin()) return
   },
   computed: {
@@ -72,7 +73,8 @@ export default {
           color: 'warning'
         })
 
-        this.$router.push('/').catch(() => {})
+        this.$router.push('/').catch(() => {
+        })
         return false
       }
       return true

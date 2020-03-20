@@ -9,19 +9,19 @@
 
 
 <template>
-    <div id="table-demo">
-        <table-default></table-default>
-        <table-striped></table-striped>
-        <table-state></table-state>
-        <table-pagination></table-pagination>
-        <table-single-selected></table-single-selected>
-        <table-multiple-selected></table-multiple-selected>
-        <table-expandable-data></table-expandable-data>
-        <table-edit-data-table></table-edit-data-table>
-        <table-filter-sorter></table-filter-sorter>
-        <table-miscellaneous></table-miscellaneous>
-        <table-ssr></table-ssr>
-    </div>
+  <div id="table-demo">
+    <table-default></table-default>
+    <table-striped></table-striped>
+    <table-state></table-state>
+    <table-pagination></table-pagination>
+    <table-single-selected></table-single-selected>
+    <table-multiple-selected></table-multiple-selected>
+    <table-expandable-data></table-expandable-data>
+    <table-edit-data-table></table-edit-data-table>
+    <table-filter-sorter></table-filter-sorter>
+    <table-miscellaneous></table-miscellaneous>
+    <table-ssr></table-ssr>
+  </div>
 </template>
 
 <script>
@@ -37,7 +37,7 @@ import TableFilterSorter from './TableFilterSorter.vue'
 import TableMiscellaneous from './TableMiscellaneous.vue'
 import TableSsr from './TableSSR.vue'
 
-export default{
+export default {
   components: {
     TableDefault,
     TableStriped,
