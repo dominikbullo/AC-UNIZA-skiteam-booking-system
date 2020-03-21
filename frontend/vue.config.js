@@ -40,11 +40,16 @@ module.exports = {
       }
     }
   }
-  // devServer: {
-  //   overlay: {
-  //     warnings: true,
-  //     errors: true
-  //   }
-  // }
+}
+
+module.exports = {
+  // ...other vue-cli plugin options...
+  pwa: {
+    name: 'AC UNIZA Ski Team',
+    themeColor: '#00b0d3',
+    msTileColor: '#000000',
+    appleMobileWebAppCapable: 'yes',
+    appleMobileWebAppStatusBarStyle: 'black'
+  }
 }
 

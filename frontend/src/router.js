@@ -250,7 +250,7 @@ const router = new Router({
           name: 'data-list-list-view',
           component: () => import(
             '@/views/ui-elements/data-list/list-view/DataListListView.vue'
-          ),
+            ),
           meta: {
             breadcrumb: [
               {
@@ -272,7 +272,7 @@ const router = new Router({
           name: 'data-list-thumb-view',
           component: () => import(
             '@/views/ui-elements/data-list/thumb-view/DataListThumbView.vue'
-          ),
+            ),
           meta: {
             breadcrumb: [
               {
@@ -1375,7 +1375,7 @@ const router = new Router({
           name: 'extra-component-quill-editor',
           component: () => import(
             '@/views/components/extra-components/quill-editor/QuillEditor.vue'
-          ),
+            ),
           meta: {
             breadcrumb: [
               {
@@ -1397,7 +1397,7 @@ const router = new Router({
           name: 'extra-component-drag-and-drop',
           component: () => import(
             '@/views/components/extra-components/drag-and-drop/DragAndDrop.vue'
-          ),
+            ),
           meta: {
             breadcrumb: [
               {
@@ -1419,7 +1419,7 @@ const router = new Router({
           name: 'extra-component-datepicker',
           component: () => import(
             '@/views/components/extra-components/datepicker/Datepicker.vue'
-          ),
+            ),
           meta: {
             breadcrumb: [
               {
@@ -1441,7 +1441,7 @@ const router = new Router({
           name: 'extra-component-datetime-picker',
           component: () => import(
             '@/views/components/extra-components/datetime-picker/DatetimePicker.vue'
-          ),
+            ),
           meta: {
             breadcrumb: [
               {
@@ -1463,7 +1463,7 @@ const router = new Router({
           name: 'extra-component-access-control',
           component: () => import(
             '@/views/components/extra-components/access-control/AccessControl.vue'
-          ),
+            ),
           meta: {
             breadcrumb: [
               {
@@ -1525,7 +1525,7 @@ const router = new Router({
           name: 'extra-component-clipboard',
           component: () => import(
             '@/views/components/extra-components/clipboard/Clipboard.vue'
-          ),
+            ),
           meta: {
             breadcrumb: [
               {
@@ -1547,7 +1547,7 @@ const router = new Router({
           name: 'extra-component-context-menu',
           component: () => import(
             '@/views/components/extra-components/context-menu/ContextMenu.vue'
-          ),
+            ),
           meta: {
             breadcrumb: [
               {
@@ -1569,7 +1569,7 @@ const router = new Router({
           name: 'extra-component-star-ratings',
           component: () => import(
             '@/views/components/extra-components/star-ratings/StarRatings.vue'
-          ),
+            ),
           meta: {
             breadcrumb: [
               {
@@ -1591,7 +1591,7 @@ const router = new Router({
           name: 'extra-component-autocomplete',
           component: () => import(
             '@/views/components/extra-components/autocomplete/Autocomplete.vue'
-          ),
+            ),
           meta: {
             breadcrumb: [
               {
@@ -1633,7 +1633,7 @@ const router = new Router({
           name: 'import-excel',
           component: () => import(
             '@/views/components/extra-components/import-export/Import.vue'
-          ),
+            ),
           meta: {
             breadcrumb: [
               {
@@ -1656,7 +1656,7 @@ const router = new Router({
           name: 'export-excel',
           component: () => import(
             '@/views/components/extra-components/import-export/Export.vue'
-          ),
+            ),
           meta: {
             breadcrumb: [
               {
@@ -1679,7 +1679,7 @@ const router = new Router({
           name: 'export-excel-selected',
           component: () => import(
             '@/views/components/extra-components/import-export/ExportSelected.vue'
-          ),
+            ),
           meta: {
             breadcrumb: [
               {
@@ -1790,12 +1790,13 @@ const router = new Router({
           }
         }
       ]
-    },
-    // Redirect to 404 page, if no match found
-    {
-      path: '*',
-      redirect: '/pages/error-404'
     }
+    // Redirect to 404 page, if no match found
+    // RELEASE TODO
+    // {
+    //   path: '*',
+    //   redirect: '/pages/error-404'
+    // }
   ]
 })
 
