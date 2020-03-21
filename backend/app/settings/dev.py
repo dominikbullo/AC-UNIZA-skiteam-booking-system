@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-# from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import sys
@@ -21,8 +20,6 @@ from django.urls import include
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 SETTINGS_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(SETTINGS_DIR)
-sys.path.insert(0, os.path.join(os.path.dirname(BASE_DIR), "frontend"))
-sys.path.insert(0, os.path.join(os.path.dirname(BASE_DIR), "frontend", "dist"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -67,7 +64,6 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.facebook',
 
     # 'widget_tweaks',
-    'webpack_loader',
 ]
 
 MIDDLEWARE = [
@@ -101,7 +97,7 @@ ROOT_URLCONF = 'app.urls'
 TEMPLATES = [
     {
         'BACKEND' : 'django.template.backends.django.DjangoTemplates',
-        'DIRS'    : ['dist'],
+        'DIRS'    : ['../frontend/dist'],
         'APP_DIRS': True,
         'OPTIONS' : {
             'context_processors': [

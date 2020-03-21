@@ -5,6 +5,12 @@ LABEL maintainer="dominobullo@gmail.com"
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
+## Copy into docker
+RUN mkdir /app
+WORKDIR /app
+
+COPY backend/Pipfile* /
+
 # Install pipenv
 RUN pip install --upgrade pip
 RUN pip install pipenv
@@ -16,19 +22,15 @@ RUN apk update \
     && apk add --no-cache --virtual .build-deps build-base linux-headers \
     && pip install Pillow
 
-#FASTER Docker
-COPY Pipfile* /
 RUN pipenv lock --requirements > requirements.txt
-RUN pip install -r /requirements.txt
+RUN pip install -r requirements.txt
 
 #Instal also dev packpages
 RUN pipenv lock --dev --requirements > requirements_dev.txt
-RUN pip install -r /requirements_dev.txt
+RUN pip install -r requirements_dev.txt
 
-## Copy into docker
-RUN mkdir /app
-WORKDIR /app
-COPY ./app /app
+COPY . /app
+EXPOSE 8000
 
 ## Create new user name user for security reasons
 ## -D runnig apps only
