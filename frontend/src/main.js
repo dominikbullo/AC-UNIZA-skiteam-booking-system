@@ -1,11 +1,11 @@
-/*=========================================================================================
+/* =========================================================================================
   File Name: main.js
   Description: main vue(js) file
   ----------------------------------------------------------------------------------------
   Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
   Author: Pixinvent
   Author URL: http://www.themeforest.net/user/pixinvent
-==========================================================================================*/
+========================================================================================== */
 
 
 import Vue from 'vue'
@@ -14,14 +14,12 @@ import './registerServiceWorker'
 
 // Vuesax Component Framework
 import Vuesax from 'vuesax'
-import 'material-icons/iconfont/material-icons.css' //Material Icons
-import 'vuesax/dist/vuesax.css' // Vuesax
-Vue.use(Vuesax)
+import 'material-icons/iconfont/material-icons.css' // Material Icons
+import 'vuesax/dist/vuesax.css'
 
 
 // axios
 import axios from './axios.js'
-Vue.prototype.$http = axios
 
 // API Calls
 import './http/requests'
@@ -39,7 +37,6 @@ import '@/firebase/firebaseConfig'
 
 // Auth0 Plugin
 import AuthPlugin from './plugins/auth'
-Vue.use(AuthPlugin)
 
 
 // ACL
@@ -76,22 +73,33 @@ import './filters/filters'
 
 // Clipboard
 import VueClipboard from 'vue-clipboard2'
-Vue.use(VueClipboard)
 
 
 // Tour
 import VueTour from 'vue-tour'
-Vue.use(VueTour)
-require('vue-tour/dist/vue-tour.css')
 
 
 // VeeValidate
 import VeeValidate from 'vee-validate'
-Vue.use(VeeValidate)
 
 
 // Google Maps
 import * as VueGoogleMaps from 'vue2-google-maps'
+
+// Vuejs - Vue wrapper for hammerjs
+import { VueHammer } from 'vue2-hammer'
+
+
+// PrismJS
+import 'prismjs'
+import 'prismjs/themes/prism-tomorrow.css' // Vuesax
+Vue.use(Vuesax)
+Vue.prototype.$http = axios
+Vue.use(AuthPlugin)
+Vue.use(VueClipboard)
+Vue.use(VueTour)
+require('vue-tour/dist/vue-tour.css')
+Vue.use(VeeValidate)
 Vue.use(VueGoogleMaps, {
   load: {
     // Add your API key here
@@ -99,15 +107,7 @@ Vue.use(VueGoogleMaps, {
     libraries: 'places' // This is required if you use the Auto complete plug-in
   }
 })
-
-// Vuejs - Vue wrapper for hammerjs
-import { VueHammer } from 'vue2-hammer'
 Vue.use(VueHammer)
-
-
-// PrismJS
-import 'prismjs'
-import 'prismjs/themes/prism-tomorrow.css'
 
 
 // Feather font icon
@@ -120,15 +120,6 @@ require('./assets/css/iconfont.css')
 
 Vue.config.productionTip = false
 
-if ('-ms-scroll-limit' in document.documentElement.style && '-ms-ime-align' in document.documentElement.style) {
-  window.addEventListener('hashchange', (event) => {
-    const currentPath = window.location.hash.slice(1)
-    if (router.path !== currentPath) {
-      router.push(currentPath)
-    }
-  }, false)
-}
-  
 
 new Vue({
   router,
