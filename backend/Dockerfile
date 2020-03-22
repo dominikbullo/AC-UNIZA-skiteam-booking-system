@@ -29,7 +29,7 @@ RUN pip install -r requirements.txt
 RUN pipenv lock --dev --requirements > requirements_dev.txt
 RUN pip install -r requirements_dev.txt
 
-COPY . /app
+COPY ./backend/ /
 EXPOSE 8000
 
 ## Create new user name user for security reasons

@@ -10,23 +10,30 @@ const data = {
     {
       uid: 34,
       displayName: 'Howard Potts',
-      password: 'adminadmin',
+      id: '1',
       photoURL: require('@/assets/images/portrait/small/avatar-s-5.jpg'),
       email: 'admin@admin.com',
-      phoneNumber: null
+      first_name: 'asdasd',
+      last_name: 'asdasdas',
+      profile: {
+        birth_date: '09.12.1996',
+        phoneNumber: null
+
+      }
+
     }
   ]
 }
 
 
 const jwtConfig = {
-  'secret'   : 'dd5f3089-40c3-403d-af14-d0c228b05cb4',
+  'secret': 'dd5f3089-40c3-403d-af14-d0c228b05cb4',
   'expireTime': 8000
 }
 
 
 mock.onPost('/api/auth/login').reply((request) => {
-  const {email, password} = JSON.parse(request.data)
+  const { email, password } = JSON.parse(request.data)
 
   let error = 'Something went wrong'
 
@@ -36,9 +43,9 @@ mock.onPost('/api/auth/login').reply((request) => {
 
     try {
 
-      const accessToken = jwt.sign({id: user.uid}, jwtConfig.secret, {expiresIn: jwtConfig.expireTime})
+      const accessToken = jwt.sign({ id: user.uid }, jwtConfig.secret, { expiresIn: jwtConfig.expireTime })
 
-      const userData = Object.assign({}, user, {providerId: 'jwt'})
+      const userData = Object.assign({}, user, { providerId: 'jwt' })
 
       delete userData.password
 
@@ -56,16 +63,16 @@ mock.onPost('/api/auth/login').reply((request) => {
     error = 'Email Or Password Invalid'
   }
 
-  return [200, {error}]
+  return [200, { error }]
 
 
 })
 
 mock.onPost('/api/auth/register').reply((request) => {
-  const {displayName, email, password} = JSON.parse(request.data)
+  const { displayName, email, password } = JSON.parse(request.data)
   const isEmailAlreadyInUse = data.users.find((user) => user.email === email)
   const error = {
-    email      : isEmailAlreadyInUse ? 'This email is already in use.' : null,
+    email: isEmailAlreadyInUse ? 'This email is already in use.' : null,
     displayName: displayName === '' ? 'Please enter your name.' : null
   }
 
@@ -89,7 +96,7 @@ mock.onPost('/api/auth/register').reply((request) => {
 
     data.users.push(userData)
 
-    const accessToken = jwt.sign({id: userData.uid}, jwtConfig.secret, {expiresIn: jwtConfig.expireTime})
+    const accessToken = jwt.sign({ id: userData.uid }, jwtConfig.secret, { expiresIn: jwtConfig.expireTime })
 
     const user = Object.assign({}, userData)
     delete user['password']
@@ -100,21 +107,21 @@ mock.onPost('/api/auth/register').reply((request) => {
 
     return [200, response]
   } else {
-    return [200, {error}]
+    return [200, { error }]
   }
 })
 
 
 mock.onPost('/api/auth/refresh-token').reply((request) => {
 
-  const {accessToken} = JSON.parse(request.data)
+  const { accessToken } = JSON.parse(request.data)
 
   try {
-    const {id} = jwt.verify(accessToken, jwtConfig.secret)
+    const { id } = jwt.verify(accessToken, jwtConfig.secret)
 
     const userData = Object.assign({}, data.users.find(user => user.uid === id))
 
-    const newAccessToken = jwt.sign({id: userData.uid}, jwtConfig.secret, {expiresIn: jwtConfig.expiresIn})
+    const newAccessToken = jwt.sign({ id: userData.uid }, jwtConfig.secret, { expiresIn: jwtConfig.expiresIn })
 
     delete userData['password']
     const response = {
@@ -125,7 +132,7 @@ mock.onPost('/api/auth/refresh-token').reply((request) => {
     return [200, response]
   } catch (e) {
     const error = 'Invalid access token'
-    return [401, {error}]
+    return [401, { error }]
   }
 })
 

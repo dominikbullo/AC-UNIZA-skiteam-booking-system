@@ -25,7 +25,7 @@ services:
     volumes:
       - .:/app
     ports:
-      - "8000:8000"
+      - "8002:8000"
   #    depends_on:
   #      - db
   vue:
@@ -37,6 +37,6 @@ services:
     volumes:
       - .:/app
     ports:
-      - "8080:8080"
+      - "8082:8080"
     depends_on:
       - django

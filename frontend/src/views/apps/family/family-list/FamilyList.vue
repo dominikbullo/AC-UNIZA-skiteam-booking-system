@@ -510,15 +510,11 @@ export default {
     }
   },
   created () {
-    if (!moduleFamily.isRegistered) {
-      this.$store.registerModule('family', moduleFamily)
-      moduleFamily.isRegistered = true
-    }
     // const filter = this.$route.params.filter
     // this.$store.dispatch('family/fetchFamily', {filter})
     this.$store.dispatch('family/fetchFamily')
   }
-
 }
+
 
 </script>
