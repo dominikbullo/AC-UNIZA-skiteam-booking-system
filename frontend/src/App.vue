@@ -10,13 +10,13 @@
 
 <template>
   <div id="app" :class="vueAppClasses">
-    <router-view @setAppClasses="setAppClasses" />
+    <router-view @setAppClasses="setAppClasses"/>
   </div>
 </template>
 
 <script>
 import themeConfig from '@/../themeConfig.js'
-import jwt         from '@/http/requests/auth/jwt/index.js'
+import drf from '@/http/requests/auth/drf/index.js'
 
 export default {
   data () {
@@ -41,7 +41,7 @@ export default {
         if (document.body.className.match('theme-dark')) document.body.classList.remove('theme-dark')
         document.body.classList.add('theme-semi-dark')
       } else {
-        if (document.body.className.match('theme-dark'))      document.body.classList.remove('theme-dark')
+        if (document.body.className.match('theme-dark')) document.body.classList.remove('theme-dark')
         if (document.body.className.match('theme-semi-dark')) document.body.classList.remove('theme-semi-dark')
       }
     },
@@ -67,19 +67,14 @@ export default {
     document.documentElement.style.setProperty('--vh', `${vh}px`)
   },
   async created () {
+    drf.init()
 
-    // jwt
-    jwt.init()
 
     const dir = this.$vs.rtl ? 'rtl' : 'ltr'
     document.documentElement.setAttribute('dir', dir)
 
     window.addEventListener('resize', this.handleWindowResize)
     window.addEventListener('scroll', this.handleScroll)
-
-    // Auth0
-    try       { await this.$auth.renewTokens() } catch (e) { console.error(e) }
-
   },
   destroyed () {
     window.removeEventListener('resize', this.handleWindowResize)

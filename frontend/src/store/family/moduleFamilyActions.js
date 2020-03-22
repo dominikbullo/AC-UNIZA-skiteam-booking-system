@@ -18,7 +18,9 @@ export default {
     return new Promise((resolve, reject) => {
       // console.log(payload.filter)
       // axios.get('/families/', {params: {filter: payload.filter}})
-      // TODO family id -> from userdata?
+      // TODO -> need id of family
+      // Need to fetch
+      //
       axios.get('/families/1/')
         .then((response) => {
           console.log(response.data)

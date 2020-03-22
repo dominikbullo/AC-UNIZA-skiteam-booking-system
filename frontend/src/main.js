@@ -30,14 +30,8 @@ import './fake-db/index.js'
 // Theme Configurations
 import '../themeConfig.js'
 
-
 // Firebase
-import '@/firebase/firebaseConfig'
-
-
-// Auth0 Plugin
-import AuthPlugin from './plugins/auth'
-
+// import '@/firebase/firebaseConfig'
 
 // ACL
 import acl from './acl/acl'
@@ -94,12 +88,17 @@ import { VueHammer } from 'vue2-hammer'
 import 'prismjs'
 import 'prismjs/themes/prism-tomorrow.css' // Vuesax
 Vue.use(Vuesax)
+
 Vue.prototype.$http = axios
-Vue.use(AuthPlugin)
+
 Vue.use(VueClipboard)
+
 Vue.use(VueTour)
+
 require('vue-tour/dist/vue-tour.css')
+
 Vue.use(VeeValidate)
+
 Vue.use(VueGoogleMaps, {
   load: {
     // Add your API key here
@@ -107,6 +106,7 @@ Vue.use(VueGoogleMaps, {
     libraries: 'places' // This is required if you use the Auto complete plug-in
   }
 })
+
 Vue.use(VueHammer)
 
 

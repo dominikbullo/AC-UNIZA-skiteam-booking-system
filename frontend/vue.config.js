@@ -32,18 +32,15 @@ module.exports = {
   // and distribute
   devServer: {
     proxy: {
-      '/api*': {
-        // Forward frontend dev server request for /api to django dev server
-        target: 'http://localhost:8000/'
+      '^/api': {
+        target: 'http://localhost:8000',
+        changeOrigin: true, // so CORS doesn't bite us.
         // secure: false,
-        // logLevel: 'debug'
+        // pathRewrite: { '^/api': '/api' },
+        logLevel: 'debug'
       }
     }
-  }
-}
-
-module.exports = {
-  // ...other vue-cli plugin options...
+  },
   pwa: {
     name: 'AC UNIZA Ski Team',
     themeColor: '#00b0d3',
@@ -52,4 +49,3 @@ module.exports = {
     appleMobileWebAppStatusBarStyle: 'black'
   }
 }
-
