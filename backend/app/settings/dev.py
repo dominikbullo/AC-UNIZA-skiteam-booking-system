@@ -20,6 +20,8 @@ from django.urls import include
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 SETTINGS_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(SETTINGS_DIR)
+TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
+FRONTEND_DIR = os.path.join(os.path.dirname(BASE_DIR), 'frontend')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -64,7 +66,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.facebook',
 
-    # 'widget_tweaks',
+    'webpack_loader'
 ]
 
 MIDDLEWARE = [
@@ -99,7 +101,7 @@ ROOT_URLCONF = 'app.urls'
 TEMPLATES = [
     {
         'BACKEND' : 'django.template.backends.django.DjangoTemplates',
-        'DIRS'    : ['../frontend/dist'],
+        'DIRS'    : ['../frontend/dist', TEMPLATES_DIR],
         'APP_DIRS': True,
         'OPTIONS' : {
             'context_processors': [
@@ -220,6 +222,13 @@ REST_FRAMEWORK = {
     'PAGE_SIZE'                     : 100
 }
 
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'CACHE'          : DEBUG,
+        'BUNDLE_DIR_NAME': 'dist/',
+        'STATS_FILE'     : os.path.join(FRONTEND_DIR, 'webpack-stats.json'),
+    }
+}
 try:
     from .local_settings import *
 except ImportError:

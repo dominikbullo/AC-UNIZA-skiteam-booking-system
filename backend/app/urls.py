@@ -15,9 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path, include
+from django.views.generic import TemplateView
 
 from core import router
-from core.views import serve_worker_view, index_view
+from core.views import serve_worker_view
 
 from users.api.urls import router as user_router
 from family.api.urls import router as family_router
@@ -30,10 +31,11 @@ router.extend(events_router)
 
 urlpatterns = [
     # http://localhost:8000/
-    path('', index_view, name='index'),
+    path("", TemplateView.as_view(template_name="application.html"), name="app", ),
+    # path('', index_view, name='index'),
 
     # serve static files for PWA
-    path('index.html', index_view, name='index'),
+    # path('index.html', index_view, name='index'),
     re_path(r'^(?P<worker_name>manifest).json$', serve_worker_view, name='manifest'),
     re_path(r'^(?P<worker_name>[-\w\d.]+).js$', serve_worker_view, name='serve_worker'),
     re_path(r'^(?P<worker_name>robots).txt$', serve_worker_view, name='robots'),
@@ -51,5 +53,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     # support vue-router history mode
-    re_path(r'^\S+$', index_view, name='SPA_reload'),
+    re_path(r'^\S+$', TemplateView.as_view(template_name="application.html"), name="app", ),
 ]
