@@ -1,8 +1,9 @@
 from rest_framework import viewsets, mixins
 from rest_framework.filters import SearchFilter
 
-from family.models import Family, Parent, Child
-from family.api.serializers import FamilySerializer, ParentSerializer, ChildSerializer, CustomRegisterChildSerializer
+from family.models import Family, FamilyMember, Child
+from family.api.serializers import (FamilySerializer, FamilyMemberSerializer, ChildSerializer,
+                                    CustomRegisterChildSerializer)
 from family.api.permissions import IsOwnerOrReadOnly, IsOwnFamilyOrReadOnly
 
 
@@ -16,13 +17,13 @@ class FamiliesViewSet(viewsets.ModelViewSet):
     search_fields = ["name"]
 
 
-class ParentsViewSet(mixins.UpdateModelMixin,
-                     mixins.ListModelMixin,
-                     mixins.RetrieveModelMixin,
-                     viewsets.GenericViewSet):
+class FamilyMemberViewSet(mixins.UpdateModelMixin,
+                          mixins.ListModelMixin,
+                          mixins.RetrieveModelMixin,
+                          viewsets.GenericViewSet):
     # TODO permissions
-    queryset = Parent.objects.all()
-    serializer_class = ParentSerializer
+    queryset = FamilyMember.objects.all()
+    serializer_class = FamilyMemberSerializer
     filter_backends = [SearchFilter]
     search_fields = ["user"]
 

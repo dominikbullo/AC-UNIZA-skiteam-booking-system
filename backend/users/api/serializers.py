@@ -9,7 +9,7 @@ from rest_auth.models import TokenModel
 from rest_auth.registration.serializers import RegisterSerializer
 from rest_framework import serializers
 
-from family.models import Family, Parent
+from family.models import Family, FamilyMember
 from users.models import Profile
 
 
@@ -44,9 +44,22 @@ class ProfileAvatarSerializer(serializers.ModelSerializer):
 class UserDisplaySerializer(serializers.ModelSerializer):
     """Serializer for the users object"""
     verified_email = serializers.SerializerMethodField()
+    family_id = serializers.SerializerMethodField()
 
-    user_role = serializers.CharField(source='get_user_role_display')
-    profile = ProfileSerializer(required=True)
+    # https://stackoverflow.com/questions/41394761/the-create-method-does-not-support-writable-nested-fields-by-default
+    profile = ProfileSerializer()
+
+    # my_family = FamilySerializer(many=True, source='user_family')
+
+    # RES: https://stackoverflow.com/questions/48073471/django-rest-framework-get-data-based-on-current-userid-token
+    def get_family_id(self, obj):
+        # TODO_ family ID
+        return 1
+        # try:
+        #     test = Family.objects.all()
+        #     return test.id
+        # except EmailAddress.DoesNotExist:
+        #     return None
 
     def get_verified_email(self, obj):
         try:
@@ -55,15 +68,16 @@ class UserDisplaySerializer(serializers.ModelSerializer):
         except EmailAddress.DoesNotExist:
             return None
 
+    def update(self, instance, validated_data):
+        # TODO custom update
+        return instance
+
     class Meta:
         model = get_user_model()
         fields = (
-            'id', 'email', "username", 'password', 'first_name', "last_name", "verified_email", "user_role", "profile")
+            'id', 'family_id', 'email', "username", 'first_name', "last_name", "verified_email", "user_role", "profile")
         # exclude = ("password", "last_login", "is_superuser", "is_staff", "is_active",)
-        extra_kwargs = {
-            'password': {'write_only': True, 'min_length': 5},
-            'username': {'read_only': True},
-        }
+        read_only_fields = 'id', 'family_id', 'verified_email', "user_role", "email",
 
 
 class CustomRegisterSerializer(RegisterSerializer):
@@ -100,7 +114,7 @@ class CustomRegisterSerializer(RegisterSerializer):
         family = Family.objects.create(name=user.email)
         family.save()
 
-        parent = Parent.objects.create(user=user, family=family)
+        parent = FamilyMember.objects.create(user=user, family=family)
         parent.save()
 
         # # TODO: Validate date of birthday only 18 +

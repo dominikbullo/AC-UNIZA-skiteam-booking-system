@@ -116,11 +116,10 @@ WSGI_APPLICATION = 'app.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME'  : os.path.join(BASE_DIR, '../../../db.sqlite3'),
+        'NAME'  : os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -196,7 +195,7 @@ REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'users.api.serializers.CustomRegisterSerializer',
 }
 REST_AUTH_SERIALIZERS = {
-    # TODO USER_DETAILS_SERIALIZER
+    # 'USER_DETAILS_SERIALIZER': 'users.api.serializers.CustomUserDetailSerializer',
     'TOKEN_SERIALIZER': 'users.api.serializers.TokenSerializer',
 }
 DATE_INPUT_FORMATS = [

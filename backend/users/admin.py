@@ -34,7 +34,7 @@ class CustomUserAdmin(UserAdmin):
 
     def get_identity(self, instance):
         try:
-            return instance.name_or_username
+            return instance.email_or_username
         except Exception:
             return "Unidentified"
 
@@ -43,7 +43,7 @@ class CustomUserAdmin(UserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ("username", "email", "first_name", "last_name", "password1", "password2",),
+            'fields' : ("username", "email", "first_name", "last_name", "password1", "password2",),
         }),
     )
 

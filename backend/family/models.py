@@ -22,29 +22,23 @@ class Family(models.Model):
         ordering = ['id']
 
 
-class Person(models.Model):
+class FamilyMember(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    family = models.ForeignKey(Family, on_delete=models.CASCADE, related_name="members")
+    extra_field_family_member = models.CharField(max_length=30, blank=True)
+
+    def __str__(self):
+        return self.user.display_name
 
     class Meta:
-        abstract = True
         ordering = ['user__date_joined']
 
 
-class Parent(Person):
-    family = models.ForeignKey(Family, on_delete=models.CASCADE, related_name="parents")
-    title = models.CharField(max_length=30, blank=True)
+class Child(FamilyMember):
+    test_field = models.CharField(max_length=30, blank=True)
 
     def __str__(self):
-        return self.user.username
-
-
-class Child(Person):
-    family = models.ForeignKey(Family, on_delete=models.CASCADE, related_name="children")
-
-    # parent = models.ForeignKey(Parent, on_delete=models.CASCADE, related_name='children')
-
-    def __str__(self):
-        return self.user.username
+        return self.user.display_name
 
     class Meta:
         verbose_name_plural = "Children"

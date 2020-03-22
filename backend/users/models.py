@@ -18,13 +18,19 @@ class User(AbstractUser):
     user_role = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES, null=True, blank=True)
 
     def __str__(self):
-        return self.name_or_username
+        return self.display_name
 
     @property
-    def name_or_username(self):
+    def email_or_username(self):
         if self.email != "":
             return self.email
         return self.username
+
+    @property
+    def email_or_full_name(self):
+        if self.email != "":
+            return self.email
+        return self.full_name
 
     @property
     def full_name(self):
@@ -32,7 +38,7 @@ class User(AbstractUser):
 
     @property
     def display_name(self):
-        return "%s %s" % (self.first_name, self.last_name)
+        return self.email_or_full_name
 
 
 class Profile(models.Model):
@@ -50,4 +56,4 @@ class Profile(models.Model):
         ordering = ['user__date_joined']
 
     def __str__(self):
-        return self.user.name_or_username
+        return self.user.email_or_username

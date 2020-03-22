@@ -4,9 +4,9 @@ from allauth.account.adapter import get_adapter
 from allauth.account.utils import setup_user_email
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from family.models import Child, Parent, Family
+from family.models import Child, FamilyMember, Family
 
-from users.api.serializers import CustomRegisterSerializer
+from users.api.serializers import CustomRegisterSerializer, UserDisplaySerializer
 from users.models import Profile
 
 
@@ -53,9 +53,9 @@ class ChildSerializer(serializers.ModelSerializer):
             # TODO doesn't pass parent
             return None
 
-        parent = Parent.objects.get(user=validated_data.get("parent"))
-        # TODO doesn't found parent
+        parent = FamilyMember.objects.get(user=validated_data.get("parent"))
 
+        # TODO doesn't found parent
         child = Child.objects.create(user=user, family_id=parent.family_id)
         # # TODO try save there
         # user.save()
@@ -70,42 +70,19 @@ class ChildSerializer(serializers.ModelSerializer):
                         "username": {"required": True}}
 
 
-class ParentSerializer(serializers.ModelSerializer):
-    # I dont need that for now, because, i wil be searching family. Because if parent have all child,
-    # then all parents must have these child and when I want to merge Mother and Father into one family, i just change
-    # one of them family id. with all child if they have some
-    # children = serializers.HyperlinkedRelatedField(many=True,
-    #                                                read_only=True,
-    #                                                view_name="child-detail")
-
-    # user = serializers.StringRelatedField(read_only=True)
-    user = serializers.HyperlinkedRelatedField(read_only=True, view_name="users:profile-detail")
-    family = serializers.StringRelatedField()
-
-    # def validate(self, data):
-    #     raise serializers.ValidationError('Not a multiple of ten')
-
-    # More possible ways
+class FamilyMemberSerializer(serializers.ModelSerializer):
     # user = UserDisplaySerializer(read_only=True)
-    # def create(self, validated_data):
-    #     create_user()
+    user = serializers.HyperlinkedRelatedField(read_only=True, view_name="users:user-detail")
 
     class Meta:
-        model = Parent
+        model = FamilyMember
         fields = "__all__"
 
 
 class FamilySerializer(serializers.ModelSerializer):
-    parents = ParentSerializer(many=True, read_only=True)
-    children = ChildSerializer(many=True, read_only=True)
+    members = FamilyMemberSerializer(many=True, read_only=True)
 
-    # parents = serializers.HyperlinkedRelatedField(many=True,
-    #                                               read_only=True,
-    #                                               view_name="family:parent-detail")
-
-    # children = serializers.HyperlinkedRelatedField(many=True,
-    #                                                read_only=True,
-    #                                                view_name="family:child-detail")
+    # children = ChildSerializer(many=True, read_only=True)
 
     class Meta:
         model = Family
