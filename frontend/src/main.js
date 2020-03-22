@@ -17,6 +17,8 @@ import Vuesax from 'vuesax'
 import 'material-icons/iconfont/material-icons.css' // Material Icons
 import 'vuesax/dist/vuesax.css'
 
+// Moment (Dates)
+import moment from 'moment'
 
 // axios
 import axios from './axios.js'
@@ -86,9 +88,11 @@ import { VueHammer } from 'vue2-hammer'
 
 // PrismJS
 import 'prismjs'
-import 'prismjs/themes/prism-tomorrow.css' // Vuesax
+import 'prismjs/themes/prism-tomorrow.css'
+
 Vue.use(Vuesax)
 
+Vue.prototype.moment = moment
 Vue.prototype.$http = axios
 
 Vue.use(VueClipboard)

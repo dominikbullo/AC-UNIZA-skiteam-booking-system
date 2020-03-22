@@ -1,11 +1,11 @@
-/*=========================================================================================
+/* =========================================================================================
   File Name: state.js
   Description: Vuex Store - state
   ----------------------------------------------------------------------------------------
   Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
   Author: Pixinvent
   Author URL: http://www.themeforest.net/user/pixinvent
-==========================================================================================*/
+========================================================================================== */
 
 import navbarSearchAndPinList from '@/layouts/components/navbar/navbarSearchAndPinList'
 import themeConfig, { colors } from '@/../themeConfig.js'
@@ -16,11 +16,12 @@ import themeConfig, { colors } from '@/../themeConfig.js'
 
 // *From Auth - Data will be received from auth provider
 const userDefaults = {
-  displayName : 'John Doe', // From Auth
-  about       : 'default',
-  photoURL    : require('@/assets/images/portrait/small/avatar-s-11.jpg'), // From Auth
-  status      : 'online',
-  userRole    : 'admin'
+  displayName: 'John Doe', // From Auth
+  about: 'default',
+  photoURL: require('@/assets/images/portrait/small/avatar-s-11.jpg'), // From Auth
+  status: 'online',
+  userRole: 'admin',
+  family_id: 0
 }
 
 const userInfoLocalStorage = JSON.parse(localStorage.getItem('userInfo')) || {}
@@ -33,7 +34,7 @@ const getUserInfo = () => {
   // Update property in user
   Object.keys(userDefaults).forEach((key) => {
     // If property is defined in localStorage => Use that
-    userInfo[key] = userInfoLocalStorage[key] ?  userInfoLocalStorage[key] : userDefaults[key]
+    userInfo[key] = userInfoLocalStorage[key] ? userInfoLocalStorage[key] : userDefaults[key]
   })
 
   // Include properties from localStorage
@@ -70,19 +71,19 @@ const is_touch_device = () => {
 // /////////////////////////////////////////////
 
 const state = {
-  AppActiveUser           : getUserInfo(),
-  bodyOverlay             : false,
-  isVerticalNavMenuActive : true,
-  is_touch_device         : is_touch_device(),
-  mainLayoutType          : themeConfig.mainLayoutType || 'vertical',
+  AppActiveUser: getUserInfo(),
+  bodyOverlay: false,
+  isVerticalNavMenuActive: true,
+  is_touch_device: is_touch_device(),
+  mainLayoutType: themeConfig.mainLayoutType || 'vertical',
   navbarSearchAndPinList,
-  reduceButton            : themeConfig.sidebarCollapsed,
-  verticalNavMenuWidth    : 'default',
-  verticalNavMenuItemsMin : false,
-  scrollY                 : 0,
-  starredPages            : navbarSearchAndPinList['pages'].data.filter((page) => page.is_bookmarked),
-  theme                   : themeConfig.theme || 'light',
-  themePrimaryColor       : colors.primary,
+  reduceButton: themeConfig.sidebarCollapsed,
+  verticalNavMenuWidth: 'default',
+  verticalNavMenuItemsMin: false,
+  scrollY: 0,
+  starredPages: navbarSearchAndPinList['pages'].data.filter((page) => page.is_bookmarked),
+  theme: themeConfig.theme || 'light',
+  themePrimaryColor: colors.primary,
 
   // Can be used to get current window with
   // Note: Above breakpoint state is for internal use of sidebar & navbar component

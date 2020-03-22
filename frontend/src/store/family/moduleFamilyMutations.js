@@ -1,9 +1,11 @@
 export default {
   SET_FAMILY_MEMBERS (state, payload) {
+    console.log('setting up family members:', payload)
     state.members = payload
   },
-  ADD_MEMBER (state, child) {
-    state.members.unshift(child)
+  ADD_MEMBER (state, payload) {
+    console.log('ading member', payload)
+    state.members.unshift(payload.user)
   },
   UPDATE_FAMILY_INFO (state, payload) {
     // Get Data localStorage

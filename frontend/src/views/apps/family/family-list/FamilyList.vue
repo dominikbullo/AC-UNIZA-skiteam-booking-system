@@ -118,7 +118,7 @@
 
                   <!-- RES: https://flatpickr.js.org/formatting/ -->
                   <label style="font-size: 10px">{{ $t('BirthDate') }}</label>
-                  <flat-pickr :config="{ dateFormat: 'd.m.Y',maxDate: new Date().fp_incr(14) }" class="w-full"
+                  <flat-pickr :config="{ dateFormat: 'd.m.Y' }" class="w-full"
                               v-model="childData.profile.birth_date"/>
                   <span class="text-danger text-sm">{{ errors.first('childData.profile.birth_date') }}</span>
 
@@ -236,13 +236,9 @@
 </template>
 
 <script>
-import {AgGridVue} from 'ag-grid-vue'
+import { AgGridVue } from 'ag-grid-vue'
 import '@/assets/scss/vuexy/extraComponents/agGridStyleOverride.scss'
 import vSelect from 'vue-select'
-
-
-// Store Module
-import moduleFamily from '@/store/family/moduleFamily.js'
 
 // Cell Renderer
 import CellRendererLink from './cell-renderer/CellRendererLink.vue'
@@ -280,7 +276,7 @@ export default {
         first_name: 'testing321',
         last_name: 'testing321',
         profile: {
-          birth_date: new Date(),
+          birth_date: this.moment().format('DD.MM.YYYY'),
           phone_number: '',
           location: '',
           gender: 'M'
@@ -301,21 +297,16 @@ export default {
       },
 
       columnDefs: [
-        {
-          headerName: 'ID',
-          field: 'id',
-          width: 125,
-          // filter: true,
-          checkboxSelection: true,
-          headerCheckboxSelectionFilteredOnly: true,
-          headerCheckboxSelection: true
-        },
+
         {
           headerName: 'Username',
           field: 'username',
           filter: true,
           width: 210,
-          cellRendererFramework: 'CellRendererLink'
+          cellRendererFramework: 'CellRendererLink',
+          checkboxSelection: true,
+          headerCheckboxSelectionFilteredOnly: true,
+          headerCheckboxSelection: true
         },
         {
           headerName: 'Email',
@@ -356,6 +347,7 @@ export default {
           cellRendererFramework: 'CellRendererVerified',
           cellClass: 'text-center'
         },
+        // TODO actions
         {
           headerName: 'Actions',
           field: 'transactions',
@@ -391,20 +383,35 @@ export default {
   },
   computed: {
     familyMembers () {
-      return this.$store.state.family.members
+      const members = this.$store.state.family.members
+
+      const cleanMembers = []
+      members.forEach((element) => {
+        cleanMembers.unshift(element['user'])
+      })
+      return cleanMembers
     },
     paginationPageSize () {
-      if (this.gridApi) return this.gridApi.paginationGetPageSize()
-      else return 10
+      if (this.gridApi) {
+        return this.gridApi.paginationGetPageSize()
+      } else {
+        return 10
+      }
     },
     totalPages () {
-      if (this.gridApi) return this.gridApi.paginationGetTotalPages()
-      else return 0
+      if (this.gridApi) {
+        return this.gridApi.paginationGetTotalPages()
+      } else {
+        return 0
+      }
     },
     currentPage: {
       get () {
-        if (this.gridApi) return this.gridApi.paginationGetCurrentPage() + 1
-        else return 1
+        if (this.gridApi) {
+          return this.gridApi.paginationGetCurrentPage() + 1
+        } else {
+          return 1
+        }
       },
       set (val) {
         this.gridApi.paginationGoToPage(val - 1)
@@ -454,7 +461,7 @@ export default {
         first_name: '',
         last_name: '',
         profile: {
-          birth_date: new Date(),
+          birth_date: this.moment().format('DD.MM.YYYY'),
           gender: 'M'
         }
       })
@@ -465,13 +472,11 @@ export default {
         if (result) {
           this.$store.dispatch('family/addChild', Object.assign({}, this.childData)).then(() => {
             this.clearFields()
-
             this.$vs.notify({
               color: 'success',
-              title: 'User Deleted',
-              text: 'The selected user was successfully deleted'
+              title: 'Child Added',
+              text: 'The child was successfully added'
             })
-
           }).catch(error => {
             this.$vs.loading.close()
             // this.multipleNotify(error.response.data)
@@ -510,9 +515,7 @@ export default {
     }
   },
   created () {
-    // const filter = this.$route.params.filter
-    // this.$store.dispatch('family/fetchFamily', {filter})
-    this.$store.dispatch('family/fetchFamily')
+    this.$store.dispatch('family/fetchFamily', this.$store.state.AppActiveUser.family_id)
   }
 }
 

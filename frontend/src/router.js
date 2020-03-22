@@ -70,14 +70,6 @@ const router = new Router({
           }
         },
         {
-          path: '/admin/dashboard',
-          name: 'dashboard',
-          component: () => import('./views/dashboards/DashboardAdmin.vue'),
-          meta: {
-            rule: 'admin'
-          }
-        },
-        {
           path: '/testpage',
           name: 'testpage',
           component: () => import('@/views/pages/TestPage.vue'),
@@ -153,26 +145,26 @@ const router = new Router({
         },
 
         // User APP
-        {
-          path: '/apps/user/user-edit/:userId',
-          name: 'app-user-edit',
-          component: () => import('@/views/apps/user/user-edit/UserEdit.vue'),
-          meta: {
-            breadcrumb: [
-              {
-                title: 'Home',
-                url: '/'
-              },
-              { title: 'User' },
-              {
-                title: 'Edit',
-                active: true
-              }
-            ],
-            pageTitle: 'User Edit',
-            rule: 'admin'
-          }
-        },
+        // {
+        //   path: '/apps/user/user-edit/:userId',
+        //   name: 'app-user-edit',
+        //   component: () => import('@/views/apps/user/user-edit/UserEdit.vue'),
+        //   meta: {
+        //     breadcrumb: [
+        //       {
+        //         title: 'Home',
+        //         url: '/'
+        //       },
+        //       { title: 'User' },
+        //       {
+        //         title: 'Edit',
+        //         active: true
+        //       }
+        //     ],
+        //     pageTitle: 'User Edit',
+        //     rule: 'admin'
+        //   }
+        // },
         {
           path: '/apps/calendar',
           name: 'calendar-simple-calendar',
