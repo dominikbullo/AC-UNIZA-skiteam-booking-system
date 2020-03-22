@@ -20,12 +20,12 @@ from users.models import Profile
 #         instance.username = username
 
 
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def create_profile(sender, instance, created, **kwargs):
-    if created:
-        print("Creating profile: ", created)
-        Profile.objects.get_or_create(user=instance)
-        instance.save()
+# @receiver(post_save, sender=settings.AUTH_USER_MODEL)
+# def create_profile(sender, instance, created, **kwargs):
+#     if created:
+#         print("Creating profile: ", created)
+#         Profile.objects.get_or_create(user=instance)
+#         instance.save()
 
 
 @receiver(email_confirmed)
