@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Permission
 
+from family.models import FamilyMember
 from users.forms import CustomUserCreationForm, CustomUserChangeForm
 from users.models import User, Profile
 
@@ -16,6 +17,13 @@ class ProfileInline(admin.StackedInline):
     fk_name = 'user'
 
 
+class FamilyMemberInLine(admin.StackedInline):
+    model = FamilyMember
+    can_delete = False
+    verbose_name_plural = 'Families'
+    fk_name = 'user'
+
+
 # https: // simpleisbetterthancomplex.com / tutorial / 2016 / 07 / 22 / how - to - extend - django - user - model.html
 
 
@@ -24,7 +32,7 @@ class CustomUserAdmin(UserAdmin):
     form = CustomUserChangeForm
     model = User
     list_display = ["get_identity", "first_name", "last_name", "date_joined", "last_login", "get_type", "is_staff"]
-    inlines = [ProfileInline]
+    inlines = [ProfileInline, FamilyMemberInLine]
 
     def get_type(self, instance):
         try:

@@ -1,7 +1,4 @@
-from collections import OrderedDict
-
-from allauth.account.adapter import get_adapter
-from allauth.account.utils import setup_user_email
+from allauth.account.utils import setup_user_email, send_email_confirmation
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from family.models import Child, FamilyMember, Family
@@ -39,11 +36,19 @@ class ChildSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
 
-        Profile.objects.create(user=user, **profile_data)
-        user.profile.save()
+        if validated_data["user"].get("email", None):
 
-        # TODO Here i can add user/owner/family
-        # RELEASE: Delete
+            # TODO add email adress
+            setup_user_email(self.context['request'], user, [])
+            send_email_confirmation(self.context['request'], user, signup=False)
+            # user.add_email_address(self.context['request'], validated_data["user"]["email"])
+
+            # TODO singals
+            Profile.objects.get_or_create(user=user, **profile_data)
+            user.profile.save()
+
+            # TODO Here i can add user/owner/family
+            # RELEASE: Delete
         try:
             print("Parent is:", validated_data["parent"])
         except:
@@ -71,8 +76,9 @@ class ChildSerializer(serializers.ModelSerializer):
 
 
 class FamilyMemberSerializer(serializers.ModelSerializer):
-    # user = UserDisplaySerializer(read_only=True)
-    user = serializers.HyperlinkedRelatedField(read_only=True, view_name="users:user-detail")
+    user = UserDisplaySerializer(read_only=True)
+
+    # user = serializers.HyperlinkedRelatedField(read_only=True, view_name="users:user-detail")
 
     class Meta:
         model = FamilyMember

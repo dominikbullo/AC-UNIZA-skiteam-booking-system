@@ -1,4 +1,5 @@
-from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
+from allauth.account.models import EmailAddress
+from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AbstractUser, Group, PermissionsMixin
 from django.db import models
 
@@ -19,6 +20,12 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.display_name
+
+    def add_email_address(self, request, new_email):
+        # Add a new email address for the user, and send email confirmation.
+        # Old email will remain the primary until the new one is confirmed.
+        print("adding new email adress")
+        return EmailAddress.objects.add_email(request, self, new_email, confirm=True)
 
     @property
     def email_or_username(self):

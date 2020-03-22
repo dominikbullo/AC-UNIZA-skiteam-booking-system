@@ -107,7 +107,7 @@ class CustomRegisterSerializer(RegisterSerializer):
 
         profile_data["birth_date"] = datetime.datetime.strptime(profile_data["birth_date"], '%d.%m.%Y').date()
 
-        Profile.objects.create(user=user, **profile_data)
+        Profile.objects.get_or_create(user=user, **profile_data)
         user.profile.save()
 
         # TODO family_creator only if parent
