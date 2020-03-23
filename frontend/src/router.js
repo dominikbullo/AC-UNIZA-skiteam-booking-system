@@ -82,6 +82,88 @@ const router = new Router({
         // Application Routes
         // =============================================================================
 
+
+        // User APP
+        // {
+        //   path: '/apps/user/user-edit/:userId',
+        //   name: 'app-user-edit',
+        //   component: () => import('@/views/apps/user/user-edit/UserEdit.vue'),
+        //   meta: {
+        //     breadcrumb: [
+        //       {
+        //         title: 'Home',
+        //         url: '/'
+        //       },
+        //       { title: 'User' },
+        //       {
+        //         title: 'Edit',
+        //         active: true
+        //       }
+        //     ],
+        //     pageTitle: 'User Edit',
+        //     rule: 'admin'
+        //   }
+        // },
+        {
+          path: '/apps/user/user-list',
+          name: 'app-user-list',
+          component: () => import('@/views/apps/user/user-list/UserList.vue'),
+          meta: {
+            breadcrumb: [
+              {
+                title: 'Home',
+                url: '/'
+              },
+              { title: 'User' },
+              {
+                title: 'List',
+                active: true
+              }
+            ],
+            pageTitle: 'User List',
+            rule: 'editor'
+          }
+        },
+        {
+          path: '/apps/user/user-view/:userId',
+          name: 'app-user-view',
+          component: () => import('@/views/apps/user/UserView.vue'),
+          meta: {
+            breadcrumb: [
+              {
+                title: 'Home',
+                url: '/'
+              },
+              { title: 'User' },
+              {
+                title: 'View',
+                active: true
+              }
+            ],
+            pageTitle: 'User View',
+            rule: 'editor'
+          }
+        },
+        {
+          path: '/apps/user/user-edit/:userId',
+          name: 'app-user-edit',
+          component: () => import('@/views/apps/user/user-edit/UserEdit.vue'),
+          meta: {
+            breadcrumb: [
+              {
+                title: 'Home',
+                url: '/'
+              },
+              { title: 'User' },
+              {
+                title: 'Edit',
+                active: true
+              }
+            ],
+            pageTitle: 'User Edit',
+            rule: 'admin'
+          }
+        },
         // Family APP
         {
           path: '/apps/family/list',
@@ -144,27 +226,47 @@ const router = new Router({
           }
         },
 
-        // User APP
-        // {
-        //   path: '/apps/user/user-edit/:userId',
-        //   name: 'app-user-edit',
-        //   component: () => import('@/views/apps/user/user-edit/UserEdit.vue'),
-        //   meta: {
-        //     breadcrumb: [
-        //       {
-        //         title: 'Home',
-        //         url: '/'
-        //       },
-        //       { title: 'User' },
-        //       {
-        //         title: 'Edit',
-        //         active: true
-        //       }
-        //     ],
-        //     pageTitle: 'User Edit',
-        //     rule: 'admin'
-        //   }
-        // },
+        // Event APP
+        {
+          path: '/apps/event/list',
+          name: 'app-event-list',
+          component: () => import('@/views/apps/event/EventList.vue'),
+          meta: {
+            breadcrumb: [
+              {
+                title: 'Home',
+                url: '/'
+              },
+              { title: 'Event' },
+              {
+                title: 'List',
+                active: true
+              }
+            ],
+            pageTitle: 'Event List',
+            rule: 'editor'
+          }
+        },
+        {
+          path: '/apps/event/calendar',
+          name: 'app-family-view',
+          component: () => import('@/views/apps/event/EventCalendar.vue'),
+          meta: {
+            breadcrumb: [
+              {
+                title: 'Home',
+                url: '/'
+              },
+              { title: 'Event' },
+              {
+                title: 'Calendar',
+                active: true
+              }
+            ],
+            pageTitle: 'Family View',
+            rule: 'editor'
+          }
+        },
         {
           path: '/apps/calendar',
           name: 'calendar-simple-calendar',
@@ -172,66 +274,6 @@ const router = new Router({
           meta: {
             rule: 'editor',
             no_scroll: true
-          }
-        },
-        {
-          path: '/apps/user/user-list',
-          name: 'app-user-list',
-          component: () => import('@/views/apps/user/user-list/UserList.vue'),
-          meta: {
-            breadcrumb: [
-              {
-                title: 'Home',
-                url: '/'
-              },
-              { title: 'User' },
-              {
-                title: 'List',
-                active: true
-              }
-            ],
-            pageTitle: 'User List',
-            rule: 'editor'
-          }
-        },
-        {
-          path: '/apps/user/user-view/:userId',
-          name: 'app-user-view',
-          component: () => import('@/views/apps/user/UserView.vue'),
-          meta: {
-            breadcrumb: [
-              {
-                title: 'Home',
-                url: '/'
-              },
-              { title: 'User' },
-              {
-                title: 'View',
-                active: true
-              }
-            ],
-            pageTitle: 'User View',
-            rule: 'editor'
-          }
-        },
-        {
-          path: '/apps/user/user-edit/:userId',
-          name: 'app-user-edit',
-          component: () => import('@/views/apps/user/user-edit/UserEdit.vue'),
-          meta: {
-            breadcrumb: [
-              {
-                title: 'Home',
-                url: '/'
-              },
-              { title: 'User' },
-              {
-                title: 'Edit',
-                active: true
-              }
-            ],
-            pageTitle: 'User Edit',
-            rule: 'admin'
           }
         },
         // =============================================================================

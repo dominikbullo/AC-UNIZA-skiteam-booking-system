@@ -65,19 +65,26 @@ export default [
             slug: 'app-event-list',
             i18n: 'List'
           },
+          // {
+          //   url: '/apps/event/edit',
+          //   name: 'Edit',
+          //   slug: 'app-event-list',
+          //   i18n: 'Edit'
+          // },
           {
-            url: '/apps/event/edit',
-            name: 'Edit',
-            slug: 'app-event-list',
-            i18n: 'Edit'
-          },
-          {
-            url: '/apps/calendar',
+            url: '/apps/event/calendar',
             name: 'Calendar',
             slug: 'app-event-calendar',
             icon: 'CalendarIcon',
             tagColor: 'success',
             i18n: 'Calendar'
+          },
+          {
+            url: '/apps/calendar',
+            name: 'Calendar Demo ',
+            slug: 'app-event-demo-calendar',
+            icon: 'CalendarIcon',
+            tagColor: 'success',
           }
         ]
       },
