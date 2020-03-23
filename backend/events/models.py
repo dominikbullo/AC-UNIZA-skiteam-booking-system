@@ -3,6 +3,7 @@ import datetime
 from django.utils.translation import gettext as _
 from django.db import models
 
+from core.choices import CategoryNameChoices
 from family.models import Child
 
 
@@ -27,22 +28,13 @@ class Season(models.Model):
 
 
 class Category(models.Model):
-    class Categories(models.TextChoices):
-        U_8 = 'U8', _('Superbaby')
-        U_10 = 'U10', _('Mladší predžiaci')
-        U_12 = 'U12', _('Starší predžiaci')
-        U_14 = 'U14', _('Mladší žiaci')
-        U_16 = 'U16', _('Starší žiaci')
-        U_18 = 'U18', _('Juniory')
-        U_21 = 'U21', _('Dospelý')
-
     # name
     session = models.ForeignKey(Season, on_delete=models.CASCADE)
     children = models.ManyToManyField(Child, blank=True)
 
     name = models.CharField(
         max_length=3,
-        choices=Categories.choices,
+        choices=CategoryNameChoices.choices,
     )
 
     # year from to know who add into this cat

@@ -7,7 +7,7 @@ from family.models import FamilyMember
 from users.forms import CustomUserCreationForm, CustomUserChangeForm
 from users.models import User, Profile
 
-from core.utils import USER_TYPE_CHOICES
+from core.choices import USER_TYPE_CHOICES
 
 
 class ProfileInline(admin.StackedInline):
