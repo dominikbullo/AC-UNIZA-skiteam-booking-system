@@ -3,6 +3,10 @@ export default {
     console.log('setting up family members:', payload)
     state.members = payload
   },
+  ADD_FAMILY_MEMBERS (state, payload) {
+    console.log('adding family members:', payload)
+    state.members.concat(payload)
+  },
   ADD_MEMBER (state, payload) {
     console.log('ading member', payload)
     state.members.unshift(payload.user)

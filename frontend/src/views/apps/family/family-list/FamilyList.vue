@@ -258,7 +258,6 @@ export default {
     // Cell Renderer
     /* eslint-disable vue/no-unused-components */
     CellRendererLink,
-    CellRendererStatus,
     CellRendererVerified,
     CellRendererActions
     /* eslint-enable vue/no-unused-components */
@@ -325,6 +324,19 @@ export default {
           field: 'last_name',
           filter: true,
           width: 200
+        },
+        {
+          headerName: 'Birth Date',
+          field: 'profile.birth_date',
+          filter: true,
+          width: 150
+        },
+        {
+          headerName: 'Gender',
+          field: 'profile.gender',
+          cellClass: 'text-center',
+          filter: true,
+          width: 110
         },
         {
           headerName: 'Role',
@@ -499,6 +511,13 @@ export default {
           })
         }
       }
+    },
+    fetchFamily (size) {
+      const payload = {
+        familyId: this.$store.state.AppActiveUser.family_id,
+        count: size
+      }
+      this.$store.dispatch('family/fetchFamily', payload)
     }
   },
   mounted () {
@@ -515,9 +534,7 @@ export default {
     }
   },
   created () {
-    this.$store.dispatch('family/fetchFamily', this.$store.state.AppActiveUser.family_id)
+    this.fetchFamily(this.paginationPageSize)
   }
 }
-
-
 </script>

@@ -52,7 +52,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=30, blank=True)
     location = models.CharField(max_length=30, blank=True)
-    birth_date = models.DateField(null=True, blank=True)
+    birth_date = models.DateField()
     avatar = models.ImageField(null=True, blank=True)
 
     # USER_TYPE_CHOICES is from from core.utils import USER_TYPE_CHOICES because i using it at m,any locations

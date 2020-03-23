@@ -15,12 +15,11 @@ export default {
         })
     })
   },
-  fetchFamily ({ commit }, familyId) {
+  fetchFamily ({ commit }, payload) {
     return new Promise((resolve, reject) => {
-      // console.log(payload.filter)
-      // axios.get('/families/', {params: {filter: payload.filter}})
       // TODO -> need id of family
-      axios.get(`/families/${familyId}/`)
+      console.log('payload in fetchFamily', payload)
+      axios.get(`/families/${payload.familyId}/`)
         .then((response) => {
           commit('SET_FAMILY_MEMBERS', response.data.members)
           // commit('UPDATE_FAMILY_INFO', response.data)
