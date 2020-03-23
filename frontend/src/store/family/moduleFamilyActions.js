@@ -12,6 +12,7 @@ export default {
           resolve(response)
         })
         .catch((error) => {
+           reject(error)
         })
     })
   },

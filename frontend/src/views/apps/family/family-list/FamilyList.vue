@@ -76,7 +76,7 @@
                         type="text"
                         v-model="childData.first_name"
                         v-validate="'required|alpha_dash|min:3'"/>
-                      <span class="text-danger text-sm">{{ errors.first('childData.first_name') }}</span>
+                      <span class="text-danger text-sm">{{ errors.first('name') }}</span>
                     </div>
 
                     <div class="vx-col sm:w-1/2 w-full mb-2">
@@ -85,11 +85,11 @@
                         :placeholder="$t('Surname')"
                         class="w-full mt-6"
                         data-vv-validate-on="blur"
-                        name="email"
+                        name="surname"
                         type="text"
                         v-model="childData.last_name"
                         v-validate="'required|alpha_dash|min:3'"/>
-                      <span class="text-danger text-sm">{{ errors.first('childData.first_name') }}</span>
+                      <span class="text-danger text-sm">{{ errors.first('surname') }}</span>
                     </div>
                   </div>
 
@@ -98,11 +98,12 @@
                     :placeholder="$t('Username')"
                     class="w-full mt-6"
                     data-vv-validate-on="blur"
-                    name="email"
+                    name="username"
                     type="text"
                     v-model="childData.username"
                     v-validate="'required|alpha_dash|min:3'"/>
-                  <span class="text-danger text-sm">{{ errors.first('childData.first_name') }}</span>
+                  <span class="text-danger text-sm">{{ errors.first('username') }}</span>
+
 
                   <vs-input
                     :label-placeholder="$t('Email')"
@@ -113,14 +114,18 @@
                     type="email"
                     v-model="childData.email"
                     v-validate="'email'"/>
-                  <span class="text-danger text-sm">{{ errors.first('childData.email') }}</span>
+                  <span class="text-danger text-sm">{{ errors.first('email') }}</span>
 
 
                   <!-- RES: https://flatpickr.js.org/formatting/ -->
-                  <label style="font-size: 10px">{{ $t('BirthDate') }}</label>
-                  <flat-pickr :config="{ dateFormat: 'd.m.Y' }" class="w-full"
-                              v-model="childData.profile.birth_date"/>
-                  <span class="text-danger text-sm">{{ errors.first('childData.profile.birth_date') }}</span>
+                  <div>
+                    <label style="font-size: 10px">{{ $t('BirthDate') }}</label>
+                    <flat-pickr
+                      :config="{ dateFormat: 'd.m.Y' }"
+                      class="w-full"
+                      v-model="childData.profile.birth_date"/>
+                    <span class="text-danger text-sm">{{ errors.first('childData.profile.birth_date') }}</span>
+                  </div>
 
                   <div>
                     <label style="font-size: 10px">{{ $t('Gender') }}</label>
@@ -142,7 +147,7 @@
                     type="password"
                     v-model="childData.password1"
                     v-validate="'required|min:6'"/>
-                  <span class="text-danger text-sm">{{ errors.first('childData.password1') }}</span>
+                  <span class="text-danger text-sm">{{ errors.first('password1') }}</span>
 
                   <vs-input
                     :label-placeholder="$t('ConfirmPassword')"
@@ -154,7 +159,7 @@
                     type="password"
                     v-model="childData.password2"
                     v-validate="'min:6|confirmed:password'"/>
-                  <span class="text-danger text-sm">{{ errors.first('childData.password2') }}</span>
+                  <span class="text-danger text-sm">{{ errors.first('confirm_password') }}</span>
                 </div>
               </div>
 
@@ -478,9 +483,17 @@ export default {
         }
       })
     },
+    close () {
+      this.$vs.notify({
+        color: 'danger',
+        title: 'Closed',
+        text: 'You close a dialog!'
+      })
+    },
     addChild () {
       // if (!this.this.$validator.validateAll() || this.checkLogin())
       this.$validator.validateAll().then(result => {
+
         if (result) {
           this.$store.dispatch('family/addChild', Object.assign({}, this.childData)).then(() => {
             this.clearFields()
@@ -489,9 +502,22 @@ export default {
               title: 'Child Added',
               text: 'The child was successfully added'
             })
+            this.clearFields()
           }).catch(error => {
             this.$vs.loading.close()
+            console.error(error)
+            this.$vs.notify({
+              color: 'danger',
+              title: 'Child Not added',
+              text: error.message
+            })
             // this.multipleNotify(error.response.data)
+          })
+        } else {
+          this.$vs.notify({
+            color: 'danger',
+            title: 'Child Not added',
+            text: 'Form is not valid'
           })
         }
       })

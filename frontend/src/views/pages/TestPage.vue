@@ -1,5 +1,6 @@
 <template>
   <div id="test_page">
+
     <vx-card>
       <h1>That's the dashboard!</h1>
       <p>You should only get here if you're authenticated!</p>
@@ -128,6 +129,15 @@
                      v-show="$acl.check('admin')"> {{ $t('AddEvent') }}
           </vs-button>
 
+          <vs-button
+            @click="askPermission"
+            icon="icon-plus"
+            icon-pack="feather"
+            if="notificationsSupported">{{
+            $t('Enable notifications') }}
+          </vs-button>
+
+
         </div>
       </vx-card>
 
@@ -149,7 +159,8 @@ export default {
     return {
       email: '',
       userRole: this.$acl.get[0],
-      activePrompt: true,
+      activePrompt: false,
+      notificationsSupported: false,
 
       childData: {
         username: '',
@@ -184,6 +195,10 @@ export default {
       console.log(res.data)
       this.email = res.data.email
     }).catch(error => console.log(error))
+
+    if ('Notification' in window && 'serviceWorker' in navigator) {
+      this.notificationsSupported = true
+    }
   },
   methods: {
     clearFields () {
@@ -217,6 +232,35 @@ export default {
         title: 'Child',
         text: 'Yeah you want to add child - not implemented yet'
       })
+    },
+    askPermission () {
+      if (this.notificationsSupported) {
+        Notification.requestPermission(result => {
+          console.log('result from permission question', result)
+          if (result !== 'granted') {
+            alert('You probably do not like notifications?!')
+          } else {
+            console.log('A notification will be send from the service worker => This only works in production')
+            this.showNotification()
+          }
+        })
+      }
+    },
+    showNotification () {
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.ready // returns a Promise, the active SW registration
+          .then(swreg => swreg.showNotification('Notifications granted', {
+            body: 'Here is a first notification',
+            icon: '/img/icons/android-chrome-192x192.png',
+            image: '/img/autumn-forest.png',
+            vibrate: [300, 200, 300],
+            badge: '/img/icons/plint-badge-96x96.png'
+            // actions: [
+            //     { action: 'confirm', title: 'Okay', icon: '/img/icons/android-chrome-192x192.png'},
+            //     { action: 'cancel', title: 'Cancel', icon: '/img/icons/android-chrome-192x192.png'}
+            // ],
+          }))
+      }
     }
   }
 }

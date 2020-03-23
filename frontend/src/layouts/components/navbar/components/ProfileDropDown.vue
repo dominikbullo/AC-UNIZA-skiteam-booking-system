@@ -78,6 +78,11 @@ export default {
   },
   methods: {
     logout () {
+      // IDEA:
+      //  this.$store.dispatch('auth/logout')
+      // this.$router.push('/login').catch(() => {})
+      //    this.$acl.change('public')
+
       // CRSF token
       // https://laracasts.com/discuss/channels/laravel/how-to-refresh-xcsrf-token-after-logout-in-spa
       if (localStorage.getItem('accessToken')) {
