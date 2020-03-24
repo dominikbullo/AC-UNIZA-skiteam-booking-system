@@ -43,9 +43,9 @@ urlpatterns = [
 
     path("api/rest-auth/", include('core.auth')),
 
-    path("api/", include("users.api.urls", namespace="users")),
-    path("api/", include("family.api.urls", namespace="family")),
-    path("api/", include("events.api.urls", namespace="events")),
+    path("api/", include("users.api.urls")),
+    path("api/", include("family.api.urls")),
+    path("api/", include("events.api.urls")),
 
     # http://localhost:8000/admin/
     path('admin/', admin.site.urls),

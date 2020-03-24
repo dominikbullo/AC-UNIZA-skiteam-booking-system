@@ -32,6 +32,12 @@ class EventTypeChoices(models.TextChoices):
     MEETING = 'MEETING', _('Meeting')
 
 
+class SkiTypeChoices(models.TextChoices):
+    GIANT_SLALOM = 'GS', _('Giant Slalom')
+    SLALOM = 'SL', _('Slalom')
+    ALL = 'AL', _('All')
+
+
 class GenderChoices(models.TextChoices):
     MALE = 'M', _('Male')
     FEMALE = 'F', _('Female')

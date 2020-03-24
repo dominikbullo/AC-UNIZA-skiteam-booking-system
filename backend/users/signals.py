@@ -6,6 +6,7 @@ from django.dispatch import receiver
 
 from rest_framework.authtoken.models import Token
 
+from events.models import Season
 from users.models import Profile
 
 
@@ -26,6 +27,12 @@ from users.models import Profile
 #         print("Creating profile: ", created)
 #         Profile.objects.get_or_create(user=instance)
 #         instance.save()
+
+# making default_number True unique
+# @receiver(post_save, sender=Season)
+# def unique_current_season(sender, instance, **kwargs):
+#     if instance.current:
+#         Season.objects.all().exclude(pk=instance.pk).update(current=False)
 
 
 @receiver(email_confirmed)

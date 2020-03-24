@@ -25,8 +25,9 @@ class ProfileSerializer(serializers.ModelSerializer):
             representation['birth_date'] = instance.birth_date.strftime("%d.%m.%Y")
         except AttributeError as e:
             print(e)
-            user = get_user_model().objects.get(profile=instance)
-            print("User", user.display_name, "doesn't have birth date!")
+            print("User doesn't have birth date!")
+            pass
+
         return representation
 
     class Meta:

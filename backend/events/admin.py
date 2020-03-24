@@ -8,3 +8,5 @@ for model in app_models:
         admin.site.register(model)
     except AlreadyRegistered:
         pass
+
+# TODO: Admin Event in one form

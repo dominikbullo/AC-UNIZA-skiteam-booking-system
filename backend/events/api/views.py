@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 
-from events.models import SkiTraining, Event
-from events.api.serializers import SkiTrainingSerializer, EventPolymorphicSerializer
+from events.models import Event, Season
+from events.api.serializers import EventPolymorphicSerializer, SeasonSerializer
 from events.api.permissions import IsOwnerOrReadOnly, IsOwnFamilyOrReadOnly
 
 
@@ -15,9 +15,11 @@ class EventsViewSet(viewsets.ModelViewSet):
     # search_fields = ["name"]
 
 
-class SkiTrainingViewSet(viewsets.ModelViewSet):
-    queryset = SkiTraining.objects.all()
-    serializer_class = SkiTrainingSerializer
-    # permission_classes = [IsOwnFamilyOrReadOnly]
-    # filter_backends = [SearchFilter]
-    # search_fields = ["name"]
+class CurrentSeasonEventsViewSet(viewsets.ModelViewSet):
+    queryset = Event.objects.filter(season=Season.objects.get(current=True))
+    serializer_class = EventPolymorphicSerializer
+
+
+class SeasonViewSet(viewsets.ModelViewSet):
+    queryset = Season.objects.all()
+    serializer_class = SeasonSerializer
