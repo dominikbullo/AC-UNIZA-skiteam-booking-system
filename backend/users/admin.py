@@ -7,8 +7,6 @@ from family.models import FamilyMember
 from users.forms import CustomUserCreationForm, CustomUserChangeForm
 from users.models import User, Profile
 
-from core.choices import USER_TYPE_CHOICES
-
 
 class ProfileInline(admin.StackedInline):
     model = Profile
@@ -24,21 +22,13 @@ class FamilyMemberInLine(admin.StackedInline):
     fk_name = 'user'
 
 
-# https: // simpleisbetterthancomplex.com / tutorial / 2016 / 07 / 22 / how - to - extend - django - user - model.html
-
-
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = User
-    list_display = ["get_identity", "first_name", "last_name", "date_joined", "last_login", "get_type", "is_staff"]
-    inlines = [ProfileInline, FamilyMemberInLine]
+    list_display = UserAdmin.list_display + ("get_identity", "user_role")
 
-    def get_type(self, instance):
-        try:
-            return dict(USER_TYPE_CHOICES)[instance.profile.user_type]
-        except Exception:
-            return "Unidentified"
+    inlines = [ProfileInline, FamilyMemberInLine]
 
     def get_identity(self, instance):
         try:
@@ -46,16 +36,14 @@ class CustomUserAdmin(UserAdmin):
         except Exception:
             return "Unidentified"
 
-    get_type.short_description = 'User type'
-
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields' : ("username", "email", "first_name", "last_name", "password1", "password2",),
+            'fields' : ("username", "email", "first_name", "last_name", "user_role", "password1", "password2",),
         }),
     )
 
 
 admin.site.register(User, CustomUserAdmin)
 admin.site.register(Profile)
-admin.site.register(Permission)
+# admin.site.register(Permission)

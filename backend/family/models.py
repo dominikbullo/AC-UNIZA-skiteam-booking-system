@@ -1,7 +1,6 @@
 from django.db import models
 
 from users.models import User
-from core.choices import FAMILY_RELATION_CHOICE
 
 
 # RESOURCES

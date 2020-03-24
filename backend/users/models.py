@@ -3,7 +3,7 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AbstractUser, Group, PermissionsMixin
 from django.db import models
 
-from core.choices import USER_TYPE_CHOICES, GENDER_CHOICES
+from core.choices import GenderChoices, UserTypeChoices
 
 
 # https://testdriven.io/blog/django-custom-user-model/
@@ -16,7 +16,7 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=50, null=False, blank=False)
     last_name = models.CharField(max_length=150, null=False, blank=False)
 
-    user_role = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES, null=True, blank=True)
+    user_role = models.CharField(max_length=6, choices=UserTypeChoices.choices)
 
     def __str__(self):
         return self.display_name
@@ -55,14 +55,7 @@ class Profile(models.Model):
     birth_date = models.DateField()
     avatar = models.ImageField(null=True, blank=True)
 
-    # USER_TYPE_CHOICES is from from core.utils import USER_TYPE_CHOICES because i using it at m,any locations
-    # user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES,
-    #                                              default=0,
-    #                                              null=True,
-    #                                              blank=True
-    #                                              )
-
-    gender = models.CharField(choices=GENDER_CHOICES, max_length=1)
+    gender = models.CharField(choices=GenderChoices.choices, max_length=1)
 
     class Meta:
         ordering = ['user__date_joined']

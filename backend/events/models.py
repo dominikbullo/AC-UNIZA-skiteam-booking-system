@@ -2,16 +2,11 @@ import datetime
 
 from django.utils.translation import gettext as _
 from django.db import models
+from polymorphic.models import PolymorphicModel
 
-from core.choices import CategoryNameChoices
+from core.choices import CategoryNameChoices, EventTypeChoices
 from family.models import Child
-
-
-# RES: https://docs.djangoproject.com/en/dev/ref/models/fields/#django.db.models.Field.choices
-class EventTypeChoices(models.TextChoices):
-    SKI_TRAINING = 'Ski Training'
-    SKI_RACE = 'SKi Race'
-    SKI_CAMP = 'SKi Camp'
+from users.models import User
 
 
 class Season(models.Model):
@@ -30,7 +25,7 @@ class Season(models.Model):
 class Category(models.Model):
     # name
     session = models.ForeignKey(Season, on_delete=models.CASCADE)
-    children = models.ManyToManyField(Child, blank=True)
+    members = models.ManyToManyField(Child, blank=True)
 
     name = models.CharField(
         max_length=3,
@@ -52,7 +47,8 @@ class Category(models.Model):
         unique_together = (('session', 'name'),)
 
 
-class Event(models.Model):
+# FIXME Validation -> event must have SkiTraining table if is type SKI_TRAINING
+class Event(PolymorphicModel):
     # RES (null vs blank): https://stackoverflow.com/questions/8609192/differentiate-null-true-blank-true-in-django
     session = models.ForeignKey(Season, on_delete=models.CASCADE)
     category = models.ManyToManyField(Category)
@@ -63,8 +59,7 @@ class Event(models.Model):
 
     type = models.CharField(
         max_length=50,
-        choices=EventTypeChoices.choices,
-        editable=True
+        choices=EventTypeChoices.choices
     )
 
     name = models.CharField(max_length=100, blank=True)
@@ -76,7 +71,11 @@ class Event(models.Model):
     def __str__(self):
         return "%s - %s" % (self.type, self.session)
 
+    def __init__(self, *args, **kwargs):
+        self._meta.get_field('type').editable = True
+        super(Event, self).__init__(*args, **kwargs)
     # class Meta:
+    #     abstract = True
     #     unique_together = (('type', 'start'),)
 
 
@@ -96,23 +95,17 @@ class SkiEvent(Event):
         abstract = True
 
 
-#
 class SkiTraining(SkiEvent):
     number_of_turns = models.PositiveSmallIntegerField(blank=True, null=True)
+    extra_field_for_ski_training = models.CharField(max_length=50, blank=True, null=True)
+    extra_field_for_ski_training1 = models.CharField(max_length=50, blank=True, null=True)
+    extra_field_for_ski_training2 = models.CharField(max_length=50, blank=True, null=True)
+    extra_field_for_ski_training3 = models.CharField(max_length=50, blank=True, null=True)
 
-    # # RES: https://stackoverflow.com/questions/4904230/django-change-default-value-for-an-extended-model-class
+    # RES: https://stackoverflow.com/questions/4904230/django-change-default-value-for-an-extended-model-class
+    # FIXME Validation -> SkiTraining could be only type EventTypeChoices.SKI_TRAINING -> return error if try to override
     def __init__(self, *args, **kwargs):
         self._meta.get_field('type').default = EventTypeChoices.SKI_TRAINING
         super(SkiEvent, self).__init__(*args, **kwargs)
         # !ATTENTION! -> This rewrite type everytime !!!
         self.type = EventTypeChoices.SKI_TRAINING
-
-# RES: https://stackoverflow.com/questions/7884757/how-do-you-change-field-arguments-in-django-model-subclasses
-
-# class SkiRace(SkiEvent):
-#
-#     def __init__(self, *args, **kwargs):
-#         super(SkiEvent, self).__init__(*args, **kwargs)
-#         self.ques_type = EventTypeChoices.SKI_TRAINING
-#
-# # RES: https://docs.djangoproject.com/en/3.0/ref/models/fields/

@@ -60,6 +60,3 @@ class CustomSignupForm(SignupForm):
     class Meta:
         model = User
         fields = ('username', "email", 'first_name', 'last_name', "is_parent")
-# #
-# # class CustomLoginForm(SignupForm):
-# #     pass
