@@ -20,21 +20,49 @@ export default {
         .catch((error) => { reject(error) })
     })
   },
+  // events: [
+  //   {
+  //     id: 1,
+  //     title: 'My Event',
+  //     startDate: new Date(new Date() - 1000 * 60 * 60 * 24 * 3),
+  //     endDate: new Date(new Date() - 1000 * 60 * 60 * 24 * 2),
+  //     url: '',
+  //     classes: 'event-success',
+  //     label: 'business'
+  //   }
+  // ],
   fetchEvents ({ commit }) {
     return new Promise((resolve, reject) => {
-      axios.get('/api/apps/calendar/events')
+      axios.get('season/events/')
         .then((response) => {
-          commit('SET_EVENTS', response.data)
+          commit('SET_EVENTS', response.data.results)
           resolve(response)
         })
         .catch((error) => { reject(error) })
     })
   },
+  // labels: [
+  //   {
+  //     text: 'Business',
+  //     value : 'business',
+  //     color: 'success'
+  //   },
+  //   {
+  //     text: 'Work',
+  //     value: 'work',
+  //     color: 'warning'
+  //   },
+  //   {
+  //     text: 'Personal',
+  //     value: 'personal',
+  //     color: 'danger'
+  //   }
+  // ]
   fetchEventLabels ({ commit }) {
     return new Promise((resolve, reject) => {
-      axios.get('/api/apps/calendar/labels')
+      axios.get('/event/labels/')
         .then((response) => {
-          commit('SET_LABELS', response.data)
+          commit('SET_LABELS', response.data.results)
           resolve(response)
         })
         .catch((error) => { reject(error) })

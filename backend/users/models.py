@@ -55,7 +55,7 @@ class Profile(models.Model):
     birth_date = models.DateField()
     avatar = models.ImageField(null=True, blank=True)
 
-    gender = models.CharField(choices=GenderChoices.choices, max_length=1)
+    gender = models.CharField(choices=GenderChoices.choices, max_length=1, null=False, blank=False)
 
     class Meta:
         ordering = ['user__date_joined']

@@ -15,6 +15,7 @@ from users.models import Profile
 
 class ProfileSerializer(serializers.ModelSerializer):
     avatar = serializers.ImageField(read_only=True)
+    gender = serializers.CharField(source='get_gender_display')
 
     class Meta:
         model = Profile

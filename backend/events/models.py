@@ -17,9 +17,9 @@ class Season(models.Model):
     year = models.CharField(max_length=9, unique=True, primary_key=True)
 
     # # first day of skiing in the season
-    start = models.DateTimeField(null=True, blank=True)
+    start_date = models.DateTimeField(null=True, blank=True)
     # # last day of skiing in the season
-    end = models.DateTimeField(null=True, blank=True)
+    end_date = models.DateTimeField(null=True, blank=True)
     current = models.BooleanField(default=False)
 
     def __str__(self):
@@ -67,13 +67,13 @@ class Event(ShowFieldType, PolymorphicModel):
         choices=EventTypeChoices.choices
     )
 
-    name = models.CharField(max_length=100, blank=True)
+    title = models.CharField(max_length=100, default="Default Title For Event")
     canceled = models.BooleanField(default=False)
-    start = models.DateTimeField()
+    start_date = models.DateTimeField()
 
     # TODO in serializers default datetime + 1h from start
-    end = models.DateTimeField(blank=True)
-    
+    end_date = models.DateTimeField(blank=True)
+
     location = models.CharField(max_length=50, blank=True)
     additional_info = models.CharField(max_length=150, blank=True)
 

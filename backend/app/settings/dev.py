@@ -199,6 +199,7 @@ REST_AUTH_SERIALIZERS = {
     # 'USER_DETAILS_SERIALIZER': 'users.api.serializers.CustomUserDetailSerializer',
     'TOKEN_SERIALIZER': 'users.api.serializers.TokenSerializer',
 }
+CALENDAR_DATETIME_FORMAT = '%Y-%m-%d %H:%M'
 DATETIME_FORMAT = '%d.%m.%Y %H:%M'
 DATE_FORMAT = "%d.%m.%Y"
 
@@ -208,9 +209,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Django-REST-Framework
 # https://medium.com/@apogiatzis/create-a-restful-api-with-users-and-jwt-authentication-using-django-1-11-drf-part-2-eb6fdcf71f45
 REST_FRAMEWORK = {
-    "DATETIME_FORMAT"               : DATETIME_FORMAT,
     "DATETIME_INPUT_FORMATS"        : [(DATETIME_FORMAT), ('iso-8601')],
-    "DATE_FORMAT"                   : DATE_FORMAT,
     "DATE_INPUT_FORMATS"            : [(DATE_FORMAT), ('iso-8601')],
     'DEFAULT_PERMISSION_CLASSES'    : ('rest_framework.permissions.IsAuthenticated',),
     'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework.authentication.TokenAuthentication',
