@@ -70,7 +70,10 @@ class Event(ShowFieldType, PolymorphicModel):
     name = models.CharField(max_length=100, blank=True)
     canceled = models.BooleanField(default=False)
     start = models.DateTimeField()
-    end = models.DateTimeField(null=True, blank=True)
+
+    # TODO in serializers default datetime + 1h from start
+    end = models.DateTimeField(blank=True)
+    
     location = models.CharField(max_length=50, blank=True)
     additional_info = models.CharField(max_length=150, blank=True)
 

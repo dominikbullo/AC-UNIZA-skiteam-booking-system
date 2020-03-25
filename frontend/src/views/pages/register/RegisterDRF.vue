@@ -95,7 +95,7 @@ export default {
     return {
       first_name: 'DefaultMeno',
       last_name: 'DefaultPriezvisko',
-      birth_date: new Date(),
+      birth_date: this.moment().format('DD.MM.YYYY'),
       email: '',
       gender: 'M',
       password: 'testing321',
