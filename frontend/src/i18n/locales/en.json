@@ -149,6 +149,7 @@
   "Gender": "Gender",
   "Male": "Male",
   "Female": "Female",
+  "EnableNotifications": "Enable Notifications",
 
   "errors": {
      "internal1": "this is internal 1 error message"

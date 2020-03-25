@@ -28,11 +28,11 @@ from users.models import Profile
 #         Profile.objects.get_or_create(user=instance)
 #         instance.save()
 
-# making default_number True unique
-# @receiver(post_save, sender=Season)
-# def unique_current_season(sender, instance, **kwargs):
-#     if instance.current:
-#         Season.objects.all().exclude(pk=instance.pk).update(current=False)
+# making olny one season current
+@receiver(post_save, sender=Season)
+def unique_current_season(sender, instance, **kwargs):
+    if instance.current:
+        Season.objects.all().exclude(pk=instance.pk).update(current=False)
 
 
 @receiver(email_confirmed)

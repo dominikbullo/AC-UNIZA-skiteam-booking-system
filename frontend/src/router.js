@@ -249,7 +249,7 @@ const router = new Router({
         },
         {
           path: '/apps/event/calendar',
-          name: 'app-family-view',
+          name: 'app-event-calendar',
           component: () => import('@/views/apps/event/EventCalendar.vue'),
           meta: {
             breadcrumb: [

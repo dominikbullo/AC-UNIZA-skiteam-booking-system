@@ -26,7 +26,6 @@
             :is-valid="validateForm"
             @accept="addChild"
             @cancel="clearFields"
-            @close="close"
             accept-text="Add Child"
             button-cancel="border"
             title="Add Child">
@@ -134,7 +133,7 @@
             icon="icon-plus"
             icon-pack="feather"
             if="notificationsSupported">{{
-            $t('Enable notifications') }}
+            $t('EnableNotifications') }}
           </vs-button>
 
 
@@ -251,10 +250,10 @@ export default {
         navigator.serviceWorker.ready // returns a Promise, the active SW registration
           .then(swreg => swreg.showNotification('Notifications granted', {
             body: 'Here is a first notification',
-            icon: '/img/icons/android-chrome-192x192.png',
-            image: '/img/autumn-forest.png',
+            icon: 'static/img/icons/android-chrome-192x192.png',
+            image: 'static/img/autumn-forest.png',
             vibrate: [300, 200, 300],
-            badge: '/img/icons/plint-badge-96x96.png'
+            badge: '~/img/icons/plint-badge-96x96.png'
             // actions: [
             //     { action: 'confirm', title: 'Okay', icon: '/img/icons/android-chrome-192x192.png'},
             //     { action: 'cancel', title: 'Cancel', icon: '/img/icons/android-chrome-192x192.png'}

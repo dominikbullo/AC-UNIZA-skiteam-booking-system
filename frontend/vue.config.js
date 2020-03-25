@@ -7,7 +7,7 @@
   Author URL: http://www.themeforest.net/user/pixinvent
 ========================================================================================== */
 
-
+// RES: Static files: https://vuejs-templates.github.io/webpack/static.html
 module.exports = {
   publicPath: '/',
   transpileDependencies: [
