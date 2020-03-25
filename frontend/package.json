@@ -12,6 +12,11 @@
   },
   "dependencies": {
     "@chenfengyuan/vue-countdown": "^1.1.2",
+    "@fullcalendar/core": "^4.4.0",
+    "@fullcalendar/daygrid": "^4.4.0",
+    "@fullcalendar/interaction": "^4.4.0",
+    "@fullcalendar/timegrid": "^4.4.0",
+    "@fullcalendar/vue": "^4.4.0",
     "ag-grid-community": "^21.0.1",
     "ag-grid-vue": "^21.0.1",
     "algoliasearch": "^3.33.0",
@@ -23,11 +28,13 @@
     "file-saver": "2.0.2",
     "firebase": "^6.0.4",
     "instantsearch.css": "^7.3.1",
+    "js-cookie": "^2.2.0",
     "jsonwebtoken": "^8.5.1",
     "material-icons": "^0.3.1",
     "perfect-scrollbar": "^1.4.0",
     "postcss-rtl": "^1.5.0",
     "prismjs": "^1.16.0",
+    "register-service-worker": "^1.6.2",
     "vee-validate": "^2.2.8",
     "vue": "^2.6.10",
     "vue-acl": "4.1.10",
@@ -64,9 +71,7 @@
     "vuepress": "0.14.11",
     "vuesax": "3.11.13",
     "vuex": "^3.1.1",
-    "xlsx": "^0.15.0",
-    "js-cookie": "^2.2.0",
-    "register-service-worker": "^1.6.2"
+    "xlsx": "^0.15.0"
   },
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "^1.2.0",

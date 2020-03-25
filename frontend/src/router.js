@@ -70,9 +70,17 @@ const router = new Router({
           }
         },
         {
-          path: '/testpage',
+          path: '/test/page',
           name: 'testpage',
           component: () => import('@/views/pages/TestPage.vue'),
+          meta: {
+            rule: 'editor'
+          }
+        },
+        {
+          path: '/test/calendar',
+          name: 'testcalendar',
+          component: () => import('@/views/pages/TestCalendar.vue'),
           meta: {
             rule: 'editor'
           }

@@ -140,9 +140,15 @@ export default [
         i18n: 'Family'
       },
       {
-        url: '/testpage',
+        url: '/test/page',
         name: 'Test Page',
         slug: 'test-page',
+        icon: 'FileIcon'
+      },
+      {
+        url: '/test/calendar',
+        name: 'Test Calendar',
+        slug: 'test-Calendar',
         icon: 'FileIcon'
       }
       // , {

@@ -234,12 +234,12 @@ export default {
 
       calendarViewTypes: [
         {
-          label: 'Month',
-          val: 'month'
-        },
-        {
           label: 'Week',
           val: 'week'
+        },
+        {
+          label: 'Month',
+          val: 'month'
         },
         {
           label: 'Year',
@@ -262,16 +262,17 @@ export default {
           label: 'business'
         },
         {
-          id: 1,
+          id: 2,
           title: 'My Event 2',
-          startDate: new Date(new Date() - 1000 * 60 * 60 * 24 * 3),
+          startDate: new Date(new Date() - 1000 * 60 * 24 * 3),
           endDate: new Date(new Date() - 1000 * 60 * 60 * 24 * 2),
           url: '',
           classes: 'event-success',
           label: 'business'
         }
       ]
-      return this.$store.state.calendar.events
+      return test
+      // return this.$store.state.calendar.events
     },
     validForm () {
       return this.title !== '' && this.startDate !== '' && this.endDate !== '' && Date.parse(this.endDate) - Date.parse(this.startDate) >= 0 && !this.errors.has('event-url')
@@ -287,13 +288,10 @@ export default {
     },
     labelColor () {
       return (label) => {
-        if (label === 'training') {
-          return 'success'
-        } else if (label === 'race') {
-          return 'warning'
-        } else if (label === 'camp') {
-          return 'danger'
-        } else if (label === 'none') return 'primary'
+        if      (label === 'training') return 'success'
+        else if (label === 'race')     return 'warning'
+        else if (label === 'camp') return 'danger'
+        else if (label === 'none')     return 'primary'
       }
     },
     windowWidth () {
