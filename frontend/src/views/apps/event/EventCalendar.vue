@@ -3,6 +3,7 @@
     <div class="vx-card no-scroll-content">
       <calendar-view
         :displayPeriodUom="calendarView"
+        :startingDayOfWeek="startingDayOfWeek"
         :eventTop="windowWidth <= 400 ? '2rem' : '3rem'"
         :events="simpleCalendarEvents"
         :show-date="showDate"
@@ -227,7 +228,8 @@ export default {
       langSk: sk,
 
       url: '',
-      calendarView: 'month',
+      calendarView: 'week',
+      startingDayOfWeek: 1,
 
       activePromptAddEvent: false,
       activePromptEditEvent: false,
