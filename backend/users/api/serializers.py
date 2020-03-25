@@ -16,20 +16,6 @@ from users.models import Profile
 class ProfileSerializer(serializers.ModelSerializer):
     avatar = serializers.ImageField(read_only=True)
 
-    def to_representation(self, instance):
-        representation = super(ProfileSerializer, self).to_representation(instance)
-
-        # Because i have date in DB as format YYYY-MM-DD, if i getting it i need to reformat
-        # Same in login
-        try:
-            representation['birth_date'] = instance.birth_date.strftime("%d.%m.%Y")
-        except AttributeError as e:
-            print(e)
-            print("User doesn't have birth date!")
-            pass
-
-        return representation
-
     class Meta:
         model = Profile
         # RELEASE: exclude id of profile

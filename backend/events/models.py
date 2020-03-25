@@ -54,7 +54,7 @@ class Category(models.Model):
 # RES: https://django-polymorphic.readthedocs.io/en/stable/
 class Event(ShowFieldType, PolymorphicModel):
     # RES (null vs blank): https://stackoverflow.com/questions/8609192/differentiate-null-true-blank-true-in-django
-    season = models.ForeignKey(Season, on_delete=models.CASCADE)
+    season = models.ForeignKey(Season, on_delete=models.CASCADE, blank=True)
     category = models.ManyToManyField(Category)
 
     # It should be from category of the event: but it happened sometime that child which should't be on the training
@@ -84,7 +84,7 @@ class Event(ShowFieldType, PolymorphicModel):
 
 class SkiEvent(Event):
     skis_type = models.CharField(
-        max_length=2,
+        max_length=3,
         choices=SkiTypeChoices.choices,
         default=SkiTypeChoices.ALL
     )

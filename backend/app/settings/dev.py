@@ -147,7 +147,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Bratislava'
 
 USE_I18N = True
 
@@ -199,9 +199,8 @@ REST_AUTH_SERIALIZERS = {
     # 'USER_DETAILS_SERIALIZER': 'users.api.serializers.CustomUserDetailSerializer',
     'TOKEN_SERIALIZER': 'users.api.serializers.TokenSerializer',
 }
-DATE_INPUT_FORMATS = [
-    ("%d.%m.%Y"),
-]
+DATETIME_FORMAT = '%d.%m.%Y %H:%M'
+DATE_FORMAT = "%d.%m.%Y"
 
 # http://whitenoise.evans.io/en/stable/#quickstart-for-django-apps
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -209,7 +208,10 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Django-REST-Framework
 # https://medium.com/@apogiatzis/create-a-restful-api-with-users-and-jwt-authentication-using-django-1-11-drf-part-2-eb6fdcf71f45
 REST_FRAMEWORK = {
-    "DATE_INPUT_FORMATS"            : DATE_INPUT_FORMATS,
+    "DATETIME_FORMAT"               : DATETIME_FORMAT,
+    "DATETIME_INPUT_FORMATS"        : [(DATETIME_FORMAT), ('iso-8601')],
+    "DATE_FORMAT"                   : DATE_FORMAT,
+    "DATE_INPUT_FORMATS"            : [(DATE_FORMAT), ('iso-8601')],
     'DEFAULT_PERMISSION_CLASSES'    : ('rest_framework.permissions.IsAuthenticated',),
     'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework.authentication.TokenAuthentication',
                                        # RELEASE Delete SessionAuthentication

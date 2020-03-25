@@ -16,8 +16,10 @@ class EventsViewSet(viewsets.ModelViewSet):
 
 
 class CurrentSeasonEventsViewSet(viewsets.ModelViewSet):
-    queryset = Event.objects.filter(season=Season.objects.get(current=True))
     serializer_class = EventPolymorphicSerializer
+
+    def get_queryset(self):
+        return Event.objects.filter(season=Season.objects.get(current=True))
 
 
 class SeasonViewSet(viewsets.ModelViewSet):
