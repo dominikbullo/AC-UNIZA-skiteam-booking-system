@@ -50,13 +50,6 @@ class Category(models.Model):
         unique_together = (('season', 'name'),)
 
 
-# class Membership(models.Model):
-#     person = models.ForeignKey(Child, on_delete=models.CASCADE)
-#     group = models.ForeignKey(Category, on_delete=models.CASCADE)
-#     season = models.ForeignKey(Season, on_delete=models.CASCADE)
-#     # date_joined = models.DateField()
-#     # invite_reason = models.CharField(max_length=64)
-
 # RES: https://django-polymorphic.readthedocs.io/en/stable/
 class Event(PolymorphicModel):
     # RES (null vs blank): https://stackoverflow.com/questions/8609192/differentiate-null-true-blank-true-in-django
@@ -65,7 +58,10 @@ class Event(PolymorphicModel):
 
     # It should be from category of the event: but it happened sometime that child which should't be on the training
     # because of his category came
-    participants = models.ManyToManyField(Child, blank=True)
+    # participants = models.ManyToManyField(Child, blank=True)
+
+    # It must be like that for proper synchronization between fields
+    participants = models.ManyToManyField('family.Child', through=Child.events.through, blank=True)
 
     # FIXME Validation -> event must have SkiTraining table if is type SKI_TRAINING, SKi_RACE and so on..
     type = models.CharField(
