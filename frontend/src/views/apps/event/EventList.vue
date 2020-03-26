@@ -17,6 +17,7 @@ export default {
   },
   created () {
     this.$store.dispatch('calendar/fetchEvents')
+    console.log(this.$store.calendar.events)
   }
 }
 </script>

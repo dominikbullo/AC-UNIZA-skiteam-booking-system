@@ -1,20 +1,17 @@
 <template>
   <div id="test_calendar">
-
-    <vx-card>
-      <div class='demo-app'>
-        <div class='demo-app-top'>
-          <button @click="toggleWeekends">toggle weekends</button>
-          <button @click="gotoPast">go to a date in the past</button>
-          (also, click a date/time to add an event)
-        </div>
+    <vx-card class="mt-20">
+      <div class="demo-app">
         <FullCalendar
           :events="calendarEvents"
           :header="{
-        left: 'prev,next today',
-        center: 'title',
-        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-      }"
+            left: 'prev,next today',
+            center: 'title',
+            right: 'timeGridDay,timeGridWeek,dayGridMonth,listWeek'
+          }"
+          :locale="locale"
+          editable="true"
+          :now-indicator="true"
           :plugins="calendarPlugins"
           :weekends="calendarWeekends"
           @dateClick="handleDateClick"
@@ -32,35 +29,31 @@ import FullCalendar from '@fullcalendar/vue'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
+import listPlugin from '@fullcalendar/list'
+import skLocale from '@fullcalendar/core/locales/sk'
 
 export default {
   components: {
     FullCalendar // make the <FullCalendar> tag available
   },
-  data: function () {
+  data () {
     return {
       calendarPlugins: [ // plugins must be defined in the JS
         dayGridPlugin,
         timeGridPlugin,
-        interactionPlugin // needed for dateClick
+        interactionPlugin,
+        listPlugin// needed for dateClick
       ],
       calendarWeekends: true,
-      calendarEvents: [ // initial event data
-        {
-          title: 'Event Now',
-          start: new Date()
-        }
-      ]
+      locale: skLocale,
+    }
+  },
+  computed: {
+    calendarEvents () {
+      return this.$store.state.calendar.events
     }
   },
   methods: {
-    toggleWeekends () {
-      this.calendarWeekends = !this.calendarWeekends // update a property
-    },
-    gotoPast () {
-      let calendarApi = this.$refs.fullCalendar.getApi() // from the ref="..."
-      calendarApi.gotoDate('2000-01-01') // call a method on the Calendar object
-    },
     handleDateClick (arg) {
       if (confirm('Would you like to add an event to ' + arg.dateStr + ' ?')) {
         this.calendarEvents.push({ // add new event data
@@ -70,6 +63,9 @@ export default {
         })
       }
     }
+  },
+  created () {
+    this.$store.dispatch('calendar/fetchEvents')
   }
 }
 
@@ -97,4 +93,12 @@ export default {
     max-width: 900px;
   }
 
+  .fc-unthemed td.fc-today {
+    background: #0C112E;
+  }
+
+  .fc-list-heading td {
+    background: #00b0d3;
+    color: white;
+}
 </style>

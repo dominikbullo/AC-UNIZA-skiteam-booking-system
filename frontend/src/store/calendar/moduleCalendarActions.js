@@ -12,7 +12,7 @@ import axios from '@/axios.js'
 export default {
   addEvent ({ commit }, event) {
     return new Promise((resolve, reject) => {
-      axios.post('/api/apps/calendar/events/', {event})
+      axios.post('/season/events/', {event})
         .then((response) => {
           commit('ADD_EVENT', Object.assign(event, {id: response.data.id}))
           resolve(response)

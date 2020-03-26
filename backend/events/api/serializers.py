@@ -32,16 +32,18 @@ class SeasonSerializer(serializers.ModelSerializer):
 
 # RES: https://github.com/richardtallent/vue-simple-calendar#calendar-item-properties
 class BaseEventSerializer(serializers.ModelSerializer):
-    startDate = serializers.DateTimeField(source='start_date')
-    endDate = serializers.DateTimeField(source='end_date')
-    title = serializers.CharField(source='type')
+    startDate = serializers.DateTimeField(source='start_date', read_only=True)
+    endDate = serializers.DateTimeField(source='end_date', read_only=True)
+    start = serializers.DateTimeField(source='start_date', read_only=True)
+    end = serializers.DateTimeField(source='end_date', read_only=True)
+    title = serializers.CharField(source='type', read_only=True)
     participants = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name="family:child-detail")
+
 
 class EventSerializer(BaseEventSerializer):
     class Meta:
         model = Event
         fields = "__all__"
-
 
 class SkiTrainingSerializer(BaseEventSerializer):
     class Meta:

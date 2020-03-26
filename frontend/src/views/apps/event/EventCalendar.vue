@@ -3,17 +3,18 @@
     <div class="vx-card no-scroll-content">
       <calendar-view
         :displayPeriodUom="calendarView"
-        :startingDayOfWeek="startingDayOfWeek"
         :eventTop="windowWidth <= 400 ? '2rem' : '3rem'"
         :events="simpleCalendarEvents"
         :show-date="showDate"
+        :showEventTimes="showEventTimes"
+        :startingDayOfWeek="startingDayOfWeek"
         @click-date="openAddNewEvent"
         @click-event="openEditEvent"
         @drop-on-date="eventDragged"
         class="theme-default"
         enableDragDrop
-        eventBorderHeight="0px"
-        eventContentHeight="1.65rem"
+        eventBorderHeight="10px"
+        eventContentHeight="3.65rem"
         ref="calendar">
 
         <div class="mb-4" slot="header">
@@ -230,6 +231,7 @@ export default {
       url: '',
       calendarView: 'week',
       startingDayOfWeek: 1,
+      showEventTimes: true,
 
       activePromptAddEvent: false,
       activePromptEditEvent: false,
@@ -253,28 +255,7 @@ export default {
   computed: {
     simpleCalendarEvents () {
       console.log('calendar events', this.$store.state.calendar.events)
-      const test = [
-        {
-          id: 1,
-          title: 'My Event',
-          startDate: new Date(new Date() - 1000 * 60 * 60 * 24 * 3),
-          endDate: new Date(new Date() - 1000 * 60 * 60 * 24 * 2),
-          url: '',
-          classes: 'event-success',
-          label: 'business'
-        },
-        {
-          id: 2,
-          title: 'My Event 2',
-          startDate: new Date(new Date() - 1000 * 60 * 24 * 3),
-          endDate: new Date(new Date() - 1000 * 60 * 60 * 24 * 2),
-          url: '',
-          classes: 'event-success',
-          label: 'business'
-        }
-      ]
-      return test
-      // return this.$store.state.calendar.events
+      return this.$store.state.calendar.events
     },
     validForm () {
       return this.title !== '' && this.startDate !== '' && this.endDate !== '' && Date.parse(this.endDate) - Date.parse(this.startDate) >= 0 && !this.errors.has('event-url')
@@ -290,10 +271,13 @@ export default {
     },
     labelColor () {
       return (label) => {
-        if      (label === 'training') return 'success'
-        else if (label === 'race')     return 'warning'
-        else if (label === 'camp') return 'danger'
-        else if (label === 'none')     return 'primary'
+        if (label === 'training') {
+          return 'success'
+        } else if (label === 'race') {
+          return 'warning'
+        } else if (label === 'camp') {
+          return 'danger'
+        } else if (label === 'none') return 'primary'
       }
     },
     windowWidth () {
@@ -306,8 +290,8 @@ export default {
         title: this.title,
         startDate: this.startDate,
         endDate: this.endDate,
-        label: this.labelLocal,
-        url: this.url
+        // label: this.labelLocal,
+        // url: this.url
       }
       obj.classes = `event-${this.labelColor(this.labelLocal)}`
       this.$store.dispatch('calendar/addEvent', obj)
@@ -379,4 +363,23 @@ export default {
 
 <style lang="scss">
   @import "@/assets/scss/vuexy/apps/simple-calendar.scss";
+
+  #simple-calendar-app {
+    .theme-default {
+      .cv-event {
+
+        background-color: #00b0d3;
+
+        .startTime {
+          white-space: initial;
+          color: black;
+        }
+
+        .endTime {
+          white-space: initial;
+          color: black;
+        }
+      }
+    }
+  }
 </style>
