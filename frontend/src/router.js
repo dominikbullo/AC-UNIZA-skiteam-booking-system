@@ -85,6 +85,15 @@ const router = new Router({
             rule: 'editor'
           }
         },
+        {
+          path: '/test/simple-calendar',
+          name: 'event-simple-calendar',
+          component: () => import('./views/apps/calendar/SimpleCalendar.vue'),
+          meta: {
+            rule: 'editor',
+            no_scroll: true
+          }
+        },
 
         // =============================================================================
         // Application Routes
@@ -271,19 +280,11 @@ const router = new Router({
                 active: true
               }
             ],
-            pageTitle: 'Family View',
-            rule: 'editor'
-          }
-        },
-        {
-          path: '/apps/calendar',
-          name: 'calendar-simple-calendar',
-          component: () => import('./views/apps/calendar/SimpleCalendar.vue'),
-          meta: {
+            pageTitle: 'Event Calendar',
             rule: 'editor',
-            no_scroll: true
           }
         },
+
         // =============================================================================
         // UI ELEMENTS
         // =============================================================================

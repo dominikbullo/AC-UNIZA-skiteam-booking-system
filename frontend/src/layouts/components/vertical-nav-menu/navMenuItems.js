@@ -78,13 +78,6 @@ export default [
             icon: 'CalendarIcon',
             tagColor: 'success',
             i18n: 'Calendar'
-          },
-          {
-            url: '/apps/calendar',
-            name: 'Calendar Demo ',
-            slug: 'app-event-demo-calendar',
-            icon: 'CalendarIcon',
-            tagColor: 'success',
           }
         ]
       },
@@ -150,6 +143,13 @@ export default [
         name: 'Test Calendar',
         slug: 'test-Calendar',
         icon: 'FileIcon'
+      },
+      {
+        url: '/test/simple-calendar',
+        name: 'Calendar Demo ',
+        slug: 'app-event-demo-calendar',
+        icon: 'CalendarIcon',
+        tagColor: 'success'
       }
       // , {
       //   url: '/pages/profile',

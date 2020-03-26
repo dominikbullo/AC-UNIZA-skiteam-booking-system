@@ -10,13 +10,15 @@
             right: 'timeGridDay,timeGridWeek,dayGridMonth,listWeek'
           }"
           :locale="locale"
-          editable="true"
           :now-indicator="true"
           :plugins="calendarPlugins"
           :weekends="calendarWeekends"
           @dateClick="handleDateClick"
           class='demo-app-calendar'
-          defaultView="dayGridMonth"
+          default-view="timeGridWeek"
+          editable="true"
+          max-time="21:00:00"
+          min-time="06:00:00"
           ref="fullCalendar"
         />
       </div>
@@ -45,7 +47,7 @@ export default {
         listPlugin// needed for dateClick
       ],
       calendarWeekends: true,
-      locale: skLocale,
+      locale: skLocale
     }
   },
   computed: {
@@ -100,5 +102,5 @@ export default {
   .fc-list-heading td {
     background: #00b0d3;
     color: white;
-}
+  }
 </style>

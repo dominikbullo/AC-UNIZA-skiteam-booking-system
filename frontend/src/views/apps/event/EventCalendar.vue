@@ -1,94 +1,28 @@
 <template>
-  <div id="simple-calendar-app">
-    <div class="vx-card no-scroll-content">
-      <calendar-view
-        :displayPeriodUom="calendarView"
-        :eventTop="windowWidth <= 400 ? '2rem' : '3rem'"
-        :events="simpleCalendarEvents"
-        :show-date="showDate"
-        :showEventTimes="showEventTimes"
-        :startingDayOfWeek="startingDayOfWeek"
-        @click-date="openAddNewEvent"
-        @click-event="openEditEvent"
-        @drop-on-date="eventDragged"
-        class="theme-default"
-        enableDragDrop
-        eventBorderHeight="10px"
-        eventContentHeight="3.65rem"
-        ref="calendar">
-
-        <div class="mb-4" slot="header">
-
-          <div class="vx-row no-gutter">
-
-            <!-- Month Name -->
-            <div class="vx-col w-1/3 items-center sm:flex hidden">
-              <!-- Add new event button -->
-              <vs-button @click="promptAddNewEvent(new Date())" icon="icon-plus" icon-pack="feather">Add</vs-button>
-            </div>
-
-            <!-- Current Month -->
-            <div class="vx-col sm:w-1/3 w-full sm:my-0 my-3 flex sm:justify-end justify-center order-last">
-              <div class="flex items-center">
-                <feather-icon
-                  :icon="$vs.rtl ? 'ChevronRightIcon' : 'ChevronLeftIcon'"
-                  @click="updateMonth(-1)"
-                  class="cursor-pointer bg-primary text-white rounded-full"
-                  svgClasses="w-5 h-5 m-1"/>
-
-                <span class="mx-3 text-xl font-medium whitespace-no-wrap">{{ showDate | month }}</span>
-
-                <feather-icon
-                  :icon="$vs.rtl ? 'ChevronLeftIcon' : 'ChevronRightIcon'"
-                  @click="updateMonth(1)"
-                  class="cursor-pointer bg-primary text-white rounded-full"
-                  svgClasses="w-5 h-5 m-1"/>
-              </div>
-            </div>
-
-            <div class="vx-col sm:w-1/3 w-full flex justify-center">
-              <template v-for="(view, index) in calendarViewTypes">
-                <vs-button
-                  :class="{'border-l-0 rounded-l-none': index, 'rounded-r-none': calendarViewTypes.length !== index+1}"
-                  :key="String(view.val) + 'filled'"
-                  @click="calendarView = view.val"
-                  class="p-3 md:px-8 md:py-3"
-                  type="filled"
-                  v-if="calendarView === view.val"
-                >{{ view.label }}
-                </vs-button>
-                <vs-button
-                  :class="{'border-l-0 rounded-l-none': index, 'rounded-r-none': calendarViewTypes.length !== index+1}"
-                  :key="String(view.val) + 'border'"
-                  @click="calendarView = view.val"
-                  class="p-3 md:px-8 md:py-3"
-                  type="border"
-                  v-else
-                >{{ view.label }}
-                </vs-button>
-              </template>
-
-            </div>
-          </div>
-
-          <div class="vx-row sm:flex hidden mt-4">
-            <div class="vx-col w-full flex">
-              <!-- Labels -->
-              <div class="flex flex-wrap sm:justify-start justify-center">
-                <div :key="index" class="flex items-center mr-4 mb-2" v-for="(label, index) in calendarLabels">
-                  <div :class="'bg-' + label.color" class="h-3 w-3 inline-block rounded-full mr-2"></div>
-                  <span>{{ label.text }}</span>
-                </div>
-                <div class="flex items-center mr-4 mb-2">
-                  <div class="h-3 w-3 inline-block rounded-full mr-2 bg-primary"></div>
-                  <span>None</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </calendar-view>
-    </div>
+  <div id="event-calendar">
+    <vx-card class="mt-10">
+      <div class="demo-app">
+        <FullCalendar
+          :events="calendarEvents"
+          :header="{
+            left: 'prev,next today',
+            center: 'title',
+            right: 'timeGridDay,timeGridWeek,dayGridMonth,listWeek'
+          }"
+          :locale="locale"
+          :now-indicator="true"
+          :plugins="calendarPlugins"
+          :weekends="calendarWeekends"
+          @dateClick="handleDateClick"
+          class='demo-app-calendar'
+          default-view="timeGridWeek"
+          editable="true"
+          max-time="21:00:00"
+          min-time="06:00:00"
+          ref="fullCalendar"
+        />
+      </div>
+    </vx-card>
 
     <!-- ADD EVENT -->
     <vs-prompt
@@ -101,9 +35,9 @@
 
       <div class="calendar__label-container flex">
 
-        <vs-chip :class="'bg-' + labelColor(labelLocal)" class="text-white" v-if="labelLocal != 'none'">{{ labelLocal
-          }}
-        </vs-chip>
+<!--        <vs-chip :class="'bg-' + labelColor(labelLocal)" class="text-white" v-if="labelLocal != 'none'">{{ labelLocal-->
+<!--          }}-->
+<!--        </vs-chip>-->
 
         <vs-dropdown class="ml-auto my-2 cursor-pointer" vs-custom-content vs-trigger-click>
 
@@ -136,8 +70,7 @@
         <datepicker :disabledDates="disabledDatesTo" :language="$vs.rtl ? langHe : langEn" name="end-date"
                     v-model="endDate"></datepicker>
       </div>
-      <vs-input :color="!errors.has('event-url') ? 'success' : 'danger'" class="w-full mt-6"
-                label-placeholder="Event URL" name="event-url" v-model="url"
+      <vs-input :color="!errors.has('event-url') ? 'success' : 'danger'" class="w-full mt-6" label-placeholder="Event URL" name="event-url" v-model="url"
                 v-validate="'url'"></vs-input>
 
     </vs-prompt>
@@ -156,9 +89,9 @@
 
       <div class="calendar__label-container flex">
 
-        <vs-chip :class="'bg-' + labelColor(labelLocal)" class="text-white" v-if="labelLocal != 'none'">{{ labelLocal
-          }}
-        </vs-chip>
+<!--        <vs-chip :class="'bg-' + labelColor(labelLocal)" class="text-white" v-if="labelLocal != 'none'">{{ labelLocal-->
+<!--          }}-->
+<!--        </vs-chip>-->
 
         <vs-dropdown class="ml-auto my-2 cursor-pointer" vs-custom-content>
 
@@ -191,195 +124,98 @@
         <datepicker :disabledDates="disabledDatesTo" :language="$vs.rtl ? langHe : langEn" name="end-date"
                     v-model="endDate"></datepicker>
       </div>
-      <vs-input :color="!errors.has('event-url') ? 'success' : 'danger'" class="w-full mt-6"
-                label-placeholder="Event URL" name="event-url" v-model="url"
+      <vs-input :color="!errors.has('event-url') ? 'success' : 'danger'" class="w-full mt-6" label-placeholder="Event URL" name="event-url" v-model="url"
                 v-validate="'url'"></vs-input>
 
     </vs-prompt>
+
   </div>
 </template>
 
 <script>
-import { CalendarView, CalendarViewHeader } from 'vue-simple-calendar'
-import moduleCalendar from '@/store/calendar/moduleCalendar.js'
-
-import Datepicker from 'vuejs-datepicker'
-import { en, he, sk } from 'vuejs-datepicker/src/locale'
-
-require('vue-simple-calendar/static/css/default.css')
+import FullCalendar from '@fullcalendar/vue'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import timeGridPlugin from '@fullcalendar/timegrid'
+import interactionPlugin from '@fullcalendar/interaction'
+import listPlugin from '@fullcalendar/list'
+import skLocale from '@fullcalendar/core/locales/sk'
 
 export default {
   components: {
-    CalendarView,
-    CalendarViewHeader,
-    Datepicker
+    FullCalendar // make the <FullCalendar> tag available
   },
   data () {
     return {
-      showDate: new Date(),
-      disabledFrom: false,
-      id: 0,
-      title: '',
-      startDate: '',
-      endDate: '',
-      labelLocal: 'none',
-
-      langHe: he,
-      langEn: en,
-      langSk: sk,
-
-      url: '',
-      calendarView: 'week',
-      startingDayOfWeek: 1,
-      showEventTimes: true,
-
-      activePromptAddEvent: false,
+      activePromptAddEvent: true,
       activePromptEditEvent: false,
 
-      calendarViewTypes: [
-        {
-          label: 'Week',
-          val: 'week'
-        },
-        {
-          label: 'Month',
-          val: 'month'
-        },
-        {
-          label: 'Year',
-          val: 'year'
-        }
-      ]
+      calendarPlugins: [ // plugins must be defined in the JS
+        dayGridPlugin,
+        timeGridPlugin,
+        interactionPlugin,
+        listPlugin// needed for dateClick
+      ],
+      calendarWeekends: true,
+      locale: skLocale
     }
   },
   computed: {
-    simpleCalendarEvents () {
-      console.log('calendar events', this.$store.state.calendar.events)
+    calendarEvents () {
       return this.$store.state.calendar.events
-    },
-    validForm () {
-      return this.title !== '' && this.startDate !== '' && this.endDate !== '' && Date.parse(this.endDate) - Date.parse(this.startDate) >= 0 && !this.errors.has('event-url')
-    },
-    disabledDatesTo () {
-      return { to: new Date(this.startDate) }
-    },
-    disabledDatesFrom () {
-      return { from: new Date(this.endDate) }
-    },
-    calendarLabels () {
-      return this.$store.state.calendar.eventLabels
-    },
-    labelColor () {
-      return (label) => {
-        if (label === 'training') {
-          return 'success'
-        } else if (label === 'race') {
-          return 'warning'
-        } else if (label === 'camp') {
-          return 'danger'
-        } else if (label === 'none') return 'primary'
-      }
-    },
-    windowWidth () {
-      return this.$store.state.windowWidth
     }
   },
   methods: {
-    addEvent () {
-      const obj = {
-        title: this.title,
-        startDate: this.startDate,
-        endDate: this.endDate,
-        // label: this.labelLocal,
-        // url: this.url
-      }
-      obj.classes = `event-${this.labelColor(this.labelLocal)}`
-      this.$store.dispatch('calendar/addEvent', obj)
-    },
-    updateMonth (val) {
-      this.showDate = this.$refs.calendar.getIncrementedPeriod(val)
-    },
-    clearFields () {
-      this.title = this.endDate = this.url = ''
-      this.id = 0
-      this.labelLocal = 'none'
-    },
-    promptAddNewEvent (date) {
-      this.disabledFrom = false
-      this.addNewEventDialog(date)
-    },
-    addNewEventDialog (date) {
-      this.clearFields()
-      this.startDate = date
-      this.endDate = date
+    handleDateClick (arg) {
       this.activePromptAddEvent = true
-    },
-    openAddNewEvent (date) {
-      this.disabledFrom = true
-      this.addNewEventDialog(date)
-    },
-    openEditEvent (event) {
-      const e = this.$store.getters['calendar/getEvent'](event.id)
-      this.id = e.id
-      this.title = e.title
-      this.startDate = e.startDate
-      this.endDate = e.endDate
-      this.url = e.url
-      this.labelLocal = e.label
-      this.activePromptEditEvent = true
-    },
-    editEvent () {
-      const obj = {
-        id: this.id,
-        title: this.title,
-        startDate: this.startDate,
-        endDate: this.endDate,
-        label: this.labelLocal,
-        url: this.url
-      }
-      obj.classes = `event-${this.labelColor(this.labelLocal)}`
-      this.$store.dispatch('calendar/editEvent', obj)
-    },
-    removeEvent () {
-      this.$store.dispatch('calendar/removeEvent', this.id)
-    },
-    eventDragged (event, date) {
-      this.$store.dispatch('calendar/eventDragged', {
-        event,
-        date
-      })
+      //  start: arg.date,
+      // allDay: arg.allDay
+      // if (confirm('Would you like to add an event to ' + arg.dateStr + ' ?')) {
+      //   this.calendarEvents.push({ // add new event data
+      //     title: 'New Event',
+      //     start: arg.date,
+      //     allDay: arg.allDay
+      //   })
+      // }
     }
   },
   created () {
-    this.$store.registerModule('calendar', moduleCalendar)
     this.$store.dispatch('calendar/fetchEvents')
-    // this.$store.dispatch('calendar/fetchEventLabels')
-  },
-  beforeDestroy () {
-    this.$store.unregisterModule('calendar')
   }
 }
+
 </script>
 
-<style lang="scss">
-  @import "@/assets/scss/vuexy/apps/simple-calendar.scss";
+<style lang='scss'>
 
-  #simple-calendar-app {
-    .theme-default {
-      .cv-event {
+  // you must include each plugins' css
+  // paths prefixed with ~ signify node_modules
+  @import '~@fullcalendar/core/main.css';
+  @import '~@fullcalendar/daygrid/main.css';
+  @import '~@fullcalendar/timegrid/main.css';
 
-        background-color: #00b0d3;
+  .demo-app {
+    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+    font-size: 14px;
+  }
 
-        .startTime {
-          white-space: initial;
-          color: black;
-        }
+  .demo-app-top {
+    margin: 0 0 3em;
+  }
 
-        .endTime {
-          white-space: initial;
-          color: black;
-        }
-      }
-    }
+  .demo-app-calendar {
+    margin: 0 auto;
+    max-width: 900px;
+  }
+
+  .fc-unthemed td.fc-today {
+    background: #0C112E;
+  }
+
+ .fc-toolbar .fc-header-toolbar {
+      margin-bottom: 5.5em;
+ }
+  .fc-list-heading td {
+    background: #00b0d3;
+    color: white;
   }
 </style>
