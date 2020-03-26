@@ -58,7 +58,7 @@ class Category(models.Model):
 #     # invite_reason = models.CharField(max_length=64)
 
 # RES: https://django-polymorphic.readthedocs.io/en/stable/
-class Event(ShowFieldType, PolymorphicModel):
+class Event(PolymorphicModel):
     # RES (null vs blank): https://stackoverflow.com/questions/8609192/differentiate-null-true-blank-true-in-django
     season = models.ForeignKey(Season, on_delete=models.CASCADE, blank=True)
     category = models.ManyToManyField(Category)
