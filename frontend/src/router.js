@@ -269,19 +269,8 @@ const router = new Router({
           name: 'app-event-calendar',
           component: () => import('@/views/apps/event/EventCalendar.vue'),
           meta: {
-            breadcrumb: [
-              {
-                title: 'Home',
-                url: '/'
-              },
-              { title: 'Event' },
-              {
-                title: 'Calendar',
-                active: true
-              }
-            ],
-            pageTitle: 'Event Calendar',
             rule: 'editor',
+            no_scroll: true
           }
         },
 

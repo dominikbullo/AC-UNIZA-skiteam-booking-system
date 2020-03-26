@@ -1,20 +1,35 @@
 <template>
-  <div id="event-calendar">
-    <vx-card class="mt-10">
-      <div class="demo-app">
+  <div id="event-calendar-app">
+    <vx-card class="mt-5">
+      <div class="calendar-view">
         <FullCalendar
           :events="calendarEvents"
           :header="{
             left: 'prev,next today',
             center: 'title',
-            right: 'timeGridDay,timeGridWeek,dayGridMonth,listWeek'
-          }"
+            right: 'timeGridDay,timeGridWeek,dayGridMonth,listWeek'}"
           :locale="locale"
           :now-indicator="true"
           :plugins="calendarPlugins"
-          :weekends="calendarWeekends"
-          @dateClick="handleDateClick"
-          class='demo-app-calendar'
+          :select-mirror="true"
+          :selectable="true"
+          :slot-label-format="{
+            hour: '2-digit',
+            minute: '2-digit',
+            omitZeroMinute: false,
+            meridiem: 'short'
+          }"
+          :title-format="{
+          month: 'long',
+          year: 'numeric',
+          day: 'numeric',
+          weekday: 'long'
+          }"
+          :weekends="true"
+          @eventClick="handleEventClick"
+          @eventMouseEnter="handleEventMouseEnter"
+          @select="handleSelectClick"
+          class="event-calendar"
           default-view="timeGridWeek"
           editable="true"
           max-time="21:00:00"
@@ -23,112 +38,6 @@
         />
       </div>
     </vx-card>
-
-    <!-- ADD EVENT -->
-    <vs-prompt
-      :active.sync="activePromptAddEvent"
-      :is-valid="validForm"
-      @accept="addEvent"
-      accept-text="Add Event"
-      class="calendar-event-dialog"
-      title="Add Event">
-
-      <div class="calendar__label-container flex">
-
-<!--        <vs-chip :class="'bg-' + labelColor(labelLocal)" class="text-white" v-if="labelLocal != 'none'">{{ labelLocal-->
-<!--          }}-->
-<!--        </vs-chip>-->
-
-        <vs-dropdown class="ml-auto my-2 cursor-pointer" vs-custom-content vs-trigger-click>
-
-          <feather-icon @click.prevent class="cursor-pointer" icon="TagIcon" svgClasses="h-5 w-5"></feather-icon>
-
-          <vs-dropdown-menu style="z-index: 200001">
-            <vs-dropdown-item :key="index" @click="labelLocal = label.value" v-for="(label, index) in calendarLabels">
-              <div :class="'bg-' + label.color" class="h-3 w-3 inline-block rounded-full mr-2"></div>
-              <span>{{ label.text }}</span>
-            </vs-dropdown-item>
-
-            <vs-dropdown-item @click="labelLocal = 'none'">
-              <div class="h-3 w-3 mr-1 inline-block rounded-full mr-2 bg-primary"></div>
-              <span>None</span>
-            </vs-dropdown-item>
-          </vs-dropdown-menu>
-        </vs-dropdown>
-
-      </div>
-
-      <vs-input class="w-full" label-placeholder="Event Title" name="event-name" v-model="title"
-                v-validate="'required'"></vs-input>
-      <div class="my-4">
-        <small class="date-label">Start Date</small>
-        <datepicker :disabled="disabledFrom" :language="$vs.rtl ? langHe : langEn" name="start-date"
-                    v-model="startDate"></datepicker>
-      </div>
-      <div class="my-4">
-        <small class="date-label">End Date</small>
-        <datepicker :disabledDates="disabledDatesTo" :language="$vs.rtl ? langHe : langEn" name="end-date"
-                    v-model="endDate"></datepicker>
-      </div>
-      <vs-input :color="!errors.has('event-url') ? 'success' : 'danger'" class="w-full mt-6" label-placeholder="Event URL" name="event-url" v-model="url"
-                v-validate="'url'"></vs-input>
-
-    </vs-prompt>
-
-    <!-- EDIT EVENT -->
-    <vs-prompt
-      :active.sync="activePromptEditEvent"
-      :is-valid="validForm"
-      @accept="editEvent"
-      @cancel="removeEvent"
-      accept-text="Submit"
-      button-cancel="border"
-      cancel-text="Remove"
-      class="calendar-event-dialog"
-      title="Edit Event">
-
-      <div class="calendar__label-container flex">
-
-<!--        <vs-chip :class="'bg-' + labelColor(labelLocal)" class="text-white" v-if="labelLocal != 'none'">{{ labelLocal-->
-<!--          }}-->
-<!--        </vs-chip>-->
-
-        <vs-dropdown class="ml-auto my-2 cursor-pointer" vs-custom-content>
-
-          <feather-icon @click.prevent icon="TagIcon" svgClasses="h-5 w-5"></feather-icon>
-
-          <vs-dropdown-menu style="z-index: 200001">
-            <vs-dropdown-item :key="index" @click="labelLocal = label.value" v-for="(label, index) in calendarLabels">
-              <div :class="'bg-' + label.color" class="h-3 w-3 inline-block rounded-full mr-2"></div>
-              <span>{{ label.text }}</span>
-            </vs-dropdown-item>
-
-            <vs-dropdown-item @click="labelLocal = 'none'">
-              <div class="h-3 w-3 mr-1 inline-block rounded-full mr-2 bg-primary"></div>
-              <span>None</span>
-            </vs-dropdown-item>
-          </vs-dropdown-menu>
-        </vs-dropdown>
-
-      </div>
-
-      <vs-input class="w-full" label-placeholder="Event Title" name="event-name" v-model="title"
-                v-validate="'required'"></vs-input>
-      <div class="my-4">
-        <small class="date-label">Start Date</small>
-        <datepicker :disabledDates="disabledDatesFrom" :language="$vs.rtl ? langHe : langEn" name="start-date"
-                    v-model="startDate"></datepicker>
-      </div>
-      <div class="my-4">
-        <small class="date-label">End Date</small>
-        <datepicker :disabledDates="disabledDatesTo" :language="$vs.rtl ? langHe : langEn" name="end-date"
-                    v-model="endDate"></datepicker>
-      </div>
-      <vs-input :color="!errors.has('event-url') ? 'success' : 'danger'" class="w-full mt-6" label-placeholder="Event URL" name="event-url" v-model="url"
-                v-validate="'url'"></vs-input>
-
-    </vs-prompt>
-
   </div>
 </template>
 
@@ -140,13 +49,17 @@ import interactionPlugin from '@fullcalendar/interaction'
 import listPlugin from '@fullcalendar/list'
 import skLocale from '@fullcalendar/core/locales/sk'
 
+import flatPickr from 'vue-flatpickr-component'
+import 'flatpickr/dist/flatpickr.css'
+
 export default {
   components: {
-    FullCalendar // make the <FullCalendar> tag available
+    FullCalendar,
+    flatPickr
   },
   data () {
     return {
-      activePromptAddEvent: true,
+      activePromptAddEvent: false,
       activePromptEditEvent: false,
 
       calendarPlugins: [ // plugins must be defined in the JS
@@ -155,27 +68,108 @@ export default {
         interactionPlugin,
         listPlugin// needed for dateClick
       ],
-      calendarWeekends: true,
-      locale: skLocale
+      locale: skLocale,
+
+      fromDate: null,
+      toDate: null,
+      configFromdateTimePicker: {
+        minDate: new Date(),
+        maxDate: null,
+        enableTime: true
+      },
+      configTodateTimePicker: {
+        enableTime: true,
+        minDate: null
+      },
+      showDate: new Date(),
+      disabledFrom: false,
+      id: 0,
+      url: '',
+      title: '',
+      startDate: '',
+      endDate: '',
+      labelLocal: 'none'
     }
   },
   computed: {
     calendarEvents () {
       return this.$store.state.calendar.events
+    },
+    validForm () {
+      // FIXME
+      return true
     }
   },
   methods: {
     handleDateClick (arg) {
+      console.log('handling date click', arg)
+    },
+    handleEventClick (arg) {
+      console.log('handling event click', arg)
+    },
+    handleSelectClick (arg) {
+      console.log('handling select click', arg)
+      this.addNewEventDialog(arg)
+    },
+    handleEventMouseEnter (arg) {
+      console.log('handling mouse event enter', arg)
+    },
+    onFromChange (selectedDates, dateStr, instance) {
+      this.$set(this.configTodateTimePicker, 'minDate', dateStr)
+    },
+    onToChange (selectedDates, dateStr, instance) {
+      this.$set(this.configFromdateTimePicker, 'maxDate', dateStr)
+    },
+    addEvent () {
+      const obj = {
+        title: this.title,
+        startDate: this.startDate,
+        endDate: this.endDate,
+        label: this.labelLocal,
+        url: this.url
+      }
+      // obj.classes = `event-${this.labelColor(this.labelLocal)}`
+      // this.$store.dispatch('calendar/addEvent', {})
+    },
+    clearFields () {
+      console.warn('need to clean fields')
+    },
+    promptAddNewEvent (date) {
+      this.disabledFrom = false
+      this.addNewEventDialog(date)
+    },
+    addNewEventDialog (arg) {
+      console.log('addNewEventDialog', arg)
+      // this.clearFields()
+      // this.startDate = arg.startStr
+      // this.endDate =  arg.end
       this.activePromptAddEvent = true
-      //  start: arg.date,
-      // allDay: arg.allDay
-      // if (confirm('Would you like to add an event to ' + arg.dateStr + ' ?')) {
-      //   this.calendarEvents.push({ // add new event data
-      //     title: 'New Event',
-      //     start: arg.date,
-      //     allDay: arg.allDay
-      //   })
-      // }
+    },
+    openAddNewEvent (date) {
+      this.disabledFrom = true
+      this.addNewEventDialog(date)
+    },
+    openEditEvent (event) {
+      const e = this.$store.getters['calendar/getEvent'](event.id)
+      this.id = e.id
+      this.title = e.title
+      this.startDate = e.startDate
+      this.endDate = e.endDate
+      this.url = e.url
+      this.labelLocal = e.label
+      this.activePromptEditEvent = true
+    },
+    editEvent () {
+      const obj = {
+        id: this.id,
+        title: this.title,
+        startDate: this.startDate,
+        endDate: this.endDate,
+        label: this.labelLocal,
+        url: this.url
+      }
+      obj.classes = `event-${this.labelColor(this.labelLocal)}`
+      this.$store.dispatch('calendar/editEvent', obj)
     }
   },
   created () {
@@ -193,27 +187,31 @@ export default {
   @import '~@fullcalendar/daygrid/main.css';
   @import '~@fullcalendar/timegrid/main.css';
 
-  .demo-app {
+  #event-calendar-app {
     font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
     font-size: 14px;
   }
 
-  .demo-app-top {
-    margin: 0 0 3em;
-  }
-
-  .demo-app-calendar {
+  .calendar-view {
     margin: 0 auto;
-    max-width: 900px;
   }
 
   .fc-unthemed td.fc-today {
     background: #0C112E;
   }
 
- .fc-toolbar .fc-header-toolbar {
-      margin-bottom: 5.5em;
- }
+  .fc-day-grid-container {
+    /* FIXME TODO */
+    /*height: calc(var(--vh, 1vh) * 50 - 11.5rem);*/
+    max-height: 60vh;
+  }
+
+  .fc-time-grid-container {
+    /* FIXME TODO */
+    /*height: calc(var(--vh, 1vh) * 50 - 11.5rem);*/
+    max-height: 60vh;
+  }
+
   .fc-list-heading td {
     background: #00b0d3;
     color: white;
