@@ -34,6 +34,8 @@ class FamilyMember(models.Model):
 
 
 class Child(FamilyMember):
+    # RES (Many to many birectional): https://stackoverflow.com/questions/4881578/django-bi-directional-manytomany-how-to-prevent-table-creation-on-second-model
+    categories = models.ManyToManyField('events.Category', blank=True)
     test_field = models.CharField(max_length=30, blank=True)
 
     def __str__(self):

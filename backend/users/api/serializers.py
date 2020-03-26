@@ -9,11 +9,13 @@ from rest_auth.models import TokenModel
 from rest_auth.registration.serializers import RegisterSerializer
 from rest_framework import serializers
 
-from family.models import Family, FamilyMember
+from family.models import Family, FamilyMember, Child
 from users.models import Profile
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+    first_name = serializers.DateTimeField(source='user.first_name', read_only=True)
+    last_name = serializers.DateTimeField(source='user.last_name', read_only=True)
     avatar = serializers.ImageField(read_only=True)
     gender = serializers.CharField(source='get_gender_display')
 

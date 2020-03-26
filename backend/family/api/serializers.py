@@ -1,10 +1,23 @@
 from allauth.account.utils import setup_user_email, send_email_confirmation
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
+
 from family.models import Child, FamilyMember, Family
 
 from users.api.serializers import CustomRegisterSerializer, UserDisplaySerializer
 from users.models import Profile
+
+
+class ChildProfileSerializer(serializers.ModelSerializer):
+    username = serializers.DateTimeField(source='user.username', read_only=True)
+    first_name = serializers.DateTimeField(source='user.first_name', read_only=True)
+    last_name = serializers.DateTimeField(source='user.last_name', read_only=True)
+
+    class Meta:
+        model = Child
+        # Could show child category
+        fields = ("username", "first_name", "last_name", "categories")
+        # fields = ("username", "first_name", "last_name",)
 
 
 class CustomRegisterChildSerializer(CustomRegisterSerializer):

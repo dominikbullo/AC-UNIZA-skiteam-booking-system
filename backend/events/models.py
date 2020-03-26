@@ -1,6 +1,3 @@
-import datetime
-
-from django.utils.translation import gettext as _
 from django.db import models
 
 from polymorphic.models import PolymorphicModel
@@ -12,24 +9,24 @@ from users.models import User
 
 
 class Season(models.Model):
-    # format:   YYYY/YYYY
-    # example:  2019/2020
+    # format:   YYYY_YYYY
+    # example:  2019_2020
     year = models.CharField(max_length=9, unique=True, primary_key=True)
-
-    # # first day of skiing in the season
-    start_date = models.DateTimeField(null=True, blank=True)
-    # # last day of skiing in the season
-    end_date = models.DateTimeField(null=True, blank=True)
     current = models.BooleanField(default=False)
+
+    # first day of skiing in the season
+    start_date = models.DateTimeField(null=True, blank=True)
+    # last day of skiing in the season
+    end_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.year
 
 
 class Category(models.Model):
-    # name
     season = models.ForeignKey(Season, on_delete=models.CASCADE)
-    members = models.ManyToManyField(Child, blank=True)
+    # RES (Many to many birectional): https://stackoverflow.com/questions/4881578/django-bi-directional-manytomany-how-to-prevent-table-creation-on-second-model
+    members = models.ManyToManyField('family.Child', through=Child.categories.through, blank=True)
 
     name = models.CharField(
         max_length=3,
@@ -48,8 +45,17 @@ class Category(models.Model):
     class Meta:
         verbose_name_plural = "Categories"
         ordering = ['id']
+        # TODO -> cannot set unique_together with category members and season -> signals
+        # One child, One category, One Season -> many categories in different seasons
         unique_together = (('season', 'name'),)
 
+
+# class Membership(models.Model):
+#     person = models.ForeignKey(Child, on_delete=models.CASCADE)
+#     group = models.ForeignKey(Category, on_delete=models.CASCADE)
+#     season = models.ForeignKey(Season, on_delete=models.CASCADE)
+#     # date_joined = models.DateField()
+#     # invite_reason = models.CharField(max_length=64)
 
 # RES: https://django-polymorphic.readthedocs.io/en/stable/
 class Event(ShowFieldType, PolymorphicModel):
@@ -138,3 +144,4 @@ class SkiRace(SkiEvent):
 #     hotel_price = models.CharField(max_length=50, blank=True, null=True)
 #     book_hotel_from = models.DateTimeField(blank=True, null=True)
 #     book_hotel_to = models.DateTimeField(blank=True, null=True)
+
