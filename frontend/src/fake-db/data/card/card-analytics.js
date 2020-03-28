@@ -111,7 +111,7 @@ const data = {
       completed: 786617,
       inProgress: 13561
     },
-    series: [83]
+    series: [12]
   },
   salesBarSession: {
     series: [
@@ -122,7 +122,7 @@ const data = {
     ],
     analyticsData: {
       session: 2700,
-      comparison : {
+      comparison: {
         str: 'Last 7 Days',
         result: +5.2
       }

@@ -46,7 +46,7 @@ export default [
             i18n: 'List'
           },
           {
-            url: '/apps/family/edit/:id',
+            url: '/apps/family/edit/',
             name: 'Edit',
             slug: 'app-family-edit',
             i18n: 'Edit'
@@ -80,37 +80,37 @@ export default [
             i18n: 'Calendar'
           }
         ]
-      },
-      {
-        url: null,
-        name: 'Users',
-        icon: 'UsersIcon',
-        i18n: 'Users',
-        submenu: [
-          {
-            url: '/apps/user/user-list',
-            name: 'app-user-list',
-            slug: 'app-user-list',
-            i18n: 'List'
-          },
-          {
-            url: '/apps/user/user-edit/268',
-            name: 'Edit Default User',
-            slug: 'app-user-edit-default'
-          },
-          {
-            url: '/apps/user/user-view/268',
-            name: 'app-user-view',
-            slug: 'app-user-view'
-          },
-          {
-            url: '/apps/user/user-edit/:id',
-            name: 'Edit',
-            slug: 'app-user-edit',
-            i18n: 'Edit'
-          }
-        ]
       }
+      // {
+      //   url: null,
+      //   name: 'Users',
+      //   icon: 'UsersIcon',
+      //   i18n: 'Users',
+      //   submenu: [
+      //     {
+      //       url: '/apps/user/user-list',
+      //       name: 'app-user-list',
+      //       slug: 'app-user-list',
+      //       i18n: 'List'
+      //     },
+      //     {
+      //       url: '/apps/user/user-edit/268',
+      //       name: 'Edit Default User',
+      //       slug: 'app-user-edit-default'
+      //     },
+      //     {
+      //       url: '/apps/user/user-view/268',
+      //       name: 'app-user-view',
+      //       slug: 'app-user-view'
+      //     },
+      //     {
+      //       url: '/apps/user/user-edit/:id',
+      //       name: 'Edit',
+      //       slug: 'app-user-edit',
+      //       i18n: 'Edit'
+      //     }
+      //   ]
+      // }
     ]
   },
   {
@@ -153,19 +153,12 @@ export default [
         icon: 'FileIcon'
       },
       {
-        url: '/test/simple-calendar',
-        name: 'Calendar Demo ',
-        slug: 'app-event-demo-calendar',
-        icon: 'CalendarIcon',
-        tagColor: 'success'
+        url: '/pages/profile',
+        slug: 'page-profile',
+        name: 'Profile',
+        icon: 'UserIcon',
+        i18n: 'Profile'
       }
-      // , {
-      //   url: '/pages/profile',
-      //   slug: 'page-profile',
-      //   name: 'Profile',
-      //   icon: 'UserIcon',
-      //   i18n: 'Profile'
-      // }
     ]
   },
   {
