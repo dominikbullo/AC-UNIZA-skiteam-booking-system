@@ -1,4 +1,4 @@
-/*=========================================================================================
+/* =========================================================================================
   File Name: sidebarItems.js
   Description: Sidebar Items list. Add / Remove menu items from here.
   Strucutre:
@@ -16,7 +16,7 @@
   Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
   Author: Pixinvent
   Author URL: http://www.themeforest.net/user/pixinvent
-==========================================================================================*/
+========================================================================================== */
 
 
 export default [
@@ -126,12 +126,20 @@ export default [
         i18n: 'Account'
       },
       {
-        url: '/pages/family',
-        slug: 'family-settings',
-        name: 'Family',
+        url: null,
+        slug: 'page-user-settings',
+        name: 'Members',
         icon: 'UsersIcon',
-        i18n: 'Family'
-      },
+        i18n: 'Members',
+        is_disabled: true
+      }
+    ]
+  },
+  {
+    header: 'Test Things',
+    icon: 'FileIcon',
+    i18n: 'Test Things',
+    items: [
       {
         url: '/test/page',
         name: 'Test Page',
@@ -158,6 +166,19 @@ export default [
       //   icon: 'UserIcon',
       //   i18n: 'Profile'
       // }
+    ]
+  },
+  {
+    header: 'Examples',
+    icon: 'FileIcon',
+    i18n: 'Examples',
+    items: [
+      {
+        url: '/test/page',
+        name: 'Test Page',
+        slug: 'test-page',
+        icon: 'FileIcon'
+      }
     ]
   },
   {

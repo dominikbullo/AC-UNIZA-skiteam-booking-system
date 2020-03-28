@@ -40,9 +40,18 @@ class UserDisplaySerializer(serializers.ModelSerializer):
     # https://stackoverflow.com/questions/41394761/the-create-method-does-not-support-writable-nested-fields-by-default
     profile = ProfileSerializer()
 
-    # my_family = FamilySerializer(many=True, source='user_family')
-
     # RES: https://stackoverflow.com/questions/48073471/django-rest-framework-get-data-based-on-current-userid-token
+    def get_family_id(self, instance):
+        # TODO: Try catch
+        try:
+            member = FamilyMember.objects.get(user=instance)
+            family_id = member.family_id
+            return family_id
+        except Exception as e:
+            print(e)
+            print("User does not have family!")
+            pass
+        return 0
 
     def get_verified_email(self, obj):
         try:
