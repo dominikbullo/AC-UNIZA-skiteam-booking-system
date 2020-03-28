@@ -33,7 +33,7 @@ ALLOWED_HOSTS = ['*']
 
 # Application definition
 
-INSTALLED_APPS = [
+DJANGO_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,11 +42,9 @@ INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',  # < Per Whitenoise, to disable built in
     'django.contrib.staticfiles',
     'django.contrib.sites',
+)
 
-    'users',
-    'family',
-    'events',
-
+THIRD_PARTY_APPS = (
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
@@ -65,8 +63,15 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.facebook',
 
     'polymorphic',
-    # 'widget_tweaks',
-]
+)
+
+LOCAL_APPS = (
+    'users',
+    'family',
+    'events',
+)
+
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

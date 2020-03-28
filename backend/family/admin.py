@@ -5,11 +5,6 @@ from django.contrib.admin.sites import AlreadyRegistered
 from family.models import Child, FamilyMember, Family
 
 
-@admin.register(Child)
-class ChildAdmin(admin.ModelAdmin):
-    filter_horizontal = ('categories', 'events',)
-
-
 class FamilyMemberInLine(admin.StackedInline):
     model = FamilyMember
     verbose_name_plural = 'Families'

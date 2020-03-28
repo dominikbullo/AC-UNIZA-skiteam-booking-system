@@ -5,7 +5,7 @@ from polymorphic.showfields import ShowFieldType
 
 from core.choices import CategoryNameChoices, EventTypeChoices, SkiTypeChoices
 from family.models import Child
-from users.models import User
+from users.models import User, Profile
 
 
 class Season(models.Model):
@@ -61,7 +61,8 @@ class Event(PolymorphicModel):
     # participants = models.ManyToManyField(Child, blank=True)
 
     # It must be like that for proper synchronization between fields
-    participants = models.ManyToManyField('family.Child', through=Child.events.through, blank=True)
+    # TODO FIXME -> Why child? This could be any user -> coach maybe on future, child, family member
+    participants = models.ManyToManyField('users.Profile', through=Profile.events.through, blank=True)
 
     # FIXME Validation -> event must have SkiTraining table if is type SKI_TRAINING, SKi_RACE and so on..
     type = models.CharField(
