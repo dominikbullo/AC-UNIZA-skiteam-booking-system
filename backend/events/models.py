@@ -61,6 +61,7 @@ class Event(PolymorphicModel):
     # participants = models.ManyToManyField(Child, blank=True)
 
     # It must be like that for proper synchronization between fields
+    # TODO FIXME -> Why child? This could be any user -> coach maybe on future, child, family member
     participants = models.ManyToManyField('family.Child', through=Child.events.through, blank=True)
 
     # FIXME Validation -> event must have SkiTraining table if is type SKI_TRAINING, SKi_RACE and so on..
@@ -140,4 +141,3 @@ class SkiRace(SkiEvent):
 #     hotel_price = models.CharField(max_length=50, blank=True, null=True)
 #     book_hotel_from = models.DateTimeField(blank=True, null=True)
 #     book_hotel_to = models.DateTimeField(blank=True, null=True)
-

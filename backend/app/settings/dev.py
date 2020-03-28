@@ -20,6 +20,7 @@ from django.urls import include
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 SETTINGS_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(SETTINGS_DIR)
+PROJECT_PATH = os.path.dirname(BASE_DIR)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -33,7 +34,7 @@ ALLOWED_HOSTS = ['*']
 
 # Application definition
 
-INSTALLED_APPS = [
+DJANGO_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,11 +43,9 @@ INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',  # < Per Whitenoise, to disable built in
     'django.contrib.staticfiles',
     'django.contrib.sites',
+)
 
-    'users',
-    'family',
-    'events',
-
+THIRD_PARTY_APPS = (
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
@@ -65,8 +64,20 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.facebook',
 
     'polymorphic',
-    # 'widget_tweaks',
-]
+
+    'django_otp',
+    'django_otp.plugins.otp_static',
+    'django_otp.plugins.otp_totp',
+    'two_factor',
+)
+
+LOCAL_APPS = (
+    'users',
+    'family',
+    'events',
+)
+
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -80,6 +91,9 @@ MIDDLEWARE = [
 
     # 'app.middleware.LoginRequiredMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django_otp.middleware.OTPMiddleware',
 ]
 # RELEASE: Dont forget to add your client's address to the CORS whitelist.
 #   This will make sure the server accepts request from the specified source only
@@ -225,4 +239,5 @@ REST_FRAMEWORK = {
 try:
     from .local_settings import *
 except ImportError:
+    print("Not imported!")
     pass
