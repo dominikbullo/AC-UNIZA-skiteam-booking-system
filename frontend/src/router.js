@@ -1840,30 +1840,30 @@ router.afterEach(() => {
   }
 })
 // RELEASE: redirect
-// router.beforeEach((to, from, next) => {
-//   // redirect to login page if not logged in and trying to access a restricted page
-//   const publicPages = [
-//     '/login',
-//     '/forgot-password',
-//     '/register',
-//     '/pages/error-404',
-//     '/pages/error-500',
-//     '/pages/not-authorized',
-//     '/pages/comingsoon',
-//     '/admin*',
-//     '/api*'
-//   ]
-//   const authRequired = !publicPages.includes(to.path)
-//   const loggedIn = localStorage.getItem('userInfo')
-//
-//   if (authRequired && !loggedIn) {
-//     return next({
-//       path: '/pages/comingsoon',
-//       query: { returnUrl: to.path }
-//     })
-//   }
-//
-//   next()
-// })
+router.beforeEach((to, from, next) => {
+  // redirect to login page if not logged in and trying to access a restricted page
+  const publicPages = [
+    '/login',
+    '/forgot-password',
+    '/register',
+    '/pages/error-404',
+    '/pages/error-500',
+    '/pages/not-authorized',
+    '/pages/comingsoon',
+    '/admin*',
+    '/api*'
+  ]
+  const authRequired = !publicPages.includes(to.path)
+  const loggedIn = localStorage.getItem('userInfo')
+
+  if (authRequired && !loggedIn) {
+    return next({
+      path: '/pages/comingsoon',
+      query: { returnUrl: to.path }
+    })
+  }
+
+  next()
+})
 
 export default router

@@ -9,12 +9,14 @@ from users.models import Profile
 
 
 class ChildProfileSerializer(serializers.ModelSerializer):
-    display_name = serializers.CharField(source='user.display_name', read_only=True)
-    full_name = serializers.CharField(source='user.full_name', read_only=True)
+    username = serializers.CharField(source='user.username', read_only=True)
+
+    # display_name = serializers.CharField(source='user.display_name', read_only=True)
+    # full_name = serializers.CharField(source='user.full_name', read_only=True)
 
     class Meta:
         model = Child
-        fields = ("full_name","display_name",)
+        fields = ("username",)
         # Could show child category
         # fields = ("username", "first_name", "last_name", "categories")
 

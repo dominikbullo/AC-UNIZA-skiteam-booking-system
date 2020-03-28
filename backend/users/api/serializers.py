@@ -43,14 +43,6 @@ class UserDisplaySerializer(serializers.ModelSerializer):
     # my_family = FamilySerializer(many=True, source='user_family')
 
     # RES: https://stackoverflow.com/questions/48073471/django-rest-framework-get-data-based-on-current-userid-token
-    def get_family_id(self, obj):
-        # TODO_ family ID
-        return 1
-        # try:
-        #     test = Family.objects.all()
-        #     return test.id
-        # except EmailAddress.DoesNotExist:
-        #     return None
 
     def get_verified_email(self, obj):
         try:

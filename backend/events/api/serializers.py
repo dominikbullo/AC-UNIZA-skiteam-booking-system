@@ -1,11 +1,10 @@
 from rest_framework import serializers
-from rest_framework.serializers import raise_errors_on_nested_writes
-from rest_framework.utils import model_meta
 
 from events.models import Event, SkiTraining, SkiRace, Season, Category
 from rest_polymorphic.serializers import PolymorphicSerializer
 
 from family.api.serializers import ChildProfileSerializer
+from family.models import Child
 
 
 class SeasonSerializer(serializers.ModelSerializer):
@@ -21,35 +20,26 @@ class BaseEventSerializer(serializers.ModelSerializer):
     start = serializers.DateTimeField(source='start_date', read_only=True)
     end = serializers.DateTimeField(source='end_date', read_only=True)
     title = serializers.CharField(source='type', read_only=True)
-    # TODO decision
-    # participants = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name="family:child-detail")
-    participants = ChildProfileSerializer(many=True)
 
+    # RES: http://www.tomchristie.com/rest-framework-2-docs/api-guide/relations
+    participants = serializers.PrimaryKeyRelatedField(
+        many=True,
+        queryset=Child.objects.all()
+    )
+
+    #  RES(update): https://riptutorial.com/django-rest-framework/example/25521/updatable-nested-serializers
+    #  RES(delete): https://stackoverflow.com/questions/42159480/delete-member-of-many-to-many-relationship-django-rest-framework
+    #  RES: https://stackoverflow.com/questions/28706072/drf-3-creating-many-to-many-update-create-serializer-with-though-table
     def update(self, instance, validated_data):
-        raise_errors_on_nested_writes('update', self, validated_data)
-        info = model_meta.get_field_info(instance)
-
-        # Simply set each attribute on the instance, and then save it.
-        # Note that unlike `.create()` we don't need to treat many-to-many
-        # relationships as being a special case. During updates we already
-        # have an instance pk for the relationships to be associated with.
-        m2m_fields = []
-        for attr, value in validated_data.items():
-            if attr in info.relations and info.relations[attr].to_many:
-                m2m_fields.append((attr, value))
-            else:
-                setattr(instance, attr, value)
-
+        # TODO if updating then -> set all? Probably yes
+        # FIXME
+        participants = validated_data.pop('participants')
+        print(*participants, sep=", ")
+        instance = super(BaseEventSerializer, self).update(instance, validated_data)
+        instance.participants.set(participants)
         instance.save()
-
-        # Note that many-to-many fields are set after updating instance.
-        # Setting m2m fields triggers signals which could potentially change
-        # updated instance and we do not want it to collide with .update()
-        for attr, value in m2m_fields:
-            field = getattr(instance, attr)
-            field.set(value)
-
         return instance
+
 
 class EventSerializer(BaseEventSerializer):
     class Meta:
