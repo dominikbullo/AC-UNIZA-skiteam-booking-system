@@ -20,7 +20,6 @@ from django.urls import include
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 SETTINGS_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(SETTINGS_DIR)
-PROJECT_PATH = os.path.dirname(BASE_DIR)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -64,11 +63,6 @@ THIRD_PARTY_APPS = (
     'allauth.socialaccount.providers.facebook',
 
     'polymorphic',
-
-    'django_otp',
-    'django_otp.plugins.otp_static',
-    'django_otp.plugins.otp_totp',
-    'two_factor',
 )
 
 LOCAL_APPS = (
@@ -91,9 +85,6 @@ MIDDLEWARE = [
 
     # 'app.middleware.LoginRequiredMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django_otp.middleware.OTPMiddleware',
 ]
 # RELEASE: Dont forget to add your client's address to the CORS whitelist.
 #   This will make sure the server accepts request from the specified source only
@@ -239,5 +230,4 @@ REST_FRAMEWORK = {
 try:
     from .local_settings import *
 except ImportError:
-    print("Not imported!")
     pass

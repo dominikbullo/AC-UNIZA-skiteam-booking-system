@@ -21,11 +21,14 @@ class BaseEventSerializer(serializers.ModelSerializer):
     end = serializers.DateTimeField(source='end_date', read_only=True)
     title = serializers.CharField(source='type', read_only=True)
 
+    # TODO FIXME: update via rest
+    participants = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='users:user-detail')
+
     # RES: http://www.tomchristie.com/rest-framework-2-docs/api-guide/relations
-    participants = serializers.PrimaryKeyRelatedField(
-        many=True,
-        queryset=Child.objects.all()
-    )
+    # participants = serializers.PrimaryKeyRelatedField(
+    #     many=True,
+    #     queryset=Child.objects.all()
+    # )
 
     #  RES(update): https://riptutorial.com/django-rest-framework/example/25521/updatable-nested-serializers
     #  RES(delete): https://stackoverflow.com/questions/42159480/delete-member-of-many-to-many-relationship-django-rest-framework

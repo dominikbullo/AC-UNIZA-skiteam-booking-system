@@ -57,6 +57,8 @@ class Profile(models.Model):
 
     gender = models.CharField(choices=GenderChoices.choices, max_length=1, null=False, blank=False)
 
+    events = models.ManyToManyField('events.Event', blank=True)
+
     class Meta:
         ordering = ['user__date_joined']
 
