@@ -120,11 +120,9 @@
                   <!-- RES: https://flatpickr.js.org/formatting/ -->
                   <div>
                     <label style="font-size: 10px">{{ $t('BirthDate') }}</label>
-                    <flat-pickr
-                      :config="{ dateFormat: 'd.m.Y' }"
-                      class="w-full"
-                      v-model="childData.profile.birth_date"/>
-                    <span class="text-danger text-sm">{{ errors.first('childData.profile.birth_date') }}</span>
+                    <flat-pickr :config="datePickerConfig" class="w-full"
+                                v-model="childData.profile.birth_date"/>
+                    <span class="text-danger text-sm">{{ errors.first('birth_date') }}</span>
                   </div>
 
                   <div>
@@ -245,14 +243,16 @@ import { AgGridVue } from 'ag-grid-vue'
 import '@/assets/scss/vuexy/extraComponents/agGridStyleOverride.scss'
 import vSelect from 'vue-select'
 
+import flatPickr from 'vue-flatpickr-component'
+import 'flatpickr/dist/flatpickr.css'
+import { Slovak } from 'flatpickr/dist/l10n/sk.js'
+
 // Cell Renderer
 import CellRendererLink from './cell-renderer/CellRendererLink.vue'
 import CellRendererStatus from './cell-renderer/CellRendererStatus.vue'
 import CellRendererVerified from './cell-renderer/CellRendererVerified.vue'
 import CellRendererActions from './cell-renderer/CellRendererActions.vue'
 
-import flatPickr from 'vue-flatpickr-component'
-import 'flatpickr/dist/flatpickr.css'
 
 export default {
   components: {
@@ -272,6 +272,12 @@ export default {
       searchQuery: '',
       activePrompt: false,
 
+      datePickerConfig: {
+        altFormat: 'd.m.Y',
+        altInput: true,
+        dateFormat: 'Y-m-d',
+        locale: Slovak
+      },
       childData: {
         username: 'testsets',
         email: 'tes@tes.sk',
@@ -280,7 +286,8 @@ export default {
         first_name: 'testing321',
         last_name: 'testing321',
         profile: {
-          birth_date: this.moment().format('DD.MM.YYYY'),
+          birth_date: this.moment().format('YYYY-MM-DD'),
+          user_role: 'child',
           phone_number: '',
           location: '',
           gender: 'M'
@@ -540,7 +547,7 @@ export default {
     },
     fetchFamily (size) {
       const payload = {
-        familyId: this.$store.state.AppActiveUser.family_id,
+        familyId: this.$store.state.AppActiveUser.profile.family_id,
         count: size
       }
       this.$store.dispatch('family/fetchFamily', payload)

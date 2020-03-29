@@ -20,8 +20,7 @@ const userDefaults = {
   about: 'default',
   photoURL: require('@/assets/images/portrait/small/avatar-s-11.jpg'), // From Auth
   status: 'online',
-  userRole: 'admin',
-  family_id: 0
+  userRole: 'admin'
 }
 
 const userInfoLocalStorage = JSON.parse(localStorage.getItem('userInfo')) || {}

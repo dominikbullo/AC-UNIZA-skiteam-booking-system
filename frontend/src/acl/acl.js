@@ -7,7 +7,7 @@ import router from '@/router'
 Vue.use(AclInstaller)
 // TODO change
 // FIXME change
-let initialRole = 'admin'
+let initialRole = 'editor'
 
 // TODO change user role from here
 const userInfo = JSON.parse(localStorage.getItem('userInfo'))
