@@ -4,44 +4,52 @@
     <div class="vx-row">
       <div class="vx-col sm:w-1/2 w-full mb-2">
         <vs-input
-          :label-placeholder="$t('Name')"
-          :placeholder="$t('Name')"
+          :label-placeholder="$t('First Name')"
+          :placeholder="$t('First Name')"
+          :success="!errors.first('Name') && this.first_name !==''"
+          :danger="errors.first('Name')"
           class="w-full mt-6"
           data-vv-validate-on="blur"
-          name="name"
+          name="Name"
           v-model="first_name"
           v-validate="'required|alpha_dash|min:3'"/>
-        <span class="text-danger text-sm">{{ errors.first('first_name') }}</span>
+        <span class="text-danger text-sm">{{ errors.first('Name') }}</span>
       </div>
       <div class="vx-col sm:w-1/2 w-full mb-2">
         <vs-input
           :label-placeholder="$t('Surname')"
           :placeholder="$t('Surname')"
+          :success="!errors.first('Surname') && this.last_name !==''"
+          :danger="errors.first('Surname')"
           class="w-full mt-6"
           data-vv-validate-on="blur"
-          name="last_name"
+          name="Surname"
           v-model="last_name"
           v-validate="'required|alpha_dash|min:3'"/>
-        <span class="text-danger text-sm">{{ errors.first('last_name') }}</span>
+        <span class="text-danger text-sm">{{ errors.first('Surname') }}</span>
       </div>
     </div>
 
     <vs-input
       :label-placeholder="$t('Email')"
       :placeholder="$t('Email')"
+      :success="!errors.first('Email') && this.email !==''"
+      :danger="errors.first('Email')"
       class="w-full mt-6"
-      data-vv-validate-on="blur"
-      name="email"
+      name="Email"
       type="email"
       v-model="email"
       v-validate="'required|email'"/>
-    <span class="text-danger text-sm">{{ errors.first('email') }}</span>
+    <span class="text-danger text-sm">{{ errors.first('Email') }}</span>
 
     <!-- RES: https://flatpickr.js.org/formatting/ -->
-    <label style="font-size: 10px">{{ $t('BirthDate') }}</label>
-    <flat-pickr :config="{ dateFormat: 'd.m.Y',maxDate: new Date().fp_incr(14) }" class="w-full"
-                v-model="birth_date"/>
-    <span class="text-danger text-sm">{{ errors.first('birth_date') }}</span>
+    <div>
+      <label style="font-size: 10px">{{ $t('BirthDate') }}</label>
+      <flat-pickr :config="datePickerConfig" class="w-full"
+                  v-model="birth_date"/>
+      <span class="text-danger text-sm">{{ errors.first('birth_date') }}</span>
+    </div>
+
     <div>
       <label style="font-size: 10px">{{ $t('Gender') }}</label>
       <div class="demo-alignment mb-base">
@@ -49,11 +57,13 @@
         <vs-radio class="mt-2" v-model="gender" vs-value="F">{{ $t('Female') }}</vs-radio>
       </div>
     </div>
+
     <vs-input
       :label-placeholder="$t('Password')"
       :placeholder="$t('Password')"
+      :success="!errors.first('confirm_password') && this.password !=='' && this.confirm_password !==''"
+      :danger="errors.first('confirm_password')"
       class="w-full mt-6"
-      data-vv-validate-on="blur"
       name="password"
       ref="password"
       type="password"
@@ -64,9 +74,10 @@
     <vs-input
       :label-placeholder="$t('ConfirmPassword')"
       :placeholder="$t('ConfirmPassword')"
+      :success="!errors.first('confirm_password') && this.confirm_password !==''"
+      :danger="errors.first('confirm_password')"
       class="w-full mt-6"
       data-vv-as="password"
-      data-vv-validate-on="blur"
       name="confirm_password"
       type="password"
       v-model="confirm_password"
@@ -85,6 +96,7 @@
 import Datepicker from 'vuejs-datepicker'
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
+import { Slovak } from 'flatpickr/dist/l10n/sk.js'
 
 export default {
   components: {
@@ -95,27 +107,35 @@ export default {
     return {
       first_name: 'DefaultMeno',
       last_name: 'DefaultPriezvisko',
-      birth_date: this.moment().format('DD.MM.YYYY'),
-      email: '',
+      birth_date: this.moment().format('YYYY-MM-DD'),
+      email: 'totojetes@sasd.sk',
       gender: 'M',
       password: 'testing321',
       confirm_password: 'testing321',
-      isTermsConditionAccepted: true
+      isTermsConditionAccepted: true,
+
+
+      datePickerConfig: {
+        altFormat: 'd.m.Y',
+        altInput: true,
+        dateFormat: 'Y-m-d',
+        locale: Slovak
+      }
     }
   },
   computed: {
     validateForm () {
-
       // TODO watch validation
       // return true
-      return !this.errors.any()
-        && this.first_name !== ''
-        && this.last_name !== ''
-        && this.birth_date !== ''
-        && this.email !== ''
-        && this.password !== ''
-        && this.confirm_password !== ''
-        && this.isTermsConditionAccepted === true
+      return !this.errors.any() &&
+        this.first_name !== '' &&
+        this.last_name !== '' &&
+        this.email !== '' &&
+        this.birth_date !== '' &&
+        this.gender !== '' &&
+        this.password !== '' &&
+        this.confirm_password !== '' &&
+        this.isTermsConditionAccepted === true
     }
   },
   methods: {
@@ -155,6 +175,7 @@ export default {
         userDetails: {
           first_name: this.first_name,
           last_name: this.last_name,
+          user_role: 'parent',
           birth_date: this.birth_date,
           email: this.email,
           gender: this.gender,
@@ -186,3 +207,9 @@ export default {
   }
 }
 </script>
+
+<style>
+  .flatpickr-input[type="hidden"] + input {
+    color: #c2c6dc;
+  }
+</style>

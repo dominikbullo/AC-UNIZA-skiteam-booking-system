@@ -1858,7 +1858,7 @@ router.beforeEach((to, from, next) => {
 
   if (authRequired && !loggedIn) {
     return next({
-      path: '/pages/comingsoon',
+      path: '/login',
       query: { returnUrl: to.path }
     })
   }

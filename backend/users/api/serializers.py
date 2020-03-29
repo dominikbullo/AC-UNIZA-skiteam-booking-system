@@ -4,8 +4,10 @@ from django.contrib.auth import get_user_model
 
 from rest_auth.models import TokenModel
 from rest_auth.registration.serializers import RegisterSerializer
-from rest_framework import serializers
+from rest_framework import serializers, status
+from rest_framework.response import Response
 
+from core.choices import UserTypeChoices
 from family.models import Family, FamilyMember, Child
 from users.models import Profile
 
@@ -18,6 +20,7 @@ class BaseProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ("first_name", "last_name", "username")
+        read_only_fields = 'family_id', "user_role"
 
 
 class DetailProfileSerializer(BaseProfileSerializer):
@@ -37,20 +40,22 @@ class DetailProfileSerializer(BaseProfileSerializer):
             print(e)
             print("User does not have family!")
             pass
-        return 0
+        return Response(data=self.data, status=status.HTTP_404_NOT_FOUND)
 
     class Meta:
         model = Profile
         # RELEASE: exclude id of profile
         # exclude = ('id', "user")
         exclude = ('id', "user",)
-        read_only_fields = 'family_id',
+        read_only_fields = 'family_id', "user_role"
 
 
 class RegisterProfileSerializer(serializers.ModelSerializer):
+    user_role = serializers.ChoiceField(choices=UserTypeChoices.choices, required=True)
+
     class Meta:
         model = Profile
-        fields = ("birth_date", "gender",)
+        fields = ("birth_date", "gender", "user_role")
 
 
 class ProfileAvatarSerializer(serializers.ModelSerializer):
@@ -80,9 +85,9 @@ class UserDisplaySerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = (
-            'id', 'email', "username", 'first_name', "last_name", "verified_email", "user_role", "profile")
+            'id', 'email', "username", 'first_name', "last_name", "verified_email", "profile")
         # exclude = ("password", "last_login", "is_superuser", "is_staff", "is_active",)
-        read_only_fields = 'id', 'verified_email', "user_role", "email",
+        read_only_fields = 'id', 'verified_email', "email",
 
 
 class CustomRegisterSerializer(RegisterSerializer):
