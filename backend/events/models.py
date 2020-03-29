@@ -5,7 +5,7 @@ from polymorphic.showfields import ShowFieldType
 
 from core.choices import CategoryNameChoices, EventTypeChoices, SkiTypeChoices
 from family.models import Child
-from users.models import User, Profile
+from users.models import Profile
 
 
 class Season(models.Model):
@@ -141,4 +141,3 @@ class SkiRace(SkiEvent):
 #     hotel_price = models.CharField(max_length=50, blank=True, null=True)
 #     book_hotel_from = models.DateTimeField(blank=True, null=True)
 #     book_hotel_to = models.DateTimeField(blank=True, null=True)
-

@@ -1,6 +1,7 @@
 from allauth.account.utils import setup_user_email, send_email_confirmation
 from django.contrib.auth import get_user_model
-from rest_framework import serializers
+from rest_framework import serializers, status
+from rest_framework.response import Response
 
 from family.models import Child, FamilyMember, Family
 
@@ -42,6 +43,7 @@ class ChildSerializer(serializers.ModelSerializer):
     family = serializers.HyperlinkedRelatedField(read_only=True, view_name="family:family-detail")
 
     def create(self, validated_data):
+        # TODO validated data ?
         profile_data = validated_data["user"].pop('profile')
         password = validated_data["user"].pop('password1')
         validated_data["user"].pop('password2')
@@ -50,27 +52,17 @@ class ChildSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
 
-        if validated_data["user"].get("email", None):
+        Profile.objects.get_or_create(user=user, **profile_data)
+        user.profile.save()
 
-            # TODO add email adress
-            setup_user_email(self.context['request'], user, [])
-            send_email_confirmation(self.context['request'], user, signup=False)
-            # user.add_email_address(self.context['request'], validated_data["user"]["email"])
-
-            # TODO singals
-            Profile.objects.get_or_create(user=user, **profile_data)
-            user.profile.save()
-
-            # TODO Here i can add user/owner/family
-            # RELEASE: Delete
-        try:
-            print("Parent is:", validated_data["parent"])
-        except:
-            print("youre fucked")
+        # if validated_data["user"].get("email", None):
+        #     # TODO add email adress
+        #     setup_user_email(self.context['request'], user, [])
+        #     send_email_confirmation(self.context['request'], user, signup=False)
+        #     # user.add_email_address(self.context['request'], validated_data["user"]["email"])
 
         if not validated_data.get("parent", None):
-            # TODO doesn't pass parent
-            return None
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
         parent = FamilyMember.objects.get(user=validated_data.get("parent"))
 

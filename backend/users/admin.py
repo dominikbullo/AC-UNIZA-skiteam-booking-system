@@ -23,6 +23,7 @@ class FamilyMemberInLine(admin.StackedInline):
     fk_name = 'user'
 
 
+@admin.register(User)
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
@@ -45,6 +46,9 @@ class CustomUserAdmin(UserAdmin):
     )
 
 
-admin.site.register(User, CustomUserAdmin)
-admin.site.register(Profile)
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    filter_horizontal = ('events',)
+
+
 admin.site.register(Permission)

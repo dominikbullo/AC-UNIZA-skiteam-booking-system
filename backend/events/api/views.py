@@ -8,7 +8,6 @@ from events.models import Event, Season
 from events.api.serializers import EventPolymorphicSerializer, SeasonSerializer
 from events.api.permissions import IsOwnerOrReadOnly, IsOwnFamilyOrReadOnly
 
-
 # RES: https://github.com/LondonAppDeveloper/recipe-app-api/blob/master/app/recipe/views.py
 # RES: https://stackoverflow.com/questions/51016896/how-to-serialize-inherited-models-in-django-rest-framework
 from users.models import Profile
@@ -37,14 +36,21 @@ class AddChildToEventAPIView(APIView):
     def get_user_profile(self, username):
         return get_object_or_404(Profile, user__username=username)
 
-    def get(self, request, event_id):
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
     def post(self, request, event_id):
         event = self.get_event(event_id)
         event_serializer = EventPolymorphicSerializer(event)
-        user = self.get_user_profile(request.data.get("username", None))
-        event.participants.add(user)
+
+        users = request.data.get("users", None)
+        if not users:
+            Response(status=status.HTTP_400_BAD_REQUEST)
+
+        for user in users:
+            print(user)
+            try:
+                event.participants.add(self.get_user_profile(user.get("username", None)))
+            except Http404:
+                print("User not found")
+                pass
         return Response(event_serializer.data, status=status.HTTP_200_OK)
 
 
