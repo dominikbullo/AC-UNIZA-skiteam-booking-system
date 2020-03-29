@@ -20,13 +20,14 @@ from users.models import Profile
 #             counter += 1
 #         instance.username = username
 
-
+# # TODO for profile data fill profile
 # @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 # def create_profile(sender, instance, created, **kwargs):
 #     if created:
-#         print("Creating profile: ", created)
-#         Profile.objects.get_or_create(user=instance)
+#         print("Creating profile: ", created, "details: ", sender, instance)
+#         Profile.objects.create(user=instance)
 #         instance.save()
+
 
 # making olny one season current
 @receiver(post_save, sender=Season)

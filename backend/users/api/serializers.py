@@ -1,29 +1,61 @@
-import datetime
-
 from allauth.account.models import EmailAddress
-from allauth.account.utils import setup_user_email
 
 from django.contrib.auth import get_user_model
 
 from rest_auth.models import TokenModel
 from rest_auth.registration.serializers import RegisterSerializer
-from rest_framework import serializers
+from rest_framework import serializers, status
+from rest_framework.response import Response
 
+from core.choices import UserTypeChoices
 from family.models import Family, FamilyMember, Child
 from users.models import Profile
 
 
-class ProfileSerializer(serializers.ModelSerializer):
+class BaseProfileSerializer(serializers.ModelSerializer):
     first_name = serializers.DateTimeField(source='user.first_name', read_only=True)
     last_name = serializers.DateTimeField(source='user.last_name', read_only=True)
+    username = serializers.DateTimeField(source='user.username', read_only=True)
+
+    class Meta:
+        model = Profile
+        fields = ("first_name", "last_name", "username")
+        read_only_fields = 'family_id', "user_role"
+
+
+class DetailProfileSerializer(BaseProfileSerializer):
+    email = serializers.DateTimeField(source='user.email', read_only=True)
     avatar = serializers.ImageField(read_only=True)
-    gender = serializers.CharField(source='get_gender_display')
+
+    family_id = serializers.SerializerMethodField()
+
+    # RES: https://stackoverflow.com/questions/48073471/django-rest-framework-get-data-based-on-current-userid-token
+    def get_family_id(self, instance):
+        # TODO: Try catch
+        try:
+            member = FamilyMember.objects.get(user=instance.user)
+            family_id = member.family_id
+            return family_id
+        except Exception as e:
+            print(e)
+            print("User does not have family!")
+            pass
+        return Response(data=self.data, status=status.HTTP_404_NOT_FOUND)
 
     class Meta:
         model = Profile
         # RELEASE: exclude id of profile
         # exclude = ('id', "user")
-        exclude = ('id', "user")
+        exclude = ('id', "user",)
+        read_only_fields = 'family_id', "user_role"
+
+
+class RegisterProfileSerializer(serializers.ModelSerializer):
+    user_role = serializers.ChoiceField(choices=UserTypeChoices.choices, required=True)
+
+    class Meta:
+        model = Profile
+        fields = ("birth_date", "gender", "user_role")
 
 
 class ProfileAvatarSerializer(serializers.ModelSerializer):
@@ -35,23 +67,9 @@ class ProfileAvatarSerializer(serializers.ModelSerializer):
 class UserDisplaySerializer(serializers.ModelSerializer):
     """Serializer for the users object"""
     verified_email = serializers.SerializerMethodField()
-    family_id = serializers.SerializerMethodField()
 
     # https://stackoverflow.com/questions/41394761/the-create-method-does-not-support-writable-nested-fields-by-default
-    profile = ProfileSerializer()
-
-    # RES: https://stackoverflow.com/questions/48073471/django-rest-framework-get-data-based-on-current-userid-token
-    def get_family_id(self, instance):
-        # TODO: Try catch
-        try:
-            member = FamilyMember.objects.get(user=instance)
-            family_id = member.family_id
-            return family_id
-        except Exception as e:
-            print(e)
-            print("User does not have family!")
-            pass
-        return 0
+    profile = DetailProfileSerializer(read_only=True)
 
     def get_verified_email(self, obj):
         try:
@@ -67,9 +85,9 @@ class UserDisplaySerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = (
-            'id', 'family_id', 'email', "username", 'first_name', "last_name", "verified_email", "user_role", "profile")
+            'id', 'email', "username", 'first_name', "last_name", "verified_email", "profile")
         # exclude = ("password", "last_login", "is_superuser", "is_staff", "is_active",)
-        read_only_fields = 'id', 'family_id', 'verified_email', "user_role", "email",
+        read_only_fields = 'id', 'verified_email', "email",
 
 
 class CustomRegisterSerializer(RegisterSerializer):
@@ -77,7 +95,8 @@ class CustomRegisterSerializer(RegisterSerializer):
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
 
-    profile = ProfileSerializer(required=True)
+    # Fixed KeyError events with custom serializer without this field
+    profile = RegisterProfileSerializer(required=True)
 
     # FIXME get cleaned data -> normalize_email(email)
     def get_cleaned_data(self):
@@ -90,15 +109,10 @@ class CustomRegisterSerializer(RegisterSerializer):
         return {**default, **mine}
 
     def custom_signup(self, request, user):
-        # TODO: ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-        #       Don't create user on request only after mail verifications
+        # FIXME KeyError at /api/rest-auth/register/
+        # 'events'
 
         profile_data = request.data.pop('profile')
-        # profile_data["birth_date"] = datetime.datetime.strptime(
-        #     profile_data["birth_date"], '%d.%m.%Y').date().strftime('%Y-%m-%d')
-
-        profile_data["birth_date"] = datetime.datetime.strptime(profile_data["birth_date"], '%d.%m.%Y').date()
-
         Profile.objects.get_or_create(user=user, **profile_data)
         user.profile.save()
 

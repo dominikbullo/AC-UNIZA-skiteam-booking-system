@@ -1,10 +1,9 @@
 from rest_framework import serializers
 
-from events.models import Event, SkiTraining, SkiRace, Season, Category
+from events.models import Event, SkiTraining, SkiRace, Season
 from rest_polymorphic.serializers import PolymorphicSerializer
 
-from family.api.serializers import ChildProfileSerializer
-from family.models import Child
+from users.api.serializers import BaseProfileSerializer
 
 
 class SeasonSerializer(serializers.ModelSerializer):
@@ -22,13 +21,10 @@ class BaseEventSerializer(serializers.ModelSerializer):
     title = serializers.CharField(source='type', read_only=True)
 
     # TODO FIXME: update via rest
-    participants = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='users:user-detail')
+    # participants = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='users:user-detail')
 
     # RES: http://www.tomchristie.com/rest-framework-2-docs/api-guide/relations
-    # participants = serializers.PrimaryKeyRelatedField(
-    #     many=True,
-    #     queryset=Child.objects.all()
-    # )
+    participants = BaseProfileSerializer(many=True)
 
     #  RES(update): https://riptutorial.com/django-rest-framework/example/25521/updatable-nested-serializers
     #  RES(delete): https://stackoverflow.com/questions/42159480/delete-member-of-many-to-many-relationship-django-rest-framework

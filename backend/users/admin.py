@@ -27,24 +27,28 @@ class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = User
-    list_display = UserAdmin.list_display + ("get_identity", "user_role")
+    list_display = UserAdmin.list_display + ("get_user_role",)
 
     inlines = [ProfileInline, FamilyMemberInLine]
 
-    def get_identity(self, instance):
+    def get_user_role(self, instance):
         try:
-            return instance.email_or_username
+            return instance.profile.user_role
         except Exception:
             return "Unidentified"
 
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields' : ("username", "email", "first_name", "last_name", "user_role", "password1", "password2",),
+            'fields' : ("username", "email", "first_name", "last_name", "password1", "password2",),
         }),
     )
 
 
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    filter_horizontal = ('events',)
+
+
 admin.site.register(User, CustomUserAdmin)
-admin.site.register(Profile)
 admin.site.register(Permission)

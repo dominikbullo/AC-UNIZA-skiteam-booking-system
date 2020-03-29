@@ -22,7 +22,7 @@ export default {
       //  TODO if error ? then login again probbably
     }, function (error) {
       // const { config, response: { status } } = error
-      const {config, response} = error
+      const { config, response } = error
       const originalRequest = config
 
       // if (status === 401) {
@@ -55,14 +55,16 @@ export default {
       password: pwd
     })
   },
-  registerUserEmail (first_name, last_name, birth_date, email, gender, pwd) {
+  registerUserEmail (first_name, last_name, user_role, birth_date, email, gender, password) {
+    console.log()
     return axios.post('/rest-auth/register/', {
       email,
       first_name,
       last_name,
-      password1: pwd,
-      password2: pwd,
+      password1: password,
+      password2: password,
       profile: {
+        user_role,
         birth_date,
         gender
       }

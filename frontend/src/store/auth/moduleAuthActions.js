@@ -108,6 +108,7 @@ export default {
     const {
       first_name,
       last_name,
+      user_role,
       birth_date,
       email,
       gender,
@@ -115,6 +116,7 @@ export default {
       confirmPassword
     } = payload.userDetails
 
+    console.log('payload', payload.userDetails)
 
     return new Promise((resolve, reject) => {
       // Check confirm password
@@ -122,24 +124,18 @@ export default {
         reject({ message: 'Password doesn\'t match. Please try again.' })
       }
 
-      drf.registerUserEmail(
-        first_name,
-        last_name,
-        birth_date,
-        email,
-        gender,
-        password
-      ).then(response => {
-        // TODO response.token
-        localStorage.setItem('accessToken', response.data.key)
+      drf.registerUserEmail(first_name, last_name, user_role, birth_date, email, gender, password)
+        .then(response => {
+          // TODO response.token
+          localStorage.setItem('accessToken', response.data.key)
 
-        commit('UPDATE_USER_INFO', response.data.user, { root: true })
+          commit('UPDATE_USER_INFO', response.data.user, { root: true })
 
-        // Redirect User
-        router.push(router.currentRoute.query.to || '/')
+          // Redirect User
+          router.push(router.currentRoute.query.to || '/')
 
-        resolve(response)
-      }).catch(error => {
+          resolve(response)
+        }).catch(error => {
         // TODO send error messages
         // How to display serializers validation error in vue
         // https://github.com/axios/axios/issues/960

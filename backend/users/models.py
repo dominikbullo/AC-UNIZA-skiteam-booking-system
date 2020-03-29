@@ -16,8 +16,6 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=50, null=False, blank=False)
     last_name = models.CharField(max_length=150, null=False, blank=False)
 
-    user_role = models.CharField(max_length=6, choices=UserTypeChoices.choices)
-
     def __str__(self):
         return self.display_name
 
@@ -50,6 +48,8 @@ class User(AbstractUser):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user_role = models.CharField(max_length=6, choices=UserTypeChoices.choices, default=UserTypeChoices.PUBLIC)
+
     phone_number = models.CharField(max_length=30, blank=True)
     location = models.CharField(max_length=30, blank=True)
     birth_date = models.DateField()

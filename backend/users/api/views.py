@@ -12,7 +12,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 
 from users.api.permissions import IsOwnProfileOrReadOnly
-from users.api.serializers import ProfileAvatarSerializer, ProfileSerializer, UserDisplaySerializer
+from users.api.serializers import ProfileAvatarSerializer, DetailProfileSerializer, UserDisplaySerializer
 
 from users.models import Profile
 
@@ -32,7 +32,7 @@ class ProfileViewSet(mixins.UpdateModelMixin,
                      viewsets.GenericViewSet):
     """ Will be used when all users can see each other """
     queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
+    serializer_class = DetailProfileSerializer
     permission_classes = [IsAuthenticated, IsOwnProfileOrReadOnly]
     filter_backends = [SearchFilter]
     search_fields = ["user"]
