@@ -14,14 +14,10 @@ class SeasonSerializer(serializers.ModelSerializer):
 
 # RES: https://github.com/richardtallent/vue-simple-calendar#calendar-item-properties
 # RES(Nested relationships): https://medium.com/@raaj.akshar/creating-reverse-related-objects-with-django-rest-framework-b1952ddff1c
-
 class BaseEventSerializer(serializers.ModelSerializer):
     start = serializers.DateTimeField(source='start_date', read_only=True)
     end = serializers.DateTimeField(source='end_date', read_only=True)
     title = serializers.CharField(source='type', read_only=True)
-
-    # TODO FIXME: update via rest
-    # participants = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='users:user-detail')
 
     # RES: http://www.tomchristie.com/rest-framework-2-docs/api-guide/relations
     participants = BaseProfileSerializer(many=True)
@@ -62,16 +58,6 @@ class SkiRaceSerializer(BaseEventSerializer):
 
 # RES: https://pypi.org/project/django-rest-polymorphic/
 class EventPolymorphicSerializer(PolymorphicSerializer):
-    # def create(self, validated_data):
-    #     resource_type = validated_data.pop(self.resource_type_field_name)
-    #     serializer = self._get_serializer_from_resource_type(resource_type)
-    #     return serializer.create(validated_data)
-    #
-    # def update(self, instance, validated_data):
-    #     resource_type = validated_data.pop(self.resource_type_field_name)
-    #     serializer = self._get_serializer_from_resource_type(resource_type)
-    #     return serializer.update(instance, validated_data)
-
     model_serializer_mapping = {
         Event      : EventSerializer,
         SkiTraining: SkiTrainingSerializer,

@@ -19,11 +19,11 @@
         <!-- SM - OPEN SIDEBAR BUTTON -->
         <feather-icon class="sm:inline-flex xl:hidden cursor-pointer p-2" icon="MenuIcon" @click.stop="showSidebar"/>
 
-        <div class="demo-alignment mb-base">
-          <vs-radio v-model="userRole" vs-value="admin">admin</vs-radio>
-          <vs-radio v-model="userRole" vs-value="editor">editor</vs-radio>
-          <!--Đ-->
-        </div>
+        <!--        <div class="demo-alignment mb-base">-->
+        <!--          <vs-radio v-model="userRole" vs-value="admin">admin</vs-radio>-->
+        <!--          <vs-radio v-model="userRole" vs-value="editor">editor</vs-radio>-->
+        <!--          &lt;!&ndash;Đ&ndash;&gt;-->
+        <!--        </div>-->
 
         <vs-spacer/>
 
@@ -31,7 +31,7 @@
 
         <search-bar/>
 
-        <notification-drop-down/>
+        <!--        <notification-drop-down/>-->
 
         <profile-drop-down/>
 
@@ -85,7 +85,7 @@ export default {
       return this.$store.state.verticalNavMenuWidth
     },
     textColor () {
-      return {'text-white': (this.navbarColor !== '#10163a' && this.$store.state.theme === 'dark') || (this.navbarColor !== '#fff' && this.$store.state.theme !== 'dark')}
+      return { 'text-white': (this.navbarColor !== '#10163a' && this.$store.state.theme === 'dark') || (this.navbarColor !== '#fff' && this.$store.state.theme !== 'dark') }
     },
     windowWidth () {
       return this.$store.state.windowWidth
@@ -93,9 +93,11 @@ export default {
 
     // NAVBAR STYLE
     classObj () {
-      if (this.verticalNavMenuWidth === 'default') return 'navbar-default'
-      else if (this.verticalNavMenuWidth === 'reduced') return 'navbar-reduced'
-      else if (this.verticalNavMenuWidth) return 'navbar-full'
+      if (this.verticalNavMenuWidth === 'default') {
+        return 'navbar-default'
+      } else if (this.verticalNavMenuWidth === 'reduced') {
+        return 'navbar-reduced'
+      } else if (this.verticalNavMenuWidth) return 'navbar-full'
     }
   },
   methods: {

@@ -205,7 +205,7 @@ const router = new Router({
         {
           path: '/apps/family/view/:familyID',
           name: 'app-family-view',
-          component: () => import('@/views/apps/user/UserView.vue'),
+          component: () => import('@/views/apps/family/FamilyView.vue'),
           meta: {
             breadcrumb: [
               {
@@ -223,22 +223,22 @@ const router = new Router({
           }
         },
         {
-          path: '/apps/family/edit/:userId',
+          path: '/apps/family/edit/:familyID',
           name: 'app-family-edit',
-          component: () => import('@/views/apps/user/user-edit/UserEdit.vue'),
+          component: () => import('@/views/apps/family/family-edit/FamilyEdit.vue'),
           meta: {
             breadcrumb: [
               {
                 title: 'Home',
                 url: '/'
               },
-              { title: 'User' },
+              { title: 'Family' },
               {
                 title: 'Edit',
                 active: true
               }
             ],
-            pageTitle: 'User Edit',
+            pageTitle: 'Family Edit',
             rule: 'admin'
           }
         },
@@ -1235,22 +1235,22 @@ const router = new Router({
           }
         },
         {
-          path: '/pages/family-settings',
-          name: 'page-family-settings',
-          component: () => import('@/views/pages/family-settings/FamilySettings.vue'),
+          path: '/apps/event/list',
+          name: 'app-event-list',
+          component: () => import('@/views/apps/event/EventList.vue'),
           meta: {
             breadcrumb: [
               {
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Pages' },
+              { title: 'Event' },
               {
-                title: 'Family',
+                title: 'List',
                 active: true
               }
             ],
-            pageTitle: 'Settings',
+            pageTitle: 'Event List',
             rule: 'editor'
           }
         },
@@ -1271,26 +1271,6 @@ const router = new Router({
               }
             ],
             pageTitle: 'FAQ',
-            rule: 'editor'
-          }
-        },
-        {
-          path: '/pages/invoice',
-          name: 'page-invoice',
-          component: () => import('@/views/pages/Invoice.vue'),
-          meta: {
-            breadcrumb: [
-              {
-                title: 'Home',
-                url: '/'
-              },
-              { title: 'Pages' },
-              {
-                title: 'Invoice',
-                active: true
-              }
-            ],
-            pageTitle: 'Invoice',
             rule: 'editor'
           }
         },

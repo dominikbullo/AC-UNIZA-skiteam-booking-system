@@ -1,125 +1,90 @@
-<!--&lt;!&ndash; =========================================================================================-->
-<!--    File Name: DashboardEcommerce.vue-->
-<!--    Description: Dashboard - Ecommerce-->
-<!--    &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
-<!--    Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template-->
-<!--      Author: Pixinvent-->
-<!--    Author URL: http://www.themeforest.net/user/pixinvent-->
-<!--========================================================================================== &ndash;&gt;-->
-<!--<template>-->
-<!--  <div id="dashboard">-->
-<!--    <h1>That's the dashboard!</h1>-->
-<!--    <p>You should only get here if you're authenticated!</p>-->
-<!--    <p>Your email address: {{ email }}</p>-->
-<!--  </div>-->
-<!--</template>-->
-
-<!--<script>-->
-<!--export default {-->
-<!--  data () {-->
-<!--    return {-->
-<!--      email: ''-->
-<!--    }-->
-<!--  },-->
-<!--  created () {-->
-<!--    this.$http.get('/user/full-info/')-->
-<!--      .then(res => {-->
-<!--        this.email = res.data.email-->
-<!--      })-->
-<!--      .catch(error => console.log(error))-->
-<!--  }-->
-<!--}-->
-<!--</script>-->
-
-<!--<style scoped>-->
-<!--  h1, p {-->
-<!--    text-align: center;-->
-<!--  }-->
-
-<!--  p {-->
-<!--    color: red;-->
-<!--  }-->
-<!--</style>-->
-
 <template>
   <div>
+    <!-- ROW 1-->
     <div class="vx-row">
-      <div class="vx-col w-full sm:w-1/2 md:w-1/2 lg:w-1/4 xl:w-1/4 mb-base">
+      <div class="vx-col w-1/2 md:w-1/3 xl:w-1/6">
         <statistics-card-line
-          v-if="subscribersGained.analyticsData"
-          icon="UsersIcon"
-          :statistic="subscribersGained.analyticsData.subscribers | k_formatter"
-          statisticTitle="Subscribers Gained"
-          :chartData="subscribersGained.series"
-          type="area"/>
+          class="mb-base"
+          hideChart
+          icon="EyeIcon"
+          statistic="36.9k"
+          statisticTitle="Snow trainings"/>
       </div>
 
-      <div class="vx-col w-full sm:w-1/2 md:w-1/2 lg:w-1/4 xl:w-1/4 mb-base">
+      <div class="vx-col w-1/2 md:w-1/3 xl:w-1/6">
         <statistics-card-line
-          v-if="revenueGenerated.analyticsData"
-          icon="DollarSignIcon"
-          :statistic="revenueGenerated.analyticsData.revenue | k_formatter"
-          statisticTitle="Revenue Generated"
-          :chartData="revenueGenerated.series"
+          class="mb-base"
           color="success"
-          type="area"/>
+          hideChart
+          icon="MessageSquareIcon"
+          statistic="12k"
+          statisticTitle="Trainings"/>
       </div>
 
-      <div class="vx-col w-full sm:w-1/2 md:w-1/2 lg:w-1/4 xl:w-1/4 mb-base">
+      <div class="vx-col w-1/2 md:w-1/3 xl:w-1/6">
         <statistics-card-line
-          v-if="quarterlySales.analyticsData"
-          icon="ShoppingCartIcon"
-          :statistic="quarterlySales.analyticsData.sales"
-          statisticTitle="Quarterly Sales"
-          :chartData="quarterlySales.series"
-          color="danger"
-          type="area"/>
-      </div>
-      <div class="vx-col w-full sm:w-1/2 md:w-1/2 lg:w-1/4 xl:w-1/4 mb-base">
-        <statistics-card-line
-          v-if="ordersRecevied.analyticsData"
-          icon="ShoppingBagIcon"
-          :statistic="ordersRecevied.analyticsData.orders | k_formatter"
-          statisticTitle="Orders Received"
-          :chartData="ordersRecevied.series"
+          class="mb-base"
           color="warning"
-          type="area"/>
+          hideChart
+          icon="ShoppingBagIcon"
+          statistic="978"
+          statisticTitle="U8/U10 races"/>
+      </div>
+
+      <div class="vx-col w-1/2 md:w-1/3 xl:w-1/6">
+        <statistics-card-line
+          class="mb-base"
+          color="danger"
+          hideChart
+          icon="HeartIcon"
+          statistic="26.8k"
+          statisticTitle="U12/U14 races"/>
+      </div>
+
+      <div class="vx-col w-1/2 md:w-1/3 xl:w-1/6">
+        <statistics-card-line
+          class="mb-base"
+          color="success"
+          hideChart
+          icon="SmileIcon"
+          statistic="689"
+          statisticTitle="public races"/>
+      </div>
+
+      <div class="vx-col w-1/2 md:w-1/3 xl:w-1/6">
+        <statistics-card-line
+          class="mb-base"
+          color="warning"
+          hideChart
+          icon="TruckIcon"
+          statistic="2"
+          statisticTitle="Total members"/>
       </div>
     </div>
 
     <div class="vx-row">
+      <div class="vx-col w-full mb-base">
+        <vx-card title="Single/Multiple Selection" code-toggler no-shadow card-border>
 
-      <!-- LINE CHART -->
-      <div class="vx-col w-full md:w-2/3 mb-base">
-        <vx-card title="Revenue">
-          <template slot="actions">
-            <feather-icon icon="SettingsIcon" svgClasses="w-6 h-6 text-grey"></feather-icon>
-          </template>
-          <div slot="no-body" class="p-6 pb-0">
-            <div class="flex" v-if="revenueComparisonLine.analyticsData">
-              <div class="mr-6">
-                <p class="mb-1 font-semibold">This Month</p>
-                <p class="text-3xl text-success"><sup class="text-base mr-1">$</sup>{{
-                  revenueComparisonLine.analyticsData.thisMonth.toLocaleString() }}</p>
-              </div>
-              <div>
-                <p class="mb-1 font-semibold">Last Month</p>
-                <p class="text-3xl"><sup class="text-base mr-1">$</sup>{{
-                  revenueComparisonLine.analyticsData.lastMonth.toLocaleString() }}</p>
-              </div>
-            </div>
-            <vue-apex-charts
-              type="line"
-              height="266"
-              :options="analyticsData.revenueComparisonLine.chartOptions"
-              :series="revenueComparisonLine.series"/>
+          <div>
+
+            <p class="mb-3">By default, vue-select supports choosing a single value. If you need multiple values, use
+              the
+              multiple prop</p>
+
+            <v-select multiple :closeOnSelect="false" v-model="selected" :options="options"
+                      :dir="$vs.rtl ? 'rtl' : 'ltr'"/>
+            <br>
+
           </div>
         </vx-card>
       </div>
+    </div>
 
+    <div class="vx-row">
       <!-- RADIAL CHART -->
-      <div class="vx-col w-full md:w-1/3 mb-base">
-        <vx-card title="Goal Overview">
+      <div class="vx-col w-full sm:w-1/2 md:w-1/3 mb-base">
+        <vx-card title="Trainings Overview">
           <template slot="actions">
             <feather-icon icon="HelpCircleIcon" svgClasses="w-6 h-6 text-grey"></feather-icon>
           </template>
@@ -127,165 +92,206 @@
           <!-- CHART -->
           <template slot="no-body">
             <div class="mt-10">
-              <vue-apex-charts type="radialBar" height="240" :options="analyticsData.goalOverviewRadialBar.chartOptions"
-                               :series="goalOverview.series"/>
+              <vue-apex-charts
+                :options="analyticsData.goalOverviewRadialBar.chartOptions"
+                :series="goalOverview.series"
+                height="240"
+                type="radialBar"/>
             </div>
           </template>
 
           <!-- DATA -->
-          <div class="flex justify-between text-center mt-6" slot="no-body-bottom">
+          <div
+            class="flex justify-between text-center mt-4"
+            slot="no-body-bottom"
+            v-if="goalOverview.analyticsData">
             <div class="w-1/2 border border-solid d-theme-border-grey-light border-r-0 border-b-0 border-l-0">
               <p class="mt-4">Completed</p>
-              <p class="mb-4 text-3xl font-semibold">786,617</p>
+              <p class="mb-4 text-3xl font-semibold">{{ goalOverview.analyticsData.completed.toLocaleString() }}</p>
             </div>
             <div class="w-1/2 border border-solid d-theme-border-grey-light border-r-0 border-b-0">
-              <p class="mt-4">In Progress</p>
-              <p class="mb-4 text-3xl font-semibold">13,561</p>
+              <p class="mt-4">Total</p>
+              <p class="mb-4 text-3xl font-semibold">{{ goalOverview.analyticsData.inProgress.toLocaleString() }}</p>
+            </div>
+          </div>
+          <div
+            class="flex justify-between text-center mt-4"
+            slot="no-body-bottom"
+            v-if="goalOverview.analyticsData">
+            <div class="w-1/2 border border-solid d-theme-border-grey-light border-r-0 border-b-0 border-l-0">
+              <p class="mt-4">Snow</p>
+              <p class="mb-4 text-3xl font-semibold">{{ goalOverview.analyticsData.completed.toLocaleString() }}</p>
+            </div>
+            <div class="w-1/2 border border-solid d-theme-border-grey-light border-r-0 border-b-0">
+              <p class="mt-4">Total</p>
+              <p class="mb-4 text-3xl font-semibold">{{ goalOverview.analyticsData.inProgress.toLocaleString() }}</p>
+            </div>
+          </div>
+          <div
+            class="flex justify-between text-center mt-4"
+            slot="no-body-bottom"
+            v-if="goalOverview.analyticsData">
+            <div class="w-1/2 border border-solid d-theme-border-grey-light border-r-0 border-b-0 border-l-0">
+              <p class="mt-4">Other</p>
+              <p class="mb-4 text-3xl font-semibold">{{ goalOverview.analyticsData.completed.toLocaleString() }}</p>
+            </div>
+            <div class="w-1/2 border border-solid d-theme-border-grey-light border-r-0 border-b-0">
+              <p class="mt-4">Total</p>
+              <p class="mb-4 text-3xl font-semibold">{{ goalOverview.analyticsData.inProgress.toLocaleString() }}</p>
             </div>
           </div>
         </vx-card>
       </div>
-    </div>
-
-    <div class="vx-row">
-
-      <div class="vx-col w-full md:w-1/3 lg:w-1/3 xl:w-1/3 mb-base">
-        <vx-card title="Browser Statistics">
-          <div v-for="(browser, index) in browserStatistics" :key="browser.id" :class="{'mt-4': index}">
-            <div class="flex justify-between">
-              <div class="flex flex-col">
-                <span class="mb-1">{{ browser.name }}</span>
-                <h4>{{ browser.ratio }}%</h4>
-              </div>
-              <div class="flex flex-col text-right">
-                                <span class="flex -mr-1">
-                                    <span class="mr-1">{{ browser.comparedResult }}</span>
-                                    <feather-icon :icon=" browser.comparedResult < 0 ? 'ArrowDownIcon' : 'ArrowUpIcon'"
-                                                  :svgClasses="[browser.comparedResult < 0 ? 'text-danger' : 'text-success'  ,'stroke-current h-4 w-4 mb-1 mr-1']"></feather-icon>
-                                </span>
-                <span class="text-grey">{{ browser.time | time(true) }}</span>
-              </div>
-            </div>
-            <vs-progress :percent="browser.ratio"></vs-progress>
-          </div>
-        </vx-card>
-      </div>
-
-      <div class="vx-col w-full md:w-2/3">
-        <vx-card title="Client Retention">
-          <div class="flex">
-            <span class="flex items-center"><div
-              class="h-3 w-3 rounded-full mr-1 bg-primary"></div><span>New Clients</span></span>
-            <span class="flex items-center ml-4"><div class="h-3 w-3 rounded-full mr-1 bg-danger"></div><span>Retained Clients</span></span>
-          </div>
-          <vue-apex-charts type="bar" height="277" :options="analyticsData.clientRetentionBar.chartOptions"
-                           :series="clientRetentionBar.series"/>
-        </vx-card>
-      </div>
-    </div>
-
-    <div class="vx-row">
-      <!-- Sessions By Device -->
-      <div class="vx-col w-full lg:w-1/3 lg:mt-0 mt-base">
-        <vx-card title="Sessions By Device">
-          <!-- SLOT = ACTIONS -->
+      <!-- RADIAL CHART -->
+      <div class="vx-col w-full sm:w-1/2 md:w-1/3 mb-base">
+        <vx-card title="Race Overview">
           <template slot="actions">
-            <change-time-duration-dropdown/>
+            <feather-icon icon="HelpCircleIcon" svgClasses="w-6 h-6 text-grey"></feather-icon>
           </template>
 
-          <div slot="no-body">
-            <vue-apex-charts class="mt-6 mb-8" type="donut" height="325"
-                             :options="analyticsData.sessionsByDeviceDonut.chartOptions" :series="sessionsData.series"/>
-          </div>
+          <!-- CHART -->
+          <template slot="no-body">
+            <div class="mt-10">
+              <vue-apex-charts
+                :options="analyticsData.goalOverviewRadialBar.chartOptions"
+                :series="goalOverview.series"
+                height="240"
+                type="radialBar"/>
+            </div>
+          </template>
 
-          <ul class="mt-6">
-            <li v-for="deviceData in sessionsData.analyticsData" :key="deviceData.device" class="flex mb-3">
-              <feather-icon :icon="deviceData.icon"
-                            :svgClasses="[`h-5 w-5 stroke-current text-${deviceData.color}`]"></feather-icon>
-              <span class="ml-2 inline-block font-semibold">{{ deviceData.device }}</span>
-              <span class="mx-2">-</span>
-              <span class="mr-4">{{ deviceData.sessionsPercentage }}%</span>
-              <div class="ml-auto flex -mr-1">
-                <span class="mr-1">{{ deviceData.comparedResultPercentage }}%</span>
-                <feather-icon :icon=" deviceData.comparedResultPercentage < 0 ? 'ArrowDownIcon' : 'ArrowUpIcon'"
-                              :svgClasses="[deviceData.comparedResultPercentage < 0 ? 'text-danger' : 'text-success'  ,'stroke-current h-4 w-4 mb-1 mr-1']"></feather-icon>
-              </div>
-            </li>
-          </ul>
+          <!-- DATA -->
+          <div
+            class="flex justify-between text-center mt-4"
+            slot="no-body-bottom"
+            v-if="goalOverview.analyticsData">
+
+            <div class="w-1/2 border border-solid d-theme-border-grey-light border-r-0 border-b-0 border-l-0">
+              <p class="mt-4">Completed total</p>
+              <p class="mb-4 text-3xl font-semibold">{{ goalOverview.analyticsData.completed.toLocaleString() }}</p>
+            </div>
+            <div class="w-1/2 border border-solid d-theme-border-grey-light border-r-0 border-b-0">
+              <p class="mt-4">Total</p>
+              <p class="mb-4 text-3xl font-semibold">{{ goalOverview.analyticsData.inProgress.toLocaleString() }}</p>
+            </div>
+          </div>
+          <div
+            class="flex justify-between text-center mt-4"
+            slot="no-body-bottom"
+            v-if="goalOverview.analyticsData">
+            <div class="w-1/2 border border-solid d-theme-border-grey-light border-r-0 border-b-0 border-l-0">
+              <p class="mt-4">SLA</p>
+              <p class="mb-4 text-3xl font-semibold">{{ goalOverview.analyticsData.completed.toLocaleString() }}</p>
+            </div>
+            <div class="w-1/2 border border-solid d-theme-border-grey-light border-r-0 border-b-0">
+              <p class="mt-4">Total</p>
+              <p class="mb-4 text-3xl font-semibold">{{ goalOverview.analyticsData.inProgress.toLocaleString() }}</p>
+            </div>
+          </div>
+          <div
+            class="flex justify-between text-center mt-4"
+            slot="no-body-bottom"
+            v-if="goalOverview.analyticsData">
+            <div class="w-1/2 border border-solid d-theme-border-grey-light border-r-0 border-b-0 border-l-0">
+              <p class="mt-4">ZSL</p>
+              <p class="mb-4 text-3xl font-semibold">{{ goalOverview.analyticsData.completed.toLocaleString() }}</p>
+            </div>
+            <div class="w-1/2 border border-solid d-theme-border-grey-light border-r-0 border-b-0">
+              <p class="mt-4">Total</p>
+              <p class="mb-4 text-3xl font-semibold">{{ goalOverview.analyticsData.inProgress.toLocaleString() }}</p>
+            </div>
+          </div>
+          <div
+            class="flex justify-between text-center mt-4"
+            slot="no-body-bottom"
+            v-if="goalOverview.analyticsData">
+            <div class="w-1/2 border border-solid d-theme-border-grey-light border-r-0 border-b-0 border-l-0">
+              <p class="mt-4">Public</p>
+              <p class="mb-4 text-3xl font-semibold">{{ goalOverview.analyticsData.completed.toLocaleString() }}</p>
+            </div>
+            <div class="w-1/2 border border-solid d-theme-border-grey-light border-r-0 border-b-0">
+              <p class="mt-4">Total</p>
+              <p class="mb-4 text-3xl font-semibold">{{ goalOverview.analyticsData.inProgress.toLocaleString() }}</p>
+            </div>
+          </div>
         </vx-card>
       </div>
-      <!-- CARD 8: Activity Timeline -->
-      <div class="vx-col w-full lg:w-1/3 mb-base">
+
+      <div class="vx-col w-full sm:w-1/3 md:w-
+      1/3 mb-base">
         <vx-card title="Activity Timeline">
-          <vx-timeline :data="timelineData"/>
-        </vx-card>
-      </div>
-
-      <!--            &lt;!&ndash; CHAT CARD &ndash;&gt;-->
-      <!--            <div class="vx-col w-full lg:w-1/3 lg:mt-0 mt-base">-->
-      <!--                <vx-card title="Chat" class="overflow-hidden">-->
-      <!--                    <template slot="no-body">-->
-      <!--                        <div class="chat-card-log">-->
-      <!--                            <component :is="scrollbarTag" ref="chatLogPS" class="scroll-area pt-6 px-6" :settings="settings" :key="$vs.rtl">-->
-      <!--                                <ul ref="chatLog">-->
-      <!--                                        <li class="flex items-start" :class="{'flex-row-reverse': msg.isSent, 'mt-4': index}" v-for="(msg, index) in chatLog" :key="index">-->
-      <!--                                            <vs-avatar size="40px" class="m-0 flex-shrink-0" :class="msg.isSent ? 'ml-5' : 'mr-5'" :src="msg.senderImg"></vs-avatar>-->
-      <!--                                            <div class="msg relative bg-white shadow-md py-3 px-4 mb-2 rounded-lg max-w-md" :class="{'chat-sent-msg bg-primary-gradient text-white': msg.isSent, 'border border-solid d-theme-border-grey-light': !msg.isSent}">-->
-      <!--                                                <span>{{ msg.msg }}</span>-->
-      <!--                                            </div>-->
-      <!--                                        </li>-->
-      <!--                                </ul>-->
-      <!--                            </component>-->
-      <!--                        </div>-->
-      <!--                        <div class="flex bg-white chat-input-container p-6">-->
-      <!--                            <vs-input class="mr-3 w-full" v-model="chatMsgInput" @keyup.enter="chatMsgInput = ''" placeholder="Type Your Message" ></vs-input>-->
-      <!--                            <vs-button icon-pack="feather" icon="icon-send" @click="chatMsgInput = ''"></vs-button>-->
-      <!--                        </div>-->
-      <!--                    </template>-->
-      <!--                </vx-card>-->
-      <!--            </div>-->
-
-
-      <!-- CUSTOMERS CHART -->
-      <div class="vx-col w-full lg:w-1/3 lg:mt-0 mt-base">
-        <vx-card title="Customers">
-          <!-- SLOT = ACTIONS -->
-          <template slot="actions">
-            <change-time-duration-dropdown/>
-          </template>
-
-          <div slot="no-body">
-            <!-- CHART -->
-            <vue-apex-charts type="pie" height="345" class="mt-10 mb-10"
-                             :options="analyticsData.customersPie.chartOptions" :series="customersData.series"/>
-
-            <!-- CHART DATA -->
-            <ul class="mb-1">
-              <li v-for="customerData in customersData.analyticsData" :key="customerData.customerType"
-                  class="flex justify-between py-3 px-6 border d-theme-border-grey-light border-solid border-r-0 border-l-0 border-b-0">
-                                <span class="flex items-center">
-                                    <span class="inline-block h-3 w-3 rounded-full mr-2"
-                                          :class="`bg-${customerData.color}`"></span>
-                                    <span class="font-semibold">{{ customerData.customerType }}</span>
-                                </span>
-                <span>{{ customerData.counts }}</span>
-              </li>
-            </ul>
-          </div>
-
+          <vx-timeline :data="timelineData"></vx-timeline>
         </vx-card>
       </div>
     </div>
+
+    <!--    <div class="vx-row">-->
+    <!--      &lt;!&ndash; CARD 9: DISPATCHED ORDERS &ndash;&gt;-->
+    <!--      <div class="vx-col w-full mb-base">-->
+    <!--        <vx-card title="Child list">-->
+    <!--          <div class="mt-4" slot="no-body">-->
+    <!--            <vs-table :data="dispatchedOrders" class="table-dark-inverted">-->
+    <!--              <template slot="thead">-->
+    <!--                <vs-th>ORDER NO.</vs-th>-->
+    <!--                <vs-th>STATUS</vs-th>-->
+    <!--                <vs-th>OPERATORS</vs-th>-->
+    <!--                <vs-th>LOCATION</vs-th>-->
+    <!--                <vs-th>DISTANCE</vs-th>-->
+    <!--                <vs-th>START DATE</vs-th>-->
+    <!--                <vs-th>EST DELIVERY DATE</vs-th>-->
+    <!--              </template>-->
+
+    <!--              <template slot-scope="{data}">-->
+    <!--                <vs-tr :key="indextr" v-for="(tr, indextr) in data">-->
+    <!--                  <vs-td :data="data[indextr].orderNo">-->
+    <!--                    <span>#{{data[indextr].orderNo}}</span>-->
+    <!--                  </vs-td>-->
+    <!--                  <vs-td :data="data[indextr].status">-->
+    <!--                    <span class="flex items-center px-2 py-1 rounded"><div :class="'bg-' + data[indextr].statusColor"-->
+    <!--                                                                           class="h-3 w-3 rounded-full mr-2"></div>{{data[indextr].status}}</span>-->
+    <!--                  </vs-td>-->
+    <!--                  <vs-td :data="data[indextr].orderNo">-->
+    <!--                    <ul class="users-liked user-list">-->
+    <!--                      <li :key="userIndex" v-for="(user, userIndex) in data[indextr].usersLiked">-->
+    <!--                        <vx-tooltip :text="user.name" position="bottom">-->
+    <!--                          <vs-avatar :src="user.img" class="border-2 border-white border-solid -m-1"-->
+    <!--                                     size="30px"></vs-avatar>-->
+    <!--                        </vx-tooltip>-->
+    <!--                      </li>-->
+    <!--                    </ul>-->
+    <!--                  </vs-td>-->
+    <!--                  <vs-td :data="data[indextr].orderNo">-->
+    <!--                    <span>{{data[indextr].location}}</span>-->
+    <!--                  </vs-td>-->
+    <!--                  <vs-td :data="data[indextr].orderNo">-->
+    <!--                    <span>{{data[indextr].distance}}</span>-->
+    <!--                    <vs-progress :color="data[indextr].statusColor" :percent="data[indextr].distPercent"></vs-progress>-->
+    <!--                  </vs-td>-->
+    <!--                  <vs-td :data="data[indextr].orderNo">-->
+    <!--                    <span>{{data[indextr].startDate}}</span>-->
+    <!--                  </vs-td>-->
+    <!--                  <vs-td :data="data[indextr].orderNo">-->
+    <!--                    <span>{{data[indextr].estDelDate}}</span>-->
+    <!--                  </vs-td>-->
+    <!--                </vs-tr>-->
+    <!--              </template>-->
+    <!--            </vs-table>-->
+    <!--          </div>-->
+
+    <!--        </vx-card>-->
+    <!--      </div>-->
+    <!--    </div>-->
+
   </div>
 </template>
 
 <script>
-// import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import VueApexCharts from 'vue-apexcharts'
 import StatisticsCardLine from '@/components/statistics-cards/StatisticsCardLine.vue'
 import analyticsData from '../ui-elements/card/analyticsData.js'
 import ChangeTimeDurationDropdown from '@/components/ChangeTimeDurationDropdown.vue'
 import VxTimeline from '@/components/timeline/VxTimeline'
+import vSelect from 'vue-select'
 
 export default {
   components: {
@@ -293,10 +299,14 @@ export default {
     StatisticsCardLine,
     // VuePerfectScrollbar,
     ChangeTimeDurationDropdown,
-    VxTimeline
+    VxTimeline,
+    'v-select': vSelect
   },
   data () {
     return {
+      selected: ['foo', 'bar'],
+      options: ['foo', 'bar', 'baz'],
+
       subscribersGained: {},
       revenueGenerated: {},
       quarterlySales: {},
@@ -316,9 +326,23 @@ export default {
       analyticsData,
       settings: { // perfectscrollbar settings
         maxScrollbarLength: 60,
-        wheelSpeed: .60
+        wheelSpeed: 0.60
       },
       timelineData: [
+        {
+          color: 'primary',
+          icon: 'PlusIcon',
+          title: 'Client Meeting',
+          desc: 'Bonbon macaroon jelly beans gummi bears jelly lollipop apple',
+          time: '25 mins Ago'
+        },
+        {
+          color: 'warning',
+          icon: 'MailIcon',
+          title: 'Email Newsletter',
+          desc: 'Cupcake gummi bears soufflé caramels candy',
+          time: '15 Days Ago'
+        },
         {
           color: 'primary',
           icon: 'PlusIcon',
