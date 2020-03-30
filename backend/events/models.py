@@ -1,7 +1,6 @@
 from django.db import models
 
 from polymorphic.models import PolymorphicModel
-from polymorphic.showfields import ShowFieldType
 
 from core.choices import CategoryNameChoices, EventTypeChoices, SkiTypeChoices
 from family.models import Child
@@ -42,6 +41,9 @@ class Category(models.Model):
     def __str__(self):
         return "%s | %s" % (self.name, self.season)
 
+    # def get_category_dislay(self):
+    #     self.name
+
     class Meta:
         verbose_name_plural = "Categories"
         ordering = ['id']
@@ -50,18 +52,26 @@ class Category(models.Model):
         unique_together = (('season', 'name'),)
 
 
+class Location(models.Model):
+    # TODO RES: https://github.com/caioariede/django-location-field
+    name = models.CharField(max_length=80)
+    ski_slope = models.CharField(max_length=50, blank=True, null=True)
+    additional_info = models.CharField(max_length=100, blank=True, null=True)
+
+    def __str__(self):
+        return "%s - %s" % (self.name, self.ski_slope)
+
+    class Meta:
+        unique_together = (('name', 'ski_slope'),)
+
+
 # RES: https://django-polymorphic.readthedocs.io/en/stable/
 class Event(PolymorphicModel):
     # RES (null vs blank): https://stackoverflow.com/questions/8609192/differentiate-null-true-blank-true-in-django
-    season = models.ForeignKey(Season, on_delete=models.CASCADE, blank=True)
+    season = models.ForeignKey(Season, on_delete=models.CASCADE)
+    location = models.ForeignKey(Location, on_delete=models.DO_NOTHING)
     category = models.ManyToManyField(Category)
 
-    # It should be from category of the event: but it happened sometime that child which should't be on the training
-    # because of his category came
-    # participants = models.ManyToManyField(Child, blank=True)
-
-    # It must be like that for proper synchronization between fields
-    # TODO FIXME -> Why child? This could be any user -> coach maybe on future, child, family member
     participants = models.ManyToManyField('users.Profile', through=Profile.events.through, blank=True)
 
     # FIXME Validation -> event must have SkiTraining table if is type SKI_TRAINING, SKi_RACE and so on..
@@ -77,7 +87,6 @@ class Event(PolymorphicModel):
     # TODO in serializers default datetime + 1h from start
     end_date = models.DateTimeField(blank=True)
 
-    location = models.CharField(max_length=50, blank=True)
     additional_info = models.CharField(max_length=150, blank=True)
 
     @property
@@ -96,9 +105,9 @@ class SkiEvent(Event):
     )
 
     # IDEA
-    weather = models.CharField(max_length=100, blank=True, null=True)
+    # weather = models.CharField(max_length=100, blank=True, null=True)
+    # snow_temperature = models.IntegerField(null=True, blank=True)
     temperature = models.IntegerField(null=True, blank=True)
-    snow_temperature = models.IntegerField(null=True, blank=True)
 
     class Meta:
         abstract = True
@@ -107,9 +116,6 @@ class SkiEvent(Event):
 class SkiTraining(SkiEvent):
     gates = models.CharField(max_length=50, blank=True, null=True)
     number_of_runs = models.CharField(max_length=50, blank=True, null=True)
-
-    # Slovan/Leitner/Poludňák
-    ski_slope = models.CharField(max_length=50, blank=True, null=True)
 
     extra_field_for_ski_training = models.CharField(max_length=50, blank=True, null=True)
 

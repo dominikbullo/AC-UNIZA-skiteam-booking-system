@@ -109,9 +109,6 @@ class CustomRegisterSerializer(RegisterSerializer):
         return {**default, **mine}
 
     def custom_signup(self, request, user):
-        # FIXME KeyError at /api/rest-auth/register/
-        # 'events'
-
         profile_data = request.data.pop('profile')
         Profile.objects.get_or_create(user=user, **profile_data)
         user.profile.save()
