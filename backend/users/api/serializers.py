@@ -16,17 +16,6 @@ class BaseProfileSerializer(serializers.ModelSerializer):
     first_name = serializers.DateTimeField(source='user.first_name', read_only=True)
     last_name = serializers.DateTimeField(source='user.last_name', read_only=True)
     username = serializers.DateTimeField(source='user.username', read_only=True)
-
-    class Meta:
-        model = Profile
-        fields = ("first_name", "last_name", "username")
-        read_only_fields = 'family_id', "user_role"
-
-
-class DetailProfileSerializer(BaseProfileSerializer):
-    email = serializers.DateTimeField(source='user.email', read_only=True)
-    avatar = serializers.ImageField(read_only=True)
-
     family_id = serializers.SerializerMethodField()
 
     # RES: https://stackoverflow.com/questions/48073471/django-rest-framework-get-data-based-on-current-userid-token
@@ -41,6 +30,18 @@ class DetailProfileSerializer(BaseProfileSerializer):
             print("User does not have family!")
             pass
         return Response(data=self.data, status=status.HTTP_404_NOT_FOUND)
+
+    class Meta:
+        model = Profile
+        fields = ("family_id", "first_name", "last_name", "username")
+        read_only_fields = 'family_id', "user_role"
+
+
+class DetailProfileSerializer(BaseProfileSerializer):
+    email = serializers.DateTimeField(source='user.email', read_only=True)
+    avatar = serializers.ImageField(read_only=True)
+
+    family_id = serializers.SerializerMethodField()
 
     class Meta:
         model = Profile

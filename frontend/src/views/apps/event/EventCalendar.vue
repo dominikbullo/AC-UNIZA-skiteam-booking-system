@@ -50,7 +50,7 @@
 
         <div class="my-4">
           <ul class="centerx">
-            <li v-for="(child, index) in userChildren">
+            <li v-for="child in userChildren" :key="child.username">
               <vs-checkbox color="success" v-model="childAddToEventPrompt.selected" :vs-value="child.username">{{
                 child.first_name}} {{ child.last_name}}
               </vs-checkbox>
@@ -99,9 +99,8 @@ export default {
 
 
       childAddToEventPrompt: {
-        active: true,
-        selected: [],
-        options: ['foo', 'bar', 'baz']
+        active: false,
+        selected: []
       },
 
       fromDate: null,
@@ -154,16 +153,33 @@ export default {
       }
       this.$store.dispatch('family/fetchFamily', payload)
     },
-    addAllChildrenToEvent () {
-      console.log('Test')
-      this.childAddToEventPrompt.selected = this.childAddToEventPrompt.options
-    },
     handleDateClick (arg) {
       console.log('handling date click', arg)
     },
     handleEventClick (arg) {
       console.log('handling event click', arg)
-      console.log('id of event', arg.event.id)
+      console.log('handling event click id', arg.event.id)
+
+      const event = Object.values(this.calendarEvents).find(obj => {
+        return obj.id === parseInt(arg.event.id)
+      })
+      console.log('event', event)
+
+      console.log('event participants', event['participants'])
+      console.log('my family id', this.$store.state.AppActiveUser.profile.family_id)
+
+      const myChildOnEvent = event['participants'].filter(obj => {
+        return obj.family_id === this.$store.state.AppActiveUser.profile.family_id
+      })
+      console.log('myChildOnEvent', myChildOnEvent)
+
+      const userNames = []
+      myChildOnEvent.forEach((element) => {
+        userNames.unshift(element['username'])
+      })
+      console.log('usernames', userNames)
+
+      this.childAddToEventPrompt.selected = userNames
       this.childAddToEventPrompt.active = true
     },
     handleSelectClick (info) {
@@ -224,7 +240,8 @@ export default {
       obj.classes = `event-${this.labelColor(this.labelLocal)}`
       this.$store.dispatch('calendar/editEvent', obj)
     }
-  },
+  }
+  ,
   created () {
     this.$store.dispatch('calendar/fetchEvents')
     // FIXME
