@@ -2,9 +2,10 @@ import axios from '@/axios.js'
 
 export default {
   addChild ({ commit }, payload) {
+    payload.profile.user_role = 'child'
     console.log('add child payload', payload)
-    return new Promise((resolve, reject) => {
 
+    return new Promise((resolve, reject) => {
       axios.post('/children/', { user: payload })
         .then((response) => {
           console.log('response after child added ', response)
@@ -12,7 +13,7 @@ export default {
           resolve(response)
         })
         .catch((error) => {
-           reject(error)
+          reject(error)
         })
     })
   },

@@ -287,7 +287,6 @@ export default {
         last_name: 'testing321',
         profile: {
           birth_date: this.moment().format('YYYY-MM-DD'),
-          user_role: 'child',
           phone_number: '',
           location: '',
           gender: 'M'

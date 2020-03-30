@@ -37,6 +37,31 @@
           ref="fullCalendar"
         />
       </div>
+
+      <!-- Add child to EVENT -->
+      <vs-prompt
+        :active.sync="childAddToEventPrompt.active"
+        :is-valid="validForm"
+        @accept="addEvent"
+        accept-text="Save"
+        class="calendar-child-add-event-dialog"
+        title="Sign up child to event">
+
+
+        <div class="my-4">
+          <ul class="centerx">
+            <li v-for="(child, index) in userChildren">
+              <vs-checkbox color="success" v-model="childAddToEventPrompt.selected" :vs-value="child.username">{{
+                child.first_name}} {{ child.last_name}}
+              </vs-checkbox>
+            </li>
+          </ul>
+
+          <p>{{childAddToEventPrompt.selected}}</p>
+        </div>
+
+      </vs-prompt>
+
     </vx-card>
   </div>
 </template>
@@ -48,6 +73,8 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import listPlugin from '@fullcalendar/list'
 import skLocale from '@fullcalendar/core/locales/sk'
+import vSelect from 'vue-select'
+
 
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
@@ -55,13 +82,13 @@ import 'flatpickr/dist/flatpickr.css'
 export default {
   components: {
     FullCalendar,
-    flatPickr
+    flatPickr,
+    'v-select': vSelect
   },
   data () {
     return {
       activePromptAddEvent: false,
       activePromptEditEvent: false,
-
       calendarPlugins: [ // plugins must be defined in the JS
         dayGridPlugin,
         timeGridPlugin,
@@ -70,6 +97,13 @@ export default {
       ],
       locale: skLocale,
 
+
+      childAddToEventPrompt: {
+        active: true,
+        selected: [],
+        options: ['foo', 'bar', 'baz']
+      },
+
       fromDate: null,
       toDate: null,
       configFromdateTimePicker: {
@@ -77,10 +111,12 @@ export default {
         maxDate: null,
         enableTime: true
       },
+
       configTodateTimePicker: {
         enableTime: true,
         minDate: null
       },
+
       showDate: new Date(),
       disabledFrom: false,
       id: 0,
@@ -95,22 +131,45 @@ export default {
     calendarEvents () {
       return this.$store.state.calendar.events
     },
+    userChildren () {
+      const members = this.$store.state.family.members
+
+      const cleanMembers = []
+      members.forEach((element) => {
+        cleanMembers.unshift(element['user'])
+      })
+      console.log('cleanMembers', cleanMembers)
+      return cleanMembers
+    },
     validForm () {
       // FIXME
       return true
     }
   },
   methods: {
+    fetchFamily (size) {
+      const payload = {
+        familyId: this.$store.state.AppActiveUser.profile.family_id,
+        count: size
+      }
+      this.$store.dispatch('family/fetchFamily', payload)
+    },
+    addAllChildrenToEvent () {
+      console.log('Test')
+      this.childAddToEventPrompt.selected = this.childAddToEventPrompt.options
+    },
     handleDateClick (arg) {
       console.log('handling date click', arg)
     },
     handleEventClick (arg) {
       console.log('handling event click', arg)
       console.log('id of event', arg.event.id)
+      this.childAddToEventPrompt.active = true
     },
-    handleSelectClick (arg) {
-      console.log('handling select click', arg)
-      this.addNewEventDialog(arg)
+    handleSelectClick (info) {
+      console.log('handling select click', info)
+      alert(`clicked ${info.dateStr}`)
+      this.activePromptChildToEvent = true
     },
     handleEventMouseEnter (arg) {
       console.log('handling mouse event enter', arg)
@@ -138,13 +197,6 @@ export default {
     promptAddNewEvent (date) {
       this.disabledFrom = false
       this.addNewEventDialog(date)
-    },
-    addNewEventDialog (arg) {
-      console.log('addNewEventDialog', arg)
-      // this.clearFields()
-      // this.startDate = arg.startStr
-      // this.endDate =  arg.end
-      this.activePromptAddEvent = true
     },
     openAddNewEvent (date) {
       this.disabledFrom = true
@@ -175,6 +227,8 @@ export default {
   },
   created () {
     this.$store.dispatch('calendar/fetchEvents')
+    // FIXME
+    this.fetchFamily(10)
   }
 }
 
