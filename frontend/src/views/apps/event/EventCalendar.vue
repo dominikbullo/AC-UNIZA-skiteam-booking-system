@@ -42,7 +42,7 @@
       <vs-prompt
         :active.sync="childAddToEventPrompt.active"
         :is-valid="validForm"
-        @accept="addEvent"
+        @accept="changeUserChildrenOnEvent"
         accept-text="Save"
         class="calendar-child-add-event-dialog"
         title="Sign up child to event">
@@ -50,8 +50,8 @@
 
         <div class="my-4">
           <ul class="centerx">
-            <li v-for="child in userChildren" :key="child.username">
-              <vs-checkbox color="success" v-model="childAddToEventPrompt.selected" :vs-value="child.username">{{
+            <li :key="child.username" v-for="child in userChildren">
+              <vs-checkbox :vs-value="child.username" color="success" v-model="childAddToEventPrompt.selected">{{
                 child.first_name}} {{ child.last_name}}
               </vs-checkbox>
             </li>
@@ -87,8 +87,6 @@ export default {
   },
   data () {
     return {
-      activePromptAddEvent: false,
-      activePromptEditEvent: false,
       calendarPlugins: [ // plugins must be defined in the JS
         dayGridPlugin,
         timeGridPlugin,
@@ -99,7 +97,9 @@ export default {
 
 
       childAddToEventPrompt: {
+        editedEventID: -1,
         active: false,
+        onEvent: [],
         selected: []
       },
 
@@ -137,7 +137,6 @@ export default {
       members.forEach((element) => {
         cleanMembers.unshift(element['user'])
       })
-      console.log('cleanMembers', cleanMembers)
       return cleanMembers
     },
     validForm () {
@@ -146,7 +145,7 @@ export default {
     }
   },
   methods: {
-    fetchFamily (size) {
+    fetchFamily (size = 100) {
       const payload = {
         familyId: this.$store.state.AppActiveUser.profile.family_id,
         count: size
@@ -157,38 +156,36 @@ export default {
       console.log('handling date click', arg)
     },
     handleEventClick (arg) {
-      console.log('handling event click', arg)
-      console.log('handling event click id', arg.event.id)
+      this.childAddToEventPrompt.editedEventID = parseInt(arg.event.id)
 
       const event = Object.values(this.calendarEvents).find(obj => {
-        return obj.id === parseInt(arg.event.id)
+        return obj.id === this.childAddToEventPrompt.editedEventID
       })
-      console.log('event', event)
+      // console.log('event', event)
 
-      console.log('event participants', event['participants'])
-      console.log('my family id', this.$store.state.AppActiveUser.profile.family_id)
-
+      // IDEA: Check with userChildren() array
       const myChildOnEvent = event['participants'].filter(obj => {
         return obj.family_id === this.$store.state.AppActiveUser.profile.family_id
       })
-      console.log('myChildOnEvent', myChildOnEvent)
+      // console.log('myChildOnEvent', myChildOnEvent)
 
       const userNames = []
       myChildOnEvent.forEach((element) => {
         userNames.unshift(element['username'])
       })
-      console.log('usernames', userNames)
+      // console.log('usernames', userNames)
 
+      this.childAddToEventPrompt.onEvent = userNames
       this.childAddToEventPrompt.selected = userNames
+
       this.childAddToEventPrompt.active = true
     },
     handleSelectClick (info) {
       console.log('handling select click', info)
       alert(`clicked ${info.dateStr}`)
-      this.activePromptChildToEvent = true
     },
     handleEventMouseEnter (arg) {
-      console.log('handling mouse event enter', arg)
+      // console.log('handling mouse event enter', arg)
     },
     onFromChange (selectedDates, dateStr, instance) {
       this.$set(this.configTodateTimePicker, 'minDate', dateStr)
@@ -196,56 +193,23 @@ export default {
     onToChange (selectedDates, dateStr, instance) {
       this.$set(this.configFromdateTimePicker, 'maxDate', dateStr)
     },
-    addEvent () {
-      const obj = {
-        title: this.title,
-        startDate: this.startDate,
-        endDate: this.endDate,
-        label: this.labelLocal,
-        url: this.url
-      }
-      // obj.classes = `event-${this.labelColor(this.labelLocal)}`
-      // this.$store.dispatch('calendar/addEvent', {})
-    },
     clearFields () {
       console.warn('need to clean fields')
     },
-    promptAddNewEvent (date) {
-      this.disabledFrom = false
-      this.addNewEventDialog(date)
-    },
-    openAddNewEvent (date) {
-      this.disabledFrom = true
-      this.addNewEventDialog(date)
-    },
-    openEditEvent (event) {
-      const e = this.$store.getters['calendar/getEvent'](event.id)
-      this.id = e.id
-      this.title = e.title
-      this.startDate = e.startDate
-      this.endDate = e.endDate
-      this.url = e.url
-      this.labelLocal = e.label
-      this.activePromptEditEvent = true
-    },
-    editEvent () {
-      const obj = {
-        id: this.id,
-        title: this.title,
-        startDate: this.startDate,
-        endDate: this.endDate,
-        label: this.labelLocal,
-        url: this.url
+    changeUserChildrenOnEvent () {
+      const payload = {
+        'eventID': this.childAddToEventPrompt.editedEventID,
+        'selected': this.childAddToEventPrompt.selected,
+        'onEvent': this.childAddToEventPrompt.onEvent
       }
-      obj.classes = `event-${this.labelColor(this.labelLocal)}`
-      this.$store.dispatch('calendar/editEvent', obj)
+
+      this.$store.dispatch('calendar/changeEventMembers', payload)
     }
-  }
-  ,
+  },
   created () {
     this.$store.dispatch('calendar/fetchEvents')
     // FIXME
-    this.fetchFamily(10)
+    this.fetchFamily()
   }
 }
 

@@ -1,8 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from events.api.views import (EventsViewSet, CurrentSeasonEventsViewSet, SeasonViewSet, AddChildToEventAPIView,
-                              DeleteChildToEventAPIView)
+from events.api.views import EventsViewSet, CurrentSeasonEventsViewSet, SeasonViewSet, ChangeChildToEventAPIView
 
 app_name = 'events'
 
@@ -19,6 +18,5 @@ urlpatterns = [
     path("", include(router.urls)),
 
     # TODO add event/:id/add-child/id -> then i can only add child to event no update
-    path("event/<int:event_id>/add/", AddChildToEventAPIView.as_view()),
-    path("event/<int:event_id>/delete/", DeleteChildToEventAPIView.as_view())
+    path("event/<int:event_id>/change/", ChangeChildToEventAPIView.as_view()),
 ]

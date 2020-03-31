@@ -28,7 +28,7 @@ class CurrentSeasonEventsViewSet(EventsViewSet):
         return Event.objects.filter(season=Season.objects.get(current=True))
 
 
-class AddChildToEventAPIView(APIView):
+class ChangeChildToEventAPIView(APIView):
 
     def get_event(self, pk):
         return get_object_or_404(Event, pk=pk)
@@ -40,28 +40,57 @@ class AddChildToEventAPIView(APIView):
         event = self.get_event(event_id)
         event_serializer = EventPolymorphicSerializer(event)
 
+        # RELEASE delete this test data
+        # request.data["users"]["add"] = ["testsets", "asdasdaasdasd", "asdasdasdasdas", "sdasda"]
+        # request.data["users"]["delete"] = []
+
         users = request.data.get("users", None)
         if not users:
             Response(status=status.HTTP_400_BAD_REQUEST)
 
-        for user in users:
-            print(user)
+        # [] -> delete everyove
+        # ["admin"] -> find my child, remove every, add only admin
+        # ["admin", "ASdasd", "Asdasd", "asdasd"] -> find my child, remove every, add only admin
+        failed = []
+        for user in users.get("add", ""):
+            # print("add", user)
             try:
-                event.participants.add(self.get_user_profile(user.get("username", None)))
+                event.participants.add(self.get_user_profile(user))
             except Http404:
-                print("User not found")
+                failed.append(user)
+                print("User", user, "not found")
                 pass
+
+        for user in users.get("delete", ""):
+            # print("delete", user)
+            try:
+                event.participants.remove(self.get_user_profile(user))
+            except Http404:
+                failed.append(user)
+                print("User", user, "not found")
+                pass
+
+        if len(failed) > 0:
+            return Response(failed, status=status.HTTP_404_NOT_FOUND)
+
         return Response(event_serializer.data, status=status.HTTP_200_OK)
 
+    # def post(self, request, event_id):
+    #     event = self.get_event(event_id)
+    #     event_serializer = EventPolymorphicSerializer(event)
+    #     user = self.get_user_profile(request.data.get("username", None))
+    #     event.participants.remove(user)
+    #     return Response(event_serializer.data, status=status.HTTP_200_OK)
 
-class DeleteChildToEventAPIView(AddChildToEventAPIView):
 
-    def post(self, request, event_id):
-        event = self.get_event(event_id)
-        event_serializer = EventPolymorphicSerializer(event)
-        user = self.get_user_profile(request.data.get("username", None))
-        event.participants.remove(user)
-        return Response(event_serializer.data, status=status.HTTP_200_OK)
+# class DeleteChildToEventAPIView(ChangeChildToEventAPIView):
+#
+#     def post(self, request, event_id):
+#         event = self.get_event(event_id)
+#         event_serializer = EventPolymorphicSerializer(event)
+#         user = self.get_user_profile(request.data.get("username", None))
+#         event.participants.remove(user)
+#         return Response(event_serializer.data, status=status.HTTP_200_OK)
 
 
 class SeasonViewSet(viewsets.ModelViewSet):
