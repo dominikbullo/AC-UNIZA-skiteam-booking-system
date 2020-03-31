@@ -17,13 +17,15 @@ export default {
         })
     })
   },
-  fetchFamily ({ commit }, payload) {
+  fetchFamily ({ commit }, familyId) {
+    console.log('payload in fetchFamily', familyId)
+    
     return new Promise((resolve, reject) => {
-      // TODO -> need id of family
-      console.log('payload in fetchFamily', payload)
-      axios.get(`/families/${payload.familyId}/`)
+      axios.get(`/families/${familyId}/`)
         .then((response) => {
-          commit('SET_FAMILY_MEMBERS', response.data.members)
+          commit('UPDATE_FAMILY', response.data)
+          // TODO IDEA: set only children
+          // TODO FIXME: UPDATE_FAMILY_INFO
           // commit('UPDATE_FAMILY_INFO', response.data)
           resolve(response)
         })

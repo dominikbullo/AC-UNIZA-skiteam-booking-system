@@ -12,7 +12,7 @@
           :now-indicator="true"
           :plugins="calendarPlugins"
           :select-mirror="true"
-          :selectable="true"
+          :selectable="calendarConfig.selectable"
           :slot-label-format="{
             hour: '2-digit',
             minute: '2-digit',
@@ -31,7 +31,7 @@
           @select="handleSelectClick"
           class="event-calendar"
           default-view="timeGridWeek"
-          editable="true"
+          :editable="calendarConfig.editable"
           max-time="21:00:00"
           min-time="06:00:00"
           ref="fullCalendar"
@@ -51,13 +51,14 @@
         <div class="my-4">
           <ul class="centerx">
             <li :key="child.username" v-for="child in userChildren">
-              <vs-checkbox :vs-value="child.username" color="success" v-model="childAddToEventPrompt.selected">{{
-                child.first_name}} {{ child.last_name}}
+              <vs-checkbox
+                :vs-value="child.username"
+                color="success"
+                v-model="childAddToEventPrompt.selected">
+                {{ child.first_name}} {{ child.last_name}}
               </vs-checkbox>
             </li>
           </ul>
-
-          <p>{{childAddToEventPrompt.selected}}</p>
         </div>
 
       </vs-prompt>
@@ -95,6 +96,10 @@ export default {
       ],
       locale: skLocale,
 
+      calendarConfig: {
+        selectable: false,
+        editable: false
+      },
 
       childAddToEventPrompt: {
         editedEventID: -1,
@@ -105,6 +110,7 @@ export default {
 
       fromDate: null,
       toDate: null,
+
       configFromdateTimePicker: {
         minDate: new Date(),
         maxDate: null,
@@ -145,13 +151,6 @@ export default {
     }
   },
   methods: {
-    fetchFamily (size = 100) {
-      const payload = {
-        familyId: this.$store.state.AppActiveUser.profile.family_id,
-        count: size
-      }
-      this.$store.dispatch('family/fetchFamily', payload)
-    },
     handleDateClick (arg) {
       console.log('handling date click', arg)
     },
@@ -180,9 +179,9 @@ export default {
 
       this.childAddToEventPrompt.active = true
     },
-    handleSelectClick (info) {
-      console.log('handling select click', info)
-      alert(`clicked ${info.dateStr}`)
+    handleSelectClick (click) {
+      console.log('handling select click', click)
+      alert(`clicked ${click.startStr} - ${click.endStr}`)
     },
     handleEventMouseEnter (arg) {
       // console.log('handling mouse event enter', arg)
@@ -208,8 +207,7 @@ export default {
   },
   created () {
     this.$store.dispatch('calendar/fetchEvents')
-    // FIXME
-    this.fetchFamily()
+    this.$store.dispatch('family/fetchFamily', this.$store.state.AppActiveUser.profile.family_id)
   }
 }
 

@@ -543,13 +543,6 @@ export default {
           })
         }
       }
-    },
-    fetchFamily (size) {
-      const payload = {
-        familyId: this.$store.state.AppActiveUser.profile.family_id,
-        count: size
-      }
-      this.$store.dispatch('family/fetchFamily', payload)
     }
   },
   mounted () {
@@ -566,7 +559,7 @@ export default {
     }
   },
   created () {
-    this.fetchFamily(this.paginationPageSize)
+    this.$store.dispatch('family/fetchFamily', this.$store.state.AppActiveUser.profile.family_id)
   }
 }
 </script>

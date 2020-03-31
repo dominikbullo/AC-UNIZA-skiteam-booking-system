@@ -74,7 +74,8 @@ export default {
           // }
 
           // TODO display name add to response
-
+          // TODO update family!
+          
           // Set accessToken
           localStorage.setItem('accessToken', response.data.key)
 

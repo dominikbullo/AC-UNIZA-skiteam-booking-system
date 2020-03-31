@@ -1,11 +1,15 @@
 export default {
-  SET_FAMILY_MEMBERS (state, payload) {
-    console.log('setting up family members:', payload)
-    state.members = payload
+  SET_FAMILY_MEMBERS (state, members) {
+    console.log('setting up family members:', members)
+    state.members = members
   },
   ADD_FAMILY_MEMBERS (state, payload) {
     console.log('adding family members:', payload)
     state.members.concat(payload)
+  },
+  UPDATE_FAMILY (state, familyData) {
+    console.log('UPDATE_FAMILY', familyData)
+    Object.assign(state, familyData)
   },
   ADD_MEMBER (state, payload) {
     console.log('ading member', payload)
