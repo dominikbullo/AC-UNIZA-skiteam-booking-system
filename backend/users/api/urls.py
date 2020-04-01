@@ -5,8 +5,8 @@ from users.api.views import ProfileViewSet, UsersViewSet
 app_name = 'users'
 
 router = DefaultRouter()
-router.register(r"profiles", ProfileViewSet, basename="profile")
-router.register(r"users", UsersViewSet, basename="user")
+router.register(r"profile", ProfileViewSet, basename="profile")
+router.register(r"user", UsersViewSet, basename="user")
 
 urlpatterns = [
     path("", include(router.urls)),

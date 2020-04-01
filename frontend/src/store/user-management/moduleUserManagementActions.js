@@ -10,9 +10,9 @@
 import axios from '@/axios.js'
 
 export default {
-  fetchUsers ({commit}) {
+  fetchUsers ({ commit }) {
     return new Promise((resolve, reject) => {
-      axios.get('/users/')
+      axios.get('/user/')
         .then((response) => {
           commit('SET_USERS', response.data.results)
           resolve(response)
@@ -24,7 +24,7 @@ export default {
   },
   fetchUser (context, userId) {
     return new Promise((resolve, reject) => {
-      axios.get(`/users/${userId}`)
+      axios.get(`/user/${userId}`)
         .then((response) => {
           resolve(response)
         })
@@ -35,7 +35,7 @@ export default {
   },
   fetchDefaultUser (context, userId) {
     return new Promise((resolve, reject) => {
-      axios.get(`/api/user-management/users/${userId}`)
+      axios.get(`/api/user-management/user/${userId}`)
         .then((response) => {
           resolve(response)
         })
@@ -44,9 +44,9 @@ export default {
         })
     })
   },
-  removeUser ({commit}, userId) {
+  removeUser ({ commit }, userId) {
     return new Promise((resolve, reject) => {
-      axios.delete(`/api/user-management/users/${userId}/`)
+      axios.delete(`/api/user-management/user/${userId}/`)
         .then((response) => {
           commit('REMOVE_RECORD', userId)
           resolve(response)
@@ -56,9 +56,9 @@ export default {
         })
     })
   },
-  fetchProfiles ({commit}) {
+  fetchProfiles ({ commit }) {
     return new Promise((resolve, reject) => {
-      axios.get('/profiles/')
+      axios.get('/profile/')
         .then((response) => {
           commit('SET_USERS', response.data.results)
           resolve(response)
@@ -70,7 +70,7 @@ export default {
   },
   fetchProfile (context, userId) {
     return new Promise((resolve, reject) => {
-      axios.get(`/profiles/${userId}`)
+      axios.get(`/profile/${userId}`)
         .then((response) => {
           resolve(response)
         })

@@ -6,7 +6,7 @@ export default {
     console.log('add child payload', payload)
 
     return new Promise((resolve, reject) => {
-      axios.post('/children/', { user: payload })
+      axios.post('/child/', { user: payload })
         .then((response) => {
           console.log('response after child added ', response)
           commit('ADD_MEMBER', Object.assign(payload, { user: response.data }))
@@ -19,9 +19,9 @@ export default {
   },
   fetchFamily ({ commit }, familyId) {
     console.log('payload in fetchFamily', familyId)
-    
+
     return new Promise((resolve, reject) => {
-      axios.get(`/families/${familyId}/`)
+      axios.get(`/family/${familyId}/`)
         .then((response) => {
           commit('UPDATE_FAMILY', response.data)
           // TODO IDEA: set only children
