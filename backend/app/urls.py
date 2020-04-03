@@ -31,10 +31,10 @@ router.extend(family_router)
 router.extend(events_router)
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-
     path("", IndexTemplateView.as_view(), name="entry-point"),
     path("", include('pwa.urls')),
+
+    path('admin/', admin.site.urls),
 
     path('api/', include(router.urls)),
 

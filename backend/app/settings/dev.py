@@ -169,9 +169,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 # Place static in the same location as webpack build files
-STATIC_DIR = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 STATICFILES_DIRS = [
-    STATIC_DIR,
     os.path.join(FRONTEND_DIR, 'src/assets'),
 ]
 # Custom User Model
@@ -240,7 +240,7 @@ WEBPACK_LOADER = {
     }
 }
 
-PWA_SERVICE_WORKER_PATH = os.path.join(STATIC_DIR, 'js', 'serviceworker.js')
+PWA_SERVICE_WORKER_PATH = os.path.join(STATIC_ROOT, 'js', 'serviceworker.js')
 PWA_APP_NAME = 'My App'
 PWA_APP_DESCRIPTION = "My app description"
 PWA_APP_THEME_COLOR = '#0A0302'
