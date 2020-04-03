@@ -58,9 +58,7 @@ class ProfileViewSet(mixins.UpdateModelMixin,
         })
         return Response(serializer.data)
 
-    def get_serializer_context(self):
-        return {'user': self.request.user.email}
-
+    # TODO IDEA: This could be post method, which can then return data for all usernames, and wanted seasons
     @action(detail=True, url_path='stats/all')
     def get_all_stats(self, request, *args, **kwargs):
         user = get_object_or_404(Profile, user__username=kwargs["pk"])

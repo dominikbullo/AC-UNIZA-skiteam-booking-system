@@ -1,6 +1,7 @@
 from allauth.account.models import EmailAddress
 
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 
 from rest_auth.models import TokenModel
 from rest_auth.registration.serializers import RegisterSerializer
@@ -97,7 +98,7 @@ class UserDetailSerializer(BasicUserSerializer):
     # https://stackoverflow.com/questions/41394761/the-create-method-does-not-support-writable-nested-fields-by-default
     profile = DetailProfileSerializer(read_only=True)
 
- 
+
 class CustomRegisterSerializer(RegisterSerializer):
     username = serializers.CharField(read_only=True, required=False)
     first_name = serializers.CharField(required=True)
@@ -176,15 +177,18 @@ class UserStatSerializer(serializers.ModelSerializer):
             for key in choices.EventTypeChoices:
                 # If category was in current season event must be in current season too //fail safe
                 print("Test", kid_asc)
-                event = Event.objects.filter(season=season,
-                                             type=key,
-                                             category=kid_asc
-                                             ).order_by('start_date').count()
-                ret[season.__str__()][key + "_total"] = event
+                # RES: https://docs.djangoproject.com/en/dev/topics/db/queries/#complex-lookups-with-q-objects
+                query = {
+                    "season"       : season,
+                    "type"         : key,
+                    "end_date__lte": timezone.now(),
+                    "category"     : kid_asc
+                }
 
-                ret[season.__str__()][key] = user.events.filter(season=season,
-                                                                type=key,
-                                                                category=kid_asc).count()
+                event = Event.objects.filter(**query).order_by('start_date').count()
+
+                ret[str(season)][key] = user.events.filter(**query).count()
+                ret[str(season)][key + "_total"] = event
 
         return ret
 
