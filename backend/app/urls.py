@@ -19,7 +19,7 @@ from django.urls import path, re_path, include
 from django.views.generic import TemplateView
 
 from core import router
-from core.views import serve_worker_view
+from core.views import IndexTemplateView
 
 from users.api.urls import router as user_router
 from family.api.urls import router as family_router
@@ -31,12 +31,11 @@ router.extend(family_router)
 router.extend(events_router)
 
 urlpatterns = [
-    # http://localhost:8000/
-    path("", TemplateView.as_view(template_name="application.html"), name="app", ),
-    url('', include('pwa.urls')),
-    # path('', index_view, name='index'),
+    path('admin/', admin.site.urls),
 
-    # http://localhost:8000/api/<router-viewsets>
+    path("", IndexTemplateView.as_view(), name="entry-point"),
+    path("", include('pwa.urls')),
+
     path('api/', include(router.urls)),
 
     path("api/rest-auth/", include('core.auth')),
@@ -45,9 +44,7 @@ urlpatterns = [
     path("api/", include("family.api.urls")),
     path("api/", include("events.api.urls")),
 
-    # http://localhost:8000/admin/
-    path('admin/', admin.site.urls),
-
     # support vue-router history mode
-    re_path(r'^\S+$', TemplateView.as_view(template_name="application.html"), name="app", ),
+    re_path(r"^.*$", IndexTemplateView.as_view(), name="entry-point"),
+    re_path(r'^\S+$', IndexTemplateView.as_view(), name="entry-point")
 ]
