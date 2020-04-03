@@ -5,7 +5,7 @@ from rest_framework.response import Response
 
 from family.models import Child, FamilyMember, Family
 
-from users.api.serializers import CustomRegisterSerializer, UserDisplaySerializer
+from users.api.serializers import CustomRegisterSerializer, UserDetailSerializer
 from users.models import Profile
 
 
@@ -82,9 +82,7 @@ class ChildSerializer(serializers.ModelSerializer):
 
 
 class FamilyMemberSerializer(serializers.ModelSerializer):
-    user = UserDisplaySerializer(read_only=True)
-
-    # user = serializers.HyperlinkedRelatedField(read_only=True, view_name="users:user-detail")
+    user = UserDetailSerializer(read_only=True)
 
     class Meta:
         model = FamilyMember

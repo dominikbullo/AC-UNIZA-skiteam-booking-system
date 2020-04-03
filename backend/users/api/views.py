@@ -16,7 +16,7 @@ from rest_framework.views import APIView
 
 from events.models import Season
 from users.api.permissions import IsOwnProfileOrReadOnly
-from users.api.serializers import (ProfileAvatarSerializer, DetailProfileSerializer, UserDisplaySerializer,
+from users.api.serializers import (ProfileAvatarSerializer, DetailProfileSerializer, UserDetailSerializer,
                                    UserStatSerializer)
 
 from users.models import Profile
@@ -78,7 +78,7 @@ class UsersViewSet(mixins.UpdateModelMixin,
                    viewsets.GenericViewSet):
     """ Used when changing info about user """
     queryset = get_user_model().objects.all()
-    serializer_class = UserDisplaySerializer
+    serializer_class = UserDetailSerializer
     filter_backends = [SearchFilter]
     search_fields = ["username"]
 

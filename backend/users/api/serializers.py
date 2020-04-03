@@ -67,12 +67,12 @@ class ProfileAvatarSerializer(serializers.ModelSerializer):
         fields = ("avatar",)
 
 
-class UserDisplaySerializer(serializers.ModelSerializer):
+class BasicUserSerializer(serializers.ModelSerializer):
     """Serializer for the users object"""
     verified_email = serializers.SerializerMethodField()
 
     # https://stackoverflow.com/questions/41394761/the-create-method-does-not-support-writable-nested-fields-by-default
-    profile = DetailProfileSerializer(read_only=True)
+    profile = BaseProfileSerializer(read_only=True)
 
     def get_verified_email(self, obj):
         try:
@@ -93,6 +93,11 @@ class UserDisplaySerializer(serializers.ModelSerializer):
         read_only_fields = 'id', 'verified_email', "email",
 
 
+class UserDetailSerializer(BasicUserSerializer):
+    # https://stackoverflow.com/questions/41394761/the-create-method-does-not-support-writable-nested-fields-by-default
+    profile = DetailProfileSerializer(read_only=True)
+
+ 
 class CustomRegisterSerializer(RegisterSerializer):
     username = serializers.CharField(read_only=True, required=False)
     first_name = serializers.CharField(required=True)
@@ -137,7 +142,7 @@ class TokenSerializer(serializers.ModelSerializer):
     """
     Serializer for Token model.
     """
-    user = UserDisplaySerializer(many=False, read_only=True)  # this is add by myself.
+    user = UserDetailSerializer(many=False, read_only=True)  # this is add by myself.
 
     class Meta:
         model = TokenModel
