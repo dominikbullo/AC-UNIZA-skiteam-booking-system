@@ -275,3 +275,4 @@ typings/
 *.sln
 *.sw*
 /frontend/dist/
+/frontend/webpack-stats.json

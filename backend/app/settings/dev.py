@@ -101,7 +101,7 @@ ROOT_URLCONF = 'app.urls'
 TEMPLATES = [
     {
         'BACKEND' : 'django.template.backends.django.DjangoTemplates',
-        'DIRS'    : ['../frontend/dist', TEMPLATES_DIR],
+        'DIRS'    : [TEMPLATES_DIR, ],
         'APP_DIRS': True,
         'OPTIONS' : {
             'context_processors': [
@@ -225,10 +225,11 @@ REST_FRAMEWORK = {
 WEBPACK_LOADER = {
     'DEFAULT': {
         'CACHE'          : DEBUG,
-        'BUNDLE_DIR_NAME': 'dist/',
+        'BUNDLE_DIR_NAME': '/bundles/',  # must end with slash
         'STATS_FILE'     : os.path.join(FRONTEND_DIR, 'webpack-stats.json'),
     }
 }
+
 try:
     from .local_settings import *
 except ImportError:
