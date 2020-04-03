@@ -13,6 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, re_path, include
 from django.views.generic import TemplateView
@@ -32,13 +33,8 @@ router.extend(events_router)
 urlpatterns = [
     # http://localhost:8000/
     path("", TemplateView.as_view(template_name="application.html"), name="app", ),
+    url('', include('pwa.urls')),
     # path('', index_view, name='index'),
-
-    # serve static files for PWA
-    # path('index.html', index_view, name='index'),
-    re_path(r'^(?P<worker_name>manifest).json$', serve_worker_view, name='manifest'),
-    re_path(r'^(?P<worker_name>[-\w\d.]+).js$', serve_worker_view, name='serve_worker'),
-    re_path(r'^(?P<worker_name>robots).txt$', serve_worker_view, name='robots'),
 
     # http://localhost:8000/api/<router-viewsets>
     path('api/', include(router.urls)),

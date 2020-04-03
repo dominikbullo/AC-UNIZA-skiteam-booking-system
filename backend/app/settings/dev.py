@@ -21,6 +21,7 @@ from django.urls import include
 SETTINGS_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(SETTINGS_DIR)
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
 FRONTEND_DIR = os.path.join(os.path.dirname(BASE_DIR), 'frontend')
 
 # Quick-start development settings - unsuitable for production
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',  # < Per Whitenoise, to disable built in
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'pwa',
 
     'users',
     'family',
@@ -66,7 +68,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.facebook',
 
-    'webpack_loader'
+    'webpack_loader',
 ]
 
 MIDDLEWARE = [
@@ -161,9 +163,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 # Place static in the same location as webpack build files
-STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'frontend', 'dist')
 STATICFILES_DIRS = [
-    os.path.join(STATIC_ROOT, 'static'),
+    STATIC_DIR
 ]
 # Custom User Model
 AUTH_USER_MODEL = "users.User"
@@ -229,6 +230,30 @@ WEBPACK_LOADER = {
         'STATS_FILE'     : os.path.join(FRONTEND_DIR, 'webpack-stats.json'),
     }
 }
+
+PWA_SERVICE_WORKER_PATH = os.path.join(STATIC_DIR, 'js', 'serviceworker.js')
+PWA_APP_NAME = 'My App'
+PWA_APP_DESCRIPTION = "My app description"
+PWA_APP_THEME_COLOR = '#0A0302'
+PWA_APP_BACKGROUND_COLOR = '#ffffff'
+PWA_APP_DISPLAY = 'standalone'
+PWA_APP_SCOPE = '/'
+PWA_APP_ORIENTATION = 'any'
+PWA_APP_START_URL = '/'
+PWA_APP_ICONS = [
+    {
+        'src'  : 'static/img/icons/android-chrome-192x192.png',
+        'sizes': '192x192'
+    }
+]
+PWA_APP_ICONS_APPLE = [
+    {
+        'src'  : 'static/img/icons/apple-touch-icon.png',
+        'sizes': '180x180'
+    }
+]
+PWA_APP_DIR = 'ltr'
+PWA_APP_LANG = 'en-US'
 
 try:
     from .local_settings import *

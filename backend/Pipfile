@@ -12,6 +12,7 @@ djangorestframework = "*"
 gunicorn = "*"
 pillow = "*"
 whitenoise = ">=4.0"
+django-pwa = "*"
 
 [dev-packages]
 django-webpack-loader = "*"
