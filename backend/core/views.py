@@ -5,11 +5,13 @@ from django.conf import settings
 
 import os
 
+
 # Serve Vue Application
-index_view = never_cache(TemplateView.as_view(template_name='index.html'))
+# index_view = never_cache(TemplateView.as_view(template_name='index.html'))
 
 
 # pwa_view = never_cache(TemplateView.as_view(template_name='manifest.json'))
+
 
 def serve_worker_view(request, worker_name):
     """

@@ -20,6 +20,8 @@ from django.urls import include
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 SETTINGS_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(SETTINGS_DIR)
+TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
+FRONTEND_DIR = os.path.join(os.path.dirname(BASE_DIR), 'frontend')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -63,6 +65,8 @@ THIRD_PARTY_APPS = (
     'allauth.socialaccount.providers.facebook',
 
     'polymorphic',
+    'webpack_loader',
+    'pwa'
 )
 
 LOCAL_APPS = (
@@ -105,7 +109,7 @@ ROOT_URLCONF = 'app.urls'
 TEMPLATES = [
     {
         'BACKEND' : 'django.template.backends.django.DjangoTemplates',
-        'DIRS'    : ['../frontend/dist'],
+        'DIRS'    : [TEMPLATES_DIR, ],
         'APP_DIRS': True,
         'OPTIONS' : {
             'context_processors': [
@@ -152,7 +156,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Europe/Bratislava'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
@@ -165,9 +169,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 # Place static in the same location as webpack build files
-STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'frontend', 'dist')
+STATIC_DIR = os.path.join(BASE_DIR, 'static'),
 STATICFILES_DIRS = [
-    os.path.join(STATIC_ROOT, 'static'),
+    STATIC_DIR
+    os.path.join(FRONTEND_DIR, 'src/assets'),
 ]
 # Custom User Model
 AUTH_USER_MODEL = "users.User"
@@ -204,9 +209,9 @@ REST_AUTH_SERIALIZERS = {
     # 'USER_DETAILS_SERIALIZER': 'users.api.serializers.CustomUserDetailSerializer',
     'TOKEN_SERIALIZER': 'users.api.serializers.TokenSerializer',
 }
-CALENDAR_DATETIME_FORMAT = '%Y-%m-%d %H:%M'
-DATETIME_FORMAT = '%d.%m.%Y %H:%M'
-DATE_FORMAT = "%d.%m.%Y"
+DATE_INPUT_FORMATS = [
+    ("%d.%m.%Y"),
+]
 
 # http://whitenoise.evans.io/en/stable/#quickstart-for-django-apps
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -214,8 +219,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Django-REST-Framework
 # https://medium.com/@apogiatzis/create-a-restful-api-with-users-and-jwt-authentication-using-django-1-11-drf-part-2-eb6fdcf71f45
 REST_FRAMEWORK = {
-    "DATETIME_INPUT_FORMATS"        : [(DATETIME_FORMAT), ('iso-8601')],
-    "DATE_INPUT_FORMATS"            : [('iso-8601'), ],
+    "DATE_INPUT_FORMATS"            : DATE_INPUT_FORMATS,
     'DEFAULT_PERMISSION_CLASSES'    : ('rest_framework.permissions.IsAuthenticated',),
     'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework.authentication.TokenAuthentication',
                                        # RELEASE Delete SessionAuthentication
@@ -226,6 +230,38 @@ REST_FRAMEWORK = {
     # FIXME on front
     'PAGE_SIZE'                     : 100
 }
+
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'CACHE'          : DEBUG,
+        'BUNDLE_DIR_NAME': '/bundles/',  # must end with slash
+        'STATS_FILE'     : os.path.join(FRONTEND_DIR, 'webpack-stats.json'),
+    }
+}
+
+PWA_SERVICE_WORKER_PATH = os.path.join(STATIC_DIR, 'js', 'serviceworker.js')
+PWA_APP_NAME = 'My App'
+PWA_APP_DESCRIPTION = "My app description"
+PWA_APP_THEME_COLOR = '#0A0302'
+PWA_APP_BACKGROUND_COLOR = '#ffffff'
+PWA_APP_DISPLAY = 'standalone'
+PWA_APP_SCOPE = '/'
+PWA_APP_ORIENTATION = 'any'
+PWA_APP_START_URL = '/'
+PWA_APP_ICONS = [
+    {
+        'src'  : 'static/img/icons/android-chrome-192x192.png',
+        'sizes': '192x192'
+    }
+]
+PWA_APP_ICONS_APPLE = [
+    {
+        'src'  : 'static/img/icons/apple-touch-icon.png',
+        'sizes': '180x180'
+    }
+]
+PWA_APP_DIR = 'ltr'
+PWA_APP_LANG = 'en-US'
 
 try:
     from .local_settings import *
