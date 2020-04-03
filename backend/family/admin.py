@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.apps import apps
 from django.contrib.admin.sites import AlreadyRegistered
 
-from family.models import Child, FamilyMember, Family
+from family.models import FamilyMember, Family
 
 
 class FamilyMemberInLine(admin.StackedInline):

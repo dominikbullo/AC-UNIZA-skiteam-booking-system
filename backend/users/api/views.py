@@ -3,16 +3,21 @@ from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
 
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 
 from rest_auth.registration.views import SocialLoginView
 
 from rest_framework import generics, mixins, viewsets
+from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from events.models import Season
 from users.api.permissions import IsOwnProfileOrReadOnly
-from users.api.serializers import ProfileAvatarSerializer, DetailProfileSerializer, UserDisplaySerializer
+from users.api.serializers import (ProfileAvatarSerializer, DetailProfileSerializer, UserDisplaySerializer,
+                                   UserStatSerializer)
 
 from users.models import Profile
 
@@ -36,6 +41,35 @@ class ProfileViewSet(mixins.UpdateModelMixin,
     permission_classes = [IsAuthenticated, IsOwnProfileOrReadOnly]
     filter_backends = [SearchFilter]
     search_fields = ["user"]
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = get_object_or_404(Profile, user__username=kwargs["pk"])
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
+    # RES: https://stackoverflow.com/questions/36365326/django-rest-framework-doesnt-serialize-serializermethodfield
+    @action(detail=True, url_path='stats')
+    def get_stats(self, request, *args, **kwargs):
+        user = get_object_or_404(Profile, user__username=kwargs["pk"])
+        seasons = Season.objects.filter(current=True)
+        serializer = UserStatSerializer(instance={
+            'user'   : user,
+            'seasons': seasons,
+        })
+        return Response(serializer.data)
+
+    def get_serializer_context(self):
+        return {'user': self.request.user.email}
+
+    @action(detail=True, url_path='stats/all')
+    def get_all_stats(self, request, *args, **kwargs):
+        user = get_object_or_404(Profile, user__username=kwargs["pk"])
+        seasons = Season.objects.all()
+        serializer = UserStatSerializer(instance={
+            'user'   : user,
+            'seasons': seasons,
+        })
+        return Response(serializer.data)
 
 
 class UsersViewSet(mixins.UpdateModelMixin,

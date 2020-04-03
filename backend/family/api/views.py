@@ -1,12 +1,12 @@
 from rest_framework import viewsets, mixins
+from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from family.models import Family, FamilyMember, Child
-from family.api.serializers import (FamilySerializer, FamilyMemberSerializer, ChildSerializer,
-                                    CustomRegisterChildSerializer)
+from family.api.serializers import FamilySerializer, FamilyMemberSerializer, ChildSerializer
+
 from family.api.permissions import IsOwnerOrReadOnly, IsOwnFamilyOrReadOnly
 
 
@@ -55,10 +55,3 @@ class ChildViewSet(viewsets.ModelViewSet):
     # Sending parent of child (user which created him)
     def perform_create(self, serializer):
         serializer.save(parent=self.request.user)
-
-
-class ChildStatisticAPIView(APIView):
-
-    def get(self, request, child_username):
-        event = self.get_event(child_id)
-        event_serializer = EventPolymorphicSerializer(event)

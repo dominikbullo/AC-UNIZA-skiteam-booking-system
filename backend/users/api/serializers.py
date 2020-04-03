@@ -7,7 +7,9 @@ from rest_auth.registration.serializers import RegisterSerializer
 from rest_framework import serializers, status
 from rest_framework.response import Response
 
+from core import choices
 from core.choices import UserTypeChoices
+from events.models import Event
 from family.models import Family, FamilyMember, Child
 from users.models import Profile
 
@@ -140,3 +142,48 @@ class TokenSerializer(serializers.ModelSerializer):
     class Meta:
         model = TokenModel
         fields = ('key', 'user')
+
+
+class UserStatSerializer(serializers.ModelSerializer):
+
+    def to_representation(self, instance):
+        return self.get_data(instance)
+
+    def get_data(self, instance):
+        user = instance["user"]
+        seasons = instance["seasons"]
+
+        # TODO
+        #  Check if is kid
+        kid = Child.objects.get(user__profile=user)
+        ret = {}
+        for season in seasons:
+            print("season ", season)
+            try:
+                # TODO category -> user which can be on this event
+                kid_asc = kid.categories.get(season=season)
+                ret[season.__str__()] = {}
+                print("foud and creating child", season)
+            except Exception:
+                continue
+                pass
+
+            for key in choices.EventTypeChoices:
+                # If category was in current season event must be in current season too //fail safe
+                print("Test", kid_asc)
+                event = Event.objects.filter(season=season,
+                                             type=key,
+                                             category=kid_asc
+                                             ).order_by('start_date').count()
+                ret[season.__str__()][key + "_total"] = event
+
+                ret[season.__str__()][key] = user.events.filter(season=season,
+                                                                type=key,
+                                                                category=kid_asc).count()
+
+        return ret
+
+    class Meta:
+        model = Profile
+        fields = "__all__"
+        read_only_fields = ('user_role',)
