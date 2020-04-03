@@ -1,13 +1,16 @@
 from allauth.account.models import EmailAddress
 
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 
 from rest_auth.models import TokenModel
 from rest_auth.registration.serializers import RegisterSerializer
 from rest_framework import serializers, status
 from rest_framework.response import Response
 
+from core import choices
 from core.choices import UserTypeChoices
+from events.models import Event
 from family.models import Family, FamilyMember, Child
 from users.models import Profile
 
@@ -16,17 +19,6 @@ class BaseProfileSerializer(serializers.ModelSerializer):
     first_name = serializers.DateTimeField(source='user.first_name', read_only=True)
     last_name = serializers.DateTimeField(source='user.last_name', read_only=True)
     username = serializers.DateTimeField(source='user.username', read_only=True)
-
-    class Meta:
-        model = Profile
-        fields = ("first_name", "last_name", "username")
-        read_only_fields = 'family_id', "user_role"
-
-
-class DetailProfileSerializer(BaseProfileSerializer):
-    email = serializers.DateTimeField(source='user.email', read_only=True)
-    avatar = serializers.ImageField(read_only=True)
-
     family_id = serializers.SerializerMethodField()
 
     # RES: https://stackoverflow.com/questions/48073471/django-rest-framework-get-data-based-on-current-userid-token
@@ -41,6 +33,18 @@ class DetailProfileSerializer(BaseProfileSerializer):
             print("User does not have family!")
             pass
         return Response(data=self.data, status=status.HTTP_404_NOT_FOUND)
+
+    class Meta:
+        model = Profile
+        fields = ("family_id", "first_name", "last_name", "username")
+        read_only_fields = 'family_id', "user_role"
+
+
+class DetailProfileSerializer(BaseProfileSerializer):
+    email = serializers.DateTimeField(source='user.email', read_only=True)
+    avatar = serializers.ImageField(read_only=True)
+
+    family_id = serializers.SerializerMethodField()
 
     class Meta:
         model = Profile
@@ -64,12 +68,12 @@ class ProfileAvatarSerializer(serializers.ModelSerializer):
         fields = ("avatar",)
 
 
-class UserDisplaySerializer(serializers.ModelSerializer):
+class BasicUserSerializer(serializers.ModelSerializer):
     """Serializer for the users object"""
     verified_email = serializers.SerializerMethodField()
 
     # https://stackoverflow.com/questions/41394761/the-create-method-does-not-support-writable-nested-fields-by-default
-    profile = DetailProfileSerializer(read_only=True)
+    profile = BaseProfileSerializer(read_only=True)
 
     def get_verified_email(self, obj):
         try:
@@ -88,6 +92,11 @@ class UserDisplaySerializer(serializers.ModelSerializer):
             'id', 'email', "username", 'first_name', "last_name", "verified_email", "profile")
         # exclude = ("password", "last_login", "is_superuser", "is_staff", "is_active",)
         read_only_fields = 'id', 'verified_email', "email",
+
+
+class UserDetailSerializer(BasicUserSerializer):
+    # https://stackoverflow.com/questions/41394761/the-create-method-does-not-support-writable-nested-fields-by-default
+    profile = DetailProfileSerializer(read_only=True)
 
 
 class CustomRegisterSerializer(RegisterSerializer):
@@ -134,8 +143,56 @@ class TokenSerializer(serializers.ModelSerializer):
     """
     Serializer for Token model.
     """
-    user = UserDisplaySerializer(many=False, read_only=True)  # this is add by myself.
+    user = UserDetailSerializer(many=False, read_only=True)  # this is add by myself.
 
     class Meta:
         model = TokenModel
         fields = ('key', 'user')
+
+
+class UserStatSerializer(serializers.ModelSerializer):
+
+    def to_representation(self, instance):
+        return self.get_data(instance)
+
+    def get_data(self, instance):
+        user = instance["user"]
+        seasons = instance["seasons"]
+
+        # TODO
+        #  Check if is kid
+        kid = Child.objects.get(user__profile=user)
+        ret = {}
+        for season in seasons:
+            print("season ", season)
+            try:
+                # TODO category -> user which can be on this event
+                kid_asc = kid.categories.get(season=season)
+                ret[season.__str__()] = {}
+                print("foud and creating child", season)
+            except Exception:
+                continue
+                pass
+
+            for key in choices.EventTypeChoices:
+                # If category was in current season event must be in current season too //fail safe
+                print("Test", kid_asc)
+                # RES: https://docs.djangoproject.com/en/dev/topics/db/queries/#complex-lookups-with-q-objects
+                query = {
+                    "season"       : season,
+                    "type"         : key,
+                    "end_date__lte": timezone.now(),
+                    "category"     : kid_asc
+                }
+
+                event = Event.objects.filter(**query).order_by('start_date').count()
+
+                ret[str(season)][key] = user.events.filter(**query).count()
+                ret[str(season)][key + "_total"] = event
+
+        return ret
+
+    class Meta:
+        model = Profile
+        fields = "__all__"
+        read_only_fields = ('user_role',)

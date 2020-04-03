@@ -3,16 +3,21 @@ from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
 
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 
 from rest_auth.registration.views import SocialLoginView
 
 from rest_framework import generics, mixins, viewsets
+from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from events.models import Season
 from users.api.permissions import IsOwnProfileOrReadOnly
-from users.api.serializers import ProfileAvatarSerializer, DetailProfileSerializer, UserDisplaySerializer
+from users.api.serializers import (ProfileAvatarSerializer, DetailProfileSerializer, UserDetailSerializer,
+                                   UserStatSerializer)
 
 from users.models import Profile
 
@@ -37,6 +42,33 @@ class ProfileViewSet(mixins.UpdateModelMixin,
     filter_backends = [SearchFilter]
     search_fields = ["user"]
 
+    def retrieve(self, request, *args, **kwargs):
+        instance = get_object_or_404(Profile, user__username=kwargs["pk"])
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
+    # RES: https://stackoverflow.com/questions/36365326/django-rest-framework-doesnt-serialize-serializermethodfield
+    @action(detail=True, url_path='stats')
+    def get_stats(self, request, *args, **kwargs):
+        user = get_object_or_404(Profile, user__username=kwargs["pk"])
+        seasons = Season.objects.filter(current=True)
+        serializer = UserStatSerializer(instance={
+            'user'   : user,
+            'seasons': seasons,
+        })
+        return Response(serializer.data)
+
+    # TODO IDEA: This could be post method, which can then return data for all usernames, and wanted seasons
+    @action(detail=True, url_path='stats/all')
+    def get_all_stats(self, request, *args, **kwargs):
+        user = get_object_or_404(Profile, user__username=kwargs["pk"])
+        seasons = Season.objects.all()
+        serializer = UserStatSerializer(instance={
+            'user'   : user,
+            'seasons': seasons,
+        })
+        return Response(serializer.data)
+
 
 class UsersViewSet(mixins.UpdateModelMixin,
                    mixins.ListModelMixin,
@@ -44,7 +76,7 @@ class UsersViewSet(mixins.UpdateModelMixin,
                    viewsets.GenericViewSet):
     """ Used when changing info about user """
     queryset = get_user_model().objects.all()
-    serializer_class = UserDisplaySerializer
+    serializer_class = UserDetailSerializer
     filter_backends = [SearchFilter]
     search_fields = ["username"]
 

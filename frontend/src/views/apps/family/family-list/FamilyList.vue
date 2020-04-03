@@ -287,7 +287,6 @@ export default {
         last_name: 'testing321',
         profile: {
           birth_date: this.moment().format('YYYY-MM-DD'),
-          user_role: 'child',
           phone_number: '',
           location: '',
           gender: 'M'
@@ -544,13 +543,6 @@ export default {
           })
         }
       }
-    },
-    fetchFamily (size) {
-      const payload = {
-        familyId: this.$store.state.AppActiveUser.profile.family_id,
-        count: size
-      }
-      this.$store.dispatch('family/fetchFamily', payload)
     }
   },
   mounted () {
@@ -567,7 +559,7 @@ export default {
     }
   },
   created () {
-    this.fetchFamily(this.paginationPageSize)
+    this.$store.dispatch('family/fetchFamily', this.$store.state.AppActiveUser.profile.family_id)
   }
 }
 </script>
