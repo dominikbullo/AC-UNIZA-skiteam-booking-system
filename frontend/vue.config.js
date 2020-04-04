@@ -1,13 +1,12 @@
 const BundleTracker = require('webpack-bundle-tracker')
 
 module.exports = {
-  baseUrl: 'http://localhost:8080/',
+  publicPath: 'http://localhost:8080/',
   outputDir: './dist/',
 
   chainWebpack: config => {
-
     config.optimization
-      .splitChunks(false)
+      .delete('splitChunks')
 
     config
       .plugin('BundleTracker')
@@ -25,4 +24,12 @@ module.exports = {
       .https(false)
       .headers({ 'Access-Control-Allow-Origin': ['\*'] })
   }
+
+  // uncomment before executing 'npm run build'
+  // css: {
+  //   extract: {
+  //     filename: 'bundle.css',
+  //     chunkFilename: 'bundle.css'
+  //   }
+  // }
 }
