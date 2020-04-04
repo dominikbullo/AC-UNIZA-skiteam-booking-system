@@ -3,7 +3,7 @@ version: '3.7'
 services:
   #  db:
   #    image: postgres
-  #    container_name: docker-django-vue-db
+  #    container_name: sport-agenda-db
   #    environment:
   #      POSTGRES_USER: user
   #      POSTGRES_PASSWORD: pass
@@ -15,7 +15,7 @@ services:
     build:
       context: .
       dockerfile: backend/Dockerfile
-    container_name: docker-django-vue-backend
+    container_name: sport-agenda-backend
     command: backend/backend_setup.sh
     #    environment:
     #      POSTGRES_NAME: postgres
@@ -25,18 +25,18 @@ services:
     volumes:
       - .:/app
     ports:
-      - "8002:8000"
+      - "8000:8000"
   #    depends_on:
   #      - db
   vue:
     build:
       context: .
       dockerfile: frontend/Dockerfile
-    container_name: docker-django-vue-frontend
+    container_name: sport-agenda-frontend
     command: frontend/frontend_setup.sh
     volumes:
       - .:/app
     ports:
-      - "8082:8080"
+      - "8080:8080"
     depends_on:
       - django

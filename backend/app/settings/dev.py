@@ -20,6 +20,8 @@ from django.urls import include
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 SETTINGS_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(SETTINGS_DIR)
+TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
+FRONTEND_DIR = os.path.join(os.path.dirname(BASE_DIR), 'frontend')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -39,7 +41,6 @@ DJANGO_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'whitenoise.runserver_nostatic',  # < Per Whitenoise, to disable built in
     'django.contrib.staticfiles',
     'django.contrib.sites',
 )
@@ -63,6 +64,8 @@ THIRD_PARTY_APPS = (
     'allauth.socialaccount.providers.facebook',
 
     'polymorphic',
+    'webpack_loader',
+    'pwa'
 )
 
 LOCAL_APPS = (
@@ -75,7 +78,6 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -105,7 +107,7 @@ ROOT_URLCONF = 'app.urls'
 TEMPLATES = [
     {
         'BACKEND' : 'django.template.backends.django.DjangoTemplates',
-        'DIRS'    : ['../frontend/dist'],
+        'DIRS'    : [TEMPLATES_DIR, ],
         'APP_DIRS': True,
         'OPTIONS' : {
             'context_processors': [
@@ -161,14 +163,16 @@ USE_L10N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
-
+# RES: https://docs.djangoproject.com/en/2.2/howto/static-files/
+# RES: https://stackoverflow.com/questions/24022558/differences-between-staticfiles-dir-static-root-and-media-root
 STATIC_URL = '/static/'
-# Place static in the same location as webpack build files
-STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'frontend', 'dist')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 STATICFILES_DIRS = [
-    os.path.join(STATIC_ROOT, 'static'),
+    os.path.join(BASE_DIR, 'static'),
+    os.path.join(FRONTEND_DIR, 'src/assets'),
 ]
+
 # Custom User Model
 AUTH_USER_MODEL = "users.User"
 
@@ -226,6 +230,38 @@ REST_FRAMEWORK = {
     # FIXME on front
     'PAGE_SIZE'                     : 100
 }
+
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'CACHE'          : DEBUG,
+        'BUNDLE_DIR_NAME': '/bundles/',  # must end with slash
+        'STATS_FILE'     : os.path.join(FRONTEND_DIR, 'webpack-stats.json'),
+    }
+}
+
+PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'static/js', 'serviceworker.js')
+PWA_APP_NAME = 'AC UNIZA Ski Team'
+PWA_APP_DESCRIPTION = "App for managing sport club"
+PWA_APP_THEME_COLOR = '#0A0302'
+PWA_APP_BACKGROUND_COLOR = '#ffffff'
+PWA_APP_DISPLAY = 'standalone'
+PWA_APP_SCOPE = '/'
+PWA_APP_ORIENTATION = 'any'
+PWA_APP_START_URL = '/'
+PWA_APP_ICONS = [
+    {
+        'src'  : '/static/img/icons/android-chrome-192x192.png',
+        'sizes': '192x192'
+    }
+]
+PWA_APP_ICONS_APPLE = [
+    {
+        'src'  : '/static/img/icons/apple-touch-icon.png',
+        'sizes': '180x180'
+    }
+]
+PWA_APP_DIR = 'ltr'
+PWA_APP_LANG = 'en-US'
 
 try:
     from .local_settings import *
