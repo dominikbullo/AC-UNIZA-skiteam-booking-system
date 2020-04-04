@@ -44,7 +44,5 @@ urlpatterns = [
     path("api/", include("family.api.urls")),
     path("api/", include("events.api.urls")),
 
-    # support vue-router history mode
-    re_path(r"^.*$", IndexTemplateView.as_view(), name="entry-point"),
     re_path(r'^\S+$', IndexTemplateView.as_view(), name="entry-point")
 ]

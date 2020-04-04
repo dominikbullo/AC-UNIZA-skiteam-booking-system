@@ -165,15 +165,15 @@ USE_L10N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
-
+# RES: https://docs.djangoproject.com/en/2.2/howto/static-files/
+# RES: https://stackoverflow.com/questions/24022558/differences-between-staticfiles-dir-static-root-and-media-root
 STATIC_URL = '/static/'
-# Place static in the same location as webpack build files
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATICFILES_DIRS = [
     os.path.join(FRONTEND_DIR, 'src/assets'),
 ]
+
 # Custom User Model
 AUTH_USER_MODEL = "users.User"
 
@@ -241,8 +241,8 @@ WEBPACK_LOADER = {
 }
 
 PWA_SERVICE_WORKER_PATH = os.path.join(STATIC_ROOT, 'js', 'serviceworker.js')
-PWA_APP_NAME = 'My App'
-PWA_APP_DESCRIPTION = "My app description"
+PWA_APP_NAME = 'AC UNIZA Ski Team'
+PWA_APP_DESCRIPTION = "App for managing sport club"
 PWA_APP_THEME_COLOR = '#0A0302'
 PWA_APP_BACKGROUND_COLOR = '#ffffff'
 PWA_APP_DISPLAY = 'standalone'
