@@ -69,6 +69,8 @@ class Location(models.Model):
 class Event(PolymorphicModel):
     # RES (null vs blank): https://stackoverflow.com/questions/8609192/differentiate-null-true-blank-true-in-django
     season = models.ForeignKey(Season, on_delete=models.CASCADE)
+
+    # IDEA: ONE training, more location (ski slope) e.g. Slovan žiaci, Leitner Predžiaci
     location = models.ForeignKey(Location, on_delete=models.DO_NOTHING)
     category = models.ManyToManyField(Category)
 
