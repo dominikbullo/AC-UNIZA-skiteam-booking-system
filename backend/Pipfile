@@ -14,11 +14,14 @@ gunicorn = "*"
 pillow = "*"
 whitenoise = ">=4.0"
 django-pwa = "*"
+django-filter = "*"
 
 [dev-packages]
 django-webpack-loader = "*"
 bump2version = "*"
 flake8 = "*"
+django-excel-fixture = "*"
+openpyxl = "*"
 
 [requires]
 python_version = "3.7"

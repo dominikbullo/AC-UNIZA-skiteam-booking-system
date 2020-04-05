@@ -66,7 +66,9 @@ THIRD_PARTY_APPS = (
 
     'polymorphic',
     'webpack_loader',
-    'pwa'
+    'pwa',
+    'django_excel_fixture',
+    'django_filters'
 )
 
 LOCAL_APPS = (
@@ -221,6 +223,7 @@ DATE_FORMAT = "%d.%m.%Y"
 REST_FRAMEWORK = {
     "DATETIME_INPUT_FORMATS"        : [(DATETIME_FORMAT), ('iso-8601')],
     "DATE_INPUT_FORMATS"            : [('iso-8601'), ],
+    'DEFAULT_FILTER_BACKENDS'       : ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_PERMISSION_CLASSES'    : ('rest_framework.permissions.IsAuthenticated',),
     'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework.authentication.TokenAuthentication',
                                        # RELEASE Delete SessionAuthentication

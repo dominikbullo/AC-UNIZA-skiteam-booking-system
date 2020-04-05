@@ -12,7 +12,7 @@ import axios from '@/axios.js'
 export default {
   fetchEvents ({ commit }) {
     return new Promise((resolve, reject) => {
-      axios.get('season/event/')
+      axios.get('/event/?current=true')
         .then((response) => {
           commit('SET_EVENTS', response.data.results)
           resolve(response)

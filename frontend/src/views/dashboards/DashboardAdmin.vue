@@ -1,6 +1,26 @@
 <template>
   <div>
-    <!-- ROW 1-->
+    <!-- Select child -->
+    <div class="vx-row">
+      <div class="vx-col w-full mb-base">
+        <vx-card title="Single/Multiple Selection" code-toggler no-shadow card-border>
+
+          <div>
+
+            <p class="mb-3">By default, vue-select supports choosing a single value. If you need multiple values, use
+              the
+              multiple prop</p>
+
+            <v-select multiple :closeOnSelect="false" v-model="selected" :options="options"
+                      :dir="$vs.rtl ? 'rtl' : 'ltr'"/>
+            <br>
+
+          </div>
+        </vx-card>
+      </div>
+    </div>
+
+    <!-- Stats -->
     <div class="vx-row">
       <div class="vx-col w-1/2 md:w-1/3 xl:w-1/6">
         <statistics-card-line
@@ -62,24 +82,6 @@
       </div>
     </div>
 
-    <div class="vx-row">
-      <div class="vx-col w-full mb-base">
-        <vx-card title="Single/Multiple Selection" code-toggler no-shadow card-border>
-
-          <div>
-
-            <p class="mb-3">By default, vue-select supports choosing a single value. If you need multiple values, use
-              the
-              multiple prop</p>
-
-            <v-select multiple :closeOnSelect="false" v-model="selected" :options="options"
-                      :dir="$vs.rtl ? 'rtl' : 'ltr'"/>
-            <br>
-
-          </div>
-        </vx-card>
-      </div>
-    </div>
 
     <div class="vx-row">
       <!-- RADIAL CHART -->
@@ -304,7 +306,7 @@ export default {
   },
   data () {
     return {
-      selected: ['foo', 'bar'],
+      selected: ['foo'],
       options: ['foo', 'bar', 'baz'],
 
       subscribersGained: {},
@@ -493,13 +495,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-  .chat-card-log {
-    height: 400px;
-
-    .chat-sent-msg {
-      background-color: #f2f4f7 !important;
-    }
-  }
-</style>

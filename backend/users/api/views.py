@@ -1,15 +1,10 @@
 from allauth.account.models import EmailConfirmation, EmailConfirmationHMAC
-from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
-
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 
-from rest_auth.registration.views import SocialLoginView
-
-from rest_framework import generics, mixins, viewsets
+from rest_framework import generics, mixins, viewsets, filters
 from rest_framework.decorators import action
-from rest_framework.filters import SearchFilter
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -38,9 +33,9 @@ class ProfileViewSet(mixins.UpdateModelMixin,
     """ Will be used when all users can see each other """
     queryset = Profile.objects.all()
     serializer_class = DetailProfileSerializer
-    permission_classes = [IsAuthenticated, IsOwnProfileOrReadOnly]
-    filter_backends = [SearchFilter]
-    search_fields = ["user"]
+    # permission_classes = [IsAuthenticated, IsOwnProfileOrReadOnly]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['user__username']
 
     def retrieve(self, request, *args, **kwargs):
         instance = get_object_or_404(Profile, user__username=kwargs["pk"])
@@ -48,21 +43,19 @@ class ProfileViewSet(mixins.UpdateModelMixin,
         return Response(serializer.data)
 
     # RES: https://stackoverflow.com/questions/36365326/django-rest-framework-doesnt-serialize-serializermethodfield
-    @action(detail=True, url_path='stats')
+    # RES(filtering): https://stackoverflow.com/questions/26595906/django-rest-framework-with-viewset-router-queryset-filtering
+    @action(detail=True, methods=['get'], url_path='stats')
     def get_stats(self, request, *args, **kwargs):
         user = get_object_or_404(Profile, user__username=kwargs["pk"])
-        seasons = Season.objects.filter(current=True)
-        serializer = UserStatSerializer(instance={
-            'user'   : user,
-            'seasons': seasons,
-        })
-        return Response(serializer.data)
-
-    # TODO IDEA: This could be post method, which can then return data for all usernames, and wanted seasons
-    @action(detail=True, url_path='stats/all')
-    def get_all_stats(self, request, *args, **kwargs):
-        user = get_object_or_404(Profile, user__username=kwargs["pk"])
         seasons = Season.objects.all()
+
+        query = self.request.query_params.get('season')
+        if query:
+            if query == "current":
+                seasons = seasons.filter(current=True)
+            else:
+                seasons = seasons.filter(pk=query)
+
         serializer = UserStatSerializer(instance={
             'user'   : user,
             'seasons': seasons,
@@ -70,19 +63,15 @@ class ProfileViewSet(mixins.UpdateModelMixin,
         return Response(serializer.data)
 
 
-class UsersViewSet(mixins.UpdateModelMixin,
-                   mixins.ListModelMixin,
-                   mixins.RetrieveModelMixin,
-                   viewsets.GenericViewSet):
-    """ Used when changing info about user """
-    queryset = get_user_model().objects.all()
-    serializer_class = UserDetailSerializer
-    filter_backends = [SearchFilter]
-    search_fields = ["username"]
-
-
-class FacebookLogin(SocialLoginView):
-    adapter_class = FacebookOAuth2Adapter
+# class UsersViewSet(mixins.UpdateModelMixin,
+#                    mixins.ListModelMixin,
+#                    mixins.RetrieveModelMixin,
+#                    viewsets.GenericViewSet):
+#     """ Used when changing info about user """
+#     queryset = get_user_model().objects.all()
+#     serializer_class = UserDetailSerializer
+#     filter_backends = [filters.SearchFilter]
+#     search_fields = ["username"]
 
 
 # RES: https://stackoverflow.com/questions/53305849/django-rest-auth-key-error-on-email-confirmation

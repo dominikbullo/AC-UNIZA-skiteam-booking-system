@@ -72,7 +72,15 @@ const router = new Router({
         {
           path: '/test/page',
           name: 'testpage',
-          component: () => import('@/views/pages/TestPage.vue'),
+          component: () => import('@/views/pages/testPages/TestPage.vue'),
+          meta: {
+            rule: 'editor'
+          }
+        },
+        {
+          path: '/test/stats',
+          name: 'testpage',
+          component: () => import('@/views/pages/testPages/TestStats.vue'),
           meta: {
             rule: 'editor'
           }
@@ -80,7 +88,7 @@ const router = new Router({
         {
           path: '/test/calendar',
           name: 'testcalendar',
-          component: () => import('@/views/pages/TestCalendar.vue'),
+          component: () => import('@/views/pages/testPages/TestCalendar.vue'),
           meta: {
             rule: 'editor'
           }

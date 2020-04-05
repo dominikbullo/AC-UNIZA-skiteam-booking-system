@@ -48,9 +48,7 @@ class DetailProfileSerializer(BaseProfileSerializer):
 
     class Meta:
         model = Profile
-        # RELEASE: exclude id of profile
-        # exclude = ('id', "user")
-        exclude = ('id', "user",)
+        exclude = ('id', "user", "events")
         read_only_fields = 'family_id', "user_role"
 
 

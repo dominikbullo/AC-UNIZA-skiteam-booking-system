@@ -82,7 +82,6 @@ class Event(PolymorphicModel):
         choices=EventTypeChoices.choices
     )
 
-    title = models.CharField(max_length=100, default="Default Title For Event")
     canceled = models.BooleanField(default=False)
     start_date = models.DateTimeField()
 
@@ -130,10 +129,23 @@ class SkiTraining(SkiEvent):
         self.type = EventTypeChoices.SKI_TRAINING
 
 
-# IDEA: Future implementation
+class RaceOrganizer(models.Model):
+    # SLA/Public/ZSL
+    name = models.CharField(max_length=15, default="SLA")
+    club = models.CharField(max_length=50, blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        unique_together = (('name', 'club'),)
+
+
 class SkiRace(SkiEvent):
+    organizer = models.ForeignKey(RaceOrganizer, on_delete=models.DO_NOTHING)
     # results = models.OneToOneField(Results)
-    # run = models.OneToOneField(Event)
+
+    propositionURL = models.URLField(max_length=200, blank=True, null=True)
     hotel_price = models.CharField(max_length=50, blank=True, null=True)
     book_hotel_from = models.DateTimeField(blank=True, null=True)
     book_hotel_to = models.DateTimeField(blank=True, null=True)
@@ -141,6 +153,7 @@ class SkiRace(SkiEvent):
     def __init__(self, *args, **kwargs):
         self._meta.get_field('type').default = EventTypeChoices.SKI_RACE
         super(SkiEvent, self).__init__(*args, **kwargs)
+        self._meta.get_field('type').default = EventTypeChoices.SKI_RACE
         self.type = EventTypeChoices.SKI_RACE
 
 # class AthleticTest(Event):
