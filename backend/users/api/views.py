@@ -9,10 +9,10 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from events.api.serializers import UserStatSerializer
 from events.models import Season
 from users.api.permissions import IsOwnProfileOrReadOnly
-from users.api.serializers import (ProfileAvatarSerializer, DetailProfileSerializer, UserDetailSerializer,
-                                   UserStatSerializer)
+from users.api.serializers import ProfileAvatarSerializer, DetailProfileSerializer, UserDetailSerializer
 
 from users.models import Profile
 

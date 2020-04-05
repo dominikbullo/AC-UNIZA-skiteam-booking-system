@@ -276,4 +276,4 @@ typings/
 *.sw*
 /frontend/dist/
 /frontend/webpack-stats.json
-/backend/fixtures/myExport.xlsx
+/backend/fixtures/
