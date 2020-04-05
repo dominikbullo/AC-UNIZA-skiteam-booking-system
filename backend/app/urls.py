@@ -13,10 +13,8 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, re_path, include
-from django.views.generic import TemplateView
 
 from core import router
 from core.views import IndexTemplateView
@@ -31,14 +29,17 @@ router.extend(family_router)
 router.extend(events_router)
 
 urlpatterns = [
-    path("", IndexTemplateView.as_view(), name="entry-point"),
+    # PWA needs to be first
     path("", include('pwa.urls')),
+
+    path("", IndexTemplateView.as_view(), name="entry-point"),
 
     path('admin/', admin.site.urls),
 
-    path('api/', include(router.urls)),
-
     path("api/rest-auth/", include('core.auth')),
+
+    # RELEASE: Delete or just admin only
+    path('api/', include(router.urls)),
 
     path("api/", include("users.api.urls")),
     path("api/", include("family.api.urls")),

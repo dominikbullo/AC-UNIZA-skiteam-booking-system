@@ -41,6 +41,7 @@ DJANGO_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'django.contrib.sites',
 )
@@ -78,6 +79,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -165,13 +167,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # RES: https://docs.djangoproject.com/en/2.2/howto/static-files/
 # RES: https://stackoverflow.com/questions/24022558/differences-between-staticfiles-dir-static-root-and-media-root
+
 STATIC_URL = '/static/'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-    os.path.join(FRONTEND_DIR, 'src/assets'),
+    os.path.join(FRONTEND_DIR, 'src/assets/')
 ]
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Custom User Model
 AUTH_USER_MODEL = "users.User"
@@ -211,9 +215,6 @@ REST_AUTH_SERIALIZERS = {
 CALENDAR_DATETIME_FORMAT = '%Y-%m-%d %H:%M'
 DATETIME_FORMAT = '%d.%m.%Y %H:%M'
 DATE_FORMAT = "%d.%m.%Y"
-
-# http://whitenoise.evans.io/en/stable/#quickstart-for-django-apps
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Django-REST-Framework
 # https://medium.com/@apogiatzis/create-a-restful-api-with-users-and-jwt-authentication-using-django-1-11-drf-part-2-eb6fdcf71f45

@@ -1,4 +1,4 @@
-# Sport club management system 
+# Sport Agenda
 [![Coding time tracker](https://wakatime.com/badge/github/dominikbullo/sport_club_management_system.svg)](https://wakatime.com/badge/github/dominikbullo/sport_club_management_system)
 [![CodeFactor](https://www.codefactor.io/repository/github/dominikbullo/sport_club_management_system/badge/master?s=ac9f6078ba34db65adc039927cbf22272289d6bb)](https://www.codefactor.io/repository/github/dominikbullo/sport_club_management_system/overview/master)
 [![Actions Status](https://github.com/dominikbullo/sport_club_management_system/workflows/Sport%20Club%20Management%20System%20via%20Docker/badge.svg)](https://github.com/dominikbullo/sport_club_management_system/actions)

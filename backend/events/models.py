@@ -14,9 +14,9 @@ class Season(models.Model):
     current = models.BooleanField(default=False)
 
     # first day of skiing in the season
-    start_date = models.DateTimeField(null=True, blank=True)
+    start_date = models.DateField(null=True, blank=True)
     # last day of skiing in the season
-    end_date = models.DateTimeField(null=True, blank=True)
+    end_date = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return self.year
