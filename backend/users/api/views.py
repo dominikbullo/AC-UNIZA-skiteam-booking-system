@@ -54,7 +54,7 @@ class ProfileViewSet(mixins.UpdateModelMixin,
             if query == "current":
                 seasons = seasons.filter(current=True)
             else:
-                seasons = seasons.filter(pk=query)
+                seasons = seasons.filter(year=query)
 
         serializer = UserStatSerializer(instance={
             'user'   : user,

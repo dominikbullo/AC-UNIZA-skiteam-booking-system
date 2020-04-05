@@ -8,9 +8,9 @@ from users.models import Profile
 
 
 class Season(models.Model):
-    # format:   YYYY_YYYY
-    # example:  2019_2020
-    year = models.CharField(max_length=9, unique=True, primary_key=True)
+    # format:   YYYY-YYYY
+    # example:  2019-2020
+    year = models.CharField(max_length=9, unique=True)
     current = models.BooleanField(default=False)
 
     # first day of skiing in the season
@@ -136,6 +136,17 @@ class RaceOrganizer(models.Model):
 
     def __str__(self):
         return self.name
+
+    ...
+
+    def clean(self):
+        """
+        Checks that we do not create multiple categories with
+        no parent and the same name.
+        """
+        from django.core.exceptions import ValidationError
+        if self.club is None and RaceOrganizer.objects.filter(name=self.name, club=None).exists():
+            raise ValidationError("Another RaceOrganizer with name %s and no club already exists" % self.name)
 
     class Meta:
         unique_together = (('name', 'club'),)
