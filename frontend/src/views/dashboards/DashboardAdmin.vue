@@ -11,8 +11,11 @@
               the
               multiple prop</p>
 
-            <v-select multiple :closeOnSelect="false" v-model="selected" :options="options"
-                      :dir="$vs.rtl ? 'rtl' : 'ltr'"/>
+            <v-select multiple
+                      :closeOnSelect="false"
+                      v-model="selected"
+                      :options="options"
+                      :dir="$vs.rtl ? 'rtl' : 'ltr'"    />
             <br>
 
           </div>

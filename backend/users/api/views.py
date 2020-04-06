@@ -2,9 +2,11 @@ from allauth.account.models import EmailConfirmation, EmailConfirmationHMAC
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 
-from rest_framework import generics, mixins, viewsets, filters
+from rest_framework import generics, mixins, viewsets
 from rest_framework.decorators import action
+from rest_framework.filters import SearchFilter
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -34,8 +36,11 @@ class ProfileViewSet(mixins.UpdateModelMixin,
     queryset = Profile.objects.all()
     serializer_class = DetailProfileSerializer
     # permission_classes = [IsAuthenticated, IsOwnProfileOrReadOnly]
-    filter_backends = [filters.SearchFilter]
-    search_fields = ['user__username']
+
+    __basic_fields = ('user__username', 'user_role', "gender")
+    filter_backends = (DjangoFilterBackend, SearchFilter)
+    filter_fields = __basic_fields
+    search_fields = __basic_fields
 
     def retrieve(self, request, *args, **kwargs):
         instance = get_object_or_404(Profile, user__username=kwargs["pk"])
@@ -47,8 +52,8 @@ class ProfileViewSet(mixins.UpdateModelMixin,
     @action(detail=True, methods=['get'], url_path='stats')
     def get_stats(self, request, *args, **kwargs):
         user = get_object_or_404(Profile, user__username=kwargs["pk"])
-        seasons = Season.objects.all()
 
+        seasons = Season.objects.all()
         query = self.request.query_params.get('season')
         if query:
             if query == "current":

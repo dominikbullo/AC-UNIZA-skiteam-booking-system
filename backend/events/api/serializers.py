@@ -98,8 +98,6 @@ class UserStatSerializer(serializers.ModelSerializer):
                 pass
 
             for key in choices.EventTypeChoices:
-                # If category was in current season event must be in current season too //fail safe
-                print("Test", kid_asc)
                 # RES: https://docs.djangoproject.com/en/dev/topics/db/queries/#complex-lookups-with-q-objects
                 query = {
                     "season"       : season,
