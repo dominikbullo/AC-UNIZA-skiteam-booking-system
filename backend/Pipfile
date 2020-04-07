@@ -14,6 +14,8 @@ gunicorn = "*"
 pillow = "*"
 whitenoise = ">=4.0"
 django-pwa = "*"
+django-push-notifications = "*"
+django-webpush = "*"
 
 [dev-packages]
 django-webpack-loader = "*"

@@ -1,24 +1,50 @@
 from allauth.account.models import EmailAddress
 from allauth.account.signals import email_confirmed
+
 from django.conf import settings
-from django.db.models.signals import post_save
+from django.db import transaction
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
 from rest_framework.authtoken.models import Token
 
-from events.models import Season
-from users.models import Profile
+from events.models import Season, Event
 
 
-# @receiver(pre_save, sender=settings.AUTH_USER_MODEL)
-# def set_username(sender, instance, **kwargs):
-#     if not instance.username:
-#         username = instance.first_name
-#         counter = 1
-#         while get_user_model().objects.filter(username=username):
-#             username = instance.first_name + str(counter)
-#             counter += 1
-#         instance.username = username
+def send_email_if_flag_enabled(sender, instance, **kwargs):
+    if instance.send_email:
+        print("Sending mails, because send email was check")
+        instance.send_email = False
+
+
+@transaction.atomic
+def send_email_if_canceled_change(sender, instance, **kwargs):
+    try:
+        obj = sender.objects.select_for_update().get(pk=instance.pk)
+    except sender.DoesNotExist:
+        pass  # Object is new, so field hasn't technically changed, but you may want to do something else here.
+    else:
+        # If event was canceled
+        if not obj.canceled and instance.canceled:
+            print("send_email() because event has been canceled")
+            return
+
+        # If event was canceled but is live again
+        if obj.canceled and not instance.canceled:
+            print("send_email() because event has been canceled but is live again")
+            return
+
+
+def pre_save_for_all_subclasses(model_class):
+    pre_save.connect(send_email_if_flag_enabled, model_class)
+    pre_save.connect(send_email_if_canceled_change, model_class)
+    if len(model_class.__subclasses__()) > 0:
+        for subClass in model_class.__subclasses__():
+            pre_save_for_all_subclasses(subClass)
+
+
+pre_save_for_all_subclasses(Event)
+
 
 # # TODO for profile data fill profile
 # @receiver(post_save, sender=settings.AUTH_USER_MODEL)

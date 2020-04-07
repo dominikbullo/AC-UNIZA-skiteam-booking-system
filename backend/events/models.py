@@ -10,7 +10,7 @@ from users.models import Profile
 class Season(models.Model):
     # format:   YYYY_YYYY
     # example:  2019_2020
-    year = models.CharField(max_length=9, unique=True, primary_key=True)
+    year = models.CharField(max_length=9, unique=True)
     current = models.BooleanField(default=False)
 
     # first day of skiing in the season
@@ -40,9 +40,6 @@ class Category(models.Model):
 
     def __str__(self):
         return "%s | %s" % (self.name, self.season)
-
-    # def get_category_dislay(self):
-    #     self.name
 
     class Meta:
         verbose_name_plural = "Categories"
@@ -82,10 +79,10 @@ class Event(PolymorphicModel):
         choices=EventTypeChoices.choices
     )
 
-    title = models.CharField(max_length=100, default="Default Title For Event")
     canceled = models.BooleanField(default=False)
-    start_date = models.DateTimeField()
+    send_email = models.BooleanField(default=False)
 
+    start_date = models.DateTimeField()
     # TODO in serializers default datetime + 1h from start
     end_date = models.DateTimeField(blank=True)
 
@@ -97,6 +94,21 @@ class Event(PolymorphicModel):
 
     def __str__(self):
         return "%s - %s" % (self.type, self.season)
+
+        # # def save(self, *args, **kwargs):
+        # #     # TODO FIX Type
+        # #     # TODO if canceled or if is there some change in fields
+        # #     # TODO compare if something change
+        #
+        # if self.id:
+        #     old_event = Event.objects.get(pk=self.id)
+        #     if not old_event.canceled and self.canceled:
+        #         print("send_email() because event has been canceled")
+        #
+        #     if self.send_email:
+        #         print("send_email() because it's true")
+        #
+        # super(Event, self).save()
 
 
 class SkiEvent(Event):
