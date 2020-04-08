@@ -36,6 +36,8 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 DJANGO_APPS = (
+    # https://github.com/deschler/django-modeltranslation/issues/408
+    'modeltranslation',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -65,8 +67,13 @@ THIRD_PARTY_APPS = (
     'allauth.socialaccount.providers.facebook',
 
     'polymorphic',
+
     'webpack_loader',
+
     'pwa',
+
+    'simple_mail',
+    'ckeditor',
 )
 
 LOCAL_APPS = (
@@ -263,6 +270,16 @@ PWA_APP_ICONS_APPLE = [
 ]
 PWA_APP_DIR = 'ltr'
 PWA_APP_LANG = 'en-US'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'youremail@gmail.com'
+EMAIL_HOST_PASSWORD = 'yourpassword'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+
+# enable django-ckeditor integration
+SIMPLE_MAIL_USE_CKEDITOR = True
 
 try:
     from .local_settings import *

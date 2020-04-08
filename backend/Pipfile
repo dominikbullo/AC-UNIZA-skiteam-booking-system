@@ -16,6 +16,9 @@ whitenoise = ">=4.0"
 django-pwa = "*"
 django-push-notifications = "*"
 django-webpush = "*"
+django-simple-mail = "*"
+django-ckeditor = "*"
+django-modeltranslation = "*"
 
 [dev-packages]
 django-webpack-loader = "*"
