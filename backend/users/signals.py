@@ -8,29 +8,32 @@ from django.dispatch import receiver
 
 from rest_framework.authtoken.models import Token
 
+from core.utils import send_custom_mail
 from events.models import Season, Event
 
 
 def send_email_if_flag_enabled(sender, instance, **kwargs):
     if instance.send_email:
         print("Sending mails, because send email was check")
+        send_custom_mail(new=instance)
         instance.send_email = False
 
 
 @transaction.atomic
 def send_email_if_canceled_change(sender, instance, **kwargs):
     try:
-        obj = sender.objects.select_for_update().get(pk=instance.pk)
+        old = sender.objects.select_for_update().get(pk=instance.pk)
     except sender.DoesNotExist:
         pass  # Object is new, so field hasn't technically changed, but you may want to do something else here.
     else:
         # If event was canceled
-        if not obj.canceled and instance.canceled:
+        if not old.canceled and instance.canceled:
+            send_custom_mail(instance, old)
             print("send_email() because event has been canceled")
             return
 
         # If event was canceled but is live again
-        if obj.canceled and not instance.canceled:
+        if old.canceled and not instance.canceled:
             print("send_email() because event has been canceled but is live again")
             return
 
