@@ -134,12 +134,7 @@ export default {
         birth_date: new Date(),
         phone_number: '',
         location: '',
-        gender: '',
-
-        isCompleted: false,
-        isImportant: false,
-        isStarred: false,
-        tags: []
+        gender: ''
       }
     }
   },
@@ -161,12 +156,16 @@ export default {
   methods: {
     clearFields () {
       Object.assign(this.childData, {
-        title: '',
-        desc: '',
-        isCompleted: false,
-        isImportant: false,
-        isStarred: false,
-        tags: []
+        username: '',
+        email: '',
+        password: '',
+        confirm_password: '',
+        first_name: '',
+        last_name: '',
+        birth_date: new Date(),
+        phone_number: '',
+        location: '',
+        gender: ''
       })
     },
     addChild () {
@@ -180,10 +179,9 @@ export default {
 
             this.$vs.notify({
               color: 'success',
-              title: 'User Deleted',
-              text: 'The selected user was successfully deleted'
+              title: 'User Added',
+              text: 'User was created successfully'
             })
-
           }).catch(error => {
             this.$vs.loading.close()
             console.log('tototo je error', error)

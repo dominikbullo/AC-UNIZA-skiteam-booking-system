@@ -1,18 +1,27 @@
-/*=========================================================================================
+/* =========================================================================================
   File Name: moduleCalendarActions.js
   Description: Calendar Module Actions
   ----------------------------------------------------------------------------------------
   Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
   Author: Pixinvent
   Author URL: http://www.themeforest.net/user/pixinvent
-==========================================================================================*/
+========================================================================================== */
 
 import axios from '@/axios.js'
 
 export default {
-  fetchEvents ({ commit }) {
+  /**
+   * Fetching events from server.
+   *
+   * @default fetching from current active season
+   */
+  fetchEvents ({ commit }, payload = { query: { season: 'current' } }) {
+    console.log('payload fetch events', payload)
+
     return new Promise((resolve, reject) => {
-      axios.get('/event/?current=true')
+      axios.get('/event/', {
+        params: payload.query
+      })
         .then((response) => {
           commit('SET_EVENTS', response.data.results)
           resolve(response)
@@ -40,77 +49,4 @@ export default {
         })
     })
   }
-
-  // addEvent ({ commit }, event) {
-  //   return new Promise((resolve, reject) => {
-  //     axios.post('/season/events/', { event })
-  //       .then((response) => {
-  //         commit('ADD_EVENT', Object.assign(event, { id: response.data.id }))
-  //         resolve(response)
-  //       })
-  //       .catch((error) => {
-  //         reject(error)
-  //       })
-  //   })
-  // },
-  // fetchEventLabels ({ commit }) {
-  //   return new Promise((resolve, reject) => {
-  //     axios.get('/event/labels/')
-  //       .then((response) => {
-  //         commit('SET_LABELS', response.data.results)
-  //         resolve(response)
-  //       })
-  //       .catch((error) => {
-  //         reject(error)
-  //       })
-  //   })
-  // },
-  // editEvent ({ commit }, event) {
-  //   return new Promise((resolve, reject) => {
-  //     axios.post(`/api/apps/calendar/event/${event.id}`, { event })
-  //       .then((response) => {
-  //
-  //         // Convert Date String to Date Object
-  //         const event = response.data
-  //         event.startDate = new Date(event.startDate)
-  //         event.endDate = new Date(event.endDate)
-  //
-  //         commit('UPDATE_EVENT', event)
-  //         resolve(response)
-  //       })
-  //       .catch((error) => {
-  //         reject(error)
-  //       })
-  //   })
-  // },
-  // removeEvent ({ commit }, eventId) {
-  //   return new Promise((resolve, reject) => {
-  //     axios.delete(`/api/apps/calendar/event/${eventId}`)
-  //       .then((response) => {
-  //         commit('REMOVE_EVENT', response.data)
-  //         resolve(response)
-  //       })
-  //       .catch((error) => {
-  //         reject(error)
-  //       })
-  //   })
-  // },
-  // eventDragged ({ commit }, payload) {
-  //   return new Promise((resolve, reject) => {
-  //     axios.post(`/api/apps/calendar/event/dragged/${payload.event.id}`, { payload })
-  //       .then((response) => {
-  //
-  //         // Convert Date String to Date Object
-  //         const event = response.data
-  //         event.startDate = new Date(event.startDate)
-  //         event.endDate = new Date(event.endDate)
-  //
-  //         commit('UPDATE_EVENT', event)
-  //         resolve(response)
-  //       })
-  //       .catch((error) => {
-  //         reject(error)
-  //       })
-  //   })
-  // }
 }

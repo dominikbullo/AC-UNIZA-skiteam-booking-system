@@ -15,7 +15,7 @@
                       :closeOnSelect="false"
                       v-model="selected"
                       :options="options"
-                      :dir="$vs.rtl ? 'rtl' : 'ltr'"    />
+                      :dir="$vs.rtl ? 'rtl' : 'ltr'"/>
             <br>
 
           </div>
@@ -252,8 +252,9 @@
     <!--                    <span>#{{data[indextr].orderNo}}</span>-->
     <!--                  </vs-td>-->
     <!--                  <vs-td :data="data[indextr].status">-->
-    <!--                    <span class="flex items-center px-2 py-1 rounded"><div :class="'bg-' + data[indextr].statusColor"-->
-    <!--                                                                           class="h-3 w-3 rounded-full mr-2"></div>{{data[indextr].status}}</span>-->
+    <!--                        <span class="flex items-center px-2 py-1 rounded"><div-->
+    <!--                          :class="'bg-' + data[indextr].statusColor"-->
+    <!--                          class="h-3 w-3 rounded-full mr-2"></div>{{data[indextr].status}}</span>-->
     <!--                  </vs-td>-->
     <!--                  <vs-td :data="data[indextr].orderNo">-->
     <!--                    <ul class="users-liked user-list">-->
@@ -328,26 +329,16 @@ export default {
       chatMsgInput: '',
       customersData: {},
 
+      stats: {},
+
       analyticsData,
       settings: { // perfectscrollbar settings
         maxScrollbarLength: 60,
         wheelSpeed: 0.60
       },
+
+
       timelineData: [
-        {
-          color: 'primary',
-          icon: 'PlusIcon',
-          title: 'Client Meeting',
-          desc: 'Bonbon macaroon jelly beans gummi bears jelly lollipop apple',
-          time: '25 mins Ago'
-        },
-        {
-          color: 'warning',
-          icon: 'MailIcon',
-          title: 'Email Newsletter',
-          desc: 'Cupcake gummi bears soufflé caramels candy',
-          time: '15 Days Ago'
-        },
         {
           color: 'primary',
           icon: 'PlusIcon',
@@ -391,110 +382,9 @@ export default {
       return this.$store.getters.scrollbarTag
     }
   },
-  mounted () {
-    const scroll_el = this.$refs.chatLogPS.$el || this.$refs.chatLogPS
-    scroll_el.scrollTop = this.$refs.chatLog.scrollHeight
-  },
   created () {
-    console.log(localStorage.getItem('userInfo'))
-    // Subscribers gained - Statistics
-    this.$http.get('/api/card/card-statistics/subscribers')
-      .then((response) => {
-        this.subscribersGained = response.data
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-
-    // Revenue Generated
-    this.$http.get('/api/card/card-statistics/revenue')
-      .then((response) => {
-        this.revenueGenerated = response.data
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-
-    // Sales
-    this.$http.get('/api/card/card-statistics/sales')
-      .then((response) => {
-        this.quarterlySales = response.data
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-
-    // Orders - Statistics
-    this.$http.get('/api/card/card-statistics/orders')
-      .then((response) => {
-        this.ordersRecevied = response.data
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-
-    // Revenue Comparison
-    this.$http.get('/api/card/card-analytics/revenue-comparison')
-      .then((response) => {
-        this.revenueComparisonLine = response.data
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-
-    // Goal Overview
-    this.$http.get('/api/card/card-analytics/goal-overview')
-      .then((response) => {
-        this.goalOverview = response.data
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-
-    // Browser Analytics
-    this.$http.get('/api/card/card-analytics/browser-analytics')
-      .then((response) => {
-        this.browserStatistics = response.data
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-
-    // Client Retention
-    this.$http.get('/api/card/card-analytics/client-retention')
-      .then((response) => {
-        this.clientRetentionBar = response.data
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-
-    // Sessions By Device
-    this.$http.get('/api/card/card-analytics/session-by-device')
-      .then((response) => {
-        this.sessionsData = response.data
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-
-    // Chat Log
-    this.$http.get('/api/chat/demo-1/log')
-      .then((response) => {
-        this.chatLog = response.data
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-
-    // Customers
-    this.$http.get('/api/card/card-analytics/customers')
-      .then((response) => {
-        this.customersData = response.data
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+    this.$store.dispatch('family/fetchFamily', this.$store.state.AppActiveUser.profile.family_id)
+    this.$store.dispatch('family/fetchUserStats', { username: 'testsets' })
   }
 }
 </script>

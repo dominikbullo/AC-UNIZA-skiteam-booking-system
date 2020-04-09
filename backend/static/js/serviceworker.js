@@ -23,9 +23,14 @@ var filesToCache = [
   '/static/images/icons/splash-1668x2388.png',
   '/static/images/icons/splash-2048x2732.png'
 ]
+// Bump this version number each time a cached or asset changes.
+// If you don't, the SW won't be reinstalled and the pages you cache initially won't be updated
+// (by default at least, see next sections for more on caching).
+const VERSION = '{{ version }}'
 
 // Cache on install
 self.addEventListener('install', event => {
+  console.log('[SW] Installing SW version:', VERSION)
   this.skipWaiting()
   event.waitUntil(
     caches.open(staticCacheName)

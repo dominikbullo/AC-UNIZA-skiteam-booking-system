@@ -254,14 +254,20 @@ PWA_APP_ORIENTATION = 'any'
 PWA_APP_START_URL = '/'
 PWA_APP_ICONS = [
     {
-        'src'  : '/static/img/icons/android-chrome-192x192.png',
+        'src'  : '/static/images/icons/android-chrome-192x192.png',
         'sizes': '192x192'
     }
 ]
 PWA_APP_ICONS_APPLE = [
     {
-        'src'  : '/static/img/icons/apple-touch-icon.png',
+        'src'  : '/static/images/icons/apple-touch-icon.png',
         'sizes': '180x180'
+    }
+]
+PWA_APP_SPLASH_SCREEN = [
+    {
+        'src'  : '/static/images/icons/splash-640x1136.png',
+        'media': '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)'
     }
 ]
 PWA_APP_DIR = 'ltr'

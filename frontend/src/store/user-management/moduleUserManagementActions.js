@@ -35,7 +35,7 @@ export default {
   },
   fetchDefaultUser (context, userId) {
     return new Promise((resolve, reject) => {
-      axios.get(`/api/user-management/user/${userId}`)
+      axios.get(`/api/user-management/user/268`)
         .then((response) => {
           resolve(response)
         })
