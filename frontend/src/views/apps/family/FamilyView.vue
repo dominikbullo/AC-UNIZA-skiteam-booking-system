@@ -8,44 +8,46 @@
 ========================================================================================== -->
 
 <template>
-  <div id="page-user-view">
+  <div id="page-family-view">
 
-    <vs-alert color="danger" title="User Not Found" :active.sync="user_not_found">
-      <span>User record with id: {{ $route.params.userId }} not found. </span>
+    <span>Family id: {{ $route.params.familyId }}</span>
+
+    <vs-alert color="danger" title="User Not Found" :active.sync="family_not_found">
       <span>
         <span>Check </span><router-link :to="{name:'page-user-list'}"
                                         class="text-inherit underline">All Users</router-link>
       </span>
     </vs-alert>
 
-    <div id="user-data" v-if="user_data">
+    <div id="family-data" v-if="family_data">
+      <p>Family data: {{family_data}}</p>
 
-      <vx-card title="Account" class="mb-base">
+      <vx-card title="Information" class="mb-base">
 
         <!-- Avatar -->
         <div class="vx-row">
 
-          <!-- Avatar Col -->
-          <div class="vx-col" id="avatar-col">
-            <div class="img-container mb-4">
-              <img :src="user_data.avatar" class="rounded w-full"/>
-            </div>
-          </div>
+          <!--          &lt;!&ndash; Avatar Col &ndash;&gt;-->
+          <!--          <div class="vx-col" id="avatar-col">-->
+          <!--            <div class="img-container mb-4">-->
+          <!--              <img :src="family_data.avatar" class="rounded w-full"/>-->
+          <!--            </div>-->
+          <!--          </div>-->
 
           <!-- Information - Col 1 -->
           <div class="vx-col flex-1" id="account-info-col-1">
             <table>
               <tr>
                 <td class="font-semibold">Username</td>
-                <td>{{ user_data.username }}</td>
+                <td>{{ family_data.name }}</td>
               </tr>
               <tr>
                 <td class="font-semibold">Name</td>
-                <td>{{ user_data.name }}</td>
+                <td>{{ family_data.name }}</td>
               </tr>
               <tr>
                 <td class="font-semibold">Email</td>
-                <td>{{ user_data.email }}</td>
+                <td>{{ family_data.name }}</td>
               </tr>
             </table>
           </div>
@@ -56,25 +58,23 @@
             <table>
               <tr>
                 <td class="font-semibold">Status</td>
-                <td>{{ user_data.status }}</td>
+                <td>{{ family_data.name }}</td>
               </tr>
               <tr>
                 <td class="font-semibold">Role</td>
-                <td>{{ user_data.role }}</td>
+                <td>{{ family_data.name }}</td>
               </tr>
               <tr>
                 <td class="font-semibold">Company</td>
-                <td>{{ user_data.company }}</td>
+                <td>{{ family_data.name }}</td>
               </tr>
             </table>
           </div>
+
           <!-- /Information - Col 2 -->
           <div class="vx-col w-full flex" id="account-manage-buttons">
             <vs-button icon-pack="feather" icon="icon-edit" class="mr-4"
-                       :to="{name: 'app-user-edit', params: { userId: $route.params.userId }}">Edit
-            </vs-button>
-            <vs-button type="border" color="danger" icon-pack="feather" icon="icon-trash" @click="confirmDeleteRecord">
-              Delete
+                       :to="{name: 'app-family-edit', params: { userId: $route.params.userId }}">Edit
             </vs-button>
           </div>
 
@@ -84,177 +84,169 @@
 
       <div class="vx-row">
         <div class="vx-col lg:w-1/2 w-full">
-          <vx-card title="Information" class="mb-base">
+          <vx-card title="Members" class="mb-base">
             <table>
               <tr>
                 <td class="font-semibold">Birth Date</td>
-                <td>{{ user_data.dob }}</td>
+                <td>{{ family_data.name }}</td>
               </tr>
               <tr>
                 <td class="font-semibold">Mobile</td>
-                <td>{{ user_data.mobile }}</td>
+                <td>{{ family_data.name }}</td>
               </tr>
               <tr>
                 <td class="font-semibold">Website</td>
-                <td>{{ user_data.website }}</td>
+                <td>{{ family_data.name }}</td>
               </tr>
               <tr>
                 <td class="font-semibold">Languages</td>
-                <td>{{ user_data.languages_known.join(', ') }}</td>
+                <td>{{ family_data.name }}</td>
               </tr>
               <tr>
                 <td class="font-semibold">Gender</td>
-                <td>{{ user_data.gender }}</td>
+                <td>{{ family_data.name }}</td>
               </tr>
               <tr>
                 <td class="font-semibold">Contact</td>
-                <td>{{ user_data.contact_options.join(', ') }}</td>
+                <td>{{ family_data.name }}</td>
               </tr>
             </table>
           </vx-card>
         </div>
 
         <div class="vx-col lg:w-1/2 w-full">
-          <vx-card title="Social Links" class="mb-base">
+          <vx-card title="Extra info" class="mb-base">
             <table>
               <tr>
                 <td class="font-semibold">Twitter</td>
-                <td>{{ user_data.social_links.twitter }}</td>
+                <td>{{ family_data.name }}</td>
               </tr>
               <tr>
                 <td class="font-semibold">Facebook</td>
-                <td>{{ user_data.social_links.facebook }}</td>
+                <td>{{ family_data.name }}</td>
               </tr>
               <tr>
                 <td class="font-semibold">Instagram</td>
-                <td>{{ user_data.social_links.instagram }}</td>
+                <td>{{ family_data.name }}</td>
               </tr>
               <tr>
                 <td class="font-semibold">Github</td>
-                <td>{{ user_data.social_links.github }}</td>
+                <td>{{ family_data.name }}</td>
               </tr>
               <tr>
                 <td class="font-semibold">CodePen</td>
-                <td>{{ user_data.social_links.codepen }}</td>
+                <td>{{ family_data.name }}</td>
               </tr>
               <tr>
                 <td class="font-semibold">Slack</td>
-                <td>{{ user_data.social_links.slack }}</td>
+                <td>{{ family_data.name }}</td>
               </tr>
             </table>
           </vx-card>
         </div>
       </div>
-
-      <!-- Permissions -->
-      <vx-card>
-
-        <div class="vx-row">
-          <div class="vx-col w-full">
-            <div class="flex items-end px-3">
-              <feather-icon svgClasses="w-6 h-6" icon="LockIcon" class="mr-2"/>
-              <span class="font-medium text-lg leading-none">Permissions</span>
-            </div>
-            <vs-divider/>
-          </div>
-        </div>
-
-        <div class="block overflow-x-auto">
-          <table class="w-full permissions-table">
-            <tr>
-              <!--
-                You can also use `Object.keys(Object.values(data_local.permissions)[0])` this logic if you consider,
-                our data structure. You just have to loop over above variable to get table headers.
-                Below we made it simple. So, everyone can understand.
-               -->
-              <th class="font-semibold text-base text-left px-3 py-2"
-                  v-for="heading in ['Module', 'Read', 'Write', 'Create', 'Delete']" :key="heading">{{ heading }}
-              </th>
-            </tr>
-
-            <tr v-for="(val, name) in user_data.permissions" :key="name">
-              <td class="px-3 py-2">{{ name }}</td>
-              <td v-for="(permission, name) in val" class="px-3 py-2" :key="name+permission">
-                <vs-checkbox v-model="val[name]" class="pointer-events-none"/>
-              </td>
-            </tr>
-          </table>
-        </div>
-
-      </vx-card>
     </div>
   </div>
 </template>
 
 <script>
-import moduleUserManagement from '@/store/user-management/moduleUserManagement.js'
-
 export default {
   data () {
     return {
-      user_data: null,
-      user_not_found: false
-    }
-  },
-  computed: {
-    userAddress () {
-      let str = ''
-      for (const field in this.user_data.location) {
-        str += `${field} `
-      }
-      return str
-    }
-  },
-  methods: {
-    confirmDeleteRecord () {
-      this.$vs.dialog({
-        type: 'confirm',
-        color: 'danger',
-        title: 'Confirm Delete',
-        text: `You are about to delete "${this.user_data.username}"`,
-        accept: this.deleteRecord,
-        acceptText: 'Delete'
-      })
-    },
-    deleteRecord () {
-      /* Below two lines are just for demo purpose */
-      this.$router.push({name: 'app-user-list'})
-      this.showDeleteSuccess()
-
-      /* UnComment below lines for enabling true flow if deleting user */
-      // this.$store.dispatch("userManagement/removeRecord", this.user_data.id)
-      //   .then(()   => { this.$router.push({name:'app-user-list'}); this.showDeleteSuccess() })
-      //   .catch(err => { console.error(err)       })
-    },
-    showDeleteSuccess () {
-      this.$vs.notify({
-        color: 'success',
-        title: 'User Deleted',
-        text: 'The selected user was successfully deleted'
-      })
+      family_data: null,
+      family_not_found: false
     }
   },
   created () {
-    // Register Module UserManagement Module
-    if (!moduleUserManagement.isRegistered) {
-      this.$store.registerModule('userManagement', moduleUserManagement)
-      moduleUserManagement.isRegistered = true
-    }
-
-    const userId = this.$route.params.userId
-    this.$store.dispatch('userManagement/fetchDefaultUser', userId)
+    console.log()
+    const familyId = this.$route.params.familyId
+    this.$store.dispatch('family/fetchFamily', familyId)
       .then(res => {
-        this.user_data = res.data
+        this.family_data = res.data
       })
       .catch(err => {
         if (err.response.status === 404) {
-          this.user_not_found = true
+          this.family_not_found = true
           return
         }
         console.error(err)
       })
   }
 }
+// import moduleUserManagement from '@/store/user-management/moduleUserManagement.js'
+//
+// export default {
+//   props: {
+//     familyId: {
+//       type: Number,
+//       required: true
+//     }
+//   },
+//   data () {
+//     return {
+//       user_data: null,
+//       user_not_found: false
+//     }
+//   },
+//   computed: {
+//     userAddress () {
+//       let str = ''
+//       for (const field in this.user_data.location) {
+//         str += `${field} `
+//       }
+//       return str
+//     }
+//   },
+//   methods: {
+//     confirmDeleteRecord () {
+//       this.$vs.dialog({
+//         type: 'confirm',
+//         color: 'danger',
+//         title: 'Confirm Delete',
+//         text: `You are about to delete "${this.user_data.username}"`,
+//         accept: this.deleteRecord,
+//         acceptText: 'Delete'
+//       })
+//     },
+//     deleteRecord () {
+//       /* Below two lines are just for demo purpose */
+//       this.$router.push({ name: 'app-user-list' })
+//       this.showDeleteSuccess()
+//
+//       /* UnComment below lines for enabling true flow if deleting user */
+//       // this.$store.dispatch("userManagement/removeRecord", this.user_data.id)
+//       //   .then(()   => { this.$router.push({name:'app-user-list'}); this.showDeleteSuccess() })
+//       //   .catch(err => { console.error(err)       })
+//     },
+//     showDeleteSuccess () {
+//       this.$vs.notify({
+//         color: 'success',
+//         title: 'User Deleted',
+//         text: 'The selected user was successfully deleted'
+//       })
+//     }
+//   },
+//   created () {
+//     // // Register Module UserManagement Module
+//     // if (!moduleUserManagement.isRegistered) {
+//     //   this.$store.registerModule('userManagement', moduleUserManagement)
+//     //   moduleUserManagement.isRegistered = true
+//     // }
+//
+//     const familyId = this.familyId
+//     this.$store.dispatch('family/fetchFamily', familyId)
+//       .then(res => {
+//         this.family_data = res
+//       })
+//       .catch(err => {
+//         if (err.response.status === 404) {
+//           this.user_not_found = true
+//           return
+//         }
+//         console.error(err)
+//       })
+//   }
+// }
 
 </script>
 

@@ -8,7 +8,7 @@ export default {
     state.members.concat(payload)
   },
   UPDATE_FAMILY (state, familyData) {
-    console.log('UPDATE_FAMILY', familyData)
+    console.log('[STORE MUT] Updating family with data', familyData)
     Object.assign(state, familyData)
   },
   ADD_MEMBER (state, payload) {

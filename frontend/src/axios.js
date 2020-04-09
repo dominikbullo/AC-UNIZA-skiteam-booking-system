@@ -16,19 +16,19 @@ const instance = axios.create({
 
 // Add a request interceptor
 instance.interceptors.request.use(function (config) {
-  console.log('Request Interceptors', config)
+  console.log('[AXIOS] Request Interceptors', config)
   return config
 }, function (error) {
-  console.error('Request Interceptors Error', error)
+  console.error('[AXIOS] Request Interceptors Error', error)
   return Promise.reject(error)
 })
 
 // Add a response interceptor
 instance.interceptors.response.use(function (response) {
-  console.log('Response Interceptors', response)
+  console.log('[AXIOS] Response Interceptors', response)
   return response
 }, function (error) {
-  console.error('Response Interceptors Error', error)
+  console.error('[AXIOS] Response Interceptors Error', error)
 
   // FIXME: If you ever get an unauthorized, logout the user
   // RES: https://blog.sqreen.com/authentication-best-practices-vue/

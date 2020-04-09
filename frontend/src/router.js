@@ -203,7 +203,7 @@ const router = new Router({
           }
         },
         {
-          path: '/apps/family/view/:familyID',
+          path: '/apps/family/view/:familyId',
           name: 'app-family-view',
           component: () => import('@/views/apps/family/FamilyView.vue'),
           meta: {
@@ -219,11 +219,12 @@ const router = new Router({
               }
             ],
             pageTitle: 'Family View',
-            rule: 'editor'
+            rule: 'editor',
+            props: true
           }
         },
         {
-          path: '/apps/family/edit/:familyID',
+          path: '/apps/family/edit/:familyId',
           name: 'app-family-edit',
           component: () => import('@/views/apps/family/family-edit/FamilyEdit.vue'),
           meta: {
@@ -1231,26 +1232,6 @@ const router = new Router({
               }
             ],
             pageTitle: 'Settings',
-            rule: 'editor'
-          }
-        },
-        {
-          path: '/apps/event/list',
-          name: 'app-event-list',
-          component: () => import('@/views/apps/event/EventList.vue'),
-          meta: {
-            breadcrumb: [
-              {
-                title: 'Home',
-                url: '/'
-              },
-              { title: 'Event' },
-              {
-                title: 'List',
-                active: true
-              }
-            ],
-            pageTitle: 'Event List',
             rule: 'editor'
           }
         },

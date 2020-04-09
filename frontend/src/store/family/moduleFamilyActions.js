@@ -18,7 +18,7 @@ export default {
     })
   },
   fetchFamily ({ commit }, familyId) {
-    console.log('payload in fetchFamily', familyId)
+    console.log('[STORE ACT] Fetching family', familyId)
 
     return new Promise((resolve, reject) => {
       axios.get(`/family/${familyId}/`)
