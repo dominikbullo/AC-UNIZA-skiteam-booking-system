@@ -147,6 +147,12 @@ export default [
         icon: 'FileIcon'
       },
       {
+        url: '/test/stats',
+        name: 'Test stats',
+        slug: 'test-stats',
+        icon: 'FileIcon'
+      },
+      {
         url: '/test/calendar',
         name: 'Test Calendar',
         slug: 'test-Calendar',
@@ -158,19 +164,6 @@ export default [
         name: 'Profile',
         icon: 'UserIcon',
         i18n: 'Profile'
-      }
-    ]
-  },
-  {
-    header: 'Examples',
-    icon: 'FileIcon',
-    i18n: 'Examples',
-    items: [
-      {
-        url: '/test/page',
-        name: 'Test Page',
-        slug: 'test-page',
-        icon: 'FileIcon'
       }
     ]
   },

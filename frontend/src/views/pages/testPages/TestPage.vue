@@ -250,13 +250,13 @@ export default {
         navigator.serviceWorker.ready // returns a Promise, the active SW registration
           .then(swreg => swreg.showNotification('Notifications granted', {
             body: 'Here is a first notification',
-            icon: 'static/img/icons/android-chrome-192x192.png',
-            image: 'static/img/autumn-forest.png',
+            icon: 'static/images/icons/android-chrome-192x192.png',
+            image: 'static/images/autumn-forest.png',
             vibrate: [300, 200, 300],
-            badge: '~/img/icons/plint-badge-96x96.png'
+            badge: '~/images/icons/plint-badge-96x96.png'
             // actions: [
-            //     { action: 'confirm', title: 'Okay', icon: '/img/icons/android-chrome-192x192.png'},
-            //     { action: 'cancel', title: 'Cancel', icon: '/img/icons/android-chrome-192x192.png'}
+            //     { action: 'confirm', title: 'Okay', icon: '/images/icons/android-chrome-192x192.png'},
+            //     { action: 'cancel', title: 'Cancel', icon: '/images/icons/android-chrome-192x192.png'}
             // ],
           }))
       }

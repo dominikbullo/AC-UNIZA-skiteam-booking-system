@@ -15,28 +15,11 @@ from users.models import Profile
 
 
 class EventViewSet(viewsets.ModelViewSet):
-    queryset = Event.objects.all().order_by('start_date')
     serializer_class = EventPolymorphicSerializer
 
     # permission_classes = [IsOwnFamilyOrReadOnly]
     # filter_backends = [SearchFilter]
     # search_fields = ["name"]
-    # RES: https://stackoverflow.com/questions/33720416/django-rest-get-user-by-username-instead-of-primary-key
-    # RES: https://www.django-rest-framework.org/api-guide/viewsets/#marking-extra-actions-for-routing
-    # TODO IDEA: Not extra view for current season but right here
-    # @action(detail=False, methods=['get'])
-    # def season_test(self, request):
-    #     return Response(Event.objects.filter(season=Season.objects.get(current=True)), status=status.HTTP_200_OK)
-
-
-class CurrentSeasonEventViewSet(EventViewSet):
-    serializer_class = EventPolymorphicSerializer
-
-    def get_queryset(self):
-        return Event.objects.filter(season=Season.objects.get(current=True)).order_by('start_date')
-
-
-class ChangeChildToEventAPIView(APIView):
 
     def get_event(self, pk):
         return get_object_or_404(Event, pk=pk)
@@ -44,7 +27,10 @@ class ChangeChildToEventAPIView(APIView):
     def get_user_profile(self, username):
         return get_object_or_404(Profile, user__username=username)
 
-    def post(self, request, event_id):
+    # RES: https://stackoverflow.com/questions/36365326/django-rest-framework-doesnt-serialize-serializermethodfield
+    @action(detail=True, methods=['post'], url_path='change')
+    def add_users_to_event(self, request, pk=None):
+        event_id = pk
         event = self.get_event(event_id)
         event_serializer = EventPolymorphicSerializer(event)
 
@@ -83,22 +69,14 @@ class ChangeChildToEventAPIView(APIView):
 
         return Response(event_serializer.data, status=status.HTTP_200_OK)
 
-    # def post(self, request, event_id):
-    #     event = self.get_event(event_id)
-    #     event_serializer = EventPolymorphicSerializer(event)
-    #     user = self.get_user_profile(request.data.get("username", None))
-    #     event.participants.remove(user)
-    #     return Response(event_serializer.data, status=status.HTTP_200_OK)
+    def get_queryset(self):
+        queryset = Event.objects.all()
 
+        if self.request.query_params.get('season') == "current":
+            print("Getting events from current season")
+            queryset = queryset.filter(season=Season.objects.get(current=True))
 
-# class DeleteChildToEventAPIView(ChangeChildToEventAPIView):
-#
-#     def post(self, request, event_id):
-#         event = self.get_event(event_id)
-#         event_serializer = EventPolymorphicSerializer(event)
-#         user = self.get_user_profile(request.data.get("username", None))
-#         event.participants.remove(user)
-#         return Response(event_serializer.data, status=status.HTTP_200_OK)
+        return queryset
 
 
 class SeasonViewSet(viewsets.ModelViewSet):

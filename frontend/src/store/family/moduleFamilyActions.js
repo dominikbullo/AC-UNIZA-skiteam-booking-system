@@ -34,11 +34,22 @@ export default {
         })
     })
   },
-  deleteChild ({ commit }, task) {
+  // RES https://stackoverflow.com/questions/53501185/how-to-post-query-parameters-with-axios
+  fetchUserStats ({ commit }, payload = { query: { season: 'current' } }) {
+    if (!payload.query) {
+      payload.query = { season: 'current' }
+    }
+    console.log('payload in fetchUserStats', payload)
+
+    if (!('username' in payload)) {
+      console.error('Not found any username in payload')
+      return
+    }
+
     return new Promise((resolve, reject) => {
-      axios.post(`/api/apps/todo/task/${task.id}`, { task })
+      axios.get(`/profile/${payload.username}/stats/`, { params: payload.query })
         .then((response) => {
-          commit('UPDATE_TASK', response.data)
+          // commit('UPDATE_FAMILY_MEMBER_STATS', response.data)
           resolve(response)
         })
         .catch((error) => {

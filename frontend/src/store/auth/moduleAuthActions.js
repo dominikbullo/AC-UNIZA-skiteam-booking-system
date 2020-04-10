@@ -73,9 +73,7 @@ export default {
           //   return reject({message: 'User not verified!'})
           // }
 
-          // TODO display name add to response
-          // TODO update family!
-          
+
           // Set accessToken
           localStorage.setItem('accessToken', response.data.key)
 
@@ -84,6 +82,10 @@ export default {
 
           // Set bearer token in axios
           commit('SET_BEARER', response.data.key)
+
+          // TODO display name add to response
+          // TODO update family!
+          // this.$store.dispatch('family/fetchFamily', response.data.user.profile.family_id)
 
           // Navigate User to homepage
           router.push(router.currentRoute.query.to || '/')

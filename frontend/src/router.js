@@ -72,7 +72,15 @@ const router = new Router({
         {
           path: '/test/page',
           name: 'testpage',
-          component: () => import('@/views/pages/TestPage.vue'),
+          component: () => import('@/views/pages/testPages/TestPage.vue'),
+          meta: {
+            rule: 'editor'
+          }
+        },
+        {
+          path: '/test/stats',
+          name: 'test-stats',
+          component: () => import('@/views/pages/testPages/TestStats.vue'),
           meta: {
             rule: 'editor'
           }
@@ -80,7 +88,7 @@ const router = new Router({
         {
           path: '/test/calendar',
           name: 'testcalendar',
-          component: () => import('@/views/pages/TestCalendar.vue'),
+          component: () => import('@/views/pages/testPages/TestCalendar.vue'),
           meta: {
             rule: 'editor'
           }
@@ -1231,26 +1239,6 @@ const router = new Router({
               }
             ],
             pageTitle: 'Settings',
-            rule: 'editor'
-          }
-        },
-        {
-          path: '/apps/event/list',
-          name: 'app-event-list',
-          component: () => import('@/views/apps/event/EventList.vue'),
-          meta: {
-            breadcrumb: [
-              {
-                title: 'Home',
-                url: '/'
-              },
-              { title: 'Event' },
-              {
-                title: 'List',
-                active: true
-              }
-            ],
-            pageTitle: 'Event List',
             rule: 'editor'
           }
         },

@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.urls import path, include
 
-from users.api.views import FacebookLogin, CustomConfirmEmailView
+from users.api.views import CustomConfirmEmailView
 
 urlpatterns = [
 
@@ -17,8 +17,4 @@ urlpatterns = [
 
     # RES PASSWROD RESET : https://stackoverflow.com/questions/53945056/django-rest-auth-password-reset
     url(r'^', include('django.contrib.auth.urls')),
-
-    # Social
-    path('facebook/', FacebookLogin.as_view(), name='fb_login'),
-    # path('google/', GoogleLogin.as_view(), name='goggle_login')
 ]

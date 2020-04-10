@@ -74,6 +74,9 @@ THIRD_PARTY_APPS = (
 
     'simple_mail',
     'ckeditor',
+
+    'django_excel_fixture',
+    'django_filters'
 )
 
 LOCAL_APPS = (
@@ -228,6 +231,7 @@ DATE_FORMAT = "%d.%m.%Y"
 REST_FRAMEWORK = {
     "DATETIME_INPUT_FORMATS"        : [(DATETIME_FORMAT), ('iso-8601')],
     "DATE_INPUT_FORMATS"            : [('iso-8601'), ],
+    'DEFAULT_FILTER_BACKENDS'       : ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_PERMISSION_CLASSES'    : ('rest_framework.permissions.IsAuthenticated',),
     'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework.authentication.TokenAuthentication',
                                        # RELEASE Delete SessionAuthentication
@@ -247,7 +251,8 @@ WEBPACK_LOADER = {
     }
 }
 
-PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'static/js', 'serviceworker.js')
+PWA_SERVICE_WORKER_PATH = os.path.join(STATIC_ROOT, 'js/serviceworker.js')
+
 PWA_APP_NAME = 'AC UNIZA Ski Team'
 PWA_APP_DESCRIPTION = "App for managing sport club"
 PWA_APP_THEME_COLOR = '#0A0302'
@@ -258,14 +263,26 @@ PWA_APP_ORIENTATION = 'any'
 PWA_APP_START_URL = '/'
 PWA_APP_ICONS = [
     {
-        'src'  : '/static/img/icons/android-chrome-192x192.png',
-        'sizes': '192x192'
+        "src"  : "/static/images/icons/android-chrome-512x512.png",
+        "type" : "image/png",
+        "sizes": "192x192"
+    },
+    {
+        "src"  : "/static/images/icons/android-chrome-512x512.png",
+        "type" : "image/png",
+        "sizes": "512x512"
     }
 ]
 PWA_APP_ICONS_APPLE = [
     {
-        'src'  : '/static/img/icons/apple-touch-icon.png',
+        'src'  : '/static/images/icons/apple-touch-icon.png',
         'sizes': '180x180'
+    }
+]
+PWA_APP_SPLASH_SCREEN = [
+    {
+        'src'  : '/static/images/icons/splash-640x1136.png',
+        'media': '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)'
     }
 ]
 PWA_APP_DIR = 'ltr'

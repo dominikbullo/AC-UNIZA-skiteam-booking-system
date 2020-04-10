@@ -77,9 +77,9 @@ export default {
 
   // you must include each plugins' css
   // paths prefixed with ~ signify node_modules
-  @import '~@fullcalendar/core/main.css';
-  @import '~@fullcalendar/daygrid/main.css';
-  @import '~@fullcalendar/timegrid/main.css';
+  @import '../../../../node_modules/@fullcalendar/core/main.css';
+  @import '../../../../node_modules/@fullcalendar/daygrid/main.css';
+  @import '../../../../node_modules/@fullcalendar/timegrid/main.css';
 
   .demo-app {
     font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
