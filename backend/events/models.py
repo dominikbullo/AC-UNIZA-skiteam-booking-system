@@ -1,8 +1,11 @@
+import datetime
+
 from django.db import models
+from django.utils.translation import gettext as _
 
 from polymorphic.models import PolymorphicModel
 
-from core.choices import CategoryNameChoices, EventTypeChoices, SkiTypeChoices
+from core.choices import CategoryNameChoices, EventTypeChoices, SkiTypeChoices, year_choices, current_year
 from family.models import Child
 from users.models import Profile
 
@@ -32,14 +35,11 @@ class Category(models.Model):
         choices=CategoryNameChoices.choices,
     )
 
-    # year from to know who add into this cat
-    year_from = models.DateField()
-
-    # year until to know who add into this cat
-    year_until = models.DateField()
+    year_from = models.IntegerField(_('Year from'), choices=year_choices(), default=current_year() - 2)
+    year_until = models.IntegerField(_('Year until'), choices=year_choices(), default=current_year())
 
     def __str__(self):
-        return "%s | %s" % (self.name, self.season)
+        return "{name} | {season}".format(name=self.name, season=self.season)
 
     class Meta:
         verbose_name_plural = "Categories"
