@@ -50,6 +50,8 @@ THIRD_PARTY_APPS = (
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
+    
+    'django_rest_passwordreset',
 
     # https://django-rest-auth.readthedocs.io/en/latest/api_endpoints.html
     'allauth',

@@ -33,9 +33,9 @@ urlpatterns = [
     path("", IndexTemplateView.as_view(), name="entry-point"),
     path("", include('pwa.urls')),
 
-    path('admin/', admin.site.urls),
-
     path("api/rest-auth/", include('core.auth')),
+
+    path('admin/', admin.site.urls),
 
     # RELEASE: Delete or just admin only
     path('api/', include(router.urls)),

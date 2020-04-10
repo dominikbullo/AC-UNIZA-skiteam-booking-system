@@ -1,5 +1,7 @@
 <template>
   <div>
+    <p> {{ stats }} </p>
+
     <!-- Select child -->
     <div class="vx-row">
       <div class="vx-col w-full mb-base">
@@ -11,12 +13,11 @@
               the
               multiple prop</p>
 
-            <v-select multiple
-                      :closeOnSelect="false"
-                      v-model="selected"
-                      :options="options"
-                      :dir="$vs.rtl ? 'rtl' : 'ltr'"/>
-            <br>
+            <v-select
+              v-model="selected"
+              :options="options"
+              @input="getUserStats"
+            />
 
           </div>
         </vx-card>
@@ -310,8 +311,8 @@ export default {
   },
   data () {
     return {
-      selected: ['foo'],
-      options: ['foo', 'bar', 'baz'],
+      selected: [],
+      options: [],
 
       subscribersGained: {},
       revenueGenerated: {},
@@ -377,14 +378,39 @@ export default {
       ]
     }
   },
+  methods: {
+    getUserStats () {
+      console.log('resacting', this.selected)
+      this.$store.dispatch('family/fetchUserStats', { username: this.selected })
+        .then((res) => {
+          this.stats = res.data
+        })
+      return this.stats
+    }
+  },
   computed: {
     scrollbarTag () {
       return this.$store.getters.scrollbarTag
+    },
+    familyChildren () {
+      console.log('family children', this.$store.getters['family/familyChildren'])
+      return this.$store.getters['family/familyChildren']
     }
   },
   created () {
     this.$store.dispatch('family/fetchFamily', this.$store.state.AppActiveUser.profile.family_id)
-    this.$store.dispatch('family/fetchUserStats', { username: 'testsets' })
+      .then(() => {
+        console.log('fullName o children', this.$store.getters['family/usernames'](this.familyChildren))
+        console.log('all fullName', this.$store.getters['family/usernames']())
+        this.options = this.$store.getters['family/usernames'](this.familyChildren)
+        this.selected = this.options[0]
+      })
   }
 }
 </script>
+
+<style>
+  .vs__dropdown-toggle .vs__clear {
+    display: none;
+  }
+</style>

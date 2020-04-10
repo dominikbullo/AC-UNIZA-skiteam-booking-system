@@ -14,7 +14,11 @@ gunicorn = "*"
 pillow = "*"
 whitenoise = ">=4.0"
 django-pwa = "*"
-django-filter = "*"
+django-push-notifications = "*"
+django-webpush = "*"
+django-simple-mail = "*"
+django-ckeditor = "*"
+django-modeltranslation = "*"
 
 [dev-packages]
 django-webpack-loader = "*"

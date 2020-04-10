@@ -8,14 +8,13 @@ from rest_auth.registration.serializers import RegisterSerializer
 from rest_framework import serializers, status
 from rest_framework.response import Response
 
-from core import choices
 from core.choices import UserTypeChoices
-from events.models import Event
-from family.models import Family, FamilyMember, Child
+from family.models import Family, FamilyMember
 from users.models import Profile
 
 
 class BaseProfileSerializer(serializers.ModelSerializer):
+    full_name = serializers.DateTimeField(source='user.full_name', read_only=True)
     first_name = serializers.DateTimeField(source='user.first_name', read_only=True)
     last_name = serializers.DateTimeField(source='user.last_name', read_only=True)
     username = serializers.DateTimeField(source='user.username', read_only=True)

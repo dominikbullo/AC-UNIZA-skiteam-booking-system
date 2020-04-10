@@ -1,6 +1,6 @@
 // Base Service Worker implementation.  To use your own Service Worker, set the PWA_SERVICE_WORKER_PATH variable in settings.py
 
-var staticCacheName = 'django-pwa-v' + new Date().getTime()
+var staticCacheName = 'sport-agenda-v' + new Date().getTime()
 var filesToCache = [
   '/offline',
   '/css/django-pwa-app.css',
@@ -26,11 +26,11 @@ var filesToCache = [
 // Bump this version number each time a cached or asset changes.
 // If you don't, the SW won't be reinstalled and the pages you cache initially won't be updated
 // (by default at least, see next sections for more on caching).
-const VERSION = '{{ version }}'
+const VERSION = '0.0.1'
 
 // Cache on install
 self.addEventListener('install', event => {
-  console.log('[SW] Installing SW version:', VERSION)
+  console.log('[SW] Installing SW version:', VERSION, staticCacheName)
   this.skipWaiting()
   event.waitUntil(
     caches.open(staticCacheName)
@@ -46,7 +46,7 @@ self.addEventListener('activate', event => {
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames
-          .filter(cacheName => (cacheName.startsWith('django-pwa-')))
+          .filter(cacheName => (cacheName.startsWith('sport-agenda-')))
           .filter(cacheName => (cacheName !== staticCacheName))
           .map(cacheName => caches.delete(cacheName))
       )

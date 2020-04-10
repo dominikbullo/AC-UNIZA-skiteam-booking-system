@@ -36,6 +36,9 @@ export default {
   },
   // RES https://stackoverflow.com/questions/53501185/how-to-post-query-parameters-with-axios
   fetchUserStats ({ commit }, payload = { query: { season: 'current' } }) {
+    if (!payload.query) {
+      payload.query = { season: 'current' }
+    }
     console.log('payload in fetchUserStats', payload)
 
     if (!('username' in payload)) {
@@ -44,11 +47,7 @@ export default {
     }
 
     return new Promise((resolve, reject) => {
-      axios.get(`/profile/${payload.username}/stats/`,
-        null,
-        {
-          params: payload.query
-        })
+      axios.get(`/profile/${payload.username}/stats/`, { params: payload.query })
         .then((response) => {
           // commit('UPDATE_FAMILY_MEMBER_STATS', response.data)
           resolve(response)
