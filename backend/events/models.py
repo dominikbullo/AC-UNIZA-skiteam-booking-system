@@ -91,11 +91,8 @@ class Event(PolymorphicModel):
     additional_info = models.CharField(max_length=150, blank=True)
 
     @property
-    def get_type(self):
-        return "test"
-
     def __str__(self):
-        return "%s - %s" % (self.type, self.season)
+        return "{type} | {season}".format(type=self.get_type_display(), season=self.season)
 
 
 class SkiEvent(Event):

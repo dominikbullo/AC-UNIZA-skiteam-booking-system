@@ -30,8 +30,8 @@ router.extend(events_router)
 
 urlpatterns = [
     # PWA needs to be first
-    path("", IndexTemplateView.as_view(), name="entry-point"),
     path("", include('pwa.urls')),
+    path("", IndexTemplateView.as_view(), name="entry-point"),
 
     path("api/rest-auth/", include('core.auth')),
 

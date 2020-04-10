@@ -15,6 +15,13 @@ export default {
       userNames.unshift(element['user']['profile']['full_name'])
     })
     return userNames
+  },
+  fullNameAndUsername: state => (members = state.members) => {
+    const ret = []
+    members.forEach((element) => {
+      ret.unshift(element['user']['profile']['full_name'])
+    })
+    return ret
   }
 }
 //const event = Object.values(this.calendarEvents).find(obj => {

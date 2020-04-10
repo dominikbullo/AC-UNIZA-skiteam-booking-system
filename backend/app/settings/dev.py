@@ -50,7 +50,7 @@ THIRD_PARTY_APPS = (
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
-    
+
     'django_rest_passwordreset',
 
     # https://django-rest-auth.readthedocs.io/en/latest/api_endpoints.html
@@ -245,7 +245,8 @@ WEBPACK_LOADER = {
     }
 }
 
-PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'static/js', 'serviceworker.js')
+PWA_SERVICE_WORKER_PATH = os.path.join(STATIC_ROOT, 'js/serviceworker.js')
+
 PWA_APP_NAME = 'AC UNIZA Ski Team'
 PWA_APP_DESCRIPTION = "App for managing sport club"
 PWA_APP_THEME_COLOR = '#0A0302'
@@ -256,8 +257,14 @@ PWA_APP_ORIENTATION = 'any'
 PWA_APP_START_URL = '/'
 PWA_APP_ICONS = [
     {
-        'src'  : '/static/images/icons/android-chrome-192x192.png',
-        'sizes': '192x192'
+        "src"  : "/static/images/icons/android-chrome-512x512.png",
+        "type" : "image/png",
+        "sizes": "192x192"
+    },
+    {
+        "src"  : "/static/images/icons/android-chrome-512x512.png",
+        "type" : "image/png",
+        "sizes": "512x512"
     }
 ]
 PWA_APP_ICONS_APPLE = [

@@ -91,26 +91,27 @@ class UserStatSerializer(serializers.ModelSerializer):
             try:
                 # TODO category -> user which can be on this event
                 kid_asc = kid.categories.get(season=season)
-                ret[season.__str__()] = {}
+                ret[str(season)] = {}
                 print("foud and creating child", season)
             except Exception:
                 continue
                 pass
 
-            for key in choices.EventTypeChoices:
+            for event_type, value in choices.EventTypeChoices.choices:
                 # RES: https://docs.djangoproject.com/en/dev/topics/db/queries/#complex-lookups-with-q-objects
                 query = {
                     "season"       : season,
-                    "type"         : key,
+                    "type"         : event_type,
                     "end_date__lte": timezone.now(),
                     "category"     : kid_asc,
                     "canceled"     : False
                 }
 
-                event = Event.objects.filter(**query).order_by('start_date').count()
-
-                ret[str(season)][key] = user.events.filter(**query).count()
-                ret[str(season)][key + "_total"] = event
+                events = Event.objects.filter(**query).order_by('start_date')
+                ret[str(season)][event_type] = {}
+                ret[str(season)][event_type]["name"] = value
+                ret[str(season)][event_type]["count"] = user.events.filter(**query).count()
+                ret[str(season)][event_type]["total"] = events.count()
 
         return ret
 
