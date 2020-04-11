@@ -1,12 +1,10 @@
 from allauth.account.models import EmailAddress
 
 from django.contrib.auth import get_user_model
-from django.utils import timezone
 
 from rest_auth.models import TokenModel
 from rest_auth.registration.serializers import RegisterSerializer
-from rest_framework import serializers, status
-from rest_framework.response import Response
+from rest_framework import serializers
 
 from core.choices import UserTypeChoices
 from family.models import Family, FamilyMember
@@ -22,16 +20,14 @@ class BaseProfileSerializer(serializers.ModelSerializer):
 
     # RES: https://stackoverflow.com/questions/48073471/django-rest-framework-get-data-based-on-current-userid-token
     def get_family_id(self, instance):
-        # TODO: Try catch
         try:
-            member = FamilyMember.objects.get(user=instance.user)
-            family_id = member.family_id
-            return family_id
+            return FamilyMember.objects.get(user=instance.user).family_id
         except Exception as e:
+            # FIXME: Cannot find family ID, cannot show /api/profile/ -> list
+            #             #  probably it should be like events -> polymorphic
             print(e)
             print("User does not have family!")
-            pass
-        return Response(data=self.data, status=status.HTTP_404_NOT_FOUND)
+            return -1
 
     class Meta:
         model = Profile

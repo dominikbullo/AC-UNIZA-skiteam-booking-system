@@ -3,18 +3,6 @@ import datetime
 from django.db import models
 from django.utils.translation import gettext as _
 
-
-# RES: https://docs.djangoproject.com/en/dev/ref/models/fields/#django.db.models.Field.choices
-
-class UserTypeChoices(models.TextChoices):
-    PUBLIC = 'public', _('Public')
-    CHILD = 'child', _('Child')
-    PARENT = 'parent', _('Parent')
-    COACH = 'coach', _('Coach')
-    EDITOR = 'editor', _('Editor')
-    ADMIN = 'admin', _('Admin')
-
-
 YEAR_CHOICES = [(r, r) for r in range(1984, datetime.date.today().year + 1)]
 
 
@@ -24,6 +12,16 @@ def year_choices():
 
 def current_year():
     return datetime.date.today().year
+
+
+# RES: https://docs.djangoproject.com/en/dev/ref/models/fields/#django.db.models.Field.choices
+class UserTypeChoices(models.TextChoices):
+    PUBLIC = 'public', _('Public')
+    CHILD = 'child', _('Child')
+    PARENT = 'parent', _('Parent')
+    COACH = 'coach', _('Coach')
+    EDITOR = 'editor', _('Editor')
+    ADMIN = 'admin', _('Admin')
 
 
 class CategoryNameChoices(models.TextChoices):
@@ -39,6 +37,7 @@ class CategoryNameChoices(models.TextChoices):
 class EventTypeChoices(models.TextChoices):
     # FIXME Validation -> event must have SkiTraining table if is type SKI_TRAINING
     SKI_TRAINING = 'SKI_TRAINING', _('Ski Training')
+    ATHLETIC_TRAINING = 'ATHLETIC_TRAINING', _('Athletic Training')
     SKI_RACE = 'SKI_RACE', _('Ski Race')
     SKI_CAMP = 'SKI_CAMP', _('Ski Camp')
     VIDEO_ANALYZE = 'VIDEO_ANALYZE', _('Video Analyze')
