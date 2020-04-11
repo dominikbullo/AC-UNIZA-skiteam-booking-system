@@ -1,9 +1,13 @@
+from django.utils import timezone
 from rest_framework import serializers
 
+from core import choices
 from events.models import Event, SkiTraining, SkiRace, Season
 from rest_polymorphic.serializers import PolymorphicSerializer
 
+from family.models import Child
 from users.api.serializers import BaseProfileSerializer
+from users.models import Profile
 
 
 class SeasonSerializer(serializers.ModelSerializer):
@@ -67,3 +71,51 @@ class EventPolymorphicSerializer(PolymorphicSerializer):
     # RES: https://stackoverflow.com/a/51905746/10523982
     def to_resource_type(self, model_or_instance):
         return model_or_instance._meta.object_name.lower()
+
+
+class UserStatSerializer(serializers.ModelSerializer):
+
+    def to_representation(self, instance):
+        return self.get_data(instance)
+
+    def get_data(self, instance):
+        user = instance["user"]
+        seasons = instance["seasons"]
+
+        # TODO
+        #  Check if is kid
+        kid = Child.objects.get(user__profile=user)
+        ret = {}
+        for season in seasons:
+            print("season ", season)
+            try:
+                # TODO category -> user which can be on this event
+                kid_asc = kid.categories.get(season=season)
+                ret[str(season)] = {}
+                print("foud and creating child", season)
+            except Exception:
+                continue
+                pass
+
+            for event_type, value in choices.EventTypeChoices.choices:
+                # RES: https://docs.djangoproject.com/en/dev/topics/db/queries/#complex-lookups-with-q-objects
+                query = {
+                    "season"       : season,
+                    "type"         : event_type,
+                    "end_date__lte": timezone.now(),
+                    "category"     : kid_asc,
+                    "canceled"     : False
+                }
+
+                events = Event.objects.filter(**query).order_by('start_date')
+                ret[str(season)][event_type] = {}
+                ret[str(season)][event_type]["name"] = value
+                ret[str(season)][event_type]["count"] = user.events.filter(**query).count()
+                ret[str(season)][event_type]["total"] = events.count()
+
+        return ret
+
+    class Meta:
+        model = Profile
+        fields = "__all__"
+        read_only_fields = ('user_role',)

@@ -164,19 +164,6 @@ export default [
     ]
   },
   {
-    header: 'Examples',
-    icon: 'FileIcon',
-    i18n: 'Examples',
-    items: [
-      {
-        url: '/test/page',
-        name: 'Test Page',
-        slug: 'test-page',
-        icon: 'FileIcon'
-      }
-    ]
-  },
-  {
     header: 'Charts',
     icon: 'PieChartIcon',
     i18n: 'Charts',

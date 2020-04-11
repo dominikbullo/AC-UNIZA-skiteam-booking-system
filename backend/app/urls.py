@@ -31,12 +31,11 @@ router.extend(events_router)
 urlpatterns = [
     # PWA needs to be first
     path("", include('pwa.urls')),
-
     path("", IndexTemplateView.as_view(), name="entry-point"),
 
-    path('admin/', admin.site.urls),
-
     path("api/rest-auth/", include('core.auth')),
+
+    path('admin/', admin.site.urls),
 
     # RELEASE: Delete or just admin only
     path('api/', include(router.urls)),

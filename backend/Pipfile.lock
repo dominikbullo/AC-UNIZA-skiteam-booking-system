@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "35148aecf9242cbfbaf910977d5ae29103accaf3e9f395dafe6600e69ec8c119"
+            "sha256": "23b50a4ce3ce8d791ffdc132e4fe4299e80d1c0a3b842214304fd7feebff69cf"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -33,10 +33,10 @@
         },
         "cachetools": {
             "hashes": [
-                "sha256:9a52dd97a85f257f4e4127f15818e71a0c7899f121b34591fcc1173ea79a0198",
-                "sha256:b304586d357c43221856be51d73387f93e2a961598a9b6b6670664746f3b6c6c"
+                "sha256:1d057645db16ca7fe1f3bd953558897603d6f0b9c51ed9d11eb4d071ec4e2aab",
+                "sha256:de5d88f87781602201cde465d3afe837546663b168e8b39df67411b0bf10cefc"
             ],
-            "version": "==4.0.0"
+            "version": "==4.1.0"
         },
         "certifi": {
             "hashes": [
@@ -481,6 +481,14 @@
             "index": "pypi",
             "version": "==1.0.0"
         },
+        "django-excel-fixture": {
+            "hashes": [
+                "sha256:1d47c2146b8e7ee7830a512dd807fc01cb0ec3f099d1a9a97f1869df2db1e95a",
+                "sha256:3b68232ee3380241c7c07e148bc24f20d1cc02cfa321ecbcba935aa4e5000e0d"
+            ],
+            "index": "pypi",
+            "version": "==0.1"
+        },
         "django-webpack-loader": {
             "hashes": [
                 "sha256:7a3c88201aa54481f9399465615cbe7b9aece8081496a6d0287b7cb8e232f447",
@@ -496,6 +504,12 @@
             ],
             "version": "==0.3"
         },
+        "et-xmlfile": {
+            "hashes": [
+                "sha256:614d9722d572f6246302c4491846d2c393c199cfa4edc9af593437691683335b"
+            ],
+            "version": "==1.0.1"
+        },
         "flake8": {
             "hashes": [
                 "sha256:45681a117ecc81e870cbf1262835ae4af5e7a8b08e40b944a8a6e6b895914cfb",
@@ -504,12 +518,26 @@
             "index": "pypi",
             "version": "==3.7.9"
         },
+        "jdcal": {
+            "hashes": [
+                "sha256:1abf1305fce18b4e8aa248cf8fe0c56ce2032392bc64bbd61b5dff2a19ec8bba",
+                "sha256:472872e096eb8df219c23f2689fc336668bdb43d194094b5cc1707e1640acfc8"
+            ],
+            "version": "==1.4.1"
+        },
         "mccabe": {
             "hashes": [
                 "sha256:ab8a6258860da4b6677da4bd2fe5dc2c659cff31b3ee4f7f5d64e79735b80d42",
                 "sha256:dd8d182285a0fe56bace7f45b5e7d1a6ebcbf524e8f3bd87eb0f125271b8831f"
             ],
             "version": "==0.6.1"
+        },
+        "openpyxl": {
+            "hashes": [
+                "sha256:547a9fc6aafcf44abe358b89ed4438d077e9d92e4f182c87e2dc294186dc4b64"
+            ],
+            "index": "pypi",
+            "version": "==3.0.3"
         },
         "pycodestyle": {
             "hashes": [

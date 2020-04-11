@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.utils.translation import gettext as _
 
@@ -11,6 +13,17 @@ class UserTypeChoices(models.TextChoices):
     COACH = 'coach', _('Coach')
     EDITOR = 'editor', _('Editor')
     ADMIN = 'admin', _('Admin')
+
+
+YEAR_CHOICES = [(r, r) for r in range(1984, datetime.date.today().year + 1)]
+
+
+def year_choices():
+    return [(r, r) for r in range(1984, datetime.date.today().year + 1)]
+
+
+def current_year():
+    return datetime.date.today().year
 
 
 class CategoryNameChoices(models.TextChoices):

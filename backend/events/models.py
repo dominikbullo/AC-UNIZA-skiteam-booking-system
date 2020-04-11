@@ -1,15 +1,18 @@
+import datetime
+
 from django.db import models
+from django.utils.translation import gettext as _
 
 from polymorphic.models import PolymorphicModel
 
-from core.choices import CategoryNameChoices, EventTypeChoices, SkiTypeChoices
+from core.choices import CategoryNameChoices, EventTypeChoices, SkiTypeChoices, year_choices, current_year
 from family.models import Child
 from users.models import Profile
 
 
 class Season(models.Model):
-    # format:   YYYY_YYYY
-    # example:  2019_2020
+    # format:   YYYY-YYYY
+    # example:  2019-2020
     year = models.CharField(max_length=9, unique=True)
     current = models.BooleanField(default=False)
 
@@ -32,14 +35,11 @@ class Category(models.Model):
         choices=CategoryNameChoices.choices,
     )
 
-    # year from to know who add into this cat
-    year_from = models.DateField()
-
-    # year until to know who add into this cat
-    year_until = models.DateField()
+    year_from = models.IntegerField(_('Year from'), choices=year_choices(), default=current_year() - 2)
+    year_until = models.IntegerField(_('Year until'), choices=year_choices(), default=current_year())
 
     def __str__(self):
-        return "%s | %s" % (self.name, self.season)
+        return "{name} | {season}".format(name=self.name, season=self.season)
 
     class Meta:
         verbose_name_plural = "Categories"
@@ -88,12 +88,8 @@ class Event(PolymorphicModel):
 
     additional_info = models.CharField(max_length=150, blank=True)
 
-    @property
-    def get_type(self):
-        return self.type
-
     def __str__(self):
-        return "%s - %s" % (self.type, self.season)
+        return "{type} | {season}".format(type=self.get_type_display(), season=self.season)
 
 
 class SkiEvent(Event):
@@ -127,10 +123,34 @@ class SkiTraining(SkiEvent):
         self.type = EventTypeChoices.SKI_TRAINING
 
 
-# IDEA: Future implementation
+class RaceOrganizer(models.Model):
+    # SLA/Public/ZSL
+    name = models.CharField(max_length=15, default="SLA")
+    club = models.CharField(max_length=50, blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+    ...
+
+    def clean(self):
+        """
+        Checks that we do not create multiple categories with
+        no parent and the same name.
+        """
+        from django.core.exceptions import ValidationError
+        if self.club is None and RaceOrganizer.objects.filter(name=self.name, club=None).exists():
+            raise ValidationError("Another RaceOrganizer with name %s and no club already exists" % self.name)
+
+    class Meta:
+        unique_together = (('name', 'club'),)
+
+
 class SkiRace(SkiEvent):
+    organizer = models.ForeignKey(RaceOrganizer, on_delete=models.DO_NOTHING)
     # results = models.OneToOneField(Results)
-    # run = models.OneToOneField(Event)
+
+    propositionURL = models.URLField(max_length=200, blank=True, null=True)
     hotel_price = models.CharField(max_length=50, blank=True, null=True)
     book_hotel_from = models.DateTimeField(blank=True, null=True)
     book_hotel_to = models.DateTimeField(blank=True, null=True)
@@ -138,6 +158,7 @@ class SkiRace(SkiEvent):
     def __init__(self, *args, **kwargs):
         self._meta.get_field('type').default = EventTypeChoices.SKI_RACE
         super(SkiEvent, self).__init__(*args, **kwargs)
+        self._meta.get_field('type').default = EventTypeChoices.SKI_RACE
         self.type = EventTypeChoices.SKI_RACE
 
 # class AthleticTest(Event):
