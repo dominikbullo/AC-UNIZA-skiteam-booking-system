@@ -19,6 +19,7 @@ django-webpush = "*"
 django-simple-mail = "*"
 django-ckeditor = "*"
 django-modeltranslation = "*"
+django-filter = "*"
 
 [dev-packages]
 django-webpack-loader = "*"

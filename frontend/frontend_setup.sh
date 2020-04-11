@@ -1,10 +1,11 @@
 #!/bin/sh
 
-cd ./frontend/ || exit
+cd frontend/ || exit
+npm rebuild node-sass
 npm install
-npm run serve
+#npm run serve
+yarn serve --host 0.0.0.0
 
 #yarn install
 #yarn build
-#yarn serve --host 0.0.0.0
 #yarn build --watch --mode=production
