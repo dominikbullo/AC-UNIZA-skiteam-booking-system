@@ -35,7 +35,7 @@ class BaseProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ("family_id", "first_name", "last_name", "username")
+        fields = ("family_id", "full_name", "first_name", "last_name", "username")
         read_only_fields = 'family_id', "user_role"
 
 

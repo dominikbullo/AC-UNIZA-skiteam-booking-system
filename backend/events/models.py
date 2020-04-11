@@ -131,8 +131,6 @@ class RaceOrganizer(models.Model):
     def __str__(self):
         return self.name
 
-    ...
-
     def clean(self):
         """
         Checks that we do not create multiple categories with

@@ -32,8 +32,6 @@
           class="event-calendar"
           default-view="timeGridWeek"
           :editable="calendarConfig.editable"
-          max-time="21:00:00"
-          min-time="06:00:00"
           ref="fullCalendar"
         />
       </div>
@@ -240,11 +238,11 @@ export default {
   /*  max-height: 65vh;*/
   /*}*/
 
-  /*.fc-time-grid-container {*/
-  /*  !* FIXME TODO *!*/
-  /*  !*height: calc(var(--vh, 1vh) * 50 - 11.5rem);*!*/
-  /*  max-height: 60vh;*/
-  /*}*/
+  .fc-time-grid-container {
+    /* FIXME TODO */
+    /*height: calc(var(--vh, 1vh) * 50 - 11.5rem);*/
+    max-height: 60vh;
+  }
 
   .fc-list-heading td {
     background: #00b0d3;
