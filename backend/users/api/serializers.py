@@ -14,11 +14,18 @@ from users.models import Profile
 
 
 class BaseProfileSerializer(serializers.ModelSerializer):
-    full_name = serializers.DateTimeField(source='user.full_name', read_only=True)
-    first_name = serializers.DateTimeField(source='user.first_name', read_only=True)
-    last_name = serializers.DateTimeField(source='user.last_name', read_only=True)
-    username = serializers.DateTimeField(source='user.username', read_only=True)
+    # user_id = serializers.IntegerField(source='user.id', read_only=True)
     family_id = serializers.SerializerMethodField()
+    full_name = serializers.CharField(source='user.full_name', read_only=True)
+    first_name = serializers.CharField(source='user.first_name', read_only=True)
+    last_name = serializers.CharField(source='user.last_name', read_only=True)
+    username = serializers.CharField(source='user.username', read_only=True)
+
+    # full_name = serializers.DateTimeField(source='user.full_name', read_only=True)
+    # first_name = serializers.DateTimeField(source='user.first_name', read_only=True)
+    # last_name = serializers.DateTimeField(source='user.last_name', read_only=True)
+
+    # username = serializers.DateTimeField(source='user.username', read_only=True)
 
     # RES: https://stackoverflow.com/questions/48073471/django-rest-framework-get-data-based-on-current-userid-token
     def get_family_id(self, instance):
@@ -35,19 +42,18 @@ class BaseProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ("family_id", "full_name", "first_name", "last_name", "username")
-        read_only_fields = 'family_id', "user_role"
+        fields = ("id", "family_id", "full_name", "first_name", "last_name", "username")
+        read_only_fields = "id", "family_id", "user_role"
 
 
 class DetailProfileSerializer(BaseProfileSerializer):
+    family_id = serializers.SerializerMethodField()
     email = serializers.DateTimeField(source='user.email', read_only=True)
     avatar = serializers.ImageField(read_only=True)
 
-    family_id = serializers.SerializerMethodField()
-
     class Meta:
         model = Profile
-        exclude = ('id', "user", "events")
+        exclude = ("user", "events")
         read_only_fields = 'family_id', "user_role"
 
 

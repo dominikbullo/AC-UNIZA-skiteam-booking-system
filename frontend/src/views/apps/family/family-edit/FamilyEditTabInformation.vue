@@ -8,10 +8,9 @@
 ========================================================================================== -->
 
 <template>
-  <div id="user-edit-tab-info">
+  <div id="family-edit-tab-info">
     <div class="vx-row">
       <div class="vx-col w-full md:w-1/2">
-
         <!-- Col Header -->
         <div class="flex items-end">
           <feather-icon icon="UserIcon" class="mr-2" svgClasses="w-5 h-5"/>
@@ -24,7 +23,8 @@
           <!-- DOB -->
           <div class="mt-4">
             <label class="text-sm">Birth Date</label>
-            <flat-pickr v-model="data_local.dob" :config="{ dateFormat: 'd F Y', maxDate: new Date() }" class="w-full"
+            <flat-pickr v-model="data_local.dob"
+                        :config="{ dateFormat: 'd F Y', maxDate: new Date() }" class="w-full"
                         v-validate="'required'" name="dob"/>
             <span class="text-danger text-sm" v-show="errors.has('dob')">{{ errors.first('dob') }}</span>
           </div>
@@ -44,26 +44,6 @@
             <span class="text-danger text-sm" v-show="errors.has('lang_known')">{{ errors.first('lang_known') }}</span>
           </div>
 
-          <!-- Gender -->
-          <div class="mt-4">
-            <label class="text-sm">Gender</label>
-            <div class="mt-2">
-              <vs-radio v-model="data_local.gender" vs-value="male" class="mr-4">Male</vs-radio>
-              <vs-radio v-model="data_local.gender" vs-value="female" class="mr-4">Female</vs-radio>
-              <vs-radio v-model="data_local.gender" vs-value="other">Other</vs-radio>
-            </div>
-          </div>
-
-          <div class="mt-6">
-            <label>Contact Options</label>
-            <div class="flex flex-wrap mt-1">
-              <vs-checkbox v-model="data_local.contact_options" vs-value="email" class="mr-4 mb-2">Email</vs-checkbox>
-              <vs-checkbox v-model="data_local.contact_options" vs-value="message" class="mr-4 mb-2">Message
-              </vs-checkbox>
-              <vs-checkbox v-model="data_local.contact_options" vs-value="Phone" class=" mb-2">Phone</vs-checkbox>
-            </div>
-          </div>
-
         </div>
       </div>
 
@@ -76,31 +56,31 @@
           <span class="leading-none font-medium">Address</span>
         </div>
 
-        <!-- Col Content -->
-        <div>
-          <vs-input class="w-full mt-4" label="Address Line 1" v-model="data_local.location.add_line_1"
-                    v-validate="'required'" name="addd_line_1"/>
-          <span class="text-danger text-sm" v-show="errors.has('addd_line_1')">{{ errors.first('addd_line_1') }}</span>
+        <!--        &lt;!&ndash; Col Content &ndash;&gt;-->
+        <!--        <div>-->
+        <!--          <vs-input class="w-full mt-4" label="Address Line 1" v-model="data_local.location.add_line_1"-->
+        <!--                    v-validate="'required'" name="addd_line_1"/>-->
+        <!--          <span class="text-danger text-sm" v-show="errors.has('addd_line_1')">{{ errors.first('addd_line_1') }}</span>-->
 
-          <vs-input class="w-full mt-4" label="Address Line 2" v-model="data_local.location.add_line_2"/>
+        <!--          <vs-input class="w-full mt-4" label="Address Line 2" v-model="data_local.location.add_line_2"/>-->
 
-          <vs-input class="w-full mt-4" label="Post Code" v-model="data_local.location.post_code"
-                    v-validate="'required|numeric'" name="post_code"/>
-          <span class="text-danger text-sm" v-show="errors.has('post_code')">{{ errors.first('post_code') }}</span>
+        <!--          <vs-input class="w-full mt-4" label="Post Code" v-model="data_local.location.post_code"-->
+        <!--                    v-validate="'required|numeric'" name="post_code"/>-->
+        <!--          <span class="text-danger text-sm" v-show="errors.has('post_code')">{{ errors.first('post_code') }}</span>-->
 
-          <vs-input class="w-full mt-4" label="City" v-model="data_local.location.city" v-validate="'required|alpha'"
-                    name="city"/>
-          <span class="text-danger text-sm" v-show="errors.has('city')">{{ errors.first('city') }}</span>
+        <!--          <vs-input class="w-full mt-4" label="City" v-model="data_local.location.city" v-validate="'required|alpha'"-->
+        <!--                    name="city"/>-->
+        <!--          <span class="text-danger text-sm" v-show="errors.has('city')">{{ errors.first('city') }}</span>-->
 
-          <vs-input class="w-full mt-4" label="State" v-model="data_local.location.state" v-validate="'required|alpha'"
-                    name="state"/>
-          <span class="text-danger text-sm" v-show="errors.has('state')">{{ errors.first('state') }}</span>
+        <!--          <vs-input class="w-full mt-4" label="State" v-model="data_local.location.state" v-validate="'required|alpha'"-->
+        <!--                    name="state"/>-->
+        <!--          <span class="text-danger text-sm" v-show="errors.has('state')">{{ errors.first('state') }}</span>-->
 
-          <vs-input class="w-full mt-4" label="Country" v-model="data_local.location.country"
-                    v-validate="'required|alpha'" name="country"/>
-          <span class="text-danger text-sm" v-show="errors.has('country')">{{ errors.first('country') }}</span>
+        <!--          <vs-input class="w-full mt-4" label="Country" v-model="data_local.location.country"-->
+        <!--                    v-validate="'required|alpha'" name="country"/>-->
+        <!--          <span class="text-danger text-sm" v-show="errors.has('country')">{{ errors.first('country') }}</span>-->
 
-        </div>
+        <!--        </div>-->
       </div>
     </div>
 

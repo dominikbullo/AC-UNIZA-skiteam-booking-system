@@ -100,11 +100,11 @@ class UserStatSerializer(serializers.ModelSerializer):
             for event_type, value in choices.EventTypeChoices.choices:
                 # RES: https://docs.djangoproject.com/en/dev/topics/db/queries/#complex-lookups-with-q-objects
                 query = {
-                    "season"       : season,
-                    "type"         : event_type,
-                    "end_date__lte": timezone.now(),
-                    "category"     : kid_asc,
-                    "canceled"     : False
+                    "season"  : season,
+                    "type"    : event_type,
+                    "end__lte": timezone.now(),
+                    "category": kid_asc,
+                    "canceled": False
                 }
 
                 events = Event.objects.filter(**query).order_by('start')

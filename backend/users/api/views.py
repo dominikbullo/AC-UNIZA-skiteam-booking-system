@@ -28,6 +28,35 @@ class AvatarUpdateView(generics.UpdateAPIView):
         return profile_object
 
 
+class UserViewSet(mixins.UpdateModelMixin,
+                  mixins.ListModelMixin,
+                  mixins.RetrieveModelMixin,
+                  viewsets.GenericViewSet):
+    """ Will be used when all users can see each other """
+    queryset = get_user_model().objects.all()
+    serializer_class = UserDetailSerializer
+
+    # RES: https://stackoverflow.com/questions/36365326/django-rest-framework-doesnt-serialize-serializermethodfield
+    # RES(filtering): https://stackoverflow.com/questions/26595906/django-rest-framework-with-viewset-router-queryset-filtering
+    @action(detail=True, methods=['get'], url_path='stats')
+    def get_stats(self, request, *args, **kwargs):
+        user = get_object_or_404(Profile, user__pk=kwargs["pk"])
+
+        seasons = Season.objects.all()
+        query = self.request.query_params.get('season')
+        if query:
+            if query == "current":
+                seasons = seasons.filter(current=True)
+            else:
+                seasons = seasons.filter(year=query)
+
+        serializer = UserStatSerializer(instance={
+            'user'   : user,
+            'seasons': seasons,
+        })
+        return Response(serializer.data)
+
+
 class ProfileViewSet(mixins.UpdateModelMixin,
                      mixins.ListModelMixin,
                      mixins.RetrieveModelMixin,
@@ -42,16 +71,16 @@ class ProfileViewSet(mixins.UpdateModelMixin,
     filter_fields = __basic_fields
     search_fields = __basic_fields
 
-    def retrieve(self, request, *args, **kwargs):
-        instance = get_object_or_404(Profile, user__username=kwargs["pk"])
-        serializer = self.get_serializer(instance)
-        return Response(serializer.data)
+    # def retrieve(self, request, *args, **kwargs):
+    #     instance = get_object_or_404(Profile, user__username=kwargs["pk"])
+    #     serializer = self.get_serializer(instance)
+    #     return Response(serializer.data)
 
     # RES: https://stackoverflow.com/questions/36365326/django-rest-framework-doesnt-serialize-serializermethodfield
     # RES(filtering): https://stackoverflow.com/questions/26595906/django-rest-framework-with-viewset-router-queryset-filtering
     @action(detail=True, methods=['get'], url_path='stats')
     def get_stats(self, request, *args, **kwargs):
-        user = get_object_or_404(Profile, user__username=kwargs["pk"])
+        user = get_object_or_404(Profile, pk=kwargs["pk"])
 
         seasons = Season.objects.all()
         query = self.request.query_params.get('season')

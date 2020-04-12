@@ -445,7 +445,7 @@ export default {
   methods: {
     getUserStats () {
       console.log('resacting', this.selected)
-      this.$store.dispatch('family/fetchUserStats', { username: this.selected.user.username })
+      this.$store.dispatch('family/fetchUserStats', { username: this.selected.user.profile.id })
         .then((res) => {
           // FIXME
           this.stats = Object.values(res.data)[0]

@@ -8,7 +8,6 @@ app_name = 'family'
 # https://www.django-rest-framework.org/api-guide/routers/
 router = DefaultRouter()
 router.register(r"family", FamilyViewSet, basename="family")
-router.register(r"family-member", FamilyMemberViewSet, basename="family-member")
 router.register(r"child", ChildViewSet, basename="child")
 
 urlpatterns = [

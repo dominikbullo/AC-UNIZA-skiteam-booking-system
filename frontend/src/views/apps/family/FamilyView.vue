@@ -109,19 +109,23 @@ export default {
       family_not_found: false
     }
   },
+  methods: {
+    fetchFamilyData (familyId) {
+      this.$store.dispatch('family/fetchFamily', familyId)
+        .then(res => {
+          this.family_data = res.data
+        })
+        .catch(err => {
+          if (err.response.status === 404) {
+            this.family_not_found = true
+            return
+          }
+          console.error(err)
+        })
+    }
+  },
   created () {
-    const familyId = this.$route.params.familyId
-    this.$store.dispatch('family/fetchFamily', familyId)
-      .then(res => {
-        this.family_data = res.data
-      })
-      .catch(err => {
-        if (err.response.status === 404) {
-          this.family_not_found = true
-          return
-        }
-        console.error(err)
-      })
+    this.fetchFamilyData(this.$route.params.familyId)
   }
 }
 // import moduleUserManagement from '@/store/user-management/moduleUserManagement.js'
