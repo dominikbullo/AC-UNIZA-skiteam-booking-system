@@ -18,6 +18,7 @@ RUN pip install pipenv
 # Pillow
 # https://stackoverflow.com/questions/57787424/django-docker-python-unable-to-install-pillow-on-python-alpine
 RUN apk update \
+    && apk add --no-cache gcc libc-dev make git libffi-dev openssl-dev python3-dev libxml2-dev libxslt-dev \
     && apk add --no-cache jpeg-dev zlib-dev \
     && apk add --no-cache --virtual .build-deps build-base linux-headers \
     && pip install Pillow

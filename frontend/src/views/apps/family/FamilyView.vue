@@ -10,8 +10,6 @@
 <template>
   <div id="page-family-view">
 
-    <span>Family id: {{ $route.params.familyId }}</span>
-
     <vs-alert color="danger" title="User Not Found" :active.sync="family_not_found">
       <span>
         <span>Check </span><router-link :to="{name:'page-user-list'}"
@@ -20,10 +18,8 @@
     </vs-alert>
 
     <div id="family-data" v-if="family_data">
-      <p>Family data: {{family_data}}</p>
 
       <vx-card title="Information" class="mb-base">
-
         <!-- Avatar -->
         <div class="vx-row">
 
@@ -38,17 +34,14 @@
           <div class="vx-col flex-1" id="account-info-col-1">
             <table>
               <tr>
-                <td class="font-semibold">Username</td>
+                <td class="font-semibold">Family Name</td>
                 <td>{{ family_data.name }}</td>
               </tr>
               <tr>
-                <td class="font-semibold">Name</td>
+                <td class="font-semibold">Created</td>
                 <td>{{ family_data.name }}</td>
               </tr>
-              <tr>
-                <td class="font-semibold">Email</td>
-                <td>{{ family_data.name }}</td>
-              </tr>
+
             </table>
           </div>
           <!-- /Information - Col 1 -->
@@ -57,17 +50,14 @@
           <div class="vx-col flex-1" id="account-info-col-2">
             <table>
               <tr>
-                <td class="font-semibold">Status</td>
+                <td class="font-semibold">Admin</td>
                 <td>{{ family_data.name }}</td>
               </tr>
               <tr>
-                <td class="font-semibold">Role</td>
+                <td class="font-semibold">Contact</td>
                 <td>{{ family_data.name }}</td>
               </tr>
-              <tr>
-                <td class="font-semibold">Company</td>
-                <td>{{ family_data.name }}</td>
-              </tr>
+
             </table>
           </div>
 
@@ -83,67 +73,29 @@
       </vx-card>
 
       <div class="vx-row">
-        <div class="vx-col lg:w-1/2 w-full">
+        <div class="vx-col w-full">
           <vx-card title="Members" class="mb-base">
             <table>
-              <tr>
-                <td class="font-semibold">Birth Date</td>
-                <td>{{ family_data.name }}</td>
-              </tr>
-              <tr>
-                <td class="font-semibold">Mobile</td>
-                <td>{{ family_data.name }}</td>
-              </tr>
-              <tr>
-                <td class="font-semibold">Website</td>
-                <td>{{ family_data.name }}</td>
-              </tr>
-              <tr>
-                <td class="font-semibold">Languages</td>
-                <td>{{ family_data.name }}</td>
-              </tr>
-              <tr>
-                <td class="font-semibold">Gender</td>
-                <td>{{ family_data.name }}</td>
-              </tr>
-              <tr>
-                <td class="font-semibold">Contact</td>
-                <td>{{ family_data.name }}</td>
+              <tr v-for="member in family_data.members"
+                  :key="member.user.username">
+                <td class="font-semibold">Name:</td>
+                <td>{{ member.user.profile.full_name }}</td>
               </tr>
             </table>
           </vx-card>
         </div>
 
-        <div class="vx-col lg:w-1/2 w-full">
-          <vx-card title="Extra info" class="mb-base">
-            <table>
-              <tr>
-                <td class="font-semibold">Twitter</td>
-                <td>{{ family_data.name }}</td>
-              </tr>
-              <tr>
-                <td class="font-semibold">Facebook</td>
-                <td>{{ family_data.name }}</td>
-              </tr>
-              <tr>
-                <td class="font-semibold">Instagram</td>
-                <td>{{ family_data.name }}</td>
-              </tr>
-              <tr>
-                <td class="font-semibold">Github</td>
-                <td>{{ family_data.name }}</td>
-              </tr>
-              <tr>
-                <td class="font-semibold">CodePen</td>
-                <td>{{ family_data.name }}</td>
-              </tr>
-              <tr>
-                <td class="font-semibold">Slack</td>
-                <td>{{ family_data.name }}</td>
-              </tr>
-            </table>
-          </vx-card>
-        </div>
+        <!--        <div class="vx-col lg:w-1/2 w-full">-->
+        <!--          <vx-card title="Extra info" class="mb-base">-->
+        <!--            <table>-->
+        <!--              <tr v-for="data in family_data"-->
+        <!--                  :key="data">-->
+        <!--                <td class="font-semibold">test</td>-->
+        <!--                <td>{{ data }}</td>-->
+        <!--              </tr>-->
+        <!--            </table>-->
+        <!--          </vx-card>-->
+        <!--        </div>-->
       </div>
     </div>
   </div>
@@ -158,7 +110,6 @@ export default {
     }
   },
   created () {
-    console.log()
     const familyId = this.$route.params.familyId
     this.$store.dispatch('family/fetchFamily', familyId)
       .then(res => {

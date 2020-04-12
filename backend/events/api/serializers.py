@@ -19,8 +19,8 @@ class SeasonSerializer(serializers.ModelSerializer):
 # RES: https://github.com/richardtallent/vue-simple-calendar#calendar-item-properties
 # RES(Nested relationships): https://medium.com/@raaj.akshar/creating-reverse-related-objects-with-django-rest-framework-b1952ddff1c
 class BaseEventSerializer(serializers.ModelSerializer):
-    start = serializers.DateTimeField(source='start_date', read_only=True)
-    end = serializers.DateTimeField(source='end_date', read_only=True)
+    # start = serializers.DateTimeField(source='start', read_only=True)
+    # end = serializers.DateTimeField(source='end', read_only=True)
     title = serializers.CharField(source='type', read_only=True)
 
     # RES: http://www.tomchristie.com/rest-framework-2-docs/api-guide/relations
@@ -107,7 +107,7 @@ class UserStatSerializer(serializers.ModelSerializer):
                     "canceled"     : False
                 }
 
-                events = Event.objects.filter(**query).order_by('start_date')
+                events = Event.objects.filter(**query).order_by('start')
                 ret[str(season)][event_type] = {}
                 ret[str(season)][event_type]["name"] = value
                 ret[str(season)][event_type]["count"] = user.events.filter(**query).count()

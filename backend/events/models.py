@@ -82,9 +82,9 @@ class Event(PolymorphicModel):
     canceled = models.BooleanField(default=False)
     send_email = models.BooleanField(default=False)
 
-    start_date = models.DateTimeField()
+    start = models.DateTimeField()
     # TODO in serializers default datetime + 1h from start
-    end_date = models.DateTimeField(blank=True)
+    end = models.DateTimeField(blank=True)
 
     additional_info = models.CharField(max_length=150, blank=True)
 

@@ -1,7 +1,7 @@
 <template>
   <div id="event-calendar-app">
-    <vx-card class="mt-5">
-      <div class="calendar-view">
+    <vx-card class="mt-5 vx-card no-scroll-content">
+      <div class="calendar-view  no-scroll-content">
         <FullCalendar
           :events="calendarEvents"
           :header="{
@@ -32,6 +32,7 @@
           class="event-calendar"
           default-view="timeGridWeek"
           :editable="calendarConfig.editable"
+          height="parent"
           ref="fullCalendar"
         />
       </div>
@@ -226,23 +227,13 @@ export default {
 
   .calendar-view {
     margin: 0 auto;
+    max-height: calc(var(--vh, 1vh) * 100 - 16.2rem);
   }
 
   .fc-unthemed td.fc-today {
     background: #0C112E;
   }
 
-  /*.fc-day-grid-container {*/
-  /*  !* FIXME TODO *!*/
-  /*  !*height: calc(var(--vh, 1vh) * 50 - 11.5rem);*!*/
-  /*  max-height: 65vh;*/
-  /*}*/
-
-  .fc-time-grid-container {
-    /* FIXME TODO */
-    /*height: calc(var(--vh, 1vh) * 50 - 11.5rem);*/
-    max-height: 60vh;
-  }
 
   .fc-list-heading td {
     background: #00b0d3;
