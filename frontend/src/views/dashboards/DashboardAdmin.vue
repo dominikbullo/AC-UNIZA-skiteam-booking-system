@@ -230,7 +230,7 @@ export default {
       console.log('getUserStats', this.childSelection.selected)
       this.$store.dispatch('family/fetchUserStats',
         {
-          username: this.childSelection.selected.user.username,
+          username: this.childSelection.selected.user.profile.id,
           query: { season: this.seasonSelection.selected }
         })
         .then((res) => {
