@@ -11,8 +11,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from events.api.serializers import UserStatSerializer
 from events.models import Season
+from events.api.serializers import UserStatSerializer
 from users.api.permissions import IsOwnProfileOrReadOnly
 from users.api.serializers import ProfileAvatarSerializer, DetailProfileSerializer, UserDetailSerializer
 
@@ -42,16 +42,11 @@ class ProfileViewSet(mixins.UpdateModelMixin,
     filter_fields = __basic_fields
     search_fields = __basic_fields
 
-    def retrieve(self, request, *args, **kwargs):
-        instance = get_object_or_404(Profile, user__username=kwargs["pk"])
-        serializer = self.get_serializer(instance)
-        return Response(serializer.data)
-
     # RES: https://stackoverflow.com/questions/36365326/django-rest-framework-doesnt-serialize-serializermethodfield
     # RES(filtering): https://stackoverflow.com/questions/26595906/django-rest-framework-with-viewset-router-queryset-filtering
     @action(detail=True, methods=['get'], url_path='stats')
     def get_stats(self, request, *args, **kwargs):
-        user = get_object_or_404(Profile, user__username=kwargs["pk"])
+        user = get_object_or_404(Profile, pk=kwargs["pk"])
 
         seasons = Season.objects.all()
         query = self.request.query_params.get('season')
@@ -75,7 +70,7 @@ class ProfileViewSet(mixins.UpdateModelMixin,
 #     """ Used when changing info about user """
 #     queryset = get_user_model().objects.all()
 #     serializer_class = UserDetailSerializer
-#     filter_backends = [filters.SearchFilter]
+#     filter_backends = [SearchFilter]
 #     search_fields = ["username"]
 
 

@@ -3,7 +3,7 @@ import axios from '@/axios.js'
 export default {
   addChild ({ commit }, payload) {
     payload.profile.user_role = 'child'
-    console.log('add child payload', payload)
+    console.log(' [FAMILY STORE ACT] Add child payload', payload)
 
     return new Promise((resolve, reject) => {
       axios.post('/child/', { user: payload })
@@ -18,7 +18,7 @@ export default {
     })
   },
   fetchFamily ({ commit }, familyId) {
-    console.log('payload in fetchFamily', familyId)
+    console.log('[FAMILY STORE ACT] Fetching family', familyId)
 
     return new Promise((resolve, reject) => {
       axios.get(`/family/${familyId}/`)

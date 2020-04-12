@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import FamilySettingsGeneral from '../../apps/family/FamilyGeneral.vue'
+import FamilySettingsGeneral from '../FamilyGeneral.vue'
 
 export default {
   components: {

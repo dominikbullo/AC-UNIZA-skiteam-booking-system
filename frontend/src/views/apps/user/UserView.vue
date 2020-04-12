@@ -242,7 +242,7 @@ export default {
     }
 
     const userId = this.$route.params.userId
-    this.$store.dispatch('userManagement/fetchDefaultUser', userId)
+    this.$store.dispatch('userManagement/fetchUser', userId)
       .then(res => {
         this.user_data = res.data
       })

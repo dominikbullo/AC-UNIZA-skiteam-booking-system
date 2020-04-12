@@ -46,7 +46,13 @@ export default [
             i18n: 'List'
           },
           {
-            url: '/apps/family/edit/',
+            url: '/apps/family/view/1',
+            name: 'View',
+            slug: 'app-family-view',
+            i18n: 'View'
+          },
+          {
+            url: '/apps/family/edit/1',
             name: 'Edit',
             slug: 'app-family-edit',
             i18n: 'Edit'
@@ -80,37 +86,33 @@ export default [
             i18n: 'Calendar'
           }
         ]
+      },
+      {
+        url: null,
+        name: 'User',
+        icon: 'UserIcon',
+        i18n: 'User',
+        submenu: [
+          {
+            url: '/apps/user/user-list',
+            name: 'List',
+            slug: 'app-user-list',
+            i18n: 'List'
+          },
+          {
+            url: '/apps/user/user-view/268',
+            name: 'View',
+            slug: 'app-user-view',
+            i18n: 'View'
+          },
+          {
+            url: '/apps/user/user-edit/268',
+            name: 'Edit',
+            slug: 'app-user-edit',
+            i18n: 'Edit'
+          }
+        ]
       }
-      // {
-      //   url: null,
-      //   name: 'Users',
-      //   icon: 'UsersIcon',
-      //   i18n: 'Users',
-      //   submenu: [
-      //     {
-      //       url: '/apps/user/user-list',
-      //       name: 'app-user-list',
-      //       slug: 'app-user-list',
-      //       i18n: 'List'
-      //     },
-      //     {
-      //       url: '/apps/user/user-edit/268',
-      //       name: 'Edit Default User',
-      //       slug: 'app-user-edit-default'
-      //     },
-      //     {
-      //       url: '/apps/user/user-view/268',
-      //       name: 'app-user-view',
-      //       slug: 'app-user-view'
-      //     },
-      //     {
-      //       url: '/apps/user/user-edit/:id',
-      //       name: 'Edit',
-      //       slug: 'app-user-edit',
-      //       i18n: 'Edit'
-      //     }
-      //   ]
-      // }
     ]
   },
   {

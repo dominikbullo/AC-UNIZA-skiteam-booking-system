@@ -211,7 +211,7 @@ const router = new Router({
           }
         },
         {
-          path: '/apps/family/view/:familyID',
+          path: '/apps/family/view/:familyId',
           name: 'app-family-view',
           component: () => import('@/views/apps/family/FamilyView.vue'),
           meta: {
@@ -231,7 +231,7 @@ const router = new Router({
           }
         },
         {
-          path: '/apps/family/edit/:familyID',
+          path: '/apps/family/edit/:familyId',
           name: 'app-family-edit',
           component: () => import('@/views/apps/family/family-edit/FamilyEdit.vue'),
           meta: {

@@ -19,8 +19,6 @@ class SeasonSerializer(serializers.ModelSerializer):
 # RES: https://github.com/richardtallent/vue-simple-calendar#calendar-item-properties
 # RES(Nested relationships): https://medium.com/@raaj.akshar/creating-reverse-related-objects-with-django-rest-framework-b1952ddff1c
 class BaseEventSerializer(serializers.ModelSerializer):
-    start = serializers.DateTimeField(source='start_date', read_only=True)
-    end = serializers.DateTimeField(source='end_date', read_only=True)
     title = serializers.CharField(source='type', read_only=True)
 
     # RES: http://www.tomchristie.com/rest-framework-2-docs/api-guide/relations
@@ -71,6 +69,54 @@ class EventPolymorphicSerializer(PolymorphicSerializer):
     # RES: https://stackoverflow.com/a/51905746/10523982
     def to_resource_type(self, model_or_instance):
         return model_or_instance._meta.object_name.lower()
+
+
+class UserStatSerializer(serializers.ModelSerializer):
+
+    def to_representation(self, instance):
+        return self.get_data(instance)
+
+    def get_data(self, instance):
+        user = instance["user"]
+        seasons = instance["seasons"]
+
+        # TODO
+        #  Check if is kid
+        kid = Child.objects.get(user__profile=user)
+        ret = {}
+        for season in seasons:
+            print("season ", season)
+            try:
+                # TODO category -> user which can be on this event
+                kid_asc = kid.categories.get(season=season)
+                ret[str(season)] = {}
+                print("foud and creating child", season)
+            except Exception:
+                continue
+                pass
+
+            for event_type, value in choices.EventTypeChoices.choices:
+                # RES: https://docs.djangoproject.com/en/dev/topics/db/queries/#complex-lookups-with-q-objects
+                query = {
+                    "season"  : season,
+                    "type"    : event_type,
+                    "end__lte": timezone.now(),
+                    "category": kid_asc,
+                    "canceled": False
+                }
+
+                events = Event.objects.filter(**query).order_by('start')
+                ret[str(season)][event_type] = {}
+                ret[str(season)][event_type]["name"] = value
+                ret[str(season)][event_type]["count"] = user.events.filter(**query).count()
+                ret[str(season)][event_type]["total"] = events.count()
+
+        return ret
+
+    class Meta:
+        model = Profile
+        fields = "__all__"
+        read_only_fields = ('user_role',)
 
 
 class UserStatSerializer(serializers.ModelSerializer):
