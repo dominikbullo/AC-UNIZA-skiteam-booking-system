@@ -6,10 +6,8 @@ app_name = 'users'
 
 router = DefaultRouter()
 router.register(r"profile", ProfileViewSet, basename="profile")
-# router.register(r"user", ProfileViewSet, basename="user")
 # FIXME everything to user
-# FIXME TODO
-# router.register(r"userNewTest", UserViewSet, basename="userNewTest")
+# router.register(r"user", UserViewSet, basename="user")
 
 urlpatterns = [
     path("", include(router.urls)),

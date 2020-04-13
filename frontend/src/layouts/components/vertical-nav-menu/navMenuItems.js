@@ -193,12 +193,6 @@ export default [
             name: 'chartjs',
             slug: 'extra-component-charts-chartjs',
             i18n: 'chartjs'
-          },
-          {
-            url: '/charts-and-maps/charts/echarts',
-            name: 'echarts',
-            slug: 'extra-component-charts-echarts',
-            i18n: 'echarts'
           }
         ]
       }

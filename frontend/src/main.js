@@ -1,10 +1,7 @@
 /* =========================================================================================
   File Name: main.js
   Description: main vue(js) file
-  ----------------------------------------------------------------------------------------
-  Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
-  Author: Pixinvent
-  Author URL: http://www.themeforest.net/user/pixinvent
+
 ========================================================================================== */
 
 
@@ -25,9 +22,6 @@ import axios from './axios.js'
 
 // API Calls
 import './http/requests'
-
-// mock
-import './fake-db/index.js'
 
 // Theme Configurations
 import '../themeConfig.js'

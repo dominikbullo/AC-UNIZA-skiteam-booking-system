@@ -47,7 +47,7 @@ urlpatterns = [
     path("api/", include("family.api.urls")),
     path("api/", include("events.api.urls")),
 
-    # re_path(r'^\S+$', IndexTemplateView.as_view(), name="entry-point")
+    re_path(r'^\S+$', IndexTemplateView.as_view(), name="entry-point")
 ]
 
 if settings.DEBUG:
