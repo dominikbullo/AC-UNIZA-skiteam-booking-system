@@ -1,10 +1,9 @@
 from allauth.account.models import EmailConfirmation, EmailConfirmationHMAC
-from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 
-from rest_framework import generics, mixins, viewsets
+from rest_framework import generics, mixins, viewsets, status
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -13,7 +12,6 @@ from rest_framework.views import APIView
 
 from events.models import Season
 from events.api.serializers import UserStatSerializer
-from users.api.permissions import IsOwnProfileOrReadOnly
 from users.api.serializers import ProfileAvatarSerializer, DetailProfileSerializer, UserDetailSerializer
 
 from users.models import Profile
@@ -21,7 +19,6 @@ from users.models import Profile
 
 class AvatarUpdateView(generics.UpdateAPIView):
     serializer_class = ProfileAvatarSerializer
-    permission_classes = [IsAuthenticated]
 
     def get_object(self):
         profile_object = self.request.user.profile
@@ -48,13 +45,8 @@ class ProfileViewSet(mixins.UpdateModelMixin,
     def get_stats(self, request, *args, **kwargs):
         user = get_object_or_404(Profile, pk=kwargs["pk"])
 
-        seasons = Season.objects.all()
         query = self.request.query_params.get('season')
-        if query:
-            if query == "current":
-                seasons = seasons.filter(current=True)
-            else:
-                seasons = seasons.filter(year=query)
+        seasons = self.get_season_by_query(query, Season.objects.all())
 
         serializer = UserStatSerializer(instance={
             'user'   : user,
@@ -62,22 +54,19 @@ class ProfileViewSet(mixins.UpdateModelMixin,
         })
         return Response(serializer.data)
 
-
-# class UsersViewSet(mixins.UpdateModelMixin,
-#                    mixins.ListModelMixin,
-#                    mixins.RetrieveModelMixin,
-#                    viewsets.GenericViewSet):
-#     """ Used when changing info about user """
-#     queryset = get_user_model().objects.all()
-#     serializer_class = UserDetailSerializer
-#     filter_backends = [SearchFilter]
-#     search_fields = ["username"]
+    @staticmethod
+    def get_season_by_query(query, seasons):
+        if query:
+            if query == "current":
+                seasons = seasons.filter(current=True)
+            else:
+                seasons = seasons.filter(year=query)
+        return seasons
 
 
 # RES: https://stackoverflow.com/questions/53305849/django-rest-auth-key-error-on-email-confirmation
 class CustomConfirmEmailView(APIView):
     # TODO handle success and failure
-
     permission_classes = [AllowAny]
 
     def get(self, *args, **kwargs):

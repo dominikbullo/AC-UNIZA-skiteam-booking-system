@@ -178,7 +178,10 @@ USE_TZ = True
 # RES: https://docs.djangoproject.com/en/2.2/howto/static-files/
 # RES: https://stackoverflow.com/questions/24022558/differences-between-staticfiles-dir-static-root-and-media-root
 
-STATIC_URL = '/static/'
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
+
+STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATICFILES_DIRS = [

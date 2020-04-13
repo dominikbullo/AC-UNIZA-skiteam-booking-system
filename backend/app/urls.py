@@ -23,6 +23,9 @@ from users.api.urls import router as user_router
 from family.api.urls import router as family_router
 from events.api.urls import router as events_router
 
+from django.conf import settings
+from django.conf.urls.static import static
+
 router = router.DefaultRouter()
 router.extend(user_router)
 router.extend(family_router)
@@ -43,6 +46,9 @@ urlpatterns = [
     path("api/", include("users.api.urls")),
     path("api/", include("family.api.urls")),
     path("api/", include("events.api.urls")),
-    
-    re_path(r'^\S+$', IndexTemplateView.as_view(), name="entry-point")
+
+    # re_path(r'^\S+$', IndexTemplateView.as_view(), name="entry-point")
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

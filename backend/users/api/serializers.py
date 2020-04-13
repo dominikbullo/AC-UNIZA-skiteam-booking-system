@@ -1,33 +1,23 @@
 from allauth.account.models import EmailAddress
 
 from django.contrib.auth import get_user_model
-from django.utils import timezone
 
 from rest_auth.models import TokenModel
 from rest_auth.registration.serializers import RegisterSerializer
 from rest_framework import serializers
 from rest_framework.generics import get_object_or_404
 
-from core import choices
 from core.choices import UserTypeChoices
-from events.models import Event
-from family.models import Family, FamilyMember, Child
+from family.models import Family, FamilyMember
 from users.models import Profile
 
 
 class BaseProfileSerializer(serializers.ModelSerializer):
-    # user_id = serializers.IntegerField(source='user.id', read_only=True)
     family_id = serializers.SerializerMethodField()
     full_name = serializers.DateTimeField(source='user.full_name', read_only=True)
     first_name = serializers.DateTimeField(source='user.first_name', read_only=True)
     last_name = serializers.DateTimeField(source='user.last_name', read_only=True)
     username = serializers.DateTimeField(source='user.username', read_only=True)
-
-    # full_name = serializers.DateTimeField(source='user.full_name', read_only=True)
-    # first_name = serializers.DateTimeField(source='user.first_name', read_only=True)
-    # last_name = serializers.DateTimeField(source='user.last_name', read_only=True)
-
-    # username = serializers.DateTimeField(source='user.username', read_only=True)
 
     # RES: https://stackoverflow.com/questions/48073471/django-rest-framework-get-data-based-on-current-userid-token
     def get_family_id(self, instance):
