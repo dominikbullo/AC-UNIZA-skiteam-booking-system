@@ -49,6 +49,16 @@
 
         <div class="my-4">
           <ul class="centerx">
+
+            <!--            {{editedEvent}}-->
+            <div v-if="editedEvent">
+              <h2>Details: </h2>
+              <p>Title: {{editedEvent.title}}</p>
+              <p>Start: {{editedEvent.start}}</p>
+              <p>Skis: {{editedEvent.skis_type}}</p>
+              <p>Category: {{editedEvent.category}}</p>
+            </div>
+
             <li :key="child.username" v-for="child in userChildren">
               <vs-checkbox
                 :vs-value="child.username"
@@ -100,8 +110,9 @@ export default {
         editable: false
       },
 
+      editedEvent: null,
+
       childAddToEventPrompt: {
-        editedEventID: -1,
         active: false,
         onEvent: [],
         selected: []
@@ -154,24 +165,31 @@ export default {
       console.log('handling date click', arg)
     },
     handleEventClick (arg) {
-      this.childAddToEventPrompt.editedEventID = parseInt(arg.event.id)
+      // Allow only next event change not previous
+      // TODO RELEASE Uncomment this
+      if (process.env.NODE_ENV !== 'development') {
+        if (new Date(arg.event.start).valueOf() < new Date().valueOf()) {
+          return false
+        }
+      }
 
-      const event = Object.values(this.calendarEvents).find(obj => {
-        return obj.id === this.childAddToEventPrompt.editedEventID
+      this.editedEvent = Object.values(this.calendarEvents).find(obj => {
+        return obj.id === parseInt(arg.event.id)
       })
-      // console.log('event', event)
 
       // IDEA: Check with userChildren() array
-      const myChildOnEvent = event['participants'].filter(obj => {
+      console.log('participants', this.editedEvent['participants'])
+      const myChildrenOnEvent = this.editedEvent['participants'].filter(obj => {
+        console.log('obj', obj)
         return obj.family_id === this.$store.state.AppActiveUser.profile.family_id
       })
       // console.log('myChildOnEvent', myChildOnEvent)
 
+      // TODO not parents just children
       const userNames = []
-      myChildOnEvent.forEach((element) => {
+      myChildrenOnEvent.forEach((element) => {
         userNames.unshift(element['username'])
       })
-      // console.log('usernames', userNames)
 
       this.childAddToEventPrompt.onEvent = userNames
       this.childAddToEventPrompt.selected = userNames
@@ -180,6 +198,10 @@ export default {
     },
     handleSelectClick (click) {
       console.log('handling select click', click)
+      if (click.start.isBefore(this.moment())) {
+        // $('#calendar').fullCalendar('unselect')
+        return false
+      }
       alert(`clicked ${click.startStr} - ${click.endStr}`)
     },
     handleEventMouseEnter (arg) {
@@ -196,7 +218,7 @@ export default {
     },
     changeUserChildrenOnEvent () {
       const payload = {
-        'eventID': this.childAddToEventPrompt.editedEventID,
+        'eventID': this.editedEvent.id,
         'selected': this.childAddToEventPrompt.selected,
         'onEvent': this.childAddToEventPrompt.onEvent
       }

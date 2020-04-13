@@ -6,16 +6,16 @@ from polymorphic.admin import PolymorphicParentModelAdmin, PolymorphicChildModel
 
 from events.models import Event, SkiTraining, SkiRace, Category, Location
 
+_event_display_fields = ("season", "start", "type", "location")
+
 
 # RES: https://django-polymorphic.readthedocs.io/en/stable/admin.html
 class ModelAChildAdmin(PolymorphicChildModelAdmin):
     """ Base admin class for all child models """
     base_model = Event  # Optional, explicitly set here.
 
-    __fields = ("season", "type", "location")
-    # search_fields = ('season__year', 'type', 'location__name')
-    list_filter = __fields
-    list_display = PolymorphicParentModelAdmin.list_display + __fields
+    list_filter = _event_display_fields
+    list_display = PolymorphicParentModelAdmin.list_display + _event_display_fields
 
 
 @admin.register(SkiTraining)
@@ -38,10 +38,8 @@ class ModelAParentAdmin(PolymorphicParentModelAdmin):
     """ The parent model admin """
     base_model = Event  # Optional, explicitly set here.
     child_models = (Event, SkiTraining, SkiRace)
-    __fields = ("season", "type", "location")
-    # search_fields = ('season__year', 'type', 'location__name')
-    list_filter = __fields
-    list_display = PolymorphicParentModelAdmin.list_display + __fields
+    list_filter = _event_display_fields
+    list_display = PolymorphicParentModelAdmin.list_display + _event_display_fields
 
 
 @admin.register(Category)
