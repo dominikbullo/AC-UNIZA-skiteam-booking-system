@@ -76,6 +76,7 @@ const state = {
   is_touch_device: is_touch_device(),
   mainLayoutType: themeConfig.mainLayoutType || 'vertical',
   navbarSearchAndPinList,
+  packageVersion: process.env.VUE_APP_VERSION || '0',
   reduceButton: themeConfig.sidebarCollapsed,
   verticalNavMenuWidth: 'default',
   verticalNavMenuItemsMin: false,
