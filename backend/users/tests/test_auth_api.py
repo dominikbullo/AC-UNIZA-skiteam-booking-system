@@ -18,7 +18,8 @@ default_payload = {
     "first_name": "TestName",
     "last_name" : "TestSurname",
     "profile"   : {
-        "birth_date": "09.12.1996",
+        "birth_date": "1996-12-09",
+        "user_role" : "parent",
         "gender"    : "M"
     }
 }
