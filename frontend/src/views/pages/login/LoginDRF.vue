@@ -80,7 +80,6 @@ export default {
       return true
     },
     loginDRF () {
-
       if (!this.checkLogin()) return
 
       // Loading

@@ -14,38 +14,6 @@ function addSubscriber (callback) {
 }
 
 export default {
-  init () {
-    // TODO get token
-    // FIXME get token
-    axios.interceptors.response.use(function (response) {
-      return response
-      //  TODO if error ? then login again probbably
-    }, function (error) {
-      // const { config, response: { status } } = error
-      const { config, response } = error
-      const originalRequest = config
-
-      // if (status === 401) {
-      if (response && response.status === 401) {
-        if (!isAlreadyFetchingAccessToken) {
-          isAlreadyFetchingAccessToken = true
-          store.dispatch('auth/fetchAccessTokenDRF').then((access_token) => {
-            isAlreadyFetchingAccessToken = false
-            onAccessTokenFetched(access_token)
-          })
-        }
-
-        const retryOriginalRequest = new Promise((resolve) => {
-          addSubscriber(access_token => {
-            originalRequest.headers.Authorization = `Bearer ${access_token}`
-            resolve(axios(originalRequest))
-          })
-        })
-        return retryOriginalRequest
-      }
-      return Promise.reject(error)
-    })
-  },
   logout () {
     return axios.post('/rest-auth/logout/', {})
   },

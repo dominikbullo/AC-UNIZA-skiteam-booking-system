@@ -6,6 +6,7 @@ from django.utils import timezone
 from rest_auth.models import TokenModel
 from rest_auth.registration.serializers import RegisterSerializer
 from rest_framework import serializers
+from rest_framework.generics import get_object_or_404
 
 from core import choices
 from core.choices import UserTypeChoices
@@ -31,7 +32,7 @@ class BaseProfileSerializer(serializers.ModelSerializer):
     # RES: https://stackoverflow.com/questions/48073471/django-rest-framework-get-data-based-on-current-userid-token
     def get_family_id(self, instance):
         try:
-            return FamilyMember.objects.get(user=instance.user).family_id
+            return get_object_or_404(FamilyMember, user=instance.user).family_id
         except Exception as e:
             # FIXME: Cannot find family ID, cannot show /api/profile/ -> list
             #             #  probably it should be like events -> polymorphic

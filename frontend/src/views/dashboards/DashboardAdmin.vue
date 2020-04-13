@@ -261,6 +261,9 @@ export default {
     }
   },
   created () {
+    console.log('user', this.$store.state.AppActiveUser)
+    console.log('user family_id', this.$store.state.AppActiveUser.profile.family_id)
+
     this.$store.dispatch('family/fetchFamily', this.$store.state.AppActiveUser.profile.family_id)
       .then(() => {
         this.childSelection.options = this.familyChildren

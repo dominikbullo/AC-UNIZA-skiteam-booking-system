@@ -82,17 +82,17 @@ export default {
       //  this.$store.dispatch('auth/logout')
       // this.$router.push('/login').catch(() => {})
       //    this.$acl.change('public')
+      // https://docs.djangoproject.com/en/3.0/ref/csrf/
+      this.$http.post('/rest-auth/logout/').then(() => {
+        // delete this.$http.defaults.headers.common['X-CSRFToken']
+        delete this.$http.defaults.headers.common['Authorization']
+      })
 
       // CRSF token
       // https://laracasts.com/discuss/channels/laravel/how-to-refresh-xcsrf-token-after-logout-in-spa
       if (localStorage.getItem('accessToken')) {
         localStorage.removeItem('accessToken')
       }
-      // https://docs.djangoproject.com/en/3.0/ref/csrf/
-      this.$http.post('/rest-auth/logout/').then(() => {
-        // delete this.$http.defaults.headers.common['X-CSRFToken']
-        delete this.$http.defaults.headers.common['Authorization']
-      })
 
       // Change role on logout. Same value as initialRole of acj.js
       this.$acl.change('admin')

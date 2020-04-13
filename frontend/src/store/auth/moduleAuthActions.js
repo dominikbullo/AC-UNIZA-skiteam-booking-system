@@ -13,55 +13,6 @@ import router from '@/router'
 import acl from 'vue-acl'
 
 export default {
-  updateUsername ({ commit }, payload) {
-    payload.user.updateProfile({
-      displayName: payload.displayName
-    }).then(() => {
-      // If username update is success
-      // update in localstorage
-      const newUserData = Object.assign({}, payload.user.providerData[0])
-      newUserData.displayName = payload.displayName
-      commit('UPDATE_USER_INFO', newUserData, { root: true })
-
-      // If reload is required to get fresh data after update
-      // Reload current page
-      if (payload.isReloadRequired) {
-        router.push(router.currentRoute.query.to || '/')
-      }
-    }).catch((err) => {
-      payload.notify({
-        time: 8800,
-        title: 'Error',
-        text: err.message,
-        iconPack: 'feather',
-        icon: 'icon-alert-circle',
-        color: 'danger'
-      })
-    })
-  },
-  // logout: ({ commit }, payload) => {
-  //   return new Promise((resolve, reject) => {
-  //     // CRSF token
-  //     // https://laracasts.com/discuss/channels/laravel/how-to-refresh-xcsrf-token-after-logout-in-spa
-  //     // https://docs.djangoproject.com/en/3.0/ref/csrf/
-  //
-  //     // remove the axios default header
-  //
-  //     drf.logout().then(() => {
-  //       console.log('logged out')
-  //
-  //       if (localStorage.getItem('userInfo')) {
-  //         localStorage.removeItem('userInfo')
-  //       }
-  //       delete this.$http.defaults.headers.common['Authorization']
-  //     })
-  //
-  //     if (localStorage.getItem('accessToken')) {
-  //       localStorage.removeItem('accessToken')
-  //     }
-  //     resolve()
-  //   })
-  // },
   loginDRF ({ commit }, payload) {
     return new Promise((resolve, reject) => {
       drf.login(payload.userDetails.email, payload.userDetails.password).then(response => {

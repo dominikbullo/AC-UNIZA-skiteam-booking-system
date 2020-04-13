@@ -67,9 +67,6 @@ export default {
     document.documentElement.style.setProperty('--vh', `${vh}px`)
   },
   async created () {
-    drf.init()
-
-
     const dir = this.$vs.rtl ? 'rtl' : 'ltr'
     document.documentElement.setAttribute('dir', dir)
 
