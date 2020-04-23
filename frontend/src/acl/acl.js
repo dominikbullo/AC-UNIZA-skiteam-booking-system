@@ -7,9 +7,8 @@ import router from '@/router'
 Vue.use(AclInstaller)
 // TODO change
 // FIXME change
-let initialRole = 'editor'
+let initialRole = 'public'
 
-// TODO change user role from here
 const userInfo = JSON.parse(localStorage.getItem('userInfo'))
 if (userInfo && userInfo.userRole) initialRole = userInfo.userRole
 
@@ -22,13 +21,27 @@ export default new AclCreate({
   router,
   acceptLocalRules: true,
   globalRules: {
-    admin: new AclRule('admin').generate(),
-    editor: new AclRule('editor').or('admin').generate(),
+    isAdmin: new AclRule('admin').generate(),
 
-    coach: new AclRule('coach').or('admin').generate(),
-    parent: new AclRule('parent').or('admin').generate(),
-    child: new AclRule('child').or('admin').generate(),
+    isCoach: new AclRule('coach').or('admin').generate(),
+    isParent: new AclRule('parent').or('coach').or('admin').generate(),
+    isChild: new AclRule('child').or('parent').or('coach').or('admin').generate(),
 
-    isPublic: new AclRule('public').or('admin').generate()
+    isLogged: new AclRule('child').or('parent').or('coach').or('admin').generate(),
+    isPublic: new AclRule('public').or('child').or('parent').or('coach').or('admin').generate()
+  },
+  middleware: async acl => {
+    // TODO change role here
+    console.log('Changing user role via middleware')
+    // this.$http.get('/rest-auth/user/')
+    //   .then((response) => {
+    //     this.$acl.change(response.user.profile.userRole)
+    //   })
+    //   .catch((error) => {
+    //     console.log(error)
+    //     // reject(error)
+    //   })
+    // user, profile, userRole
+    // console.log(this.$acl[0])
   }
 })

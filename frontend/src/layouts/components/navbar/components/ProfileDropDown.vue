@@ -81,7 +81,7 @@ export default {
       // IDEA:
       //  this.$store.dispatch('auth/logout')
       // this.$router.push('/login').catch(() => {})
-      //    this.$acl.change('public')
+
       // https://docs.djangoproject.com/en/3.0/ref/csrf/
       this.$http.post('/rest-auth/logout/').then(() => {
         // delete this.$http.defaults.headers.common['X-CSRFToken']
@@ -95,7 +95,6 @@ export default {
       }
 
       // Change role on logout. Same value as initialRole of acj.js
-      this.$acl.change('admin')
       localStorage.removeItem('userInfo')
 
       // This is just for demo Purpose. If user clicks on logout -> redirect

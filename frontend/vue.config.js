@@ -7,12 +7,15 @@ module.exports = {
   outputDir: './dist/',
 
   chainWebpack: config => {
-    config.optimization
-      .delete('splitChunks')
-
     config
       .plugin('BundleTracker')
-      .use(BundleTracker, [{ filename: '../frontend/webpack-stats.json' }])
+      .use(BundleTracker, [{ filename: './webpack-stats.json' }])
+
+    config.output
+      .filename('bundle.js')
+
+    config.optimization
+      .delete('splitChunks')
 
     config.resolve.alias
       .set('__STATIC__', 'static')
