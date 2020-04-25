@@ -1,13 +1,3 @@
-<!-- =========================================================================================
-    File Name: FlexAlignmentTop.vue
-    Description: Align elements vertically - Top
-    ----------------------------------------------------------------------------------------
-    Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
-      Author: Pixinvent
-    Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
-
 <template>
     <vx-card title="Align Top" code-toggler no-shadow card-border>
 

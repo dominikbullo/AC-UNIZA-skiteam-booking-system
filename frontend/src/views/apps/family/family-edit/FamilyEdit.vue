@@ -1,12 +1,3 @@
-<!-- =========================================================================================
-  File Name: UserEdit.vue
-  Description: User Edit Page
-  ----------------------------------------------------------------------------------------
-  Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
-  Author: Pixinvent
-  Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
 <template>
   <div id="page-family-edit">
     <vs-alert :active.sync="family_not_found" color="danger" title="User Not Found">

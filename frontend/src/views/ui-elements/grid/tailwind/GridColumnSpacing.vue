@@ -1,13 +1,3 @@
-<!-- =========================================================================================
-    File Name: GridColumnSpacing.vue
-    Description: Add space between columns
-    ----------------------------------------------------------------------------------------
-    Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
-      Author: Pixinvent
-    Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
-
 <template>
     <vx-card title="Column Spacing" code-toggler>
 

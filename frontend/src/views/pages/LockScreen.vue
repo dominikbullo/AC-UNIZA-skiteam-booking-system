@@ -1,13 +1,3 @@
-<!-- =========================================================================================
-    File Name: LockScreen.vue
-    Description: Lock Screen Page
-    ----------------------------------------------------------------------------------------
-    Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
-      Author: Pixinvent
-    Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
-
 <template>
     <div class="h-screen flex w-full bg-img vx-row no-gutter justify-center items-center">
         <div class="vx-col sm:w-3/5 md:w-3/5 lg:w-3/4 xl:w-3/5 sm:m-0 m-4">
