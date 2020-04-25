@@ -11,8 +11,12 @@
 
   <div id="page-user-list">
 
-    <vx-card ref="filterCard" :title="$t('Filters')" class="user-list-filters mb-8" actionButtons
-             @refresh="resetColFilters" @remove="resetColFilters">
+    <vx-card ref="filterCard"
+             :title="$t('Filters')"
+             class="user-list-filters mb-8"
+             actionButtons
+             @refresh="resetColFilters"
+             @remove="resetColFilters">
       <div class="vx-row">
         <div class="vx-col md:w-1/4 sm:w-1/2 w-full">
           <label class="text-sm opacity-75">Role</label>
@@ -83,31 +87,31 @@
           <vs-dropdown-menu>
 
             <vs-dropdown-item>
-                <span class="flex items-center">
-                  <feather-icon icon="TrashIcon" svgClasses="h-4 w-4" class="mr-2"/>
-                  <span>Delete</span>
-                </span>
+                    <span class="flex items-center">
+                      <feather-icon icon="TrashIcon" svgClasses="h-4 w-4" class="mr-2"/>
+                      <span>Delete</span>
+                    </span>
             </vs-dropdown-item>
 
             <vs-dropdown-item>
-                <span class="flex items-center">
-                  <feather-icon icon="ArchiveIcon" svgClasses="h-4 w-4" class="mr-2"/>
-                  <span>Archive</span>
-                </span>
+                    <span class="flex items-center">
+                      <feather-icon icon="ArchiveIcon" svgClasses="h-4 w-4" class="mr-2"/>
+                      <span>Archive</span>
+                    </span>
             </vs-dropdown-item>
 
             <vs-dropdown-item>
-                <span class="flex items-center">
-                  <feather-icon icon="FileIcon" svgClasses="h-4 w-4" class="mr-2"/>
-                  <span>Print</span>
-                </span>
+                    <span class="flex items-center">
+                      <feather-icon icon="FileIcon" svgClasses="h-4 w-4" class="mr-2"/>
+                      <span>Print</span>
+                    </span>
             </vs-dropdown-item>
 
             <vs-dropdown-item>
-                <span class="flex items-center">
-                  <feather-icon icon="SaveIcon" svgClasses="h-4 w-4" class="mr-2"/>
-                  <span>CSV</span>
-                </span>
+                    <span class="flex items-center">
+                      <feather-icon icon="SaveIcon" svgClasses="h-4 w-4" class="mr-2"/>
+                      <span>CSV</span>
+                    </span>
             </vs-dropdown-item>
 
           </vs-dropdown-menu>
@@ -146,7 +150,7 @@
 </template>
 
 <script>
-import {AgGridVue} from 'ag-grid-vue'
+import { AgGridVue } from 'ag-grid-vue'
 import '@/assets/scss/vuexy/extraComponents/agGridStyleOverride.scss'
 import vSelect from 'vue-select'
 
@@ -314,24 +318,11 @@ export default {
           width: 200
         },
         {
-          headerName: 'Country',
-          field: 'country',
-          filter: true,
-          width: 150
-        },
-        {
           headerName: 'Role',
-          field: 'role',
+          field: 'userRole',
           filter: true,
           width: 150
         },
-        // {
-        //   headerName: 'Status',
-        //   field: 'status',
-        //   filter: true,
-        //   width: 150,
-        //   cellRendererFramework: 'CellRendererStatus'
-        // },
         {
           headerName: 'Verified',
           field: 'verified_email',
@@ -339,12 +330,6 @@ export default {
           width: 125,
           cellRendererFramework: 'CellRendererVerified',
           cellClass: 'text-center'
-        },
-        {
-          headerName: 'Actions',
-          field: 'transactions',
-          width: 150,
-          cellRendererFramework: 'CellRendererActions'
         }
       ],
 
@@ -377,17 +362,26 @@ export default {
       return this.$store.state.userManagement.users
     },
     paginationPageSize () {
-      if (this.gridApi) return this.gridApi.paginationGetPageSize()
-      else return 10
+      if (this.gridApi) {
+        return this.gridApi.paginationGetPageSize()
+      } else {
+        return 10
+      }
     },
     totalPages () {
-      if (this.gridApi) return this.gridApi.paginationGetTotalPages()
-      else return 0
+      if (this.gridApi) {
+        return this.gridApi.paginationGetTotalPages()
+      } else {
+        return 0
+      }
     },
     currentPage: {
       get () {
-        if (this.gridApi) return this.gridApi.paginationGetCurrentPage() + 1
-        else return 1
+        if (this.gridApi) {
+          return this.gridApi.paginationGetCurrentPage() + 1
+        } else {
+          return 1
+        }
       },
       set (val) {
         this.gridApi.paginationGoToPage(val - 1)
@@ -444,11 +438,7 @@ export default {
       this.$store.registerModule('userManagement', moduleUserManagement)
       moduleUserManagement.isRegistered = true
     }
-    this.$store.dispatch('userManagement/fetchUsers').catch(err => {
-      console.error(err)
-    })
-    // OR
-    // this.$store.dispatch('userManagement/fetchProfiles').catch(err => { console.error(err) })
+    this.$store.dispatch('userManagement/fetchUsers')
   }
 }
 
@@ -464,13 +454,5 @@ export default {
         transform: translateY(-58%);
       }
     }
-
-    /*.ag-grid-table {*/
-
-    /*  height: calc(var(--vh, 1vh) * 100 - 30rem);*/
-    /*  @media screen and (max-height: 800px) {*/
-    /*    height: 620px;*/
-    /*  }*/
-    /*}*/
   }
 </style>

@@ -12,7 +12,7 @@ import axios from '@/axios.js'
 export default {
   fetchUsers ({ commit }) {
     return new Promise((resolve, reject) => {
-      axios.get('/user/')
+      axios.get('/profile/')
         .then((response) => {
           commit('SET_USERS', response.data.results)
           resolve(response)

@@ -351,7 +351,7 @@ export default {
         },
         {
           headerName: 'Role',
-          field: 'role',
+          field: 'profile.userRole',
           filter: true,
           width: 150
         },

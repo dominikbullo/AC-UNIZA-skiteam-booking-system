@@ -54,6 +54,14 @@ const router = new Router({
           }
         },
         {
+          path: '/dashboard/coach',
+          name: 'dashboard-coach',
+          component: () => import('./views/dashboards/CoachDashboard.vue'),
+          meta: {
+            rule: 'isCoach'
+          }
+        },
+        {
           path: '/test/page',
           name: 'testpage',
           component: () => import('@/views/pages/testPages/TestPage.vue'),
@@ -191,7 +199,7 @@ const router = new Router({
               }
             ],
             pageTitle: 'Family View',
-            rule: 'isParent'
+            rule: 'isChild'
           }
         },
         {
