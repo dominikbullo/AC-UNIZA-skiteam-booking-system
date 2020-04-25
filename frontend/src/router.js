@@ -118,7 +118,7 @@ const router = new Router({
               }
             ],
             pageTitle: 'User List',
-            rule: 'isCoach'
+            rule: 'isParent'
           }
         },
         {
@@ -138,6 +138,26 @@ const router = new Router({
               }
             ],
             pageTitle: 'User View',
+            rule: 'isParent'
+          }
+        },
+        {
+          path: '/apps/user/:userId/stats',
+          name: 'app-user-stats',
+          component: () => import('@/views/apps/user/UserStatsView.vue'),
+          meta: {
+            breadcrumb: [
+              {
+                title: 'Home',
+                url: '/'
+              },
+              { title: 'User' },
+              {
+                title: 'Stats',
+                active: true
+              }
+            ],
+            pageTitle: 'User Stats',
             rule: 'isCoach'
           }
         },
@@ -321,6 +341,26 @@ const router = new Router({
         // =============================================================================
         // CHARTS & MAPS
         // =============================================================================
+        {
+          path: '/page/statistics',
+          name: 'page-statistics',
+          component: () => import('@/views/pages/stats/Statistics.vue'),
+          meta: {
+            breadcrumb: [
+              {
+                title: 'Home',
+                url: '/'
+              },
+              { title: 'Charts & Maps' },
+              {
+                title: 'Apex Charts',
+                active: true
+              }
+            ],
+            pageTitle: 'Apex Charts',
+            rule: 'isParent'
+          }
+        },
         {
           path: '/charts-and-maps/charts/apex-charts',
           name: 'extra-component-charts-apex-charts',

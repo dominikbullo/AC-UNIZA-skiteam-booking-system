@@ -29,19 +29,19 @@ export default new AclCreate({
 
     isLogged: new AclRule('child').or('parent').or('coach').or('admin').generate(),
     isPublic: new AclRule('public').or('child').or('parent').or('coach').or('admin').generate()
-  },
-  middleware: async acl => {
-    // TODO change role here
-    console.log('Changing user role via middleware')
-    // this.$http.get('/rest-auth/user/')
-    //   .then((response) => {
-    //     this.$acl.change(response.user.profile.userRole)
-    //   })
-    //   .catch((error) => {
-    //     console.log(error)
-    //     // reject(error)
-    //   })
-    // user, profile, userRole
-    // console.log(this.$acl[0])
   }
+  // ,
+  // middleware: async acl => {
+  //   // TODO change role here
+  //   // this.$http.get('/rest-auth/user/')
+  //   //   .then((response) => {
+  //   //     this.$acl.change(response.user.profile.userRole)
+  //   //   })
+  //   //   .catch((error) => {
+  //   //     console.log(error)
+  //   //     // reject(error)
+  //   //   })
+  //   // user, profile, userRole
+  //   // console.log(this.$acl[0])
+  // }
 })

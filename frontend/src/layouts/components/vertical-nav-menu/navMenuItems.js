@@ -69,53 +69,10 @@ export default [
     i18n: 'Members'
   },
   {
-    url: '/apps/user/user-view/268',
-    name: 'View',
-    slug: 'app-user-view',
-    icon: 'UserIcon',
-    i18n: 'User Views TEST'
-  },
-  {
-    header: 'Charts',
+    url: '/page/statistics',
+    name: 'Statistics',
     icon: 'PieChartIcon',
-    i18n: 'Charts',
-    items: [
-      {
-        url: null,
-        name: 'Charts',
-        icon: 'PieChartIcon',
-        tag: '3',
-        tagColor: 'success',
-        i18n: 'Charts',
-        submenu: [
-          {
-            url: '/charts-and-maps/charts/apex-charts',
-            name: 'Apex Charts',
-            slug: 'extra-component-charts-apex-charts',
-            i18n: 'ApexCharts'
-          },
-          {
-            url: '/charts-and-maps/charts/chartjs',
-            name: 'chartjs',
-            slug: 'extra-component-charts-chartjs',
-            i18n: 'chartjs'
-          }
-        ]
-      }
-    ]
+    slug: 'page-stats',
+    i18n: 'Statistics'
   }
-  // {
-  //   header: 'Others',
-  //   icon: 'MoreHorizontalIcon',
-  //   i18n: 'Others',
-  //   items: [
-  //     {
-  //       url: '/pages/faq',
-  //       slug: 'page-faq',
-  //       name: 'FAQ',
-  //       icon: 'HelpCircleIcon',
-  //       i18n: 'FAQ'
-  //     }
-  //   ]
-  // }
 ]

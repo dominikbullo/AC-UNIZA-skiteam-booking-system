@@ -128,9 +128,12 @@ class UserStatSerializer(serializers.ModelSerializer):
         user = instance["user"]
         seasons = instance["seasons"]
 
-        # TODO
-        #  Check if is kid
-        kid = Child.objects.get(user__profile=user)
+        try:
+            kid = Child.objects.get(user__profile=user)
+        except Exception:
+            error = {"message": "Child not found. Stats are currently only available for Children"}
+            raise serializers.ValidationError(error)
+
         ret = {}
         for season in seasons:
             print("season ", season)

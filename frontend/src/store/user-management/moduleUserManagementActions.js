@@ -25,7 +25,7 @@ export default {
   fetchUser (context, userId) {
     console.log('[STORE] fetchUser:', userId)
     return new Promise((resolve, reject) => {
-      axios.get(`/user/${userId}`)
+      axios.get(`/profile/${userId}/`)
         .then((response) => {
           resolve(response)
         })

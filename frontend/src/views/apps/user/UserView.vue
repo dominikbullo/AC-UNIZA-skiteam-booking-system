@@ -9,11 +9,10 @@
 
 <template>
   <div id="page-user-view">
-
     <vs-alert color="danger" title="User Not Found" :active.sync="user_not_found">
       <span>User record with id: {{ $route.params.userId }} not found. </span>
       <span>
-        <span>Check </span><router-link :to="{name:'page-user-list'}"
+        <span>Check </span><router-link :to="{name:'app-user-list'}"
                                         class="text-inherit underline">All Users</router-link>
       </span>
     </vs-alert>
@@ -26,26 +25,26 @@
         <div class="vx-row">
 
           <!-- Avatar Col -->
-          <div class="vx-col" id="avatar-col">
-            <div class="img-container mb-4">
-              <img :src="user_data.avatar" class="rounded w-full"/>
-            </div>
-          </div>
+          <!--          <div class="vx-col" id="avatar-col">-->
+          <!--            <div class="img-container mb-4">-->
+          <!--              <img :src="user_data.avatar" class="rounded w-full"/>-->
+          <!--            </div>-->
+          <!--          </div>-->
 
           <!-- Information - Col 1 -->
           <div class="vx-col flex-1" id="account-info-col-1">
             <table>
               <tr>
-                <td class="font-semibold">Username</td>
-                <td>{{ user_data.username }}</td>
-              </tr>
-              <tr>
                 <td class="font-semibold">Name</td>
-                <td>{{ user_data.name }}</td>
+                <td>{{ user_data.first_name }}</td>
               </tr>
               <tr>
                 <td class="font-semibold">Email</td>
                 <td>{{ user_data.email }}</td>
+              </tr>
+              <tr>
+                <td class="font-semibold">Username</td>
+                <td>{{ user_data.username }}</td>
               </tr>
             </table>
           </div>
@@ -55,28 +54,21 @@
           <div class="vx-col flex-1" id="account-info-col-2">
             <table>
               <tr>
-                <td class="font-semibold">Status</td>
-                <td>{{ user_data.status }}</td>
+                <td class="font-semibold">Surname</td>
+                <td>{{ user_data.last_name}}</td>
               </tr>
               <tr>
                 <td class="font-semibold">Role</td>
-                <td>{{ user_data.role }}</td>
-              </tr>
-              <tr>
-                <td class="font-semibold">Company</td>
-                <td>{{ user_data.company }}</td>
+                <td>{{ user_data.userRole | capitalize }}</td>
               </tr>
             </table>
           </div>
           <!-- /Information - Col 2 -->
-          <div class="vx-col w-full flex" id="account-manage-buttons">
-            <vs-button icon-pack="feather" icon="icon-edit" class="mr-4"
-                       :to="{name: 'app-user-edit', params: { userId: $route.params.userId }}">Edit
-            </vs-button>
-            <vs-button type="border" color="danger" icon-pack="feather" icon="icon-trash" @click="confirmDeleteRecord">
-              Delete
-            </vs-button>
-          </div>
+
+          <!--          <div class="vx-col w-full flex" id="account-manage-buttons">-->
+          <!--            <vs-button icon-pack="feather" icon="icon-edit" class="mr-4" :to="{name: 'page-user-settings'}">Edit-->
+          <!--            </vs-button>-->
+          <!--          </div>-->
 
         </div>
 
@@ -98,90 +90,51 @@
                 <td class="font-semibold">Website</td>
                 <td>{{ user_data.website }}</td>
               </tr>
-              <tr>
-                <td class="font-semibold">Languages</td>
-                <td>{{ user_data.languages_known.join(', ') }}</td>
-              </tr>
-              <tr>
-                <td class="font-semibold">Gender</td>
-                <td>{{ user_data.gender }}</td>
-              </tr>
-              <tr>
-                <td class="font-semibold">Contact</td>
-                <td>{{ user_data.contact_options.join(', ') }}</td>
-              </tr>
             </table>
           </vx-card>
         </div>
 
-        <div class="vx-col lg:w-1/2 w-full">
-          <vx-card title="Social Links" class="mb-base">
-            <table>
-              <tr>
-                <td class="font-semibold">Twitter</td>
-                <td>{{ user_data.social_links.twitter }}</td>
-              </tr>
-              <tr>
-                <td class="font-semibold">Facebook</td>
-                <td>{{ user_data.social_links.facebook }}</td>
-              </tr>
-              <tr>
-                <td class="font-semibold">Instagram</td>
-                <td>{{ user_data.social_links.instagram }}</td>
-              </tr>
-              <tr>
-                <td class="font-semibold">Github</td>
-                <td>{{ user_data.social_links.github }}</td>
-              </tr>
-              <tr>
-                <td class="font-semibold">CodePen</td>
-                <td>{{ user_data.social_links.codepen }}</td>
-              </tr>
-              <tr>
-                <td class="font-semibold">Slack</td>
-                <td>{{ user_data.social_links.slack }}</td>
-              </tr>
-            </table>
-          </vx-card>
-        </div>
       </div>
 
-      <!-- Permissions -->
-      <!--      <vx-card>-->
+      <vx-card>
+        <div class="vx-row">
+          <div class="vx-col w-full">
+            <div class="flex items-end px-3">
+              <feather-icon svgClasses="w-6 h-6" icon="LockIcon" class="mr-2"/>
+              <span class="font-medium text-lg leading-none">Permissions</span>
+            </div>
+            <vs-divider/>
+          </div>
+        </div>
 
-      <!--        <div class="vx-row">-->
-      <!--          <div class="vx-col w-full">-->
-      <!--            <div class="flex items-end px-3">-->
-      <!--              <feather-icon svgClasses="w-6 h-6" icon="LockIcon" class="mr-2"/>-->
-      <!--              <span class="font-medium text-lg leading-none">Permissions</span>-->
-      <!--            </div>-->
-      <!--            <vs-divider/>-->
-      <!--          </div>-->
-      <!--        </div>-->
+        <div class="block overflow-x-auto">
+          <table class="w-full permissions-table">
+            <tr>
+              <!--
+                You can also use `Object.keys(Object.values(data_local.permissions)[0])` this logic if you consider,
+                our data structure. You just have to loop over above variable to get table headers.
+                Below we made it simple. So, everyone can understand.
+               -->
+              <th class="font-semibold text-base text-left px-3 py-2"
+                  v-for="heading in ['Module', 'Read', 'Write', 'Create', 'Delete']" :key="heading">{{ heading }}
+              </th>
+            </tr>
 
-      <!--        <div class="block overflow-x-auto">-->
-      <!--          <table class="w-full permissions-table">-->
-      <!--            <tr>-->
-      <!--              &lt;!&ndash;-->
-      <!--                You can also use `Object.keys(Object.values(data_local.permissions)[0])` this logic if you consider,-->
-      <!--                our data structure. You just have to loop over above variable to get table headers.-->
-      <!--                Below we made it simple. So, everyone can understand.-->
-      <!--               &ndash;&gt;-->
-      <!--              <th class="font-semibold text-base text-left px-3 py-2"-->
-      <!--                  v-for="heading in ['Module', 'Read', 'Write', 'Create', 'Delete']" :key="heading">{{ heading }}-->
-      <!--              </th>-->
-      <!--            </tr>-->
+            <tr v-for="(val, name) in user_data.permissions" :key="name">
+              <td class="px-3 py-2">{{ name }}</td>
+              <td v-for="(permission, name) in val" class="px-3 py-2" :key="name+permission">
+                <vs-checkbox v-model="val[name]" class="pointer-events-none"/>
+              </td>
+            </tr>
+          </table>
+        </div>
 
-      <!--            <tr v-for="(val, name) in user_data.permissions" :key="name">-->
-      <!--              <td class="px-3 py-2">{{ name }}</td>-->
-      <!--              <td v-for="(permission, name) in val" class="px-3 py-2" :key="name+permission">-->
-      <!--                <vs-checkbox v-model="val[name]" class="pointer-events-none"/>-->
-      <!--              </td>-->
-      <!--            </tr>-->
-      <!--          </table>-->
-      <!--        </div>-->
 
-      <!--      </vx-card>-->
+        <div class="vx-col w-full flex" id="account-manage-buttons">
+          <vs-button icon-pack="feather" icon="icon-edit" class="mr-4" :to="{name: 'app-user-stats'}">More stats
+          </vs-button>
+        </div>
+      </vx-card>
     </div>
   </div>
 </template>
@@ -242,9 +195,12 @@ export default {
     }
 
     const userId = this.$route.params.userId
+    console.log('userId', userId)
     this.$store.dispatch('userManagement/fetchUser', userId)
       .then(res => {
         this.user_data = res.data
+        console.log('res.data', res.data)
+        console.log('this.user_data', this.user_data)
       })
       .catch(err => {
         if (err.response.status === 404) {
@@ -257,58 +213,3 @@ export default {
 }
 
 </script>
-
-<style lang="scss">
-  #avatar-col {
-    width: 10rem;
-  }
-
-  #page-user-view {
-    table {
-      td {
-        vertical-align: top;
-        min-width: 140px;
-        padding-bottom: .8rem;
-        word-break: break-all;
-      }
-
-      &:not(.permissions-table) {
-        td {
-          @media screen and (max-width: 370px) {
-            display: block;
-          }
-        }
-      }
-    }
-  }
-
-  // #account-info-col-1 {
-  //   // flex-grow: 1;
-  //   width: 30rem !important;
-  //   @media screen and (min-width:1200px) {
-  //     & {
-  //       flex-grow: unset !important;
-  //     }
-  //   }
-  // }
-
-
-  @media screen and (min-width: 1201px) and (max-width: 1211px),
-  only screen and (min-width: 636px) and (max-width: 991px) {
-    #account-info-col-1 {
-      width: calc(100% - 12rem) !important;
-    }
-
-    // #account-manage-buttons {
-    //   width: 12rem !important;
-    //   flex-direction: column;
-
-    //   > button {
-    //     margin-right: 0 !important;
-    //     margin-bottom: 1rem;
-    //   }
-    // }
-
-  }
-
-</style>
