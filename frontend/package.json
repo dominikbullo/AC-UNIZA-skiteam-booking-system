@@ -1,6 +1,6 @@
 {
   "name": "sport-agenda-app",
-  "version": "1.0.2-alpha",
+  "version": "1.1.0-alpha",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
