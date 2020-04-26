@@ -47,19 +47,42 @@
         title="Sign up child to event">
 
 
-        <div class="my-4">
-          <ul class="centerx">
-
-            <!--            {{editedEvent}}-->
-            <div v-if="editedEvent">
-              <h2>Details: </h2>
-              <p>Title: {{editedEvent.title}}</p>
-              <p>Start: {{editedEvent.start}}</p>
-              <p>Skis: {{editedEvent.skis_type}}</p>
-              <p>Category: {{editedEvent.category}}</p>
+        <div v-if="editedEvent" id="event-info-table">
+          <div class="vx-row">
+            <div class="vx-col flex-1" id="event-info-col-1">
+              <table>
+                <tr>
+                  <td class="font-semibold">Type</td>
+                  <td>{{ editedEvent.title }}</td>
+                </tr>
+                <tr>
+                  <td class="font-semibold">Skis</td>
+                  <td>{{ editedEvent.additional_info }}</td>
+                </tr>
+                <tr>
+                  <td class="font-semibold">Skis</td>
+                  <td>{{ editedEvent.skis_type }}</td>
+                </tr>
+              </table>
             </div>
+            <div class="vx-col flex-1" id="event-info-col-2">
+              <table>
+                <tr>
+                  <td class="font-semibold">Location</td>
+                  <td>{{ editedEvent.location }}</td>
+                </tr>
+                <tr>
+                  <td class="font-semibold">Start</td>
+                  <td>{{ editedEvent.start | time }}</td>
+                </tr>
 
-            <li :key="child.username" v-for="child in userChildren">
+              </table>
+            </div>
+          </div>
+
+          <ul class="centerx">
+            <vs-divider>Your children</vs-divider>
+            <li class="mb-2" :key="child.username" v-for="child in userChildren">
               <vs-checkbox
                 :vs-value="child.username"
                 color="success"
@@ -68,6 +91,18 @@
               </vs-checkbox>
             </li>
           </ul>
+
+          <div v-if="$acl.check('isCoach')">
+            <vs-divider>Coach zone</vs-divider>
+            <div class="vx-col w-full flex flex-wrap items-center justify-center">
+              <vs-button icon-pack="feather" icon="icon-edit" class="mr-4"
+                         :to="{name: 'app-user-edit', params: { userId: $route.params.userId }}">Edit
+              </vs-button>
+              <vs-button type="border" color="danger" icon-pack="feather" icon="icon-trash"
+                         @click="confirmDeleteRecord">Delete
+              </vs-button>
+            </div>
+          </div>
         </div>
 
       </vs-prompt>
@@ -147,7 +182,8 @@ export default {
       return this.$store.state.calendar.events
     },
     userChildren () {
-      const members = this.$store.state.family.members
+      // const members = this.$store.state.family.members
+      const members = this.$store.getters['family/familyChildren']
 
       const cleanMembers = []
       members.forEach((element) => {
@@ -256,20 +292,35 @@ export default {
     background: #0C112E;
   }
 
-  /*.fc-day-grid-container {*/
-  /*  !* FIXME TODO *!*/
-  /*  !*height: calc(var(--vh, 1vh) * 50 - 11.5rem);*!*/
-  /*  max-height: 65vh;*/
-  /*}*/
-
-  /*.fc-time-grid-container {*/
-  /*  !* FIXME TODO *!*/
-  /*  !*height: calc(var(--vh, 1vh) * 50 - 11.5rem);*!*/
-  /*  max-height: 60vh;*/
-  /*}*/
-
   .fc-list-heading td {
     background: #00b0d3;
     color: white;
   }
+
+  #event-info-table {
+    table {
+      td {
+        padding-right: .5rem;
+        padding-bottom: .8rem;
+        word-break: break-all;
+      }
+
+      &:not(.permissions-table) {
+        td {
+          @media screen and (max-width: 370px) {
+            display: block;
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (min-width: 1201px) and (max-width: 1211px),
+  only screen and (min-width: 636px) and (max-width: 991px) {
+    #event-info-col-1 {
+      width: calc(100% - 5rem) !important;
+    }
+  }
+
+
 </style>

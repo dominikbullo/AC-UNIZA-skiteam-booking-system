@@ -3,7 +3,6 @@ from django.core.mail import send_mail
 
 
 def custom_create_user(**params):
-    # TODO create user with same method as in login
     return get_user_model().objects.create_user(**params)
 
 

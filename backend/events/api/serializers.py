@@ -24,6 +24,9 @@ class BaseEventSerializer(serializers.ModelSerializer):
     # RES: http://www.tomchristie.com/rest-framework-2-docs/api-guide/relations
     participants = BaseProfileSerializer(many=True)
 
+    # TODO
+    #  category =
+
     #  RES(update): https://riptutorial.com/django-rest-framework/example/25521/updatable-nested-serializers
     #  RES(delete): https://stackoverflow.com/questions/42159480/delete-member-of-many-to-many-relationship-django-rest-framework
     #  RES: https://stackoverflow.com/questions/28706072/drf-3-creating-many-to-many-update-create-serializer-with-though-table
