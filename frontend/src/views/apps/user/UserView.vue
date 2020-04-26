@@ -121,7 +121,8 @@
         </div>
         <!-- TODO only if user is from save family or you have access-->
         <div class="vx-col w-full flex" id="account-manage-buttons">
-          <vs-button icon-pack="feather" icon="icon-bar-chart" class="mr-4" :to="{name: 'app-user-stats'}">More stats
+          <vs-button icon-pack="feather" icon="icon-bar-chart" class="mr-4"
+                     :to="{name: 'app-user-stats',  params: { userId: this.$route.params.userId }}">More stats
           </vs-button>
         </div>
       </vx-card>

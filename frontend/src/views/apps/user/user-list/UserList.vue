@@ -67,46 +67,46 @@
         <!-- <vs-button class="mb-4 md:mb-0" @click="gridApi.exportDataAsCsv()">Export as CSV</vs-button> -->
 
         <!-- ACTION - DROPDOWN -->
-        <vs-dropdown vs-trigger-click class="cursor-pointer">
+        <!--        <vs-dropdown vs-trigger-click class="cursor-pointer">-->
 
-          <div
-            class="p-3 shadow-drop rounded-lg d-theme-dark-light-bg cursor-pointer flex items-end justify-center text-lg font-medium w-32">
-            <span class="mr-2 leading-none">Actions</span>
-            <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4"/>
-          </div>
+        <!--          <div-->
+        <!--            class="p-3 shadow-drop rounded-lg d-theme-dark-light-bg cursor-pointer flex items-end justify-center text-lg font-medium w-32">-->
+        <!--            <span class="mr-2 leading-none">Actions</span>-->
+        <!--            <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4"/>-->
+        <!--          </div>-->
 
-          <vs-dropdown-menu>
+        <!--          <vs-dropdown-menu>-->
 
-            <vs-dropdown-item>
-                    <span class="flex items-center">
-                      <feather-icon icon="TrashIcon" svgClasses="h-4 w-4" class="mr-2"/>
-                      <span>Delete</span>
-                    </span>
-            </vs-dropdown-item>
+        <!--            <vs-dropdown-item>-->
+        <!--                    <span class="flex items-center">-->
+        <!--                      <feather-icon icon="TrashIcon" svgClasses="h-4 w-4" class="mr-2"/>-->
+        <!--                      <span>Delete</span>-->
+        <!--                    </span>-->
+        <!--            </vs-dropdown-item>-->
 
-            <vs-dropdown-item>
-                    <span class="flex items-center">
-                      <feather-icon icon="ArchiveIcon" svgClasses="h-4 w-4" class="mr-2"/>
-                      <span>Archive</span>
-                    </span>
-            </vs-dropdown-item>
+        <!--            <vs-dropdown-item>-->
+        <!--                    <span class="flex items-center">-->
+        <!--                      <feather-icon icon="ArchiveIcon" svgClasses="h-4 w-4" class="mr-2"/>-->
+        <!--                      <span>Archive</span>-->
+        <!--                    </span>-->
+        <!--            </vs-dropdown-item>-->
 
-            <vs-dropdown-item>
-                    <span class="flex items-center">
-                      <feather-icon icon="FileIcon" svgClasses="h-4 w-4" class="mr-2"/>
-                      <span>Print</span>
-                    </span>
-            </vs-dropdown-item>
+        <!--            <vs-dropdown-item>-->
+        <!--                    <span class="flex items-center">-->
+        <!--                      <feather-icon icon="FileIcon" svgClasses="h-4 w-4" class="mr-2"/>-->
+        <!--                      <span>Print</span>-->
+        <!--                    </span>-->
+        <!--            </vs-dropdown-item>-->
 
-            <vs-dropdown-item>
-                    <span class="flex items-center">
-                      <feather-icon icon="SaveIcon" svgClasses="h-4 w-4" class="mr-2"/>
-                      <span>CSV</span>
-                    </span>
-            </vs-dropdown-item>
+        <!--            <vs-dropdown-item>-->
+        <!--                    <span class="flex items-center">-->
+        <!--                      <feather-icon icon="SaveIcon" svgClasses="h-4 w-4" class="mr-2"/>-->
+        <!--                      <span>CSV</span>-->
+        <!--                    </span>-->
+        <!--            </vs-dropdown-item>-->
 
-          </vs-dropdown-menu>
-        </vs-dropdown>
+        <!--          </vs-dropdown-menu>-->
+        <!--        </vs-dropdown>-->
       </div>
 
 

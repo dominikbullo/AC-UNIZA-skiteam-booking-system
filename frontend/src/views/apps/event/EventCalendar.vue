@@ -201,13 +201,11 @@ export default {
       console.log('handling date click', arg)
     },
     handleEventClick (arg) {
-      // Allow only next event change not previous
-      // TODO RELEASE Uncomment this
-      if (new Date(arg.event.start).valueOf() < new Date().valueOf()) {
+      if (this.$acl.not.check('isCoach') && new Date(arg.event.start).valueOf() < new Date().valueOf()) {
         this.$vs.notify({
           color: 'danger',
           title: 'Old event',
-          text: 'Cannot change event that already happend'
+          text: 'You cannot change an event which has already happened'
         })
         return false
       }

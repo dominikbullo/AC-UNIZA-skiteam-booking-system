@@ -33,13 +33,12 @@
         <!-- TABLE ACTION COL-2: SEARCH & EXPORT AS CSV -->
         <vs-input @input="updateSearchQuery" class="sm:mr-4 mr-0 sm:w-auto w-full sm:order-normal order-3 sm:mt-0 mt-4"
                   placeholder="Search..." v-model="searchQuery"/>
-        <!-- <vs-button class="mb-4 md:mb-0" @click="gridApi.exportDataAsCsv()">Export as CSV</vs-button> -->
 
         <vs-button
           @click="activePrompt = true"
           class="sm:mr-4 mr-0 sm:w-auto w-full sm:order-normal order-2 sm:mt-0 mt-4"
           icon="icon-plus" icon-pack="feather"
-          v-show="$acl.check('editor')">
+          v-show="$acl.check('isParent')">
           {{ $t('AddChild') }}
         </vs-button>
 
@@ -157,46 +156,46 @@
         </vs-prompt>
 
         <!-- ACTION - DROPDOWN -->
-        <vs-dropdown class="cursor-pointer" vs-trigger-click>
+        <!--        <vs-dropdown class="cursor-pointer" vs-trigger-click>-->
 
-          <div
-            class="p-3 shadow-drop rounded-lg  d-theme-dark-light-bg cursor-pointer flex items-end justify-center text-lg font-medium w-32">
-            <span class="mr-2 leading-none">Actions</span>
-            <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4"/>
-          </div>
+        <!--          <div-->
+        <!--            class="p-3 shadow-drop rounded-lg  d-theme-dark-light-bg cursor-pointer flex items-end justify-center text-lg font-medium w-32">-->
+        <!--            <span class="mr-2 leading-none">Actions</span>-->
+        <!--            <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4"/>-->
+        <!--          </div>-->
 
-          <vs-dropdown-menu>
+        <!--          <vs-dropdown-menu>-->
 
-            <vs-dropdown-item>
-                <span class="flex items-center">
-                  <feather-icon class="mr-2" icon="TrashIcon" svgClasses="h-4 w-4"/>
-                  <span>Delete</span>
-                </span>
-            </vs-dropdown-item>
+        <!--            <vs-dropdown-item>-->
+        <!--                <span class="flex items-center">-->
+        <!--                  <feather-icon class="mr-2" icon="TrashIcon" svgClasses="h-4 w-4"/>-->
+        <!--                  <span>Delete</span>-->
+        <!--                </span>-->
+        <!--            </vs-dropdown-item>-->
 
-            <vs-dropdown-item>
-                <span class="flex items-center">
-                  <feather-icon class="mr-2" icon="ArchiveIcon" svgClasses="h-4 w-4"/>
-                  <span>Archive</span>
-                </span>
-            </vs-dropdown-item>
+        <!--            <vs-dropdown-item>-->
+        <!--                <span class="flex items-center">-->
+        <!--                  <feather-icon class="mr-2" icon="ArchiveIcon" svgClasses="h-4 w-4"/>-->
+        <!--                  <span>Archive</span>-->
+        <!--                </span>-->
+        <!--            </vs-dropdown-item>-->
 
-            <vs-dropdown-item>
-                <span class="flex items-center">
-                  <feather-icon class="mr-2" icon="FileIcon" svgClasses="h-4 w-4"/>
-                  <span>Print</span>
-                </span>
-            </vs-dropdown-item>
+        <!--            <vs-dropdown-item>-->
+        <!--                <span class="flex items-center">-->
+        <!--                  <feather-icon class="mr-2" icon="FileIcon" svgClasses="h-4 w-4"/>-->
+        <!--                  <span>Print</span>-->
+        <!--                </span>-->
+        <!--            </vs-dropdown-item>-->
 
-            <vs-dropdown-item>
-                <span class="flex items-center">
-                  <feather-icon class="mr-2" icon="SaveIcon" svgClasses="h-4 w-4"/>
-                  <span>CSV</span>
-                </span>
-            </vs-dropdown-item>
+        <!--            <vs-dropdown-item>-->
+        <!--                <span class="flex items-center">-->
+        <!--                  <feather-icon class="mr-2" icon="SaveIcon" svgClasses="h-4 w-4"/>-->
+        <!--                  <span>CSV</span>-->
+        <!--                </span>-->
+        <!--            </vs-dropdown-item>-->
 
-          </vs-dropdown-menu>
-        </vs-dropdown>
+        <!--          </vs-dropdown-menu>-->
+        <!--        </vs-dropdown>-->
       </div>
 
       <!-- RES: Height https://www.ag-grid.com/javascript-grid-width-and-height/-->
@@ -270,6 +269,7 @@ export default {
         locale: Slovak
       },
       childData: {
+        id: null,
         username: 'testsets',
         email: 'tes@tes.sk',
         password1: 'testing321',
@@ -534,19 +534,6 @@ export default {
           })
         }
       }
-    }
-  },
-  mounted () {
-    this.gridApi = this.gridOptions.api
-
-    /* =================================================================
-      NOTE:
-      Header is not aligned properly in RTL version of agGrid table.
-      However, we given fix to this issue. If you want more robust solution please contact them at gitHub
-    ================================================================= */
-    if (this.$vs.rtl) {
-      const header = this.$refs.agGridTable.$el.querySelector('.ag-header-container')
-      header.style.left = `-${String(Number(header.style.transform.slice(11, -3)) + 9)}px`
     }
   },
   created () {

@@ -52,7 +52,7 @@ class RegisterProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ("birth_date", "gender", "user_role")
+        fields = ("id", "birth_date", "gender", "user_role")
 
 
 class ProfileAvatarSerializer(serializers.ModelSerializer):
