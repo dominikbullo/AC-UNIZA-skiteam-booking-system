@@ -95,8 +95,8 @@
           <div v-if="$acl.check('isCoach')">
             <vs-divider>Coach zone</vs-divider>
             <div class="vx-col w-full flex flex-wrap items-center justify-center">
-              <vs-button icon-pack="feather" icon="icon-edit" class="mr-4"
-                         :to="{name: 'app-user-edit', params: { userId: $route.params.userId }}">Edit
+              <vs-button icon-pack="feather" icon="icon-edit" color="warning" class="mr-4"
+                         :to="{name: 'app-event-edit', params: { eventId: this.editedEvent.id }}">Edit
               </vs-button>
               <vs-button type="border" color="danger" icon-pack="feather" icon="icon-trash"
                          @click="confirmDeleteRecord">Delete
@@ -203,10 +203,13 @@ export default {
     handleEventClick (arg) {
       // Allow only next event change not previous
       // TODO RELEASE Uncomment this
-      if (process.env.NODE_ENV !== 'development') {
-        if (new Date(arg.event.start).valueOf() < new Date().valueOf()) {
-          return false
-        }
+      if (new Date(arg.event.start).valueOf() < new Date().valueOf()) {
+        this.$vs.notify({
+          color: 'danger',
+          title: 'Old event',
+          text: 'Cannot change event that already happend'
+        })
+        return false
       }
 
       this.editedEvent = Object.values(this.calendarEvents).find(obj => {
@@ -235,7 +238,11 @@ export default {
     handleSelectClick (click) {
       console.log('handling select click', click)
       if (click.start.isBefore(this.moment())) {
-        // $('#calendar').fullCalendar('unselect')
+        this.$vs.notify({
+          color: 'danger',
+          title: 'Old event',
+          text: 'Cannot change event that already happend'
+        })
         return false
       }
       alert(`clicked ${click.startStr} - ${click.endStr}`)
@@ -243,11 +250,32 @@ export default {
     handleEventMouseEnter (arg) {
       // console.log('handling mouse event enter', arg)
     },
-    onFromChange (selectedDates, dateStr, instance) {
-      this.$set(this.configTodateTimePicker, 'minDate', dateStr)
+    confirmDeleteRecord () {
+      this.childAddToEventPrompt.active = false
+      this.$vs.dialog({
+        type: 'confirm',
+        color: 'danger',
+        title: 'Confirm Delete',
+        text: `You are about to delete "${this.editedEvent.title}"`,
+        accept: this.deleteRecord,
+        acceptText: 'Delete'
+      })
     },
-    onToChange (selectedDates, dateStr, instance) {
-      this.$set(this.configFromdateTimePicker, 'maxDate', dateStr)
+    deleteRecord () {
+      /* Below two lines are just for demo purpose */
+      this.showDeleteSuccess()
+
+      /* UnComment below lines for enabling true flow if deleting user */
+      // this.$store.dispatch("userManagement/removeRecord", this.params.data.id)
+      //   .then(()   => { this.showDeleteSuccess() })
+      //   .catch(err => { console.error(err)       })
+    },
+    showDeleteSuccess () {
+      this.$vs.notify({
+        color: 'success',
+        title: 'User Deleted',
+        text: 'The selected user was successfully deleted'
+      })
     },
     clearFields () {
       console.warn('need to clean fields')

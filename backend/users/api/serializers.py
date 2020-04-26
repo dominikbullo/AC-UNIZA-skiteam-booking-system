@@ -28,7 +28,7 @@ class BaseProfileSerializer(serializers.ModelSerializer):
             # FIXME: Cannot find family ID, cannot show /api/profile/ -> list
             #             #  probably it should be like events -> polymorphic
             print(e)
-            print("User does not have family!")
+            print("User does not have family or is not family member!")
             return -1
 
     class Meta:

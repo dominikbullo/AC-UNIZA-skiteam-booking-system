@@ -85,15 +85,6 @@ const router = new Router({
             rule: 'isLogged'
           }
         },
-        {
-          path: '/test/simple-calendar',
-          name: 'event-simple-calendar',
-          component: () => import('./views/apps/calendar/SimpleCalendar.vue'),
-          meta: {
-            rule: 'isLogged',
-            no_scroll: true
-          }
-        },
 
         // =============================================================================
         // Application Routes
@@ -183,9 +174,9 @@ const router = new Router({
         },
         // Family APP
         {
-          path: '/apps/family/list',
-          name: 'app-family-list',
-          component: () => import('@/views/apps/family/family-list/FamilyList.vue'),
+          path: '/apps/family/members',
+          name: 'app-family-members',
+          component: () => import('@/views/apps/family/family-members/FamilyMembersList.vue'),
           meta: {
             breadcrumb: [
               {
@@ -198,12 +189,12 @@ const router = new Router({
                 active: true
               }
             ],
-            pageTitle: 'Family List',
+            pageTitle: 'Family Members List',
             rule: 'isParent'
           }
         },
         {
-          path: '/apps/family/view/:familyId',
+          path: '/apps/family/:familyId?/view',
           name: 'app-family-view',
           component: () => import('@/views/apps/family/FamilyView.vue'),
           meta: {
@@ -223,7 +214,7 @@ const router = new Router({
           }
         },
         {
-          path: '/apps/family/edit/:familyId',
+          path: '/apps/family/:familyId?/edit/',
           name: 'app-family-edit',
           component: () => import('@/views/apps/family/family-edit/FamilyEdit.vue'),
           meta: {
@@ -242,12 +233,32 @@ const router = new Router({
             rule: 'isParent'
           }
         },
+        {
+          path: '/apps/family/list',
+          name: 'app-family-members',
+          component: () => import('@/views/apps/family/family-list/FamilyList.vue'),
+          meta: {
+            breadcrumb: [
+              {
+                title: 'Home',
+                url: '/'
+              },
+              { title: 'Family' },
+              {
+                title: 'List',
+                active: true
+              }
+            ],
+            pageTitle: 'Family List',
+            rule: 'isParent'
+          }
+        },
 
         // Event APP
         {
           path: '/apps/event/list',
           name: 'app-event-list',
-          component: () => import('@/views/apps/event/EventList.vue'),
+          component: () => import('@/views/apps/event/event-list/EventList.vue'),
           meta: {
             breadcrumb: [
               {
@@ -261,6 +272,26 @@ const router = new Router({
               }
             ],
             pageTitle: 'Event List',
+            rule: 'isChild'
+          }
+        },
+        {
+          path: '/apps/event/:eventId/edit',
+          name: 'app-event-edit',
+          component: () => import('@/views/apps/event/event-edit/EventEdit.vue'),
+          meta: {
+            breadcrumb: [
+              {
+                title: 'Home',
+                url: '/'
+              },
+              { title: 'Event' },
+              {
+                title: 'Edit',
+                active: true
+              }
+            ],
+            pageTitle: 'Edit Event',
             rule: 'isChild'
           }
         },

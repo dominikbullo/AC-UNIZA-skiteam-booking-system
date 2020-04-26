@@ -1,10 +1,10 @@
 <template>
   <div id="page-family-view">
 
-    <vs-alert color="danger" title="User Not Found" :active.sync="family_not_found">
+    <vs-alert color="danger" title="Family Not Found" :active.sync="family_not_found">
       <span>
-        <span>Check </span><router-link :to="{name:'page-user-list'}"
-                                        class="text-inherit underline">All Users</router-link>
+        <span>Check </span><router-link :to="{name:'app-family-members'}"
+                                        class="text-inherit underline">Family List</router-link> or contact administrator
       </span>
     </vs-alert>
 
@@ -116,84 +116,14 @@ export default {
     }
   },
   created () {
-    this.fetchFamilyData(this.$route.params.familyId)
+    let localFamilyId = this.$store.state.AppActiveUser.profile.family_id
+    if (this.$route.params.familyId) {
+      localFamilyId = this.$route.params.familyId
+    }
+
+    this.fetchFamilyData(localFamilyId)
   }
 }
-// import moduleUserManagement from '@/store/user-management/moduleUserManagement.js'
-//
-// export default {
-//   props: {
-//     familyId: {
-//       type: Number,
-//       required: true
-//     }
-//   },
-//   data () {
-//     return {
-//       user_data: null,
-//       user_not_found: false
-//     }
-//   },
-//   computed: {
-//     userAddress () {
-//       let str = ''
-//       for (const field in this.user_data.location) {
-//         str += `${field} `
-//       }
-//       return str
-//     }
-//   },
-//   methods: {
-//     confirmDeleteRecord () {
-//       this.$vs.dialog({
-//         type: 'confirm',
-//         color: 'danger',
-//         title: 'Confirm Delete',
-//         text: `You are about to delete "${this.user_data.username}"`,
-//         accept: this.deleteRecord,
-//         acceptText: 'Delete'
-//       })
-//     },
-//     deleteRecord () {
-//       /* Below two lines are just for demo purpose */
-//       this.$router.push({ name: 'app-user-list' })
-//       this.showDeleteSuccess()
-//
-//       /* UnComment below lines for enabling true flow if deleting user */
-//       // this.$store.dispatch("userManagement/removeRecord", this.user_data.id)
-//       //   .then(()   => { this.$router.push({name:'app-user-list'}); this.showDeleteSuccess() })
-//       //   .catch(err => { console.error(err)       })
-//     },
-//     showDeleteSuccess () {
-//       this.$vs.notify({
-//         color: 'success',
-//         title: 'User Deleted',
-//         text: 'The selected user was successfully deleted'
-//       })
-//     }
-//   },
-//   created () {
-//     // // Register Module UserManagement Module
-//     // if (!moduleUserManagement.isRegistered) {
-//     //   this.$store.registerModule('userManagement', moduleUserManagement)
-//     //   moduleUserManagement.isRegistered = true
-//     // }
-//
-//     const familyId = this.familyId
-//     this.$store.dispatch('family/fetchFamily', familyId)
-//       .then(res => {
-//         this.family_data = res
-//       })
-//       .catch(err => {
-//         if (err.response.status === 404) {
-//           this.user_not_found = true
-//           return
-//         }
-//         console.error(err)
-//       })
-//   }
-// }
-
 </script>
 
 <style lang="scss">

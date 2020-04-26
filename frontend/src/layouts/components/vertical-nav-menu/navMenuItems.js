@@ -46,16 +46,22 @@ export default [
         i18n: 'Family',
         submenu: [
           {
+            url: '/apps/family/members',
+            name: 'Members',
+            slug: 'app-family-members',
+            i18n: 'Members'
+          },
+          {
+            url: '/apps/family/view',
+            name: 'View',
+            slug: 'app-family-view',
+            i18n: 'View'
+          },
+          {
             url: '/apps/family/list',
             name: 'List',
             slug: 'app-family-list',
             i18n: 'List'
-          },
-          {
-            url: '/apps/family/view/1',
-            name: 'View',
-            slug: 'app-family-view',
-            i18n: 'View'
           }
         ]
       }
@@ -64,9 +70,9 @@ export default [
   {
     url: '/apps/user/user-list',
     slug: 'page-user-settings',
-    name: 'Members',
+    name: 'Users',
     icon: 'UsersIcon',
-    i18n: 'Members'
+    i18n: 'Users'
   },
   {
     url: '/page/statistics',
