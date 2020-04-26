@@ -235,7 +235,7 @@ const router = new Router({
         },
         {
           path: '/apps/family/list',
-          name: 'app-family-members',
+          name: 'app-family-list',
           component: () => import('@/views/apps/family/family-list/FamilyList.vue'),
           meta: {
             breadcrumb: [
@@ -382,7 +382,7 @@ const router = new Router({
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Charts & Maps' },
+              { title: 'Statistics' },
               {
                 title: 'Apex Charts',
                 active: true
@@ -390,66 +390,6 @@ const router = new Router({
             ],
             pageTitle: 'Apex Charts',
             rule: 'isParent'
-          }
-        },
-        {
-          path: '/charts-and-maps/charts/apex-charts',
-          name: 'extra-component-charts-apex-charts',
-          component: () => import('@/views/charts-and-maps/charts/apex-charts/ApexCharts.vue'),
-          meta: {
-            breadcrumb: [
-              {
-                title: 'Home',
-                url: '/'
-              },
-              { title: 'Charts & Maps' },
-              {
-                title: 'Apex Charts',
-                active: true
-              }
-            ],
-            pageTitle: 'Apex Charts',
-            rule: 'isLogged'
-          }
-        },
-        {
-          path: '/charts-and-maps/charts/chartjs',
-          name: 'extra-component-charts-chartjs',
-          component: () => import('@/views/charts-and-maps/charts/chartjs/Chartjs.vue'),
-          meta: {
-            breadcrumb: [
-              {
-                title: 'Home',
-                url: '/'
-              },
-              { title: 'Charts & Maps' },
-              {
-                title: 'chartjs',
-                active: true
-              }
-            ],
-            pageTitle: 'chartjs',
-            rule: 'isLogged'
-          }
-        },
-        {
-          path: '/charts-and-maps/maps/google-map',
-          name: 'extra-component-maps-google-map',
-          component: () => import('@/views/charts-and-maps/maps/google-map/GoogleMap.vue'),
-          meta: {
-            breadcrumb: [
-              {
-                title: 'Home',
-                url: '/'
-              },
-              { title: 'Charts & Maps' },
-              {
-                title: 'Google Map',
-                active: true
-              }
-            ],
-            pageTitle: 'Google Map',
-            rule: 'isLogged'
           }
         }
       ]

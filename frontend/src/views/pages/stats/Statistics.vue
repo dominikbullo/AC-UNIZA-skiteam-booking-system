@@ -41,11 +41,12 @@ export default {
       return this.$store.state.userManagement.users
     }
   },
-  methods: {
-    created () {
+  created () {
+    if (!moduleUserManagement.isRegistered) {
       this.$store.registerModule('userManagement', moduleUserManagement)
-      this.$store.dispatch('userManagement/fetchUsers')
+      moduleUserManagement.isRegistered = true
     }
+    this.$store.dispatch('userManagement/fetchUsers')
   }
 }
 </script>

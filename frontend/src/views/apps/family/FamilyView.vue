@@ -51,16 +51,15 @@
 
             </table>
           </div>
-
           <!-- /Information - Col 2 -->
-          <div class="vx-col w-full flex" id="account-manage-buttons">
-            <vs-button icon-pack="feather" icon="icon-edit" class="mr-4"
-                       :to="{name: 'app-family-edit', params: { userId: $route.params.userId }}">Edit
-            </vs-button>
-          </div>
+
+          <!--          <div class="vx-col w-full flex" id="account-manage-buttons">-->
+          <!--            <vs-button icon-pack="feather" icon="icon-edit" class="mr-4"-->
+          <!--                       :to="{name: 'app-family-edit', params: { userId: $route.params.userId }}">Edit-->
+          <!--            </vs-button>-->
+          <!--          </div>-->
 
         </div>
-
       </vx-card>
 
       <div class="vx-row">
@@ -70,7 +69,7 @@
               <tr v-for="member in family_data.members"
                   :key="member.user.username">
                 <td class="font-semibold">Name:</td>
-                <td>{{ member.user.profile.full_name }}</td>
+                <td>{{ member.user.profile.displayName }}</td>
               </tr>
             </table>
           </vx-card>

@@ -11,6 +11,7 @@ import axios from '@/axios.js'
 
 export default {
   fetchUsers ({ commit }) {
+    console.log('[STORE] fetchUsers')
     return new Promise((resolve, reject) => {
       axios.get('/profile/')
         .then((response) => {
@@ -23,7 +24,7 @@ export default {
     })
   },
   fetchUser (context, userId) {
-    console.log('[STORE] fetchUser:', userId)
+    console.log('[STORE] fetchUser', userId)
     return new Promise((resolve, reject) => {
       axios.get(`/profile/${userId}/`)
         .then((response) => {
