@@ -40,7 +40,7 @@
 export default {
   data () {
     return {
-      email: 'admin@admin.sk',
+      email: 'totojetes@sasd.sk',
       password: 'testing321',
       checkbox_remember_me: true
     }
@@ -98,7 +98,9 @@ export default {
           aclChangeRole: this.$acl.change,
           userRole: response.data.user.profile.userRole
         })
+        //FIXME not working
         this.$router.push(this.$router.currentRoute.query.to || '/')
+
         this.$vs.loading.close()
       }).catch(error => {
         this.$vs.loading.close()

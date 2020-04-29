@@ -1,5 +1,9 @@
 <template>
   <div id="page-user-stats-view">
+    <vs-alert color="danger" title="User Not Found" :active.sync="user_not_found">
+      <span>Statistic for this user not found. </span>
+    </vs-alert>
+
     <!--    <div class="vx-row">-->
     <!--      <div class="vx-col w-full w-1/2 sm:w-1/2 lg:w-1/3"-->
     <!--           v-for="(item, key) in user_stats"-->
@@ -36,7 +40,6 @@
     <!--        </vx-card>-->
     <!--      </div>-->
     <!--    </div>-->
-
 
     <vue-apex-charts type="bar" height="350" :options="chartOptions" :series="series"></vue-apex-charts>
   </div>
@@ -117,7 +120,7 @@ export default {
     },
     async processData () {
       // TODO return data via server, this must be the best way smt like /stats/summary/
-      this.$vs.loading()
+      // this.$vs.loading()
       const categories = []
       const data = []
       const series = []
@@ -232,11 +235,11 @@ export default {
         cleanData.unshift(element)
       })
       this.series = cleanData
-      this.$vs.loading.close()
+      // this.$vs.loading.close()
     }
   },
   created () {
-    this.$vs.loading()
+    // this.$vs.loading()
     if (!moduleUserManagement.isRegistered) {
       this.$store.registerModule('userManagement', moduleUserManagement)
       moduleUserManagement.isRegistered = true
@@ -256,17 +259,18 @@ export default {
         username: this.$route.params.userId
       })
       .then(res => {
+        // this.$vs.loading.close()
         this.user_stats = res.data
         this.processData()
       })
       .catch(err => {
+        this.$vs.loading.close()
         console.error(err)
-        if (err.response.status === 404) {
+        if (err.response.status === 400) {
           this.user_not_found = true
         }
       })
 
-    this.$vs.loading.close()
   }
 }
 
