@@ -1,13 +1,3 @@
-<!-- =========================================================================================
-    File Name: GridFlexOrder.vue
-    Description: Change the order of the grid items
-    ----------------------------------------------------------------------------------------
-    Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
-      Author: Pixinvent
-    Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
-
 <template>
     <vx-card title="Flex Order" code-toggler>
 

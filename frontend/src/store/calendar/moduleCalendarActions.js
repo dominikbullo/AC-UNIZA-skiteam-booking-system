@@ -31,6 +31,18 @@ export default {
         })
     })
   },
+  fetchEvent (context, eventId) {
+    console.log('payload fetch event', eventId)
+    return new Promise((resolve, reject) => {
+      axios.get(`/event/${eventId}/`)
+        .then((response) => {
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
+  },
   changeEventMembers ({ commit }, payload) {
     const apiPayload = {
       'add': payload.selected.filter(x => !payload.onEvent.includes(x)),

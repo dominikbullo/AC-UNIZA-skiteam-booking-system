@@ -278,3 +278,6 @@ typings/
 /frontend/webpack-stats.json
 /backend/fixtures/
 /backend/uploads/
+/backend/media/
+/backend/staticfiles/
+/.old/

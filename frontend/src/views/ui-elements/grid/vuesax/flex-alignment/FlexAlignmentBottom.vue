@@ -1,13 +1,3 @@
-<!-- =========================================================================================
-    File Name: FlexAlignmentBottom.vue
-    Description: Align elements vertically - Bottom
-    ----------------------------------------------------------------------------------------
-    Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
-      Author: Pixinvent
-    Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
-
 <template>
     <vx-card title="Align Bottom" code-toggler no-shadow card-border>
 

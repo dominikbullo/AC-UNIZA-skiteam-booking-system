@@ -1,13 +1,3 @@
-<!-- =========================================================================================
-    File Name: GridAutoColumnWidth.vue
-    Description: Example of building grid layouts with Tailwind CSS
-    ----------------------------------------------------------------------------------------
-    Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
-      Author: Pixinvent
-    Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
-
 <template>
     <vx-card title="Automatic Column Widths" code-toggler>
 

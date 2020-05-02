@@ -23,8 +23,6 @@ export default [
   {
     url: '/dashboard',
     name: 'Dashboard',
-    // tag: '2',
-    tagColor: 'warning',
     icon: 'HomeIcon',
     i18n: 'Dashboard'
   },
@@ -34,278 +32,53 @@ export default [
     i18n: 'Apps',
     items: [
       {
+        url: '/apps/event/calendar',
+        name: 'Calendar',
+        slug: 'app-event-calendar',
+        icon: 'CalendarIcon',
+        tagColor: 'success',
+        i18n: 'Calendar'
+      },
+      {
         url: null,
         name: 'Family',
         icon: 'UsersIcon',
         i18n: 'Family',
         submenu: [
           {
-            url: '/apps/family/list',
-            name: 'List',
-            slug: 'app-family-list',
-            i18n: 'List'
+            url: '/apps/family/members',
+            name: 'Members',
+            slug: 'app-family-members',
+            i18n: 'Members'
           },
           {
-            url: '/apps/family/view/1',
+            url: '/apps/family/view',
             name: 'View',
             slug: 'app-family-view',
             i18n: 'View'
-          },
-          {
-            url: '/apps/family/edit/1',
-            name: 'Edit',
-            slug: 'app-family-edit',
-            i18n: 'Edit'
           }
-        ]
-      },
-      {
-        url: null,
-        name: 'Events',
-        icon: 'CalendarIcon',
-        i18n: 'Events',
-        submenu: [
-          {
-            url: '/apps/event/list',
-            name: 'List',
-            slug: 'app-event-list',
-            i18n: 'List'
-          },
-          // {
-          //   url: '/apps/event/edit',
-          //   name: 'Edit',
-          //   slug: 'app-event-list',
-          //   i18n: 'Edit'
-          // },
-          {
-            url: '/apps/event/calendar',
-            name: 'Calendar',
-            slug: 'app-event-calendar',
-            icon: 'CalendarIcon',
-            tagColor: 'success',
-            i18n: 'Calendar'
-          }
-        ]
-      },
-      {
-        url: null,
-        name: 'User',
-        icon: 'UserIcon',
-        i18n: 'User',
-        submenu: [
-          {
-            url: '/apps/user/user-list',
-            name: 'List',
-            slug: 'app-user-list',
-            i18n: 'List'
-          },
-          {
-            url: '/apps/user/user-view/268',
-            name: 'View',
-            slug: 'app-user-view',
-            i18n: 'View'
-          },
-          {
-            url: '/apps/user/user-edit/268',
-            name: 'Edit',
-            slug: 'app-user-edit',
-            i18n: 'Edit'
-          }
+          // ,{
+          //   url: '/apps/family/list',
+          //   name: 'List',
+          //   slug: 'app-family-list',
+          //   i18n: 'List'
+          // }
         ]
       }
     ]
   },
   {
-    header: 'Pages',
-    icon: 'FileIcon',
-    i18n: 'Pages',
-    items: [
-      {
-        url: '/pages/user-settings',
-        slug: 'page-user-settings',
-        name: 'Account',
-        icon: 'SettingsIcon',
-        i18n: 'Account'
-      },
-      {
-        url: null,
-        slug: 'page-user-settings',
-        name: 'Members',
-        icon: 'UsersIcon',
-        i18n: 'Members',
-        is_disabled: true
-      }
-    ]
+    url: '/apps/user/user-list',
+    slug: 'page-user-settings',
+    name: 'Users',
+    icon: 'UsersIcon',
+    i18n: 'Users'
   },
   {
-    header: 'Test Things',
-    icon: 'FileIcon',
-    i18n: 'Test Things',
-    items: [
-      {
-        url: '/test/page',
-        name: 'Test Page',
-        slug: 'test-page',
-        icon: 'FileIcon'
-      },
-      {
-        url: '/test/stats',
-        name: 'Test stats',
-        slug: 'test-stats',
-        icon: 'FileIcon'
-      },
-      {
-        url: '/test/calendar',
-        name: 'Test Calendar',
-        slug: 'test-Calendar',
-        icon: 'FileIcon'
-      },
-      {
-        url: '/pages/profile',
-        slug: 'page-profile',
-        name: 'Profile',
-        icon: 'UserIcon',
-        i18n: 'Profile'
-      }
-    ]
-  },
-  {
-    header: 'Charts',
+    url: '/page/statistics',
+    name: 'Statistics',
     icon: 'PieChartIcon',
-    i18n: 'Charts',
-    items: [
-      {
-        url: null,
-        name: 'Charts',
-        icon: 'PieChartIcon',
-        tag: '3',
-        tagColor: 'success',
-        i18n: 'Charts',
-        submenu: [
-          {
-            url: '/charts-and-maps/charts/apex-charts',
-            name: 'Apex Charts',
-            slug: 'extra-component-charts-apex-charts',
-            i18n: 'ApexCharts'
-          },
-          {
-            url: '/charts-and-maps/charts/chartjs',
-            name: 'chartjs',
-            slug: 'extra-component-charts-chartjs',
-            i18n: 'chartjs'
-          }
-        ]
-      }
-    ]
-  },
-  // TODO show this only for admins
-  // everything wit /admin/
-  // {
-  //   header: 'Admin',
-  //   icon: 'PackageIcon',
-  //   i18n: 'Admin',
-  //   items: [
-  //     {
-  //       url: '/admin/dashboard',
-  //       name: 'Admin dashboard',
-  //       // tag: '2',
-  //       tagColor: 'warning',
-  //       icon: 'HomeIcon',
-  //       i18n: 'Admin dashboard'
-  //     },
-  //     {
-  //       url: null,
-  //       name: 'Events',
-  //       icon: 'CalendarIcon',
-  //       i18n: 'Event',
-  //       submenu: [
-  //         {
-  //           url: '/apps/event/list',
-  //           name: 'List',
-  //           slug: 'app-event-list',
-  //           i18n: 'List'
-  //         },
-  //         {
-  //           url: '/apps/calendar/vue-simple-calendar',
-  //           name: 'Calendar',
-  //           slug: 'calendar-simple-calendar',
-  //           icon: 'CalendarIcon',
-  //           tagColor: 'success',
-  //           i18n: 'Calendar'
-  //         }
-  //       ]
-  //     },
-  //     {
-  //       url: null,
-  //       name: 'User',
-  //       icon: 'UserIcon',
-  //       i18n: 'User',
-  //       submenu: [
-  //         {
-  //           url: '/apps/user/user-list',
-  //           name: 'List',
-  //           slug: 'app-user-list',
-  //           i18n: 'List'
-  //         },
-  //         {
-  //           url: '/apps/user/user-view/268',
-  //           name: 'View',
-  //           slug: 'app-user-view',
-  //           i18n: 'View'
-  //         },
-  //         {
-  //           url: '/apps/user/user-edit/268',
-  //           name: 'Edit',
-  //           slug: 'app-user-edit',
-  //           i18n: 'Edit'
-  //         }
-  //       ]
-  //     }
-  //   ]
-  // },
-  {
-    header: 'Others',
-    icon: 'MoreHorizontalIcon',
-    i18n: 'Others',
-    items: [
-      // {
-      //   url: null,
-      //   name: 'Disabled Menu',
-      //   icon: 'EyeOffIcon',
-      //   i18n: 'DisabledMenu',
-      //   isDisabled: true
-      // },
-      {
-        url: '/pages/faq',
-        slug: 'page-faq',
-        name: 'FAQ',
-        icon: 'HelpCircleIcon',
-        i18n: 'FAQ'
-      },
-      {
-        url: null,
-        name: 'Support',
-        icon: 'SmileIcon',
-        i18n: 'Support',
-        submenu: [
-          {
-            url: 'https://pixinvent.com/demo/vuexy-vuejs-admin-dashboard-template/documentation/',
-            name: 'Documentation',
-            icon: 'BookOpenIcon',
-            slug: 'external',
-            i18n: 'Documentation',
-            target: '_blank'
-          },
-          {
-            url: 'https://pixinvent.ticksy.com/',
-            name: 'Raise Support',
-            icon: 'LifeBuoyIcon',
-            slug: 'external',
-            i18n: 'RaiseSupport',
-            target: '_blank'
-          }
-        ]
-      }
-    ]
+    slug: 'page-stats',
+    i18n: 'Statistics'
   }
 ]

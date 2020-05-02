@@ -1,12 +1,3 @@
-<!-- =========================================================================================
-    File Name: ApexCharts.vue
-    Description: Apex Charts Demo
-    ----------------------------------------------------------------------------------------
-    Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
-      Author: Pixinvent
-    Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
 <template>
     <div id="extra-component-chartist-demo">
         <p class="mb-4">A Vue.js component for ApexCharts. Read full documnetation <a href="https://apexcharts.com/docs/installation/" target="_blank" rel="nofollow">here</a></p>

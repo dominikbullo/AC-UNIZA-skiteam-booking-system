@@ -47,19 +47,54 @@
         title="Sign up child to event">
 
 
-        <div class="my-4">
-          <ul class="centerx">
-
-            <!--            {{editedEvent}}-->
-            <div v-if="editedEvent">
-              <h2>Details: </h2>
-              <p>Title: {{editedEvent.title}}</p>
-              <p>Start: {{editedEvent.start}}</p>
-              <p>Skis: {{editedEvent.skis_type}}</p>
-              <p>Category: {{editedEvent.category}}</p>
+        <div v-if="editedEvent" id="event-info-table">
+          <div class="vx-row">
+            <div class="vx-col flex-1" id="event-info-col-1">
+              <table>
+                <tr>
+                  <td class="font-semibold">Type</td>
+                  <td>{{ editedEvent.title }}</td>
+                </tr>
+                <tr>
+                  <td class="font-semibold">Skis</td>
+                  <td>{{ editedEvent.additional_info }}</td>
+                </tr>
+                <tr>
+                  <td class="font-semibold">Skis</td>
+                  <td>{{ editedEvent.skis_type }}</td>
+                </tr>
+              </table>
             </div>
+            <div class="vx-col flex-1" id="event-info-col-2">
+              <table>
+                <tr>
+                  <td class="font-semibold">Location</td>
+                  <td>{{ editedEvent.location }}</td>
+                </tr>
+                <tr>
+                  <td class="font-semibold">Start</td>
+                  <td>{{ editedEvent.start | time }}</td>
+                </tr>
 
-            <li :key="child.username" v-for="child in userChildren">
+              </table>
+            </div>
+          </div>
+
+          <div v-if="$acl.check('isCoach')">
+            <vs-divider>Coach zone</vs-divider>
+            <div class="vx-col w-full flex flex-wrap items-center justify-center">
+              <vs-button icon-pack="feather" icon="icon-edit" color="warning" class="mr-4"
+                         :to="{name: 'app-event-edit', params: { eventId: this.editedEvent.id }}">Edit
+              </vs-button>
+              <vs-button type="border" color="danger" icon-pack="feather" icon="icon-trash"
+                         @click="confirmDeleteRecord">Delete
+              </vs-button>
+            </div>
+          </div>
+
+          <ul class="centerx">
+            <vs-divider>Your children</vs-divider>
+            <li class="mb-2" :key="child.username" v-for="child in userChildren">
               <vs-checkbox
                 :vs-value="child.username"
                 color="success"
@@ -68,6 +103,7 @@
               </vs-checkbox>
             </li>
           </ul>
+
         </div>
 
       </vs-prompt>
@@ -147,7 +183,8 @@ export default {
       return this.$store.state.calendar.events
     },
     userChildren () {
-      const members = this.$store.state.family.members
+      // const members = this.$store.state.family.members
+      const members = this.$store.getters['family/familyChildren']
 
       const cleanMembers = []
       members.forEach((element) => {
@@ -165,12 +202,13 @@ export default {
       console.log('handling date click', arg)
     },
     handleEventClick (arg) {
-      // Allow only next event change not previous
-      // TODO RELEASE Uncomment this
-      if (process.env.NODE_ENV !== 'development') {
-        if (new Date(arg.event.start).valueOf() < new Date().valueOf()) {
-          return false
-        }
+      if (this.$acl.not.check('isCoach') && new Date(arg.event.start).valueOf() < new Date().valueOf()) {
+        this.$vs.notify({
+          color: 'danger',
+          title: 'Old event',
+          text: 'You cannot change an event which has already happened'
+        })
+        return false
       }
 
       this.editedEvent = Object.values(this.calendarEvents).find(obj => {
@@ -199,7 +237,11 @@ export default {
     handleSelectClick (click) {
       console.log('handling select click', click)
       if (click.start.isBefore(this.moment())) {
-        // $('#calendar').fullCalendar('unselect')
+        this.$vs.notify({
+          color: 'danger',
+          title: 'Old event',
+          text: 'Cannot change event that already happend'
+        })
         return false
       }
       alert(`clicked ${click.startStr} - ${click.endStr}`)
@@ -207,11 +249,32 @@ export default {
     handleEventMouseEnter (arg) {
       // console.log('handling mouse event enter', arg)
     },
-    onFromChange (selectedDates, dateStr, instance) {
-      this.$set(this.configTodateTimePicker, 'minDate', dateStr)
+    confirmDeleteRecord () {
+      this.childAddToEventPrompt.active = false
+      this.$vs.dialog({
+        type: 'confirm',
+        color: 'danger',
+        title: 'Confirm Delete',
+        text: `You are about to delete "${this.editedEvent.title}"`,
+        accept: this.deleteRecord,
+        acceptText: 'Delete'
+      })
     },
-    onToChange (selectedDates, dateStr, instance) {
-      this.$set(this.configFromdateTimePicker, 'maxDate', dateStr)
+    deleteRecord () {
+      /* Below two lines are just for demo purpose */
+      this.showDeleteSuccess()
+
+      /* UnComment below lines for enabling true flow if deleting user */
+      // this.$store.dispatch("userManagement/removeRecord", this.params.data.id)
+      //   .then(()   => { this.showDeleteSuccess() })
+      //   .catch(err => { console.error(err)       })
+    },
+    showDeleteSuccess () {
+      this.$vs.notify({
+        color: 'success',
+        title: 'User Deleted',
+        text: 'The selected user was successfully deleted'
+      })
     },
     clearFields () {
       console.warn('need to clean fields')
@@ -256,20 +319,35 @@ export default {
     background: #0C112E;
   }
 
-  /*.fc-day-grid-container {*/
-  /*  !* FIXME TODO *!*/
-  /*  !*height: calc(var(--vh, 1vh) * 50 - 11.5rem);*!*/
-  /*  max-height: 65vh;*/
-  /*}*/
-
-  /*.fc-time-grid-container {*/
-  /*  !* FIXME TODO *!*/
-  /*  !*height: calc(var(--vh, 1vh) * 50 - 11.5rem);*!*/
-  /*  max-height: 60vh;*/
-  /*}*/
-
   .fc-list-heading td {
     background: #00b0d3;
     color: white;
   }
+
+  #event-info-table {
+    table {
+      td {
+        padding-right: .5rem;
+        padding-bottom: .8rem;
+        word-break: break-all;
+      }
+
+      &:not(.permissions-table) {
+        td {
+          @media screen and (max-width: 370px) {
+            display: block;
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (min-width: 1201px) and (max-width: 1211px),
+  only screen and (min-width: 636px) and (max-width: 991px) {
+    #event-info-col-1 {
+      width: calc(100% - 5rem) !important;
+    }
+  }
+
+
 </style>

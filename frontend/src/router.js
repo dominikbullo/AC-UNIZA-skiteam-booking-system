@@ -50,19 +50,15 @@ const router = new Router({
           name: 'dashboard',
           component: () => import('./views/dashboards/MainDashboard.vue'),
           meta: {
-            // breadcrumb: [
-            //   {
-            //     title: 'Home',
-            //     url: '/'
-            //   },
-            //   {title: 'Family'},
-            //   {
-            //     title: 'Child',
-            //     active: true
-            //   }
-            // ],
-            // pageTitle: 'Dashboard',
-            rule: 'editor'
+            rule: 'isLogged'
+          }
+        },
+        {
+          path: '/dashboard/coach',
+          name: 'dashboard-coach',
+          component: () => import('./views/dashboards/CoachDashboard.vue'),
+          meta: {
+            rule: 'isCoach'
           }
         },
         {
@@ -70,7 +66,7 @@ const router = new Router({
           name: 'testpage',
           component: () => import('@/views/pages/testPages/TestPage.vue'),
           meta: {
-            rule: 'editor'
+            rule: 'isLogged'
           }
         },
         {
@@ -78,7 +74,7 @@ const router = new Router({
           name: 'test-stats',
           component: () => import('@/views/pages/testPages/TestStats.vue'),
           meta: {
-            rule: 'editor'
+            rule: 'isLogged'
           }
         },
         {
@@ -86,16 +82,7 @@ const router = new Router({
           name: 'testcalendar',
           component: () => import('@/views/pages/testPages/TestCalendar.vue'),
           meta: {
-            rule: 'editor'
-          }
-        },
-        {
-          path: '/test/simple-calendar',
-          name: 'event-simple-calendar',
-          component: () => import('./views/apps/calendar/SimpleCalendar.vue'),
-          meta: {
-            rule: 'editor',
-            no_scroll: true
+            rule: 'isLogged'
           }
         },
 
@@ -122,7 +109,7 @@ const router = new Router({
               }
             ],
             pageTitle: 'User List',
-            rule: 'editor'
+            rule: 'isParent'
           }
         },
         {
@@ -142,7 +129,27 @@ const router = new Router({
               }
             ],
             pageTitle: 'User View',
-            rule: 'editor'
+            rule: 'isParent'
+          }
+        },
+        {
+          path: '/apps/user/:userId?/stats',
+          name: 'app-user-stats',
+          component: () => import('@/views/apps/user/UserStatsView.vue'),
+          meta: {
+            breadcrumb: [
+              {
+                title: 'Home',
+                url: '/'
+              },
+              { title: 'User' },
+              {
+                title: 'Stats',
+                active: true
+              }
+            ],
+            pageTitle: 'User Stats',
+            rule: 'isCoach'
           }
         },
         {
@@ -162,10 +169,70 @@ const router = new Router({
               }
             ],
             pageTitle: 'User Edit',
-            rule: 'admin'
+            rule: 'isAdmin'
           }
         },
         // Family APP
+        {
+          path: '/apps/family/members',
+          name: 'app-family-members',
+          component: () => import('@/views/apps/family/family-members/FamilyMembersList.vue'),
+          meta: {
+            breadcrumb: [
+              {
+                title: 'Home',
+                url: '/'
+              },
+              { title: 'Family' },
+              {
+                title: 'List',
+                active: true
+              }
+            ],
+            pageTitle: 'Family Members List',
+            rule: 'isParent'
+          }
+        },
+        {
+          path: '/apps/family/:familyId?/view',
+          name: 'app-family-view',
+          component: () => import('@/views/apps/family/FamilyView.vue'),
+          meta: {
+            breadcrumb: [
+              {
+                title: 'Home',
+                url: '/'
+              },
+              { title: 'Family' },
+              {
+                title: 'View',
+                active: true
+              }
+            ],
+            pageTitle: 'Family View',
+            rule: 'isChild'
+          }
+        },
+        {
+          path: '/apps/family/:familyId?/edit/',
+          name: 'app-family-edit',
+          component: () => import('@/views/apps/family/family-edit/FamilyEdit.vue'),
+          meta: {
+            breadcrumb: [
+              {
+                title: 'Home',
+                url: '/'
+              },
+              { title: 'Family' },
+              {
+                title: 'Edit',
+                active: true
+              }
+            ],
+            pageTitle: 'Family Edit',
+            rule: 'isParent'
+          }
+        },
         {
           path: '/apps/family/list',
           name: 'app-family-list',
@@ -183,47 +250,7 @@ const router = new Router({
               }
             ],
             pageTitle: 'Family List',
-            rule: 'editor'
-          }
-        },
-        {
-          path: '/apps/family/view/:familyId',
-          name: 'app-family-view',
-          component: () => import('@/views/apps/family/FamilyView.vue'),
-          meta: {
-            breadcrumb: [
-              {
-                title: 'Home',
-                url: '/'
-              },
-              { title: 'Family' },
-              {
-                title: 'View',
-                active: true
-              }
-            ],
-            pageTitle: 'Family View',
-            rule: 'editor'
-          }
-        },
-        {
-          path: '/apps/family/edit/:familyId',
-          name: 'app-family-edit',
-          component: () => import('@/views/apps/family/family-edit/FamilyEdit.vue'),
-          meta: {
-            breadcrumb: [
-              {
-                title: 'Home',
-                url: '/'
-              },
-              { title: 'Family' },
-              {
-                title: 'Edit',
-                active: true
-              }
-            ],
-            pageTitle: 'Family Edit',
-            rule: 'admin'
+            rule: 'isParent'
           }
         },
 
@@ -231,7 +258,7 @@ const router = new Router({
         {
           path: '/apps/event/list',
           name: 'app-event-list',
-          component: () => import('@/views/apps/event/EventList.vue'),
+          component: () => import('@/views/apps/event/event-list/EventList.vue'),
           meta: {
             breadcrumb: [
               {
@@ -245,7 +272,27 @@ const router = new Router({
               }
             ],
             pageTitle: 'Event List',
-            rule: 'editor'
+            rule: 'isChild'
+          }
+        },
+        {
+          path: '/apps/event/:eventId/edit',
+          name: 'app-event-edit',
+          component: () => import('@/views/apps/event/event-edit/EventEdit.vue'),
+          meta: {
+            breadcrumb: [
+              {
+                title: 'Home',
+                url: '/'
+              },
+              { title: 'Event' },
+              {
+                title: 'Edit',
+                active: true
+              }
+            ],
+            pageTitle: 'Edit Event',
+            rule: 'isChild'
           }
         },
         {
@@ -253,7 +300,7 @@ const router = new Router({
           name: 'app-event-calendar',
           component: () => import('@/views/apps/event/EventCalendar.vue'),
           meta: {
-            rule: 'editor',
+            rule: 'isChild',
             no_scroll: true
           }
         },
@@ -278,7 +325,7 @@ const router = new Router({
               }
             ],
             pageTitle: 'Profile',
-            rule: 'editor'
+            rule: 'isAdmin'
           }
         },
         {
@@ -298,7 +345,7 @@ const router = new Router({
               }
             ],
             pageTitle: 'Settings',
-            rule: 'editor'
+            rule: 'isLogged'
           }
         },
         {
@@ -318,7 +365,7 @@ const router = new Router({
               }
             ],
             pageTitle: 'FAQ',
-            rule: 'editor'
+            rule: 'isPublic'
           }
         },
 
@@ -326,63 +373,23 @@ const router = new Router({
         // CHARTS & MAPS
         // =============================================================================
         {
-          path: '/charts-and-maps/charts/apex-charts',
-          name: 'extra-component-charts-apex-charts',
-          component: () => import('@/views/charts-and-maps/charts/apex-charts/ApexCharts.vue'),
+          path: '/page/statistics',
+          name: 'page-statistics',
+          component: () => import('@/views/pages/stats/Statistics.vue'),
           meta: {
             breadcrumb: [
               {
                 title: 'Home',
                 url: '/'
               },
-              { title: 'Charts & Maps' },
+              { title: 'Statistics' },
               {
                 title: 'Apex Charts',
                 active: true
               }
             ],
             pageTitle: 'Apex Charts',
-            rule: 'editor'
-          }
-        },
-        {
-          path: '/charts-and-maps/charts/chartjs',
-          name: 'extra-component-charts-chartjs',
-          component: () => import('@/views/charts-and-maps/charts/chartjs/Chartjs.vue'),
-          meta: {
-            breadcrumb: [
-              {
-                title: 'Home',
-                url: '/'
-              },
-              { title: 'Charts & Maps' },
-              {
-                title: 'chartjs',
-                active: true
-              }
-            ],
-            pageTitle: 'chartjs',
-            rule: 'editor'
-          }
-        },
-        {
-          path: '/charts-and-maps/maps/google-map',
-          name: 'extra-component-maps-google-map',
-          component: () => import('@/views/charts-and-maps/maps/google-map/GoogleMap.vue'),
-          meta: {
-            breadcrumb: [
-              {
-                title: 'Home',
-                url: '/'
-              },
-              { title: 'Charts & Maps' },
-              {
-                title: 'Google Map',
-                active: true
-              }
-            ],
-            pageTitle: 'Google Map',
-            rule: 'editor'
+            rule: 'isParent'
           }
         }
       ]
@@ -402,7 +409,7 @@ const router = new Router({
           name: 'page-login',
           component: () => import('@/views/pages/login/Login.vue'),
           meta: {
-            rule: 'editor'
+            rule: 'isPublic'
           }
         },
         {
@@ -410,7 +417,7 @@ const router = new Router({
           name: 'page-register',
           component: () => import('@/views/pages/register/Register.vue'),
           meta: {
-            rule: 'editor'
+            rule: 'isPublic'
           }
         },
         {
@@ -418,7 +425,7 @@ const router = new Router({
           name: 'page-forgot-password',
           component: () => import('@/views/pages/ForgotPassword.vue'),
           meta: {
-            rule: 'editor'
+            rule: 'isPublic'
           }
         },
         {
@@ -426,7 +433,7 @@ const router = new Router({
           name: 'page-reset-password',
           component: () => import('@/views/pages/ResetPassword.vue'),
           meta: {
-            rule: 'editor'
+            rule: 'isPublic'
           }
         },
         {
@@ -434,7 +441,7 @@ const router = new Router({
           name: 'page-lock-screen',
           component: () => import('@/views/pages/LockScreen.vue'),
           meta: {
-            rule: 'editor'
+            rule: 'isPublic'
           }
         },
         {
@@ -442,7 +449,7 @@ const router = new Router({
           name: 'page-coming-soon',
           component: () => import('@/views/pages/ComingSoon.vue'),
           meta: {
-            rule: 'editor'
+            rule: 'isPublic'
           }
         },
         {
@@ -450,7 +457,7 @@ const router = new Router({
           name: 'page-error-404',
           component: () => import('@/views/pages/Error404.vue'),
           meta: {
-            rule: 'editor'
+            rule: 'isPublic'
           }
         },
         {
@@ -458,7 +465,7 @@ const router = new Router({
           name: 'page-error-500',
           component: () => import('@/views/pages/Error500.vue'),
           meta: {
-            rule: 'editor'
+            rule: 'isPublic'
           }
         },
         {
@@ -466,7 +473,7 @@ const router = new Router({
           name: 'page-not-authorized',
           component: () => import('@/views/pages/NotAuthorized.vue'),
           meta: {
-            rule: 'editor'
+            rule: 'isPublic'
           }
         },
         {
@@ -474,7 +481,7 @@ const router = new Router({
           name: 'page-maintenance',
           component: () => import('@/views/pages/Maintenance.vue'),
           meta: {
-            rule: 'editor'
+            rule: 'isPublic'
           }
         }
       ]

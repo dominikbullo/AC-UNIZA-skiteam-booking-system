@@ -109,21 +109,17 @@ const mutations = {
     console.log('[STORE] updating user info', payload)
     // Get Data localStorage
     const userInfo = JSON.parse(localStorage.getItem('userInfo')) || state.AppActiveUser
-
-    // TODO if exist
-    // When changing permission this change to undefined
-    payload.displayName = `${payload.first_name} ${payload.last_name}`
-
+    
     for (const property of Object.keys(payload)) {
-
+      state.AppActiveUser[property] = payload[property]
       userInfo[property] = payload[property]
-      // if (payload[property] !== null) {
-      //   // If some of user property is null - user default property defined in state.AppActiveUser
-      //   state.AppActiveUser[property] = payload[property]
-      //
-      //   // Update key in localStorage
-      //   userInfo[property] = payload[property]
-      // }
+      if (payload[property] !== null) {
+        // If some of user property is null - user default property defined in state.AppActiveUser
+        state.AppActiveUser[property] = payload[property]
+
+        // Update key in localStorage
+        userInfo[property] = payload[property]
+      }
     }
     // Store data in localStorage
     localStorage.setItem('userInfo', JSON.stringify(userInfo))

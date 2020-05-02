@@ -1,12 +1,3 @@
-<!-- =========================================================================================
-    File Name: Charts.vue
-    Description: Chartjs (third-party) - Imports page portions
-    ----------------------------------------------------------------------------------------
-    Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
-      Author: Pixinvent
-    Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
 <template>
     <div id="extra-component-chartjs-demo">
         <p class="mb-4">You can easily create reuseable chart components. <a href="https://vue-chartjs.org/" target="_blank" rel="nofollow">vue-chartjs</a> is a wrapper for Chart.js. Read full documnetation <a href="https://vue-chartjs.org/guide/" target="_blank" rel="nofollow">here</a></p>

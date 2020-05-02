@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.urls import path, include
 
-from users.api.views import CustomConfirmEmailView
+from apps.users.api.views import CustomConfirmEmailView
 
 urlpatterns = [
 

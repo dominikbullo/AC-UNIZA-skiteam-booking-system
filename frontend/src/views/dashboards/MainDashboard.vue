@@ -10,23 +10,23 @@
             :options="childSelection.options"
             :clearable="false"
             :searchable="false"
-            :getOptionLabel="options => options.user.profile.full_name"
+            :getOptionLabel="options => options.user.profile.displayName"
             @input="getUserStats"
           />
         </vx-card>
       </div>
 
       <!-- Select season -->
-      <div class="vx-col w-full md:w-1/2 mb-base">
-        <vx-card title="Season Selection (not implemented yet)" no-shadow card-border>
-          <v-select
-            v-model="seasonSelection.selected"
-            :options="seasonSelection.options"
-            :clearable="false"
-            :searchable="false"
-          />
-        </vx-card>
-      </div>
+      <!--      <div class="vx-col w-full md:w-1/2 mb-base">-->
+      <!--        <vx-card title="Season Selection (not implemented yet)" no-shadow card-border>-->
+      <!--          <v-select-->
+      <!--            v-model="seasonSelection.selected"-->
+      <!--            :options="seasonSelection.options"-->
+      <!--            :clearable="false"-->
+      <!--            :searchable="false"-->
+      <!--          />-->
+      <!--        </vx-card>-->
+      <!--      </div>-->
     </div>
 
     <!--    &lt;!&ndash; TODO: maybe for each statictic roll out field ?&ndash;&gt;-->
@@ -53,7 +53,7 @@
 
 
     <div class="vx-row">
-      <div class="vx-col w-full w-1/2 sm:w-1/2 lg:w-1/3 xl:w-1/4"
+      <div class="vx-col w-full w-1/2 sm:w-1/2 lg:w-1/3"
            v-for="(item, key) in stats"
            :key="key">
         <vx-card :title="`${item.name}`" class="mb-10">

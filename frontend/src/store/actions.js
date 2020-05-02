@@ -54,6 +54,7 @@ const actions = {
   },
   updateUserRole ({ dispatch }, payload) {
     // Change client side
+    console.log('[STORE] Updating user role payload:', payload.userRole)
     payload.aclChangeRole(payload.userRole)
 
     // Make API call to server for changing role

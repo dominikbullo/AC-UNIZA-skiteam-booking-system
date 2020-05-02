@@ -40,7 +40,7 @@
 export default {
   data () {
     return {
-      email: 'admin@admin.sk',
+      email: 'totojetes@sasd.sk',
       password: 'testing321',
       checkbox_remember_me: true
     }
@@ -93,7 +93,14 @@ export default {
         }
       }
 
-      this.$store.dispatch('auth/loginDRF', payload).then(() => {
+      this.$store.dispatch('auth/loginDRF', payload).then((response) => {
+        this.$store.dispatch('updateUserRole', {
+          aclChangeRole: this.$acl.change,
+          userRole: response.data.user.profile.userRole
+        })
+        //FIXME not working
+        this.$router.push(this.$router.currentRoute.query.to || '/')
+
         this.$vs.loading.close()
       }).catch(error => {
         this.$vs.loading.close()

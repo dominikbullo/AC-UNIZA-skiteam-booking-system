@@ -1,42 +1,51 @@
-version: '3.7'
+version: "3.3"
+
+volumes:
+  sportagenda_data: {}
 
 services:
-  #  db:
-  #    image: postgres
-  #    container_name: sport-agenda-db
-  #    environment:
-  #      POSTGRES_USER: user
-  #      POSTGRES_PASSWORD: pass
-  #      POSTGRES_DB: db
-  #    restart: unless-stopped
-  #    ports:
-  #      - "5432:5432"
-  django:
+  backend:
     build:
-      context: .
-      dockerfile: backend/Dockerfile
-    container_name: sport-agenda-backend
-    command: backend/backend_setup.sh
-    #    environment:
-    #      POSTGRES_NAME: postgres
-    #      POSTGRES_USER: user
-    #      POSTGRES_PASSWORD: pass
-    #      POSTGRES_HOST: db
-    volumes:
-      - .:/app
-    ports:
-      - "8000:8000"
-  #    depends_on:
-  #      - db
-  vue:
-    build:
-      context: .
-      dockerfile: frontend/Dockerfile
-    container_name: sport-agenda-frontend
-    command: frontend/frontend_setup.sh
-    volumes:
-      - .:/app
-    ports:
-      - "8080:8080"
+      context: ./backend
     depends_on:
-      - django
+      - postgres
+    volumes:
+      - ./backend:/app
+    command: /start.sh
+    entrypoint: /entrypoint.sh
+    restart: on-failure
+    env_file: .env
+
+  frontend:
+    image: node:lts-alpine
+    command: npm run serve
+    volumes:
+      - ./.env:/app/.env:ro
+      - ./frontend:/app
+    working_dir: /app
+    restart: on-failure
+
+  postgres:
+    image: postgres:10-alpine
+    volumes:
+      - sportagenda_data:/var/lib/postgresql/data
+    env_file: .env
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+    logging:
+      driver: none
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "8000:80"
+    depends_on:
+      - backend
+    volumes:
+      - ./backend/media/:/media/
+      - ./backend/staticfiles/:/staticfiles/
+      - ./nginx/dev.conf:/etc/nginx/nginx.conf:ro
+    logging:
+      driver: none

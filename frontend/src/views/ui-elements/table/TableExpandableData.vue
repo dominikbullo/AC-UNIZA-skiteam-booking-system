@@ -1,13 +1,3 @@
-<!-- =========================================================================================
-    File Name: TableExpandableData.vue
-    Description: Create expandable rows which have custom data
-    ----------------------------------------------------------------------------------------
-    Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
-      Author: Pixinvent
-    Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
-
 <template>
     <vx-card title="ExpandableData" code-toggler>
 

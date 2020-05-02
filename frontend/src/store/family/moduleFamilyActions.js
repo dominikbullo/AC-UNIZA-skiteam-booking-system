@@ -39,15 +39,16 @@ export default {
     if (!payload.query) {
       payload.query = { season: 'current' }
     }
-    console.log('payload in fetchUserStats', payload)
 
-    if (!('username' in payload)) {
-      console.error('Not found any username in payload')
-      return
+    let localId = this.state.AppActiveUser.profile.id
+
+    if ('username' in payload && payload.username !== undefined) {
+      localId = payload.username
     }
+    console.log('fetchUserStats', localId)
 
     return new Promise((resolve, reject) => {
-      axios.get(`/profile/${payload.username}/stats/`, { params: payload.query })
+      axios.get(`/profile/${localId}/stats/`, { params: payload.query })
         .then((response) => {
           // commit('UPDATE_FAMILY_MEMBER_STATS', response.data)
           resolve(response)

@@ -8,9 +8,7 @@
 ========================================================================================== */
 
 import drf from '../../http/requests/auth/drf'
-
 import router from '@/router'
-import acl from 'vue-acl'
 
 export default {
   loginDRF ({ commit }, payload) {
@@ -30,23 +28,23 @@ export default {
 
           // Update user details
           commit('UPDATE_USER_INFO', response.data.user, { root: true })
+          // TODO or Test FIXME id missmatch Profile/User
+          commit('UPDATE_USER_INFO', response.data.user.profile, { root: true })
 
           // Set bearer token in axios
           commit('SET_BEARER', response.data.key)
 
-          // TODO display name add to response
-          // TODO update family!
-          // this.$store.dispatch('family/fetchFamily', response.data.user.profile.family_id)
-
           // Navigate User to homepage
-          router.push(router.currentRoute.query.to || '/')
+          // acl.change('admin')
+          // router.push(router.currentRoute.query.to || '/')
 
           resolve(response)
         } else {
           reject({ message: 'Wrong Email or Password' })
         }
-      }).catch(() => {
-        reject({ message: 'Wrong Email or Password' })
+      }).catch((err) => {
+        console.log(err)
+        reject(err)
       })
     })
   },

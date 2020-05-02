@@ -1,13 +1,3 @@
-<!-- =========================================================================================
-    File Name: ChartLineChart.vue
-    Description: Create line chart
-    ----------------------------------------------------------------------------------------
-    Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
-      Author: Pixinvent
-    Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
-
 <template>
     <vx-card title="Line Chart" class="mb-base" code-toggler>
 

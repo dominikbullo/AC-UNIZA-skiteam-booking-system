@@ -1,13 +1,3 @@
-<!-- =========================================================================================
-    File Name: ColorTailwind.vue
-    Description: Tailwind Colors - Imports all page portions
-    ----------------------------------------------------------------------------------------
-    Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
-      Author: Pixinvent
-    Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
-
 <template>
     <vx-card title="Tailwind Colors">
         <span>Tailwind creates <code>text-{color}</code> and <code>bg-{color}</code> for text color and background color.</span>

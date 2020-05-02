@@ -1,13 +1,3 @@
-<!-- =========================================================================================
-    File Name: GridFlexAlignment.vue
-    Description: Flex alignment of grid using vs-align
-    ----------------------------------------------------------------------------------------
-    Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
-      Author: Pixinvent
-    Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
-
 <template>
     <vx-card title="Flex alignment">
         <p>To align the elements vertically we have the directive <code>vs-align</code> that as parameters the same known values of css: <code>center</code>, <code>flex-end</code>, <code>flex-start</code>.</p>

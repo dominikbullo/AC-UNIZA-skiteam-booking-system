@@ -1,12 +1,3 @@
-<!-- =========================================================================================
-  File Name: UserList.vue
-  Description: User List page
-  ----------------------------------------------------------------------------------------
-  Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
-  Author: Pixinvent
-  Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
 <template>
   <div id="page-family-list">
     <div class="vx-card p-6">
@@ -351,7 +342,7 @@ export default {
         },
         {
           headerName: 'Role',
-          field: 'role',
+          field: 'profile.userRole',
           filter: true,
           width: 150
         },

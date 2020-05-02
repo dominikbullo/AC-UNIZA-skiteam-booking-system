@@ -1,27 +1,19 @@
-FROM python:3.7-alpine
-LABEL maintainer="dominobullo@gmail.com"
+FROM python:3.7
 
-# Set environment varibles
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+# python envs
+ENV PYTHONFAULTHANDLER=1 \
+    PYTHONUNBUFFERED=1 \
+    PYTHONHASHSEED=random \
+    PIP_NO_CACHE_DIR=off \
+    PIP_DISABLE_PIP_VERSION_CHECK=on \
+    PIP_DEFAULT_TIMEOUT=100
 
-## Copy into docker
-RUN mkdir /app
-WORKDIR /app
-
-COPY backend/Pipfile* /
+COPY ./Pipfile* /
 
 # Install pipenv
 RUN pip install --upgrade pip
 RUN pip install pipenv
 
-# Pillow
-# https://stackoverflow.com/questions/57787424/django-docker-python-unable-to-install-pillow-on-python-alpine
-RUN apk update \
-    && apk add --no-cache gcc libc-dev make git libffi-dev openssl-dev python3-dev libxml2-dev libxslt-dev \
-    && apk add --no-cache jpeg-dev zlib-dev \
-    && apk add --no-cache --virtual .build-deps build-base linux-headers \
-    && pip install Pillow
 
 RUN pipenv lock --requirements > requirements.txt
 RUN pip install -r requirements.txt
@@ -30,11 +22,12 @@ RUN pip install -r requirements.txt
 RUN pipenv lock --dev --requirements > requirements_dev.txt
 RUN pip install -r requirements_dev.txt
 
-COPY ./backend/ /
-EXPOSE 8000
+# python dependencies
+COPY ./requirements.txt /
+RUN pip install -r ./requirements.txt
 
-## Create new user name user for security reasons
-## -D runnig apps only
-#RUN adduser -D user
-## Switch user to user
-#USER user
+# upload scripts
+COPY ./scripts/entrypoint.sh ./scripts/start.sh ./scripts/gunicorn.sh /
+
+WORKDIR /app
+EXPOSE 8000
