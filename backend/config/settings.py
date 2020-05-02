@@ -56,8 +56,6 @@ THIRD_PARTY_APPS = [
 
     'polymorphic',
 
-    'webpack_loader',
-
     'pwa',
 
     'simple_mail',
