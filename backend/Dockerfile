@@ -22,9 +22,6 @@ RUN pip install -r requirements.txt
 RUN pipenv lock --dev --requirements > requirements_dev.txt
 RUN pip install -r requirements_dev.txt
 
-# python dependencies
-COPY ./requirements.txt /
-RUN pip install -r ./requirements.txt
 
 # upload scripts
 COPY ./scripts/entrypoint.sh ./scripts/start.sh ./scripts/gunicorn.sh /

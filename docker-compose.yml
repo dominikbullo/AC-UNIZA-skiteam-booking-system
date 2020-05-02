@@ -14,7 +14,7 @@ services:
     command: /start.sh
     entrypoint: /entrypoint.sh
     restart: on-failure
-    env_file: .env
+    env_file: .env.dev
 
   frontend:
     image: node:lts-alpine
@@ -29,7 +29,7 @@ services:
     image: postgres:10-alpine
     volumes:
       - sportagenda_data:/var/lib/postgresql/data
-    env_file: .env
+    env_file: .env.dev
 
   mailhog:
     image: mailhog/mailhog
