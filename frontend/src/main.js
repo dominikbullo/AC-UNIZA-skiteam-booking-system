@@ -84,6 +84,9 @@ import { VueHammer } from 'vue2-hammer'
 import 'prismjs'
 import 'prismjs/themes/prism-tomorrow.css'
 
+// Raven, Sentry
+import VueRaven from 'vue-raven'
+
 Vue.use(Vuesax)
 
 Vue.prototype.moment = moment
@@ -110,6 +113,11 @@ Vue.use(VueHammer)
 
 // Feather font icon
 require('./assets/css/iconfont.css')
+
+Vue.use(VueRaven, {
+  dsn: process.env.VUE_APP_SENTRY_PUBLIC_DSN,
+  disableReport: process.env.NODE_ENV === 'development'
+})
 
 
 // Vue select css

@@ -17,8 +17,11 @@
       <vx-card card-border code-toggler no-shadow title="Buttons">
         <div class="demo-alignment">
 
-          <vs-button @click="activePrompt = true" icon="icon-plus" icon-pack="feather" v-show="$acl.check('editor')">{{
+          <vs-button @click="activePrompt = true" icon="icon-plus" icon-pack="feather">{{
             $t('AddChild') }}
+          </vs-button>
+
+          <vs-button @click="throwError()" icon="icon-plus" icon-pack="feather">error
           </vs-button>
 
           <vs-prompt
@@ -200,6 +203,9 @@ export default {
     }
   },
   methods: {
+    throwError () {
+      throw new Error('test exception')
+    },
     clearFields () {
       Object.assign(this.childData, {
         title: '',

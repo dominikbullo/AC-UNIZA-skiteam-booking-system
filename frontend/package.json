@@ -7,7 +7,8 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs"
+    "docs:build": "vuepress build docs",
+    "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
     "@chenfengyuan/vue-countdown": "^1.1.2",
@@ -55,6 +56,7 @@
     "vue-prism-component": "^1.1.1",
     "vue-property-decorator": "^8.1.1",
     "vue-quill-editor": "^3.0.6",
+    "vue-raven": "^1.0.0",
     "vue-router": "^3.0.6",
     "vue-select": "^3.1.0",
     "vue-simple-calendar": "^4.3.2",
