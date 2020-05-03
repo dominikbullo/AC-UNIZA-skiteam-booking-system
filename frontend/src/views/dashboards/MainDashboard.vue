@@ -64,9 +64,10 @@
           <!-- CHART -->
           <template slot="no-body">
             <div class="mt-10">
+              {{getDisplayStats(item).percent}}
               <vue-apex-charts
                 :options="goalOverviewRadialBar.chartOptions"
-                :series=" [getDisplayStats(item).percent]"
+                :series=" [getDisplayStats(item).percent.toFixed(0)]"
                 height="240"
                 type="radialBar"/>
             </div>
@@ -241,9 +242,11 @@ export default {
         })
     },
     getDisplayStats (stats) {
+      console.log("stat", stats)
       if (stats === undefined) {
         return 'undefined'
       }
+      console.log("stat1", stats)
       return {
         'percent': stats.count / stats.total * 100,
         'percentStr': `${(stats.count / stats.total * 100).toFixed(2)}%`,
