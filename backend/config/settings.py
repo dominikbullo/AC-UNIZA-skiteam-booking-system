@@ -10,7 +10,7 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 import environ
 from datetime import timedelta
 
-ROOT_DIR= environ.Path(__file__) - 2
+ROOT_DIR = environ.Path(__file__) - 2
 APP_DIR = environ.Path(__file__) - 3
 # SETTINGS_DIR = environ.Path(__file__)
 # BASE_DIR = environ.Path(__file__) - 1
@@ -120,7 +120,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME'  : str(ROOT_DIR('db.sqlite3')),
+        'NAME': str(ROOT_DIR('db.sqlite3')),
     }
 }
 

@@ -83,9 +83,11 @@
           <div v-if="$acl.check('isCoach')">
             <vs-divider>Coach zone</vs-divider>
             <div class="vx-col w-full flex flex-wrap items-center justify-center">
-              <vs-button icon-pack="feather" icon="icon-edit" color="warning" class="mr-4"
+
+              <vs-button icon-pack="feather" icon="icon-edit" class="mr-4"
                          :to="{name: 'app-event-edit', params: { eventId: this.editedEvent.id }}">Edit
               </vs-button>
+
               <vs-button type="border" color="danger" icon-pack="feather" icon="icon-trash"
                          @click="confirmDeleteRecord">Delete
               </vs-button>

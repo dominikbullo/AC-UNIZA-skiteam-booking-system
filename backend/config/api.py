@@ -26,5 +26,3 @@ urlpatterns = [
     path("", include("apps.events.api.urls")),
 
 ]
-
-
