@@ -14,8 +14,8 @@ from apps.events.models import Season, Event
 
 def send_email_if_flag_enabled(sender, instance, **kwargs):
     if instance.send_email:
+        send_custom_mail(instance)
         print("Sending mails, because send email was check")
-        send_custom_mail(new=instance)
         instance.send_email = False
 
 
@@ -34,6 +34,7 @@ def send_email_if_canceled_change(sender, instance, **kwargs):
 
         # If event was canceled but is live again
         if old.canceled and not instance.canceled:
+            send_custom_mail(instance, old)
             print("send_email() because event has been canceled but is live again")
             return
 

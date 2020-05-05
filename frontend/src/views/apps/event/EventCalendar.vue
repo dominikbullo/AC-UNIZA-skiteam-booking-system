@@ -252,24 +252,29 @@ export default {
       // console.log('handling mouse event enter', arg)
     },
     confirmDeleteRecord () {
+      console.log('event', this.editedEvent)
       this.childAddToEventPrompt.active = false
       this.$vs.dialog({
         type: 'confirm',
         color: 'danger',
         title: 'Confirm Delete',
         text: `You are about to delete "${this.editedEvent.title}"`,
-        accept: this.deleteRecord,
+        accept: this.deleteEvent,
         acceptText: 'Delete'
       })
     },
-    deleteRecord () {
-      /* Below two lines are just for demo purpose */
-      this.showDeleteSuccess()
-
-      /* UnComment below lines for enabling true flow if deleting user */
-      // this.$store.dispatch("userManagement/removeRecord", this.params.data.id)
-      //   .then(()   => { this.showDeleteSuccess() })
-      //   .catch(err => { console.error(err)       })
+    deleteEvent () {
+      console.log('id', this.editedEvent)
+      this.$http.delete(`/event/${this.editedEvent.id}/`)
+        .then(response => {
+          console.log('response', response)
+          this.$vs.notify({
+            color: 'success',
+            title: 'Event Deleted',
+            text: 'Event has been deleted successfully'
+          })
+          this.$store.dispatch('calendar/fetchEvents')
+        })
     },
     showDeleteSuccess () {
       this.$vs.notify({

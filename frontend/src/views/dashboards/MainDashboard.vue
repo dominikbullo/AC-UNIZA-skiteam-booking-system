@@ -64,7 +64,6 @@
           <!-- CHART -->
           <template slot="no-body">
             <div class="mt-10">
-              {{getDisplayStats(item).percent}}
               <vue-apex-charts
                 :options="goalOverviewRadialBar.chartOptions"
                 :series=" [getDisplayStats(item).percent.toFixed(0)]"
