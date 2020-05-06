@@ -60,5 +60,18 @@ export default {
           reject(error)
         })
     })
+  },
+  deleteEvent ({ commit }, event) {
+    console.log('event in actions', event)
+    return new Promise((resolve, reject) => {
+      axios.delete(`/event/${event.id}/`)
+        .then((response) => {
+          commit('DELETE_EVENT', event)
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
   }
 }

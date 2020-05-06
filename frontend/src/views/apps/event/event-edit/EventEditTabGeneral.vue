@@ -58,7 +58,7 @@
                 <!--                           @click="reset_data">Cancel event-->
                 <!--                </vs-button>-->
                 <vs-button class="mt-2" icon-pack="feather" icon="icon-trash-2" type="border" color="danger"
-                           @click="delete_event">Delete event
+                           @click="deleteEvent">Delete event
                 </vs-button>
               </div>
             </div>
@@ -177,18 +177,24 @@ export default {
     reset_data () {
       this.data_local = Object.assign({}, this.data)
     },
-    delete_event () {
-      console.log('id', this.data.id)
-      this.$http.delete(`/event/${this.data.id}/`)
-        .then(response => {
-          console.log('response', response)
+    deleteEvent () {
+      this.$store.dispatch('calendar/deleteEvent', this.data)
+        .then(res => {
+          this.$router.push({ name: 'app-event-calendar' }).catch(() => {
+          })
           this.$vs.notify({
             color: 'success',
             title: 'Event Deleted',
-            text: 'Event has been deleted successfully'
+            text: 'The selected event was successfully deleted'
           })
-          this.$router.push({ name: 'app-event-calendar' }).catch(() => {
+        })
+        .catch(err => {
+          this.$vs.notify({
+            color: 'danger',
+            title: 'Event Not Deleted',
+            text: 'The selected user was successfully deleted'
           })
+          console.error(err)
         })
     }
   }

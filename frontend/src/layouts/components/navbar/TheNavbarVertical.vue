@@ -7,10 +7,8 @@
 
         <!-- SM - OPEN SIDEBAR BUTTON -->
         <feather-icon class="sm:inline-flex xl:hidden cursor-pointer p-2" icon="MenuIcon" @click.stop="showSidebar"/>
-        <div class="demo-alignment mb-base">
-          <h2>You role is {{userRole}}</h2>
-        </div>
-        <div class="demo-alignment mb-base">
+
+        <div class="demo-alignment">
           <vs-radio v-model="userRole" vs-value="admin">admin</vs-radio>
           <vs-radio v-model="userRole" vs-value="coach">coach</vs-radio>
           <vs-radio v-model="userRole" vs-value="parent">parent</vs-radio>

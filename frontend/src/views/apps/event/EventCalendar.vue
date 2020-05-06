@@ -4,10 +4,7 @@
       <div class="calendar-view  no-scroll-content">
         <FullCalendar
           :events="calendarEvents"
-          :header="{
-            left: 'prev,next today',
-            center: 'title',
-            right: 'timeGridDay,timeGridWeek,dayGridMonth,listWeek'}"
+          :header="calendarConfig.header"
           :locale="locale"
           :now-indicator="true"
           :plugins="calendarPlugins"
@@ -30,7 +27,8 @@
           @eventMouseEnter="handleEventMouseEnter"
           @select="handleSelectClick"
           class="event-calendar"
-          default-view="timeGridWeek"
+          :views="calendarConfig.views"
+          :default-view="calendarConfig.views.defaultView"
           :editable="calendarConfig.editable"
           height="parent"
           ref="fullCalendar"
@@ -143,9 +141,23 @@ export default {
       ],
       locale: skLocale,
 
+
       calendarConfig: {
         selectable: false,
-        editable: false
+        editable: false,
+        header: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'timeGridThreeDay,timeGridWeek,dayGridMonth,listWeek' // this will place the button on the right hand side
+        },
+        views: {
+          timeGridThreeDay: {
+            type: 'timeGrid',
+            duration: { days: 3 },
+            buttonText: '3 dni'
+          },
+          defaultView: 'timeGridWeek'
+        }
       },
 
       editedEvent: null,
@@ -264,16 +276,21 @@ export default {
       })
     },
     deleteEvent () {
-      console.log('id', this.editedEvent)
-      this.$http.delete(`/event/${this.editedEvent.id}/`)
-        .then(response => {
-          console.log('response', response)
+      this.$store.dispatch('calendar/deleteEvent', this.editedEvent)
+        .then(res => {
           this.$vs.notify({
             color: 'success',
             title: 'Event Deleted',
-            text: 'Event has been deleted successfully'
+            text: 'The selected event was successfully deleted'
           })
-          this.$store.dispatch('calendar/fetchEvents')
+        })
+        .catch(err => {
+          this.$vs.notify({
+            color: 'danger',
+            title: 'Event Not Deleted',
+            text: 'The selected user was successfully deleted'
+          })
+          console.error(err)
         })
     },
     showDeleteSuccess () {
@@ -348,6 +365,10 @@ export default {
       }
     }
   }
+
+  /*.fc-button-group {*/
+
+  /*}*/
 
   @media screen and (min-width: 1201px) and (max-width: 1211px),
   only screen and (min-width: 636px) and (max-width: 991px) {

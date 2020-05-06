@@ -18,5 +18,9 @@ export default {
   UPDATE_EVENT (state, event) {
     const eventIndex = state.events.findIndex((e) => e.id === event.id)
     Object.assign(state.events[eventIndex], event)
+  },
+  DELETE_EVENT (state, event) {
+    const eventIndex = state.events.findIndex((e) => e.id === event.id)
+    state.events.splice(eventIndex, 1)
   }
 }
