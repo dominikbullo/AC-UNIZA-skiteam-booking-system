@@ -207,7 +207,7 @@ export default {
           this.$vs.notify({
             color: 'danger',
             title: 'Event Not Deleted',
-            text: 'The selected user was successfully deleted'
+            text: 'The selected user wasn\'t  deleted'
           })
           console.error(err)
         })

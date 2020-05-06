@@ -28,16 +28,19 @@ class BaseEventSerializer(serializers.ModelSerializer):
     # TODO
     #  category =
 
+    def validate(self, data):
+        # don't want to change any type
+        participants = data.get('participants', None)
+        type = data.get('type', None)
+        return data
+
     #  RES(update): https://riptutorial.com/django-rest-framework/example/25521/updatable-nested-serializers
     #  RES(delete): https://stackoverflow.com/questions/42159480/delete-member-of-many-to-many-relationship-django-rest-framework
     #  RES: https://stackoverflow.com/questions/28706072/drf-3-creating-many-to-many-update-create-serializer-with-though-table
     def update(self, instance, validated_data):
-        # TODO if updating then -> set all? Probably yes
         participants = validated_data.get('participants', None)
 
         instance = super(BaseEventSerializer, self).update(instance, validated_data)
-        if participants:
-            instance.participants.set(participants)
         instance.save()
         return instance
 
