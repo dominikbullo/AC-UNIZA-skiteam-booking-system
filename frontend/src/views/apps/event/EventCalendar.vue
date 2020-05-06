@@ -50,34 +50,50 @@
             <div class="vx-col flex-1" id="event-info-col-1">
               <table>
                 <tr>
-                  <td class="font-semibold">Type</td>
+                  <td class="font-bold">Type</td>
                   <td>{{ editedEvent.title }}</td>
                 </tr>
                 <tr>
-                  <td class="font-semibold">Skis</td>
-                  <td>{{ editedEvent.additional_info }}</td>
+                  <td class="font-bold">Location</td>
+                  <td>{{ editedEvent.location }}</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <vs-divider></vs-divider>
+          <div class="vx-row">
+            <div class="vx-col flex-1" id="event-info-col-2">
+              <table>
+                <tr>
+                  <td class="font-bold">Start</td>
+                  <td>{{ editedEvent.start | time }}</td>
                 </tr>
                 <tr>
-                  <td class="font-semibold">Skis</td>
+                  <td class="font-bold">Skis</td>
                   <td>{{ editedEvent.skis_type }}</td>
                 </tr>
               </table>
             </div>
-            <div class="vx-col flex-1" id="event-info-col-2">
+            <div class="vx-col flex-1" id="event-info-col-3">
               <table>
                 <tr>
-                  <td class="font-semibold">Location</td>
-                  <td>{{ editedEvent.location }}</td>
+                  <td class="font-bold">End</td>
+                  <td>{{ editedEvent.end | time }}</td>
                 </tr>
                 <tr>
-                  <td class="font-semibold">Start</td>
-                  <td>{{ editedEvent.start | time }}</td>
+                  <td class="font-bold">Skis</td>
+                  <td>{{ editedEvent.skis_type }}</td>
                 </tr>
-
               </table>
             </div>
           </div>
-
+          <!-- TODO: if exist -->
+          <div class="vx-row">
+            <div class="vx-col">
+              <p class="font-bold mr-5">Additional information:</p>
+              <p>{{ editedEvent.additional_info }}</p>
+            </div>
+          </div>
           <div v-if="$acl.check('isCoach')">
             <vs-divider>Coach zone</vs-divider>
             <div class="vx-col w-full flex flex-wrap items-center justify-center">
@@ -105,7 +121,6 @@
           </ul>
 
         </div>
-
       </vs-prompt>
 
     </vx-card>
@@ -366,9 +381,15 @@ export default {
     }
   }
 
-  /*.fc-button-group {*/
-
-  /*}*/
+  .my-column {
+    table {
+      td {
+        padding-right: .5rem;
+        padding-bottom: .8rem;
+        word-break: break-all;
+      }
+    }
+  }
 
   @media screen and (min-width: 1201px) and (max-width: 1211px),
   only screen and (min-width: 636px) and (max-width: 991px) {

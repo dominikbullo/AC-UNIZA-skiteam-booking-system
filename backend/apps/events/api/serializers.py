@@ -33,14 +33,13 @@ class BaseEventSerializer(serializers.ModelSerializer):
     #  RES: https://stackoverflow.com/questions/28706072/drf-3-creating-many-to-many-update-create-serializer-with-though-table
     def update(self, instance, validated_data):
         # TODO if updating then -> set all? Probably yes
-        # FIXME
-        participants = validated_data.pop('participants')
-        print(*participants, sep=", ")
+        participants = validated_data.get('participants', None)
+
         instance = super(BaseEventSerializer, self).update(instance, validated_data)
-        instance.participants.set(participants)
+        if participants:
+            instance.participants.set(participants)
         instance.save()
         return instance
-
 
 class EventSerializer(BaseEventSerializer):
     class Meta:

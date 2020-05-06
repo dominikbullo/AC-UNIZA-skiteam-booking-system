@@ -73,5 +73,22 @@ export default {
           reject(error)
         })
     })
+  },
+  editEvent ({ commit }, event) {
+    console.log('edit event in actions', event)
+    return new Promise((resolve, reject) => {
+      delete event['participants']
+      axios.patch(`/event/${event.id}/`, event)
+        .then((response) => {
+          commit('UPDATE_EVENT', response)
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
   }
+  // updateOrAddEvent ({ commit }, event) {
+  //   commit('UPDATE_EVENT', event.data)
+  // }
 }

@@ -7,7 +7,7 @@
         <div>
           <!-- DOB -->
           <vs-input class="w-full mt-4" label="Event Title" v-model="data_local.title"
-                    v-validate="{regex: '^\\+?([0-9]+)$' }" name="mobile"/>
+                    name="mobile"/>
           <span class="text-danger text-sm" v-show="errors.has('mobile')">{{ errors.first('mobile') }}</span>
 
           <div class="mt-4">
@@ -73,7 +73,7 @@
           <!-- Bio -->
           <div class="mt-4">
             <label class="text-sm">Additional information</label>
-            <vs-textarea class="w-full" height="110px" v-model="data_local.additional_info"
+            <vs-textarea id="text-area-edit-event" class="w-full" v-model="data_local.additional_info"
                          placeholder="Additional information about event..."/>
           </div>
 
@@ -146,7 +146,6 @@ export default {
         enableTime: true,
         altInput: true,
         altFormat: 'd.m.Y H:i',
-        maxDate: new Date()
       },
       email: this.data.canceled,
 
@@ -173,6 +172,22 @@ export default {
       if (!this.validateForm) return
       console.log('Save changes with data', this.data_local)
 
+      this.$store.dispatch('calendar/editEvent', this.data_local)
+        .then(res => {
+          this.$vs.notify({
+            color: 'success',
+            title: 'Event Deleted',
+            text: 'The selected event was successfully edited'
+          })
+        })
+        .catch(err => {
+          this.$vs.notify({
+            color: 'danger',
+            title: 'Event Not Changed',
+            text: err.message
+          })
+          console.error(err)
+        })
     },
     reset_data () {
       this.data_local = Object.assign({}, this.data)
@@ -200,3 +215,9 @@ export default {
   }
 }
 </script>
+
+<style>
+  #text-area-edit-event {
+    min-height: 110px
+  }
+</style>
