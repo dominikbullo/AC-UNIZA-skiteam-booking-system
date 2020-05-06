@@ -9,9 +9,23 @@
         </div>
         <ul class="centerx">
           <li :key="user.id" class="mb-2" v-for="user in data">
-            {{user}}
             <vs-checkbox
-              :vs-value="user.username"
+              :vs-value="user.id"
+              color="success"
+              v-model="data_local">
+              {{ user.displayName }}
+            </vs-checkbox>
+          </li>
+        </ul>
+      </div>
+      <div class="vx-col w-full md:w-1/2">
+        <div class="flex items-end mb-5">
+          <span class="leading-none font-medium">Have't been logged in to the event</span>
+        </div>
+        <ul class="centerx">
+          <li :key="user.id" class="mb-2" v-for="user in usersData">
+            <vs-checkbox
+              :vs-value="user.id"
               color="success"
               v-model="data_local">
               {{ user.displayName }}
@@ -19,18 +33,12 @@
           </li>
         </ul>
 
-      </div>
-      <div class="vx-col w-full md:w-1/2">
-        <div class="flex items-end mb-5">
-          <span class="leading-none font-medium">Have't been logged in to the event</span>
-        </div>
-        <pre>{{data_local}}</pre>
-
         <!--        <pre>{{data}}</pre>-->
       </div>
     </div>
     <div class="vx-row">
       <div class="vx-col w-full">
+        {{data_local}}
         <div class="mt-8 flex flex-wrap items-center justify-end">
           <vs-button :disabled="!validateForm" @click="save_changes" class="ml-auto mt-2">Save Changes</vs-button>
           <vs-button @click="reset_data" class="ml-4 mt-2" color="warning" type="border">Reset</vs-button>
@@ -45,6 +53,7 @@
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
 import vSelect from 'vue-select'
+import moduleUserManagement from '@/store/user-management/moduleUserManagement'
 
 export default {
   components: {
@@ -59,7 +68,7 @@ export default {
   },
   data () {
     return {
-      data_local: JSON.parse(JSON.stringify(this.data)),
+      data_local: this.formatLocalData(),
 
       langOptions: [
         {
@@ -76,7 +85,29 @@ export default {
   computed: {
     validateForm () {
       return !this.errors.any()
+    },
+    usersData () {
+      return this.$store.state.userManagement.users
     }
+  },
+  methods: {
+    reset_data () {
+      this.data_local = this.formatLocalData()
+    },
+    formatLocalData () {
+      const cleanData = []
+      Object.values(this.data).forEach((element) => {
+        cleanData.unshift(element.id)
+      })
+      return cleanData
+    }
+  },
+  created () {
+    if (!moduleUserManagement.isRegistered) {
+      this.$store.registerModule('userManagement', moduleUserManagement)
+      moduleUserManagement.isRegistered = true
+    }
+    this.$store.dispatch('userManagement/fetchUsers')
   }
 }
 </script>
