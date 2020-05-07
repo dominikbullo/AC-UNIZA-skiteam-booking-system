@@ -5,33 +5,22 @@
         <FullCalendar
           :events="calendarEvents"
           :header="calendarConfig.header"
-          :locale="locale"
+          :custom-buttons="calendarConfig.customButtons"
+          :locale="calendarConfig.locale"
           :now-indicator="true"
           :plugins="calendarPlugins"
           :select-mirror="true"
           :selectable="calendarConfig.selectable"
-          :slot-label-format="{
-            hour: '2-digit',
-            minute: '2-digit',
-            omitZeroMinute: false,
-            meridiem: 'short'
-          }"
-          :title-format="{
-          month: 'long',
-          year: 'numeric',
-          day: 'numeric',
-          weekday: 'long'
-          }"
+          :slot-label-format="calendarConfig.slot_label_format"
+          :title-format="calendarConfig.title_format"
           :weekends="true"
           @eventClick="handleEventClick"
           @eventMouseEnter="handleEventMouseEnter"
-          @select="handleSelectClick"
-          class="event-calendar"
+          @select="handleSelect"
           :views="calendarConfig.views"
           :default-view="calendarConfig.views.defaultView"
           :editable="calendarConfig.editable"
           height="parent"
-          ref="fullCalendar"
         />
       </div>
 
@@ -123,6 +112,33 @@
         </div>
       </vs-prompt>
 
+
+      <!-- ADD EVENT -->
+      <vs-prompt
+        :active.sync="addEventPrompt.active"
+        :is-valid="true"
+        @accept="changeUserChildrenOnEvent"
+        accept-text="Save"
+        class="calendar-add-event-dialog"
+        title="Add event">
+        <h2>Hi from add event</h2>
+
+        <vs-input name="event-name" v-validate="'required'" class="w-full" label-placeholder="Event Title"
+                  v-model="title"></vs-input>
+        <div class="my-4">
+          <small class="date-label">Start Date</small>
+          <datepicker :language="$vs.rtl ? langHe : langEn" name="start-date" v-model="startDate"
+                      :disabled="disabledFrom"></datepicker>
+        </div>
+        <div class="my-4">
+          <small class="date-label">End Date</small>
+          <datepicker :language="$vs.rtl ? langHe : langEn" :disabledDates="disabledDatesTo" name="end-date"
+                      v-model="endDate"></datepicker>
+        </div>
+        <vs-input name="event-url" v-validate="'url'" class="w-full mt-6" label-placeholder="Event URL" v-model="url"
+                  :color="!errors.has('event-url') ? 'success' : 'danger'"></vs-input>
+      </vs-prompt>
+
     </vx-card>
   </div>
 </template>
@@ -139,6 +155,7 @@ import vSelect from 'vue-select'
 
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -154,13 +171,13 @@ export default {
         interactionPlugin,
         listPlugin// needed for dateClick
       ],
-      locale: skLocale,
-
 
       calendarConfig: {
-        selectable: false,
-        editable: false,
+        locale: skLocale,
+        selectable: this.$acl.check('isCoach'),
+        editable: this.$acl.check('isCoach'),
         header: {
+          // left: 'prev,next today addEvent',
           left: 'prev,next today',
           center: 'title',
           right: 'timeGridThreeDay,timeGridWeek,dayGridMonth,listWeek' // this will place the button on the right hand side
@@ -172,12 +189,38 @@ export default {
             buttonText: '3 dni'
           },
           defaultView: 'timeGridWeek'
+        },
+        customButtons: {
+          addEvent: {
+            text: 'Add Event',
+            click () {
+              console.log('test', this.addEventPrompt)
+            }
+          }
+        },
+        slot_label_format: {
+          hour: '2-digit',
+          minute: '2-digit',
+          omitZeroMinute: false,
+          meridiem: 'short'
+        },
+        title_format: {
+          month: 'long',
+          year: 'numeric',
+          day: 'numeric',
+          weekday: 'long'
         }
       },
 
       editedEvent: null,
 
       childAddToEventPrompt: {
+        active: false,
+        onEvent: [],
+        selected: []
+      },
+
+      addEventPrompt: {
         active: false,
         onEvent: [],
         selected: []
@@ -227,10 +270,14 @@ export default {
     }
   },
   methods: {
+    showAddEventDialog () {
+      this.addEventPrompt.active = true
+    },
     handleDateClick (arg) {
       console.log('handling date click', arg)
     },
     handleEventClick (arg) {
+      console.log('event click arf', arg.event.id)
       if (this.$acl.not.check('isCoach') && new Date(arg.event.start).valueOf() < new Date().valueOf()) {
         this.$vs.notify({
           color: 'danger',
@@ -257,23 +304,22 @@ export default {
       myChildrenOnEvent.forEach((element) => {
         userNames.unshift(element['username'])
       })
-
       this.childAddToEventPrompt.onEvent = userNames
       this.childAddToEventPrompt.selected = userNames
 
       this.childAddToEventPrompt.active = true
     },
-    handleSelectClick (click) {
-      console.log('handling select click', click)
-      if (click.start.isBefore(this.moment())) {
-        this.$vs.notify({
-          color: 'danger',
-          title: 'Old event',
-          text: 'Cannot change event that already happend'
-        })
-        return false
+    handleSelect (arg) {
+      console.log('handling select click', arg)
+      this.addEventPrompt.active = true
+      const event = {
+        id: new Date().getTime(),
+        title: 'Something',
+        start: arg.start,
+        end: arg.end,
+        allDay: arg.allDay
       }
-      alert(`clicked ${click.startStr} - ${click.endStr}`)
+      this.$store.dispatch('calendar/addEvent', event)
     },
     handleEventMouseEnter (arg) {
       // console.log('handling mouse event enter', arg)

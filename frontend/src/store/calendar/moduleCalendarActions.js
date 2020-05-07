@@ -87,6 +87,20 @@ export default {
           reject(error)
         })
     })
+  },
+  addEvent ({ commit }, event) {
+    console.log('add event in actions', event)
+    commit('ADD_EVENT', event.data)
+    // return new Promise((resolve, reject) => {
+    //   axios.post('/events/', event)
+    //     .then((response) => {
+    //       commit('ADD_EVENT', response.data)
+    //       resolve(response)
+    //     })
+    //     .catch((error) => {
+    //       reject(error)
+    //     })
+    // })
   }
   // updateOrAddEvent ({ commit }, event) {
   //   commit('UPDATE_EVENT', event.data)

@@ -20,10 +20,10 @@ class SeasonSerializer(serializers.ModelSerializer):
 # RES: https://github.com/richardtallent/vue-simple-calendar#calendar-item-properties
 # RES(Nested relationships): https://medium.com/@raaj.akshar/creating-reverse-related-objects-with-django-rest-framework-b1952ddff1c
 class BaseEventSerializer(serializers.ModelSerializer):
-    title = serializers.CharField(source='get_type_display')
+    title = serializers.CharField(source='get_type_display', read_only=True)
 
     # RES: http://www.tomchristie.com/rest-framework-2-docs/api-guide/relations
-    participants = BaseProfileSerializer(many=True)
+    participants = BaseProfileSerializer(many=True, required=False)
 
     # TODO
     #  category =
