@@ -46,6 +46,10 @@
                   <td class="font-bold">Location</td>
                   <td>{{ editedEvent.location }}</td>
                 </tr>
+                <tr>
+                  <td class="font-bold">Category</td>
+                  <td>{{ editedEvent.category}}</td>
+                </tr>
               </table>
             </div>
           </div>
@@ -117,26 +121,37 @@
       <vs-prompt
         :active.sync="addEventPrompt.active"
         :is-valid="true"
-        @accept="changeUserChildrenOnEvent"
+        @accept="newEvent"
         accept-text="Save"
         class="calendar-add-event-dialog"
         title="Add event">
-        <h2>Hi from add event</h2>
-        <p>Choices</p>
-        <p>{{eventChoices}}</p>
 
-        <p>Categories</p>
-        <p>{{this.$store.state.calendar.eventConfig.categories}}</p>
+        <!--        <p>Choices</p>-->
+        <!--        <p>{{eventChoices}}</p>-->
 
-        <p>DATA</p>
-        <p>{{addEvent}}</p>
+        <!--        <p>Categories</p>-->
+        <!--        <p>{{this.$store.state.calendar.eventConfig.categories}}</p>-->
+
+        <!--        <p>DATA</p>-->
+        <!--        <p>{{addEvent}}</p>-->
 
 
         <vs-input name="event-name" v-validate="'required'" class="w-full" label-placeholder="Event Title"
-                  v-model="addEvent.title"></vs-input>
+                  v-model="newEvent.title"></vs-input>
+
+        <div class="mt-4">
+          <label class="text-sm">Categories</label>
+          <!-- RES: https://vue-select.org/ -->
+          <v-select multiple
+                    :closeOnSelect="false"
+                    label="displayName"
+                    v-model="addEventPrompt.selected"
+                    :options="addEventPrompt.options"/>
+        </div>
+
         <div class="mt-4">
           <label class="text-sm">Start</label>
-          <flat-pickr v-model="addEvent.startDate"
+          <flat-pickr v-model="newEvent.startDate"
                       :config="datePickerConfig"
                       class="w-full"
                       v-validate="'required'"
@@ -146,7 +161,7 @@
 
         <div class="mt-4">
           <label class="text-sm">End</label>
-          <flat-pickr v-model="addEvent.endDate"
+          <flat-pickr v-model="newEvent.endDate"
                       :config="datePickerConfig"
                       class="w-full"
                       v-validate="'required'"
@@ -252,7 +267,8 @@ export default {
       addEventPrompt: {
         active: false,
         onEvent: [],
-        selected: []
+        selected: [],
+        options: []
       },
 
       fromDate: null,
@@ -269,7 +285,7 @@ export default {
         minDate: null
       },
 
-      addEvent: {
+      newEvent: {
         showDate: new Date(),
         disabledFrom: false,
         disabledDatesTo: false,
@@ -302,8 +318,19 @@ export default {
     }
   },
   methods: {
-    onSwipeLeft () {
-      console.log('swipe left')
+    addEvent () {
+      console.log('adding event')
+      // const event = {
+      //   type: 'ATHLETIC_TRAINING',
+      //   start: arg.start,
+      //   end: arg.end,
+      //   allDay: arg.allDay,
+      //   season: 1,
+      //   location: 1,
+      //   category: [1, 2, 3],
+      //   resourcetype: 'event'
+      // }
+      // this.$store.dispatch('calendar/addEvent', event)
     },
     handleDateClick (arg) {
       console.log('handling date click', arg)
@@ -318,10 +345,16 @@ export default {
         })
         return false
       }
-
       this.editedEvent = Object.values(this.calendarEvents).find(obj => {
         return obj.id === parseInt(arg.event.id)
       })
+
+      const categories = []
+      Object.values(this.editedEvent.category).forEach((element) => {
+        categories.unshift(element['displayName'])
+      })
+      this.editedEvent.category = categories
+
 
       // IDEA: Check with userChildren() array
       // console.log('participants', this.editedEvent['participants'])
@@ -345,16 +378,30 @@ export default {
       console.log('handling select click', arg)
       this.addEventPrompt.active = true
       console.log('handling select click123', arg.start)
-      this.addEvent.startDate = arg.start
-      this.addEvent.endDate = arg.end
-      // const event = {
-      //   id: new Date().getTime(),
-      //   title: 'Something',
-      //   start: arg.start,
-      //   end: arg.end,
-      //   allDay: arg.allDay
-      // }
-      // this.$store.dispatch('calendar/addEvent', event)
+      this.newEvent.startDate = arg.start
+      this.newEvent.endDate = arg.end
+      //    {
+      // "type":"ATHLETIC_TRAINING",
+      // "start":"2020-05-06T08:55:00+02:00",
+      // "end":"2020-05-06T11:55:00+02:00",
+      // "season":1,
+      // "location":1,
+      // "category":[
+      //    1
+      // ],
+      // "resourcetype":"event"
+
+      const event = {
+        type: 'ATHLETIC_TRAINING',
+        start: arg.start,
+        end: arg.end,
+        allDay: arg.allDay,
+        season: 1,
+        location: 1,
+        category: [1, 2],
+        resourcetype: 'event'
+      }
+      this.$store.dispatch('calendar/addEvent', event)
     },
     handleEventMouseEnter (arg) {
       // console.log('handling mouse event enter', arg)
@@ -416,7 +463,9 @@ export default {
     if (this.$acl.check('isCoach')) {
       console.log('Hello coach')
       this.$store.dispatch('calendar/fetchEventChoices')
-      this.$store.dispatch('calendar/fetchCategories')
+      this.$store.dispatch('calendar/fetchCategories').then((response) => {
+        this.addEventPrompt.options = this.addEventPrompt.selected = response.data.results
+      })
     }
   }
 }

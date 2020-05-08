@@ -20,7 +20,7 @@ class SeasonSerializer(serializers.ModelSerializer):
 
 class CategorySerializer(serializers.ModelSerializer):
     displayName = serializers.CharField(source='get_name_display', read_only=True)
-    season = SeasonSerializer(many=False)
+    season = SeasonSerializer(many=False, read_only=True)
 
     # TODO LESS info base user serializer? Idk
     # members = ChildSerializer(many=True)
@@ -37,14 +37,18 @@ class BaseEventSerializer(serializers.ModelSerializer):
 
     # RES: http://www.tomchristie.com/rest-framework-2-docs/api-guide/relations
     participants = BaseProfileSerializer(many=True, required=False)
-
-    # TODO
-    #  category =
+    season = SeasonSerializer(many=False, read_only=True)
+    category = CategorySerializer(many=True, read_only=True)
 
     def validate(self, data):
         # don't want to change any type
         participants = data.get('participants', None)
-        type = data.get('type', None)
+
+        # If doesnt have season then default current season
+        if not data.get('season', None):
+            data["season"] = Season.objects.get(current=True)
+
+        # TODO: If all categories are from same season
         return data
 
     #  RES(update): https://riptutorial.com/django-rest-framework/example/25521/updatable-nested-serializers
