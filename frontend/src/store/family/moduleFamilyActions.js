@@ -3,7 +3,7 @@ import axios from '@/axios.js'
 export default {
   addChild ({ commit }, payload) {
     payload.profile.user_role = 'child'
-    console.log(' [FAMILY STORE ACT] Add child payload', payload)
+    // console.log(' [FAMILY STORE ACT] Add child payload', payload)
 
     return new Promise((resolve, reject) => {
       axios.post('/child/', { user: payload })
@@ -18,7 +18,7 @@ export default {
     })
   },
   fetchFamily ({ commit }, familyId) {
-    console.log('[FAMILY STORE ACT] Fetching family', familyId)
+    // console.log('[FAMILY STORE ACT] Fetching family', familyId)
 
     return new Promise((resolve, reject) => {
       axios.get(`/family/${familyId}/`)
@@ -35,17 +35,14 @@ export default {
     })
   },
   // RES https://stackoverflow.com/questions/53501185/how-to-post-query-parameters-with-axios
-  fetchUserStats ({ commit }, payload = { query: { season: 'current' } }) {
-    if (!payload.query) {
-      payload.query = { season: 'current' }
-    }
+  fetchUserStats ({ commit }, payload = { query: { season: {} } }) {
 
     let localId = this.state.AppActiveUser.profile.id
 
     if ('username' in payload && payload.username !== undefined) {
       localId = payload.username
     }
-    console.log('fetchUserStats', localId)
+    // console.log('fetchUserStats', localId)
 
     return new Promise((resolve, reject) => {
       axios.get(`/profile/${localId}/stats/`, { params: payload.query })

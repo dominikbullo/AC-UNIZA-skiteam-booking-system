@@ -236,7 +236,7 @@ export default {
         })
         .then((res) => {
           // FIXME
-          console.log('res data', res.data)
+          // console.log('res data', res.data)
           this.stats = Object.values(res.data)[0]
           return res.data
         })
@@ -257,7 +257,7 @@ export default {
       return this.$store.getters.scrollbarTag
     },
     familyChildren () {
-      console.log('family children', this.$store.getters['family/familyChildren'])
+      // console.log('family children', this.$store.getters['family/familyChildren'])
       return this.$store.getters['family/familyChildren']
     }
   },

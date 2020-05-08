@@ -3,15 +3,23 @@ from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
-from apps.events.models import Event, Season
-from apps.events.api.serializers import EventPolymorphicSerializer, SeasonSerializer
+from apps.events.models import Event, Season, Category
+from apps.events.api.serializers import EventPolymorphicSerializer, SeasonSerializer, CategorySerializer
 from apps.events.api.permissions import IsOwnerOrReadOnly, IsOwnFamilyOrReadOnly
 
 # RES: https://github.com/LondonAppDeveloper/recipe-app-api/blob/master/app/recipe/views.py
 # RES: https://stackoverflow.com/questions/51016896/how-to-serialize-inherited-models-in-django-rest-framework
 from apps.users.models import Profile
+from core.choices import get_all_choices
+from core.views import get_custom_queryset
+
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    serializer_class = CategorySerializer
+
+    def get_queryset(self):
+        return get_custom_queryset(self.request, Category).order_by('year_from')
 
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -69,14 +77,12 @@ class EventViewSet(viewsets.ModelViewSet):
 
         return Response(event_serializer.data, status=status.HTTP_200_OK)
 
+    @action(detail=False, url_path='choices')
+    def get_event_choices(self, request):
+        return Response(get_all_choices(), status=status.HTTP_200_OK)
+
     def get_queryset(self):
-        queryset = Event.objects.all()
-
-        if self.request.query_params.get('season') == "current":
-            print("Getting events from current season")
-            queryset = queryset.filter(season=Season.objects.get(current=True))
-
-        return queryset
+        return get_custom_queryset(self.request, Event).order_by('start')
 
 
 class SeasonViewSet(viewsets.ModelViewSet):

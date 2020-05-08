@@ -15,8 +15,8 @@ export default {
    *
    * @default fetching from current active season
    */
-  fetchEvents ({ commit }, payload = { query: { season: 'current' } }) {
-    console.log('payload fetch events', payload)
+  fetchEvents ({ commit }, payload = { query: { season: {} } }) {
+    // console.log('payload fetch events', payload)
 
     return new Promise((resolve, reject) => {
       axios.get('/event/', {
@@ -36,6 +36,30 @@ export default {
     return new Promise((resolve, reject) => {
       axios.get(`/event/${eventId}/`)
         .then((response) => {
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
+  },
+  fetchEventChoices ({ commit }, payload) {
+    return new Promise((resolve, reject) => {
+      axios.get('/event/choices/')
+        .then((response) => {
+          commit('SET_EVENT_CHOICES', response.data)
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
+  },
+  fetchCategories ({ commit }, payload) {
+    return new Promise((resolve, reject) => {
+      axios.get('/categories/')
+        .then((response) => {
+          commit('SET_CATEGORIES', response.data.results)
           resolve(response)
         })
         .catch((error) => {
@@ -90,6 +114,7 @@ export default {
   },
   addEvent ({ commit }, event) {
     console.log('add event in actions', event)
+    // TODO
     commit('ADD_EVENT', event.data)
     // return new Promise((resolve, reject) => {
     //   axios.post('/events/', event)

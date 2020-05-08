@@ -235,17 +235,17 @@ export default {
         })
         .then((res) => {
           // FIXME
-          console.log('res data', res.data)
+          // console.log('res data', res.data)
           this.stats = Object.values(res.data)[0]
           return res.data
         })
     },
     getDisplayStats (stats) {
-      console.log("stat", stats)
+      // console.log("stat", stats)
       if (stats === undefined) {
         return 'undefined'
       }
-      console.log("stat1", stats)
+      // console.log("stat1", stats)
       return {
         'percent': stats.count / stats.total * 100,
         'percentStr': `${(stats.count / stats.total * 100).toFixed(2)}%`,
@@ -258,13 +258,13 @@ export default {
       return this.$store.getters.scrollbarTag
     },
     familyChildren () {
-      console.log('family children', this.$store.getters['family/familyChildren'])
+      // console.log('family children', this.$store.getters['family/familyChildren'])
       return this.$store.getters['family/familyChildren']
     }
   },
   created () {
-    console.log('user', this.$store.state.AppActiveUser)
-    console.log('user family_id', this.$store.state.AppActiveUser.profile.family_id)
+    // console.log('user', this.$store.state.AppActiveUser)
+    // console.log('user family_id', this.$store.state.AppActiveUser.profile.family_id)
 
     this.$store.dispatch('family/fetchFamily', this.$store.state.AppActiveUser.profile.family_id)
       .then(() => {

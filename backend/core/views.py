@@ -1,12 +1,10 @@
-from django.conf import settings
-from django.views.generic.base import TemplateView
+from apps.events.models import Season
 
 
-class IndexTemplateView(TemplateView):
+def get_custom_queryset(request, db_object):
+    if request.query_params.get('season') == "all":
+        print("Getting all events")
+        return db_object.objects.all()
 
-    def get_template_names(self):
-        if settings.DEBUG:
-            template_name = "index-dev.html"
-        else:
-            template_name = "index.html"
-        return template_name
+    print("Getting ONLY CURRENT season data")
+    return db_object.objects.filter(season=Season.objects.get(current=True))

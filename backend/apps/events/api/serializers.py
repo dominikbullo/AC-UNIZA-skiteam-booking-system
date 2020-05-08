@@ -3,8 +3,9 @@ from rest_framework import serializers
 
 from rest_polymorphic.serializers import PolymorphicSerializer
 
+from apps.family.api.serializers import ChildSerializer
 from core import choices
-from apps.events.models import Event, SkiTraining, SkiRace, Season
+from apps.events.models import Event, SkiTraining, SkiRace, Season, Category
 
 from apps.family.models import Child
 from apps.users.api.serializers import BaseProfileSerializer
@@ -14,6 +15,18 @@ from apps.users.models import Profile
 class SeasonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Season
+        fields = "__all__"
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    displayName = serializers.CharField(source='get_name_display', read_only=True)
+    season = SeasonSerializer(many=False)
+
+    # TODO LESS info base user serializer? Idk
+    # members = ChildSerializer(many=True)
+
+    class Meta:
+        model = Category
         fields = "__all__"
 
 
@@ -112,57 +125,6 @@ class UserStatSerializer(serializers.ModelSerializer):
                 }
 
                 events = Event.objects.filter(**query).order_by('start')
-                ret[str(season)][event_type] = {}
-                ret[str(season)][event_type]["name"] = value
-                ret[str(season)][event_type]["count"] = user.events.filter(**query).count()
-                ret[str(season)][event_type]["total"] = events.count()
-
-        return ret
-
-    class Meta:
-        model = Profile
-        fields = "__all__"
-        read_only_fields = ('user_role',)
-
-
-class UserStatSerializer(serializers.ModelSerializer):
-
-    def to_representation(self, instance):
-        return self.get_data(instance)
-
-    def get_data(self, instance):
-        user = instance["user"]
-        seasons = instance["seasons"]
-
-        try:
-            kid = Child.objects.get(user__profile=user)
-        except Exception:
-            error = {"message": "Child not found. Stats are currently only available for Children"}
-            raise serializers.ValidationError(error)
-
-        ret = {}
-        for season in seasons:
-            print("season ", season)
-            try:
-                # TODO category -> user which can be on this event
-                kid_asc = kid.categories.get(season=season)
-                ret[str(season)] = {}
-                print("foud and creating child", season)
-            except Exception:
-                continue
-                pass
-
-            for event_type, value in choices.EventTypeChoices.choices:
-                # RES: https://docs.djangoproject.com/en/dev/topics/db/queries/#complex-lookups-with-q-objects
-                query = {
-                    "season"  : season,
-                    "type"    : event_type,
-                    "end__lte": timezone.now(),
-                    "category": kid_asc,
-                    "canceled": False
-                }
-
-                events = Event.objects.filter(**query).order_by('start_date')
                 ret[str(season)][event_type] = {}
                 ret[str(season)][event_type]["name"] = value
                 ret[str(season)][event_type]["count"] = user.events.filter(**query).count()

@@ -112,8 +112,6 @@ class SkiTraining(SkiEvent):
     gates = models.CharField(max_length=50, blank=True, null=True)
     number_of_runs = models.CharField(max_length=50, blank=True, null=True)
 
-    extra_field_for_ski_training = models.CharField(max_length=50, blank=True, null=True)
-
     # RES: https://stackoverflow.com/questions/4904230/django-change-default-value-for-an-extended-model-class
     # FIXME Validation -> SkiTraining could be only type EventTypeChoices.SKI_TRAINING -> return error if try to override
     def __init__(self, *args, **kwargs):

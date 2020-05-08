@@ -1,6 +1,7 @@
 <template>
   <div id="user-edit-tab-info">
-    <!--    <pre>{{data_local}}</pre>-->
+    <p>{{data_local}}</p>
+    <p>{{this.$store.state.calendar.eventChoices}}</p>
     <div class="vx-row">
       <div class="vx-col w-full md:w-1/2">
         <!-- Col Content -->
@@ -145,7 +146,7 @@ export default {
       datePickerConfig: {
         enableTime: true,
         altInput: true,
-        altFormat: 'd.m.Y H:i',
+        altFormat: 'd.m.Y H:i'
       },
       email: this.data.canceled,
 

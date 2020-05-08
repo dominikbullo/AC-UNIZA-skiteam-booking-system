@@ -122,21 +122,45 @@
         class="calendar-add-event-dialog"
         title="Add event">
         <h2>Hi from add event</h2>
+        <p>Choices</p>
+        <p>{{eventChoices}}</p>
+
+        <p>Categories</p>
+        <p>{{this.$store.state.calendar.eventConfig.categories}}</p>
+
+        <p>DATA</p>
+        <p>{{addEvent}}</p>
+
 
         <vs-input name="event-name" v-validate="'required'" class="w-full" label-placeholder="Event Title"
-                  v-model="title"></vs-input>
-        <div class="my-4">
-          <small class="date-label">Start Date</small>
-          <datepicker :language="$vs.rtl ? langHe : langEn" name="start-date" v-model="startDate"
-                      :disabled="disabledFrom"></datepicker>
+                  v-model="addEvent.title"></vs-input>
+        <div class="mt-4">
+          <label class="text-sm">Start</label>
+          <flat-pickr v-model="addEvent.startDate"
+                      :config="datePickerConfig"
+                      class="w-full"
+                      v-validate="'required'"
+                      name="start"/>
+          <span class="text-danger text-sm" v-show="errors.has('start')">{{ errors.first('start') }}</span>
         </div>
-        <div class="my-4">
-          <small class="date-label">End Date</small>
-          <datepicker :language="$vs.rtl ? langHe : langEn" :disabledDates="disabledDatesTo" name="end-date"
-                      v-model="endDate"></datepicker>
+
+        <div class="mt-4">
+          <label class="text-sm">End</label>
+          <flat-pickr v-model="addEvent.endDate"
+                      :config="datePickerConfig"
+                      class="w-full"
+                      v-validate="'required'"
+                      name="end"/>
+          <span class="text-danger text-sm" v-show="errors.has('end')">{{ errors.first('end') }}</span>
         </div>
-        <vs-input name="event-url" v-validate="'url'" class="w-full mt-6" label-placeholder="Event URL" v-model="url"
-                  :color="!errors.has('event-url') ? 'success' : 'danger'"></vs-input>
+        <!--        <div class="my-4">-->
+        <!--          <small class="date-label">Start Date</small>-->
+        <!--          <datepicker name="start-date" v-model="addEvent.startDate" :disabled="addEvent.disabledFrom"></datepicker>-->
+        <!--        </div>-->
+        <!--        <div class="my-4">-->
+        <!--          <small class="date-label">End Date</small>-->
+        <!--          <datepicker :disabledDates="addEvent.disabledDatesTo" name="end-date" v-model="addEvent.endDate"></datepicker>-->
+        <!--        </div>-->
       </vs-prompt>
 
     </vx-card>
@@ -155,7 +179,6 @@ import vSelect from 'vue-select'
 
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
-import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -212,6 +235,12 @@ export default {
         }
       },
 
+      datePickerConfig: {
+        enableTime: true,
+        altInput: true,
+        altFormat: 'd.m.Y H:i'
+      },
+
       editedEvent: null,
 
       childAddToEventPrompt: {
@@ -240,19 +269,22 @@ export default {
         minDate: null
       },
 
-      showDate: new Date(),
-      disabledFrom: false,
-      id: 0,
-      url: '',
-      title: '',
-      startDate: '',
-      endDate: '',
-      labelLocal: 'none'
+      addEvent: {
+        showDate: new Date(),
+        disabledFrom: false,
+        disabledDatesTo: false,
+        title: '',
+        startDate: '',
+        endDate: ''
+      }
     }
   },
   computed: {
     calendarEvents () {
       return this.$store.state.calendar.events
+    },
+    eventChoices () {
+      return this.$store.state.calendar.eventConfig.choices
     },
     userChildren () {
       // const members = this.$store.state.family.members
@@ -270,14 +302,14 @@ export default {
     }
   },
   methods: {
-    showAddEventDialog () {
-      this.addEventPrompt.active = true
+    onSwipeLeft () {
+      console.log('swipe left')
     },
     handleDateClick (arg) {
       console.log('handling date click', arg)
     },
     handleEventClick (arg) {
-      console.log('event click arf', arg.event.id)
+      console.log('event click', arg)
       if (this.$acl.not.check('isCoach') && new Date(arg.event.start).valueOf() < new Date().valueOf()) {
         this.$vs.notify({
           color: 'danger',
@@ -292,7 +324,7 @@ export default {
       })
 
       // IDEA: Check with userChildren() array
-      console.log('participants', this.editedEvent['participants'])
+      // console.log('participants', this.editedEvent['participants'])
       const myChildrenOnEvent = this.editedEvent['participants'].filter(obj => {
         console.log('obj', obj)
         return obj.family_id === this.$store.state.AppActiveUser.profile.family_id
@@ -312,14 +344,17 @@ export default {
     handleSelect (arg) {
       console.log('handling select click', arg)
       this.addEventPrompt.active = true
-      const event = {
-        id: new Date().getTime(),
-        title: 'Something',
-        start: arg.start,
-        end: arg.end,
-        allDay: arg.allDay
-      }
-      this.$store.dispatch('calendar/addEvent', event)
+      console.log('handling select click123', arg.start)
+      this.addEvent.startDate = arg.start
+      this.addEvent.endDate = arg.end
+      // const event = {
+      //   id: new Date().getTime(),
+      //   title: 'Something',
+      //   start: arg.start,
+      //   end: arg.end,
+      //   allDay: arg.allDay
+      // }
+      // this.$store.dispatch('calendar/addEvent', event)
     },
     handleEventMouseEnter (arg) {
       // console.log('handling mouse event enter', arg)
@@ -377,6 +412,12 @@ export default {
   created () {
     this.$store.dispatch('calendar/fetchEvents')
     this.$store.dispatch('family/fetchFamily', this.$store.state.AppActiveUser.profile.family_id)
+
+    if (this.$acl.check('isCoach')) {
+      console.log('Hello coach')
+      this.$store.dispatch('calendar/fetchEventChoices')
+      this.$store.dispatch('calendar/fetchCategories')
+    }
   }
 }
 

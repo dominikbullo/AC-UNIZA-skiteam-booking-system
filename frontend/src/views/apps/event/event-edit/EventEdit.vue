@@ -70,6 +70,7 @@ export default {
   created () {
     console.log('route', this.$route.params.eventId)
     this.fetch_event(this.$route.params.eventId)
+    this.$store.dispatch('calendar/fetchEventChoices')
   }
 }
 

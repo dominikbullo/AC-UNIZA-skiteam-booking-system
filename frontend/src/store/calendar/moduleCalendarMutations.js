@@ -15,6 +15,12 @@ export default {
   SET_EVENTS (state, events) {
     state.events = events
   },
+  SET_CATEGORIES (state, events) {
+    state.eventConfig.categories = events
+  },
+  SET_EVENT_CHOICES (state, choices) {
+    state.eventConfig.choices = choices
+  },
   UPDATE_EVENT (state, event) {
     const eventIndex = state.events.findIndex((e) => e.id === event.id)
     if (eventIndex === -1) {
