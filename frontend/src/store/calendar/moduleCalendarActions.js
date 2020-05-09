@@ -45,7 +45,7 @@ export default {
   },
   fetchEventChoices ({ commit }, payload) {
     return new Promise((resolve, reject) => {
-      axios.get('/event/choices/')
+      axios.get('/events/choices/')
         .then((response) => {
           commit('SET_EVENT_CHOICES', response.data)
           resolve(response)

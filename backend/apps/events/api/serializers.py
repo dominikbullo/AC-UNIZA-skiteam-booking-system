@@ -22,9 +22,6 @@ class CategorySerializer(serializers.ModelSerializer):
     displayName = serializers.CharField(source='get_name_display', read_only=True)
     season = SeasonSerializer(many=False, read_only=True)
 
-    # TODO LESS info base user serializer? Idk
-    # members = ChildSerializer(many=True)
-
     class Meta:
         model = Category
         fields = "__all__"
@@ -38,7 +35,6 @@ class BaseEventSerializer(serializers.ModelSerializer):
     # RES: http://www.tomchristie.com/rest-framework-2-docs/api-guide/relations
     participants = BaseProfileSerializer(many=True, required=False)
     season = SeasonSerializer(many=False, read_only=True)
-    category = CategorySerializer(many=True, read_only=True)
 
     def validate(self, data):
         # don't want to change any type
@@ -51,17 +47,30 @@ class BaseEventSerializer(serializers.ModelSerializer):
         # TODO: If all categories are from same season
         return data
 
+    # RES: https://stackoverflow.com/questions/28706072/drf-3-creating-many-to-many-update-create-serializer-with-though-table
+    # def create(self, validated_data):
+    #     categories = validated_data.pop('category')
+    #     event = super(BaseEventSerializer, self).create(validated_data)
+    #
+    #     for category in categories:
+    #         d = dict(category)
+    #         Category.objects.get(name=["name"], )
+    #
+    #     return event
+
     #  RES(update): https://riptutorial.com/django-rest-framework/example/25521/updatable-nested-serializers
+    # https://www.django-rest-framework.org/api-guide/serializers/#dealing-with-nested-objects
     #  RES(delete): https://stackoverflow.com/questions/42159480/delete-member-of-many-to-many-relationship-django-rest-framework
     #  RES: https://stackoverflow.com/questions/28706072/drf-3-creating-many-to-many-update-create-serializer-with-though-table
     def update(self, instance, validated_data):
-        participants = validated_data.get('participants', None)
+        # nested_serializer = self.fields['category']
+        # nested_instance = instance.category
+        #
+        # nested_data = validated_data.pop('category')
+        # nested_serializer.update(nested_instance, nested_data)
 
-        instance = super(BaseEventSerializer, self).update(instance, validated_data)
-        # if participants:
-        #     instance.participants = participants
-        instance.save()
-        return instance
+        return super(BaseEventSerializer, self).update(instance, validated_data)
+
 
 class EventSerializer(BaseEventSerializer):
     class Meta:

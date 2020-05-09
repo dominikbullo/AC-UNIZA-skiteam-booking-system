@@ -1,15 +1,25 @@
 <template>
   <div id="user-edit-tab-info">
+    <ul>
+      <li>- [x] Dátum a čas začiatku</li>
+      <li>- [x] Dátum a čas konca</li>
+      <li>- [x] Kategória</li>
+      <li>- [x] Extra informácie</li>
+      <li>- [x] Canceled</li>
+      <li>- [x] Send email</li>
+      <li>- [ ] Typ udalosti</li>
+      <li>- [ ] Typ lyží ak ski udalosť</li>
+    </ul>
+    <br>
+    <p>{{data}}</p>
+    <br>
     <p>{{data_local}}</p>
-    <p>{{this.$store.state.calendar.eventChoices}}</p>
+    <br>
     <div class="vx-row">
       <div class="vx-col w-full md:w-1/2">
         <!-- Col Content -->
         <div>
           <!-- DOB -->
-          <vs-input class="w-full mt-4" label="Event Title" v-model="data_local.title"
-                    name="mobile"/>
-          <span class="text-danger text-sm" v-show="errors.has('mobile')">{{ errors.first('mobile') }}</span>
 
           <div class="mt-4">
             <label class="text-sm">Start</label>
@@ -28,22 +38,19 @@
             <span class="text-danger text-sm" v-show="errors.has('end')">{{ errors.first('end') }}</span>
           </div>
 
-          <!-- Gender -->
-          <!-- TODO: fetch types from server-->
           <div class="mt-4">
+            <label class="text-sm">Categories</label>
+            <!-- RES: https://vue-select.org/ -->
+            <v-select multiple
+                      :closeOnSelect="false"
+                      label="displayName"
+                      :reduce="category => category.id"
+                      v-model="data_local.category"
+                      :options="getCategories"/>
+          </div>
+
+          <div v-if="data_local.skis_type" class="mt-4">
             <span slot="off">Skis type</span>
-
-            <!--            <div class="flex items-center mb-4 mt-2">-->
-            <!--              <vs-switch color="danger" vs-value="SG" v-model="data_local.skis_type"/>-->
-            <!--              <span class="ml-4">Cancel this event</span>-->
-            <!--            </div>-->
-
-            <!--            <div class="flex items-center mb-4 mt-2">-->
-            <!--              <vs-switch color="danger" vs-value="SL" v-model="data_local.skis_type"/>-->
-            <!--              <span class="ml-4">Cancel this event</span>-->
-            <!--            </div>-->
-
-
             <div class="mt-2">
               <vs-radio v-model="data_local.skis_type" vs-value="ALL" class="mr-4">All</vs-radio>
               <vs-radio v-model="data_local.skis_type" vs-value="SG" class="mr-4">SG</vs-radio>
@@ -78,16 +85,6 @@
                          placeholder="Additional information about event..."/>
           </div>
 
-          <!--          <div class="centerx">-->
-          <!--            <vs-input-number v-model="data_local.temperature" min="-50" label="passengers:"/>-->
-          <!--            <vs-input-number v-model="data_local.gates" label="passengers:"/>-->
-          <!--            <vs-input-number v-model="data_local.number_of_runs" label="passengers:"/>-->
-          <!--          </div>-->
-          <!-- TODO: Fetch categories -->
-          <vs-input class="w-full mt-4" label="Category" v-model="data_local.location.add_line_1"
-                    v-validate="'required'" name="addd_line_1"/>
-          <span class="text-danger text-sm"
-                v-show="errors.has('addd_line_1')">{{ errors.first('addd_line_1') }}</span>
 
           <div class="mt-6">
             <label>Options</label>
@@ -165,7 +162,13 @@ export default {
   computed: {
     validateForm () {
       return !this.errors.any()
+    },
+    getCategories () {
+      return this.$store.state.calendar.eventConfig.categories
     }
+  },
+  created () {
+    this.$store.dispatch('calendar/fetchCategories')
   },
   methods: {
     save_changes () {

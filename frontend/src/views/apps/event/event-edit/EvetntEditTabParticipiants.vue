@@ -1,5 +1,8 @@
 <template>
   <div id="event-edit-tab-participants">
+    <ul>
+      <li>- [ ] Pekne to usporiadať</li>
+    </ul>
     <div class="vx-row">
       <div class="vx-col w-full md:w-1/2">
         <!--        <pre>{{data_local.participants}}</pre>-->

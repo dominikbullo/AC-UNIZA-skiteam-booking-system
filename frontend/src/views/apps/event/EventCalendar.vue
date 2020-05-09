@@ -48,7 +48,7 @@
                 </tr>
                 <tr>
                   <td class="font-bold">Category</td>
-                  <td>{{ editedEvent.category}}</td>
+                  <td>{{ editedEvent.displayCategory}}</td>
                 </tr>
               </table>
             </div>
@@ -135,9 +135,24 @@
         <!--        <p>DATA</p>-->
         <!--        <p>{{addEvent}}</p>-->
 
-
+        <ul>
+          <li>- [x] Dátum a čas začiatku</li>
+          <li>- [x] Dátum a čas konca</li>
+          <li>- [ ] Typ udalosti</li>
+          <li>- [ ] Typ lyží ak ski udalosť</li>
+          <li>- [ ] Kategória</li>
+          <li>- [ ] Extra informácie</li>
+        </ul>
         <vs-input name="event-name" v-validate="'required'" class="w-full" label-placeholder="Event Title"
                   v-model="newEvent.title"></vs-input>
+
+        <div class="mt-4">
+          <label class="text-sm">Event type</label>
+          <!-- RES: https://vue-select.org/ -->
+          <v-select
+            v-model="addEventPrompt.type.selected"
+            :options="addEventPrompt.type.options"/>
+        </div>
 
         <div class="mt-4">
           <label class="text-sm">Categories</label>
@@ -176,6 +191,7 @@
         <!--          <small class="date-label">End Date</small>-->
         <!--          <datepicker :disabledDates="addEvent.disabledDatesTo" name="end-date" v-model="addEvent.endDate"></datepicker>-->
         <!--        </div>-->
+        {{newEvent}}
       </vs-prompt>
 
     </vx-card>
@@ -267,6 +283,10 @@ export default {
       addEventPrompt: {
         active: false,
         category: {
+          selected: [],
+          options: []
+        },
+        type: {
           selected: [],
           options: []
         }
@@ -399,7 +419,7 @@ export default {
         allDay: arg.allDay,
         season: 1,
         location: 1,
-        category: [1, 2],
+        category: [1, 2, 3],
         resourcetype: 'event'
       }
       this.$store.dispatch('calendar/addEvent', event)
@@ -460,12 +480,14 @@ export default {
   created () {
     this.$store.dispatch('calendar/fetchEvents')
     this.$store.dispatch('family/fetchFamily', this.$store.state.AppActiveUser.profile.family_id)
+    this.$store.dispatch('calendar/fetchCategories').then((response) => {
+      this.addEventPrompt.options = this.addEventPrompt.category.selected = response.data.results
+    })
 
     if (this.$acl.check('isCoach')) {
       console.log('Hello coach')
-      this.$store.dispatch('calendar/fetchEventChoices')
-      this.$store.dispatch('calendar/fetchCategories').then((response) => {
-        this.addEventPrompt.options = this.addEventPrompt.category.selected = response.data.results
+      this.$store.dispatch('calendar/fetchEventChoices').then((response) => {
+        this.addEventPrompt.type.options = Object.values(response.data.EventTypeChoices)
       })
     }
   }
