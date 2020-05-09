@@ -68,11 +68,12 @@ export default {
     })
   },
   changeEventMembers ({ commit }, payload) {
+    console.log('payload 1s', payload)
     const apiPayload = {
-      'add': payload.selected.filter(x => !payload.onEvent.includes(x)),
-      'delete': payload.onEvent.filter(x => !payload.selected.includes(x))
+      'add': payload.eventAdd.filter(x => !payload.eventDelete.includes(x)),
+      'delete': payload.eventDelete.filter(x => !payload.eventAdd.includes(x))
     }
-    console.log('delete', apiPayload)
+    console.log('apiPayload', apiPayload)
 
     return new Promise((resolve, reject) => {
       axios.post(`event/${payload.eventID}/change/`, { users: apiPayload })

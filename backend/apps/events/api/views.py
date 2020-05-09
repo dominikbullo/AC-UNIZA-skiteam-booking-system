@@ -10,6 +10,7 @@ from apps.events.api.permissions import IsOwnerOrReadOnly, IsOwnFamilyOrReadOnly
 
 # RES: https://github.com/LondonAppDeveloper/recipe-app-api/blob/master/app/recipe/views.py
 # RES: https://stackoverflow.com/questions/51016896/how-to-serialize-inherited-models-in-django-rest-framework
+from apps.family.models import Family, FamilyMember
 from apps.users.models import Profile
 from core.choices import get_all_choices
 from core.views import get_custom_queryset
@@ -42,17 +43,13 @@ class EventViewSet(viewsets.ModelViewSet):
         event = self.get_event(event_id)
         event_serializer = EventPolymorphicSerializer(event)
 
-        # RELEASE delete this test data
-        # request.data["users"]["add"] = ["testsets", "asdasdaasdasd", "asdasdasdasdas", "sdasda"]
-        # request.data["users"]["delete"] = []
+        # If is coach, rewrite participants
+        # If is parent, get family members
 
         users = request.data.get("users", None)
         if not users:
             Response(status=status.HTTP_400_BAD_REQUEST)
 
-        # [] -> delete everyove
-        # ["admin"] -> find my child, remove every, add only admin
-        # ["admin", "ASdasd", "Asdasd", "asdasd"] -> find my child, remove every, add only admin
         failed = []
         for user in users.get("add", ""):
             # print("add", user)
@@ -61,6 +58,7 @@ class EventViewSet(viewsets.ModelViewSet):
             except Http404:
                 failed.append(user)
                 print("User", user, "not found")
+                # raise ValidationError("User %s not found" % user)
                 pass
 
         for user in users.get("delete", ""):
@@ -70,10 +68,11 @@ class EventViewSet(viewsets.ModelViewSet):
             except Http404:
                 failed.append(user)
                 print("User", user, "not found")
+                # raise ValidationError("User %s not found" % user)
                 pass
 
         if len(failed) > 0:
-            return Response(failed, status=status.HTTP_404_NOT_FOUND)
+            return Response({"failed": failed}, status=status.HTTP_404_NOT_FOUND)
 
         return Response(event_serializer.data, status=status.HTTP_200_OK)
 

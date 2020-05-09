@@ -8,9 +8,9 @@
           <span class="leading-none font-medium">Have been logged in to the event</span>
         </div>
         <ul class="centerx">
-          <li :key="user.id" class="mb-2" v-for="user in data">
+          <li :key="user.id" class="mb-2" v-for="user in this.eventParticipants">
             <vs-checkbox
-              :vs-value="user.id"
+              :vs-value="user.username"
               color="success"
               v-model="data_local">
               {{ user.displayName }}
@@ -23,9 +23,9 @@
           <span class="leading-none font-medium">Have't been logged in to the event</span>
         </div>
         <ul class="centerx">
-          <li :key="user.id" class="mb-2" v-for="user in usersData">
+          <li :key="user.id" class="mb-2" v-for="user in this.usersData">
             <vs-checkbox
-              :vs-value="user.id"
+              :vs-value="user.username"
               color="success"
               v-model="data_local">
               {{ user.displayName }}
@@ -40,7 +40,8 @@
       <div class="vx-col w-full">
         {{data_local}}
         <div class="mt-8 flex flex-wrap items-center justify-end">
-          <vs-button :disabled="!validateForm" @click="save_changes" class="ml-auto mt-2">Save Changes</vs-button>
+          <vs-button :disabled="!validateForm" @click="changeEventParticipants" class="ml-auto mt-2">Save Changes
+          </vs-button>
           <vs-button @click="reset_data" class="ml-4 mt-2" color="warning" type="border">Reset</vs-button>
         </div>
       </div>
@@ -83,6 +84,9 @@ export default {
     }
   },
   computed: {
+    eventParticipants () {
+      return this.data.participants
+    },
     validateForm () {
       return !this.errors.any()
     },
@@ -96,10 +100,25 @@ export default {
     },
     formatLocalData () {
       const cleanData = []
-      Object.values(this.data).forEach((element) => {
-        cleanData.unshift(element.id)
+      Object.values(this.data.participants).forEach((element) => {
+        cleanData.unshift(element.username)
       })
       return cleanData
+    },
+    changeEventParticipants () {
+      const userNames = []
+      this.data.participants.forEach((element) => {
+        userNames.unshift(element['username'])
+      })
+
+      const payload = {
+        'eventID': this.data.id,
+        'eventAdd': this.data_local,
+        'eventDelete': userNames.filter(x => !this.data_local.includes(x))
+      }
+      this.$store.dispatch('calendar/changeEventMembers', payload).then(res => {
+        this.data = res.data
+      })
     }
   },
   created () {
@@ -108,6 +127,7 @@ export default {
       moduleUserManagement.isRegistered = true
     }
     this.$store.dispatch('userManagement/fetchUsers')
+    this.changeEventParticipants()
   }
 }
 </script>

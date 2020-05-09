@@ -145,8 +145,8 @@
           <v-select multiple
                     :closeOnSelect="false"
                     label="displayName"
-                    v-model="addEventPrompt.selected"
-                    :options="addEventPrompt.options"/>
+                    v-model="addEventPrompt.category.selected"
+                    :options="addEventPrompt.category.options"/>
         </div>
 
         <div class="mt-4">
@@ -266,9 +266,10 @@ export default {
 
       addEventPrompt: {
         active: false,
-        onEvent: [],
-        selected: [],
-        options: []
+        category: {
+          selected: [],
+          options: []
+        }
       },
 
       fromDate: null,
@@ -449,8 +450,8 @@ export default {
     changeUserChildrenOnEvent () {
       const payload = {
         'eventID': this.editedEvent.id,
-        'selected': this.childAddToEventPrompt.selected,
-        'onEvent': this.childAddToEventPrompt.onEvent
+        'eventAdd': this.childAddToEventPrompt.selected,
+        'eventDelete': this.childAddToEventPrompt.onEvent
       }
 
       this.$store.dispatch('calendar/changeEventMembers', payload)
@@ -464,7 +465,7 @@ export default {
       console.log('Hello coach')
       this.$store.dispatch('calendar/fetchEventChoices')
       this.$store.dispatch('calendar/fetchCategories').then((response) => {
-        this.addEventPrompt.options = this.addEventPrompt.selected = response.data.results
+        this.addEventPrompt.options = this.addEventPrompt.category.selected = response.data.results
       })
     }
   }

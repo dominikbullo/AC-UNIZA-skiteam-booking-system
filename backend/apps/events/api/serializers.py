@@ -58,6 +58,8 @@ class BaseEventSerializer(serializers.ModelSerializer):
         participants = validated_data.get('participants', None)
 
         instance = super(BaseEventSerializer, self).update(instance, validated_data)
+        # if participants:
+        #     instance.participants = participants
         instance.save()
         return instance
 

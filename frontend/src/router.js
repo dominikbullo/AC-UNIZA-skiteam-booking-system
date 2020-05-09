@@ -292,7 +292,7 @@ const router = new Router({
               }
             ],
             pageTitle: 'Edit Event',
-            rule: 'isChild'
+            rule: 'isCoach'
           }
         },
         {
