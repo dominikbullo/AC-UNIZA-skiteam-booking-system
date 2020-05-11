@@ -1,11 +1,12 @@
 from django.utils import timezone
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from rest_polymorphic.serializers import PolymorphicSerializer
 
 from apps.family.api.serializers import ChildSerializer
 from core import choices
-from apps.events.models import Event, SkiTraining, SkiRace, Season, Category
+from apps.events.models import Event, SkiTraining, SkiRace, Season, Category, Location
 
 from apps.family.models import Child
 from apps.users.api.serializers import BaseProfileSerializer
@@ -20,56 +21,62 @@ class SeasonSerializer(serializers.ModelSerializer):
 
 class CategorySerializer(serializers.ModelSerializer):
     displayName = serializers.CharField(source='get_name_display', read_only=True)
-    season = SeasonSerializer(many=False, read_only=True)
+
+    def create(self, validated_data):
+        print("test")
+        return validated_data
+
+    def update(self, instance, validated_data):
+        print("test")
+        return instance
 
     class Meta:
         model = Category
-        fields = "__all__"
+        exclude = ("members",)
 
 
 # RES: https://github.com/richardtallent/vue-simple-calendar#calendar-item-properties
 # RES(Nested relationships): https://medium.com/@raaj.akshar/creating-reverse-related-objects-with-django-rest-framework-b1952ddff1c
-class BaseEventSerializer(serializers.ModelSerializer):
+
+
+class LocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Location
+        fields = "__all__"
+
+
+class BaseEventChangeSerializer(serializers.ModelSerializer):
     title = serializers.CharField(source='get_type_display', read_only=True)
 
-    # RES: http://www.tomchristie.com/rest-framework-2-docs/api-guide/relations
     participants = BaseProfileSerializer(many=True, required=False)
     season = SeasonSerializer(many=False, read_only=True)
 
-    def validate(self, data):
-        # don't want to change any type
-        participants = data.get('participants', None)
+    category = serializers.PrimaryKeyRelatedField(
+        many=True,
+        queryset=Category.objects.all()
+    )
 
+    location = serializers.PrimaryKeyRelatedField(
+        many=False,
+        queryset=Location.objects.all()
+    )
+    
+    def validate(self, data):
         # If doesnt have season then default current season
-        if not data.get('season', None):
+        if not data.get('season'):
             data["season"] = Season.objects.get(current=True)
 
-        # TODO: If all categories are from same season
+        if data.get('category'):
+            for category in data.get('category', ""):
+                if category.season.id != data["season"].id:
+                    raise ValidationError("Category %s isn't from current season" % str(category))
+
         return data
 
-    # RES: https://stackoverflow.com/questions/28706072/drf-3-creating-many-to-many-update-create-serializer-with-though-table
-    # def create(self, validated_data):
-    #     categories = validated_data.pop('category')
-    #     event = super(BaseEventSerializer, self).create(validated_data)
-    #
-    #     for category in categories:
-    #         d = dict(category)
-    #         Category.objects.get(name=["name"], )
-    #
-    #     return event
 
-    #  RES(update): https://riptutorial.com/django-rest-framework/example/25521/updatable-nested-serializers
-    # https://www.django-rest-framework.org/api-guide/serializers/#dealing-with-nested-objects
-    #  RES(delete): https://stackoverflow.com/questions/42159480/delete-member-of-many-to-many-relationship-django-rest-framework
-    #  RES: https://stackoverflow.com/questions/28706072/drf-3-creating-many-to-many-update-create-serializer-with-though-table
-    def update(self, instance, validated_data):
-        # nested_serializer = self.fields['category']
-        # nested_instance = instance.category
-        #
-        # nested_data = validated_data.pop('category')
-        # nested_serializer.update(nested_instance, nested_data)
-
-        return super(BaseEventSerializer, self).update(instance, validated_data)
+class BaseEventSerializer(BaseEventChangeSerializer):
+    category = CategorySerializer(many=True, read_only=True)
+    location = LocationSerializer(read_only=True)
 
 
 class EventSerializer(BaseEventSerializer):
@@ -92,6 +99,52 @@ class SkiRaceSerializer(BaseEventSerializer):
         read_only_fields = ('type',)
 
 
+class EventChangeSerializer(BaseEventChangeSerializer):
+
+    def validate(self, data):
+        super(EventChangeSerializer, self).validate(data)
+        event_type = data.get("type")
+        if event_type == choices.EventTypeChoices.SKI_TRAINING:
+            raise ValidationError("Bad resourcetype for %s" % event_type)
+
+        if event_type == choices.EventTypeChoices.SKI_RACE:
+            raise ValidationError("Bad resourcetype for %s" % event_type)
+
+        return data
+
+    class Meta:
+        model = Event
+        exclude = ("polymorphic_ctype",)
+
+
+class SkiTrainingChangeSerializer(BaseEventChangeSerializer):
+
+    def validate(self, data):
+        super(SkiTrainingChangeSerializer, self).validate(data)
+        event_type = data.get("type")
+        if event_type != choices.EventTypeChoices.SKI_TRAINING:
+            raise ValidationError("Bad resourcetype for %s" % event_type)
+        return data
+
+    class Meta:
+        model = SkiTraining
+        fields = "__all__"
+
+
+class SkiRaceChangeSerializer(BaseEventChangeSerializer):
+
+    def validate(self, data):
+        super(SkiRaceChangeSerializer, self).validate(data)
+        event_type = data.get("type")
+        if event_type != choices.EventTypeChoices.SKI_RACE:
+            raise ValidationError("Bad resourcetype for %s" % event_type)
+        return data
+
+    class Meta:
+        model = SkiRace
+        fields = "__all__"
+
+
 # RES: https://pypi.org/project/django-rest-polymorphic/
 class EventPolymorphicSerializer(PolymorphicSerializer):
     model_serializer_mapping = {
@@ -100,9 +153,13 @@ class EventPolymorphicSerializer(PolymorphicSerializer):
         SkiRace    : SkiRaceSerializer,
     }
 
-    # RES: https://stackoverflow.com/a/51905746/10523982
-    def to_resource_type(self, model_or_instance):
-        return model_or_instance._meta.object_name.lower()
+
+class EventChangePolymorphicSerializer(PolymorphicSerializer):
+    model_serializer_mapping = {
+        Event      : EventChangeSerializer,
+        SkiTraining: SkiTrainingChangeSerializer,
+        SkiRace    : SkiRaceChangeSerializer,
+    }
 
 
 class UserStatSerializer(serializers.ModelSerializer):

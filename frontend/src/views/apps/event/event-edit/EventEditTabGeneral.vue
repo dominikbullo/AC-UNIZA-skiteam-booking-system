@@ -1,20 +1,10 @@
 <template>
   <div id="user-edit-tab-info">
-    <ul>
-      <li>- [x] Dátum a čas začiatku</li>
-      <li>- [x] Dátum a čas konca</li>
-      <li>- [x] Kategória</li>
-      <li>- [x] Extra informácie</li>
-      <li>- [x] Canceled</li>
-      <li>- [x] Send email</li>
-      <li>- [ ] Typ udalosti</li>
-      <li>- [ ] Typ lyží ak ski udalosť</li>
-    </ul>
-    <br>
     <p>{{data}}</p>
     <br>
     <p>{{data_local}}</p>
     <br>
+
     <div class="vx-row">
       <div class="vx-col w-full md:w-1/2">
         <!-- Col Content -->
@@ -176,7 +166,13 @@ export default {
       if (!this.validateForm) return
       console.log('Save changes with data', this.data_local)
 
-      this.$store.dispatch('calendar/editEvent', this.data_local)
+      // FIXME
+      const event = Object.assign({}, this.data_local)
+      delete event['season']
+      delete event['category']
+      delete event['location']
+
+      this.$store.dispatch('calendar/editEvent', event)
         .then(res => {
           this.$vs.notify({
             color: 'success',

@@ -44,11 +44,12 @@
                 </tr>
                 <tr>
                   <td class="font-bold">Location</td>
-                  <td>{{ editedEvent.location }}</td>
+                  <!-- TODO: Location with slope maybe? -->
+                  <td>{{ editedEvent.location.name }}</td>
                 </tr>
                 <tr>
                   <td class="font-bold">Category</td>
-                  <td>{{ editedEvent.displayCategory}}</td>
+                  <td>{{ displayObject(editedEvent.category).toString()}}</td>
                 </tr>
               </table>
             </div>
@@ -121,30 +122,10 @@
       <vs-prompt
         :active.sync="addEventPrompt.active"
         :is-valid="true"
-        @accept="newEvent"
-        accept-text="Save"
+        @accept="addEvent"
+        accept-text="Add event"
         class="calendar-add-event-dialog"
         title="Add event">
-
-        <!--        <p>Choices</p>-->
-        <!--        <p>{{eventChoices}}</p>-->
-
-        <!--        <p>Categories</p>-->
-        <!--        <p>{{this.$store.state.calendar.eventConfig.categories}}</p>-->
-
-        <!--        <p>DATA</p>-->
-        <!--        <p>{{addEvent}}</p>-->
-
-        <ul>
-          <li>- [x] Dátum a čas začiatku</li>
-          <li>- [x] Dátum a čas konca</li>
-          <li>- [ ] Typ udalosti</li>
-          <li>- [ ] Typ lyží ak ski udalosť</li>
-          <li>- [ ] Kategória</li>
-          <li>- [ ] Extra informácie</li>
-        </ul>
-        <vs-input name="event-name" v-validate="'required'" class="w-full" label-placeholder="Event Title"
-                  v-model="newEvent.title"></vs-input>
 
         <div class="mt-4">
           <label class="text-sm">Event type</label>
@@ -183,14 +164,6 @@
                       name="end"/>
           <span class="text-danger text-sm" v-show="errors.has('end')">{{ errors.first('end') }}</span>
         </div>
-        <!--        <div class="my-4">-->
-        <!--          <small class="date-label">Start Date</small>-->
-        <!--          <datepicker name="start-date" v-model="addEvent.startDate" :disabled="addEvent.disabledFrom"></datepicker>-->
-        <!--        </div>-->
-        <!--        <div class="my-4">-->
-        <!--          <small class="date-label">End Date</small>-->
-        <!--          <datepicker :disabledDates="addEvent.disabledDatesTo" name="end-date" v-model="addEvent.endDate"></datepicker>-->
-        <!--        </div>-->
         {{newEvent}}
       </vs-prompt>
 
@@ -301,27 +274,23 @@ export default {
         enableTime: true
       },
 
-      configTodateTimePicker: {
+      configToDateTimePicker: {
         enableTime: true,
         minDate: null
       },
 
       newEvent: {
-        showDate: new Date(),
+        start: null,
+        end: null,
         disabledFrom: false,
         disabledDatesTo: false,
-        title: '',
-        startDate: '',
-        endDate: ''
+        title: ''
       }
     }
   },
   computed: {
     calendarEvents () {
       return this.$store.state.calendar.events
-    },
-    eventChoices () {
-      return this.$store.state.calendar.eventConfig.choices
     },
     userChildren () {
       // const members = this.$store.state.family.members
@@ -339,19 +308,25 @@ export default {
     }
   },
   methods: {
+    displayObject (object, displayKey = 'displayName') {
+      const ret = []
+      Object.values(this.editedEvent.category).forEach((element) => {
+        ret.unshift(element[displayKey])
+      })
+      return ret
+    },
     addEvent () {
       console.log('adding event')
-      // const event = {
-      //   type: 'ATHLETIC_TRAINING',
-      //   start: arg.start,
-      //   end: arg.end,
-      //   allDay: arg.allDay,
-      //   season: 1,
-      //   location: 1,
-      //   category: [1, 2, 3],
-      //   resourcetype: 'event'
-      // }
-      // this.$store.dispatch('calendar/addEvent', event)
+
+      const event = {
+        type: 'ATHLETIC_TRAINING',
+        start: this.newEvent.start,
+        end: this.newEvent.end,
+        location: 1,
+        category: [1, 3, 4, 5, 6],
+        resourcetype: 'Event'
+      }
+      this.$store.dispatch('calendar/addEvent', event)
     },
     handleDateClick (arg) {
       console.log('handling date click', arg)
@@ -369,13 +344,6 @@ export default {
       this.editedEvent = Object.values(this.calendarEvents).find(obj => {
         return obj.id === parseInt(arg.event.id)
       })
-
-      const categories = []
-      Object.values(this.editedEvent.category).forEach((element) => {
-        categories.unshift(element['displayName'])
-      })
-      this.editedEvent.category = categories
-
 
       // IDEA: Check with userChildren() array
       // console.log('participants', this.editedEvent['participants'])
@@ -396,33 +364,9 @@ export default {
       this.childAddToEventPrompt.active = true
     },
     handleSelect (arg) {
-      console.log('handling select click', arg)
+      this.newEvent.start = arg.start
+      this.newEvent.end = arg.end
       this.addEventPrompt.active = true
-      console.log('handling select click123', arg.start)
-      this.newEvent.startDate = arg.start
-      this.newEvent.endDate = arg.end
-      //    {
-      // "type":"ATHLETIC_TRAINING",
-      // "start":"2020-05-06T08:55:00+02:00",
-      // "end":"2020-05-06T11:55:00+02:00",
-      // "season":1,
-      // "location":1,
-      // "category":[
-      //    1
-      // ],
-      // "resourcetype":"event"
-
-      const event = {
-        type: 'ATHLETIC_TRAINING',
-        start: arg.start,
-        end: arg.end,
-        allDay: arg.allDay,
-        season: 1,
-        location: 1,
-        category: [1, 2, 3],
-        resourcetype: 'event'
-      }
-      this.$store.dispatch('calendar/addEvent', event)
     },
     handleEventMouseEnter (arg) {
       // console.log('handling mouse event enter', arg)
@@ -480,12 +424,12 @@ export default {
   created () {
     this.$store.dispatch('calendar/fetchEvents')
     this.$store.dispatch('family/fetchFamily', this.$store.state.AppActiveUser.profile.family_id)
-    this.$store.dispatch('calendar/fetchCategories').then((response) => {
-      this.addEventPrompt.options = this.addEventPrompt.category.selected = response.data.results
-    })
 
     if (this.$acl.check('isCoach')) {
       console.log('Hello coach')
+      this.$store.dispatch('calendar/fetchCategories').then((response) => {
+        this.addEventPrompt.options = this.addEventPrompt.category.selected = response.data.results
+      })
       this.$store.dispatch('calendar/fetchEventChoices').then((response) => {
         this.addEventPrompt.type.options = Object.values(response.data.EventTypeChoices)
       })

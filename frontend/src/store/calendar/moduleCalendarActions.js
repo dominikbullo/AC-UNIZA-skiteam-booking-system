@@ -119,6 +119,8 @@ export default {
       axios.post('/events/', event)
         .then((response) => {
           commit('ADD_EVENT', response.data)
+          // Update category & location by store data
+          // commit('UPDATE_EVENT', response)
           resolve(response)
         })
         .catch((error) => {

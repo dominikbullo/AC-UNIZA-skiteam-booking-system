@@ -5,12 +5,12 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from apps.events.models import Event, Season, Category
-from apps.events.api.serializers import EventPolymorphicSerializer, SeasonSerializer, CategorySerializer
+from apps.events.api.serializers import (EventPolymorphicSerializer, SeasonSerializer, CategorySerializer,
+                                         EventChangePolymorphicSerializer)
 from apps.events.api.permissions import IsOwnerOrReadOnly, IsOwnFamilyOrReadOnly
 
 # RES: https://github.com/LondonAppDeveloper/recipe-app-api/blob/master/app/recipe/views.py
 # RES: https://stackoverflow.com/questions/51016896/how-to-serialize-inherited-models-in-django-rest-framework
-from apps.family.models import Family, FamilyMember
 from apps.users.models import Profile
 from core.choices import get_all_choices
 from core.views import get_custom_queryset
@@ -30,6 +30,14 @@ class EventViewSet(viewsets.ModelViewSet):
     # filter_backends = [SearchFilter]
     # search_fields = ["name"]
 
+    # https://github.com/LondonAppDeveloper/recipe-app-api/blob/master/app/recipe/views.py
+    def get_serializer_class(self):
+        """Return appropriate serializer class"""
+        custom = ["create", "update", "partial_update"]
+        if self.action in custom:
+            return EventChangePolymorphicSerializer
+        return EventPolymorphicSerializer
+
     def get_event(self, pk):
         return get_object_or_404(Event, pk=pk)
 
@@ -42,9 +50,6 @@ class EventViewSet(viewsets.ModelViewSet):
         event_id = pk
         event = self.get_event(event_id)
         event_serializer = EventPolymorphicSerializer(event)
-
-        # If is coach, rewrite participants
-        # If is parent, get family members
 
         users = request.data.get("users", None)
         if not users:
