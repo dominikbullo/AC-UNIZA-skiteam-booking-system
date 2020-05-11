@@ -388,7 +388,7 @@ const router = new Router({
                 active: true
               }
             ],
-            pageTitle: 'Apex Charts',
+            pageTitle: 'Charts',
             rule: 'isParent'
           }
         }
