@@ -1,10 +1,12 @@
 from django.utils import timezone
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from rest_polymorphic.serializers import PolymorphicSerializer
 
+from apps.family.api.serializers import ChildSerializer
 from core import choices
-from apps.events.models import Event, SkiTraining, SkiRace, Season
+from apps.events.models import Event, SkiTraining, SkiRace, Season, Category, Location
 
 from apps.family.models import Child
 from apps.users.api.serializers import BaseProfileSerializer
@@ -17,32 +19,65 @@ class SeasonSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class CategorySerializer(serializers.ModelSerializer):
+    displayName = serializers.CharField(source='get_name_display', read_only=True)
+
+    def create(self, validated_data):
+        print("test")
+        return validated_data
+
+    def update(self, instance, validated_data):
+        print("test")
+        return instance
+
+    class Meta:
+        model = Category
+        exclude = ("members",)
+
+
 # RES: https://github.com/richardtallent/vue-simple-calendar#calendar-item-properties
 # RES(Nested relationships): https://medium.com/@raaj.akshar/creating-reverse-related-objects-with-django-rest-framework-b1952ddff1c
-class BaseEventSerializer(serializers.ModelSerializer):
+
+
+class LocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Location
+        fields = "__all__"
+
+
+class BaseEventChangeSerializer(serializers.ModelSerializer):
     title = serializers.CharField(source='get_type_display', read_only=True)
 
-    # RES: http://www.tomchristie.com/rest-framework-2-docs/api-guide/relations
     participants = BaseProfileSerializer(many=True, required=False)
+    season = SeasonSerializer(many=False, read_only=True)
 
-    # TODO
-    #  category =
+    category = serializers.PrimaryKeyRelatedField(
+        many=True,
+        queryset=Category.objects.all()
+    )
+
+    location = serializers.PrimaryKeyRelatedField(
+        many=False,
+        queryset=Location.objects.all()
+    )
 
     def validate(self, data):
-        # don't want to change any type
-        participants = data.get('participants', None)
-        type = data.get('type', None)
+        # If doesnt have season then default current season
+        if not data.get('season'):
+            data["season"] = Season.objects.get(current=True)
+
+        if data.get('category'):
+            for category in data.get('category', ""):
+                if category.season.id != data["season"].id:
+                    raise ValidationError("Category %s isn't from current season" % str(category))
+
         return data
 
-    #  RES(update): https://riptutorial.com/django-rest-framework/example/25521/updatable-nested-serializers
-    #  RES(delete): https://stackoverflow.com/questions/42159480/delete-member-of-many-to-many-relationship-django-rest-framework
-    #  RES: https://stackoverflow.com/questions/28706072/drf-3-creating-many-to-many-update-create-serializer-with-though-table
-    def update(self, instance, validated_data):
-        participants = validated_data.get('participants', None)
 
-        instance = super(BaseEventSerializer, self).update(instance, validated_data)
-        instance.save()
-        return instance
+class BaseEventSerializer(BaseEventChangeSerializer):
+    category = CategorySerializer(many=True, read_only=True)
+    location = LocationSerializer(read_only=True)
+
 
 class EventSerializer(BaseEventSerializer):
     class Meta:
@@ -64,6 +99,52 @@ class SkiRaceSerializer(BaseEventSerializer):
         read_only_fields = ('type',)
 
 
+class EventChangeSerializer(BaseEventChangeSerializer):
+
+    def validate(self, data):
+        super(EventChangeSerializer, self).validate(data)
+        event_type = data.get("type")
+        if event_type == choices.EventTypeChoices.SKI_TRAINING:
+            raise ValidationError("Bad resourcetype for %s" % event_type)
+
+        if event_type == choices.EventTypeChoices.SKI_RACE:
+            raise ValidationError("Bad resourcetype for %s" % event_type)
+
+        return data
+
+    class Meta:
+        model = Event
+        exclude = ("polymorphic_ctype",)
+
+
+class SkiTrainingChangeSerializer(BaseEventChangeSerializer):
+
+    def validate(self, data):
+        super(SkiTrainingChangeSerializer, self).validate(data)
+        event_type = data.get("type")
+        if event_type != choices.EventTypeChoices.SKI_TRAINING:
+            raise ValidationError("Bad resourcetype for %s" % event_type)
+        return data
+
+    class Meta:
+        model = SkiTraining
+        fields = "__all__"
+
+
+class SkiRaceChangeSerializer(BaseEventChangeSerializer):
+
+    def validate(self, data):
+        super(SkiRaceChangeSerializer, self).validate(data)
+        event_type = data.get("type")
+        if event_type != choices.EventTypeChoices.SKI_RACE:
+            raise ValidationError("Bad resourcetype for %s" % event_type)
+        return data
+
+    class Meta:
+        model = SkiRace
+        fields = "__all__"
+
+
 # RES: https://pypi.org/project/django-rest-polymorphic/
 class EventPolymorphicSerializer(PolymorphicSerializer):
     model_serializer_mapping = {
@@ -72,9 +153,13 @@ class EventPolymorphicSerializer(PolymorphicSerializer):
         SkiRace    : SkiRaceSerializer,
     }
 
-    # RES: https://stackoverflow.com/a/51905746/10523982
-    def to_resource_type(self, model_or_instance):
-        return model_or_instance._meta.object_name.lower()
+
+class EventChangePolymorphicSerializer(PolymorphicSerializer):
+    model_serializer_mapping = {
+        Event      : EventChangeSerializer,
+        SkiTraining: SkiTrainingChangeSerializer,
+        SkiRace    : SkiRaceChangeSerializer,
+    }
 
 
 class UserStatSerializer(serializers.ModelSerializer):
@@ -89,13 +174,16 @@ class UserStatSerializer(serializers.ModelSerializer):
         # TODO
         #  Check if is kid
         kid = Child.objects.get(user__profile=user)
-        ret = {}
+        ret = {
+            "user": BaseProfileSerializer(instance=user).data,
+            "data": {}
+        }
         for season in seasons:
-            print("season ", season)
             try:
                 # TODO category -> user which can be on this event
+                # FIXME if event category is none then it breaks
                 kid_asc = kid.categories.get(season=season)
-                ret[str(season)] = {}
+                ret["data"][str(season)] = {}
                 print("foud and creating child", season)
             except Exception:
                 continue
@@ -112,61 +200,10 @@ class UserStatSerializer(serializers.ModelSerializer):
                 }
 
                 events = Event.objects.filter(**query).order_by('start')
-                ret[str(season)][event_type] = {}
-                ret[str(season)][event_type]["name"] = value
-                ret[str(season)][event_type]["count"] = user.events.filter(**query).count()
-                ret[str(season)][event_type]["total"] = events.count()
-
-        return ret
-
-    class Meta:
-        model = Profile
-        fields = "__all__"
-        read_only_fields = ('user_role',)
-
-
-class UserStatSerializer(serializers.ModelSerializer):
-
-    def to_representation(self, instance):
-        return self.get_data(instance)
-
-    def get_data(self, instance):
-        user = instance["user"]
-        seasons = instance["seasons"]
-
-        try:
-            kid = Child.objects.get(user__profile=user)
-        except Exception:
-            error = {"message": "Child not found. Stats are currently only available for Children"}
-            raise serializers.ValidationError(error)
-
-        ret = {}
-        for season in seasons:
-            print("season ", season)
-            try:
-                # TODO category -> user which can be on this event
-                kid_asc = kid.categories.get(season=season)
-                ret[str(season)] = {}
-                print("foud and creating child", season)
-            except Exception:
-                continue
-                pass
-
-            for event_type, value in choices.EventTypeChoices.choices:
-                # RES: https://docs.djangoproject.com/en/dev/topics/db/queries/#complex-lookups-with-q-objects
-                query = {
-                    "season"  : season,
-                    "type"    : event_type,
-                    "end__lte": timezone.now(),
-                    "category": kid_asc,
-                    "canceled": False
-                }
-
-                events = Event.objects.filter(**query).order_by('start_date')
-                ret[str(season)][event_type] = {}
-                ret[str(season)][event_type]["name"] = value
-                ret[str(season)][event_type]["count"] = user.events.filter(**query).count()
-                ret[str(season)][event_type]["total"] = events.count()
+                ret["data"][str(season)][event_type] = {}
+                ret["data"][str(season)][event_type]["name"] = value
+                ret["data"][str(season)][event_type]["count"] = user.events.filter(**query).count()
+                ret["data"][str(season)][event_type]["total"] = events.count()
 
         return ret
 

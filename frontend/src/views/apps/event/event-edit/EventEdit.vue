@@ -20,7 +20,7 @@
           </vs-tab>
           <vs-tab label="Participants" icon-pack="feather" icon="icon-info">
             <div class="tab-text">
-              <event-edit-tab-participants class="mt-4" :data="event_data.participants"/>
+              <event-edit-tab-participants class="mt-4" :data="event_data"/>
             </div>
           </vs-tab>
         </vs-tabs>
@@ -70,6 +70,7 @@ export default {
   created () {
     console.log('route', this.$route.params.eventId)
     this.fetch_event(this.$route.params.eventId)
+    this.$store.dispatch('calendar/fetchEventChoices')
   }
 }
 

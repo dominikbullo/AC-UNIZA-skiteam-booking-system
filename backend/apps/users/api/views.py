@@ -15,6 +15,7 @@ from apps.events.api.serializers import UserStatSerializer
 
 from apps.users.models import Profile
 from apps.users.api.serializers import ProfileAvatarSerializer, DetailProfileSerializer, UserDetailSerializer
+from core.views import get_object_custom_queryset, get_season_by_query
 
 
 class AvatarUpdateView(generics.UpdateAPIView):
@@ -45,23 +46,14 @@ class ProfileViewSet(mixins.UpdateModelMixin,
     def get_stats(self, request, *args, **kwargs):
         user = get_object_or_404(Profile, pk=kwargs["pk"])
 
-        query = self.request.query_params.get('season')
-        seasons = self.get_season_by_query(query, Season.objects.all())
+        # TODO refactor
+        seasons = get_season_by_query(self.request, Season.objects.all())
 
         serializer = UserStatSerializer(instance={
             'user'   : user,
             'seasons': seasons,
         })
         return Response(serializer.data)
-
-    @staticmethod
-    def get_season_by_query(query, seasons):
-        if query:
-            if query == "current":
-                seasons = seasons.filter(current=True)
-            else:
-                seasons = seasons.filter(year=query)
-        return seasons
 
 
 # RES: https://stackoverflow.com/questions/53305849/django-rest-auth-key-error-on-email-confirmation

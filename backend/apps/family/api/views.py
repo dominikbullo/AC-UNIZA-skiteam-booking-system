@@ -10,8 +10,10 @@ from apps.family.models import Family, FamilyMember, Child
 from apps.family.api.serializers import FamilySerializer, FamilyMemberSerializer, ChildSerializer
 from apps.family.api.permissions import IsOwnerOrReadOnly, IsOwnFamilyOrReadOnly
 
-
 # https://github.com/LondonAppDeveloper/recipe-app-api/blob/master/app/recipe/views.py
+from core.views import get_object_custom_queryset, get_season_by_query
+
+
 class FamilyViewSet(viewsets.ModelViewSet):
     # TODO permissions
     queryset = Family.objects.all()
@@ -46,19 +48,20 @@ class ChildViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'], url_path='stats')
     def get_stats(self, request, *args, **kwargs):
-        # TODO stat for every user in current season
-        # user = get_object_or_404(Child, pk=kwargs["pk"]).user.profile
+        ret = []
 
-        query = self.request.query_params.get('season')
-        seasons = self.get_season_by_query(query, Season.objects.all())
-        print("find season", seasons)
+        # TODO refactor
+        seasons = get_season_by_query(self.request, Season.objects.all())
 
-        # serializer = UserStatSerializer(instance={
-        #     'user'   : user,
-        #     'seasons': seasons,
-        # })
+        for child in Child.objects.all():
+            serializer = UserStatSerializer(instance={
+                'user'   : child.user.profile,
+                'seasons': seasons,
+            })
 
-        return Response(status=status.HTTP_404_NOT_FOUND)
+            ret.append(serializer.data)
+
+        return Response(ret)
 
     @staticmethod
     def get_season_by_query(query, seasons):

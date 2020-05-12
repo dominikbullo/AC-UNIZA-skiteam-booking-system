@@ -23,6 +23,18 @@ export default {
         })
     })
   },
+  fetchChildrenStatistics ({ commit }) {
+    console.log('[STORE] fetchUsers')
+    return new Promise((resolve, reject) => {
+      axios.get('/children/stats/')
+        .then((response) => {
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
+  },
   fetchUser (context, userId) {
     console.log('[STORE] fetchUser', userId)
     return new Promise((resolve, reject) => {

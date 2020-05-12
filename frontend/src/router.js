@@ -292,7 +292,7 @@ const router = new Router({
               }
             ],
             pageTitle: 'Edit Event',
-            rule: 'isChild'
+            rule: 'isCoach'
           }
         },
         {
@@ -388,7 +388,7 @@ const router = new Router({
                 active: true
               }
             ],
-            pageTitle: 'Apex Charts',
+            pageTitle: 'Charts',
             rule: 'isParent'
           }
         }

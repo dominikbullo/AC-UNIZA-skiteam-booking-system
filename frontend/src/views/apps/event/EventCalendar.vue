@@ -44,7 +44,12 @@
                 </tr>
                 <tr>
                   <td class="font-bold">Location</td>
-                  <td>{{ editedEvent.location }}</td>
+                  <!-- TODO: Location with slope maybe? -->
+                  <td>{{ editedEvent.location.name }}</td>
+                </tr>
+                <tr>
+                  <td class="font-bold">Category</td>
+                  <td>{{ displayObject(editedEvent.category).toString()}}</td>
                 </tr>
               </table>
             </div>
@@ -117,26 +122,49 @@
       <vs-prompt
         :active.sync="addEventPrompt.active"
         :is-valid="true"
-        @accept="changeUserChildrenOnEvent"
-        accept-text="Save"
+        @accept="addEvent"
+        accept-text="Add event"
         class="calendar-add-event-dialog"
         title="Add event">
-        <h2>Hi from add event</h2>
 
-        <vs-input name="event-name" v-validate="'required'" class="w-full" label-placeholder="Event Title"
-                  v-model="title"></vs-input>
-        <div class="my-4">
-          <small class="date-label">Start Date</small>
-          <datepicker :language="$vs.rtl ? langHe : langEn" name="start-date" v-model="startDate"
-                      :disabled="disabledFrom"></datepicker>
+        <div class="mt-4">
+          <label class="text-sm">Event type</label>
+          <!-- RES: https://vue-select.org/ -->
+          <v-select
+            v-model="addEventPrompt.type.selected"
+            :options="addEventPrompt.type.options"/>
         </div>
-        <div class="my-4">
-          <small class="date-label">End Date</small>
-          <datepicker :language="$vs.rtl ? langHe : langEn" :disabledDates="disabledDatesTo" name="end-date"
-                      v-model="endDate"></datepicker>
+
+        <div class="mt-4">
+          <label class="text-sm">Categories</label>
+          <!-- RES: https://vue-select.org/ -->
+          <v-select multiple
+                    :closeOnSelect="false"
+                    label="displayName"
+                    v-model="addEventPrompt.category.selected"
+                    :options="addEventPrompt.category.options"/>
         </div>
-        <vs-input name="event-url" v-validate="'url'" class="w-full mt-6" label-placeholder="Event URL" v-model="url"
-                  :color="!errors.has('event-url') ? 'success' : 'danger'"></vs-input>
+
+        <div class="mt-4">
+          <label class="text-sm">Start</label>
+          <flat-pickr v-model="newEvent.startDate"
+                      :config="datePickerConfig"
+                      class="w-full"
+                      v-validate="'required'"
+                      name="start"/>
+          <span class="text-danger text-sm" v-show="errors.has('start')">{{ errors.first('start') }}</span>
+        </div>
+
+        <div class="mt-4">
+          <label class="text-sm">End</label>
+          <flat-pickr v-model="newEvent.endDate"
+                      :config="datePickerConfig"
+                      class="w-full"
+                      v-validate="'required'"
+                      name="end"/>
+          <span class="text-danger text-sm" v-show="errors.has('end')">{{ errors.first('end') }}</span>
+        </div>
+        {{newEvent}}
       </vs-prompt>
 
     </vx-card>
@@ -155,7 +183,6 @@ import vSelect from 'vue-select'
 
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
-import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -212,6 +239,12 @@ export default {
         }
       },
 
+      datePickerConfig: {
+        enableTime: true,
+        altInput: true,
+        altFormat: 'd.m.Y H:i'
+      },
+
       editedEvent: null,
 
       childAddToEventPrompt: {
@@ -222,8 +255,14 @@ export default {
 
       addEventPrompt: {
         active: false,
-        onEvent: [],
-        selected: []
+        category: {
+          selected: [],
+          options: []
+        },
+        type: {
+          selected: [],
+          options: []
+        }
       },
 
       fromDate: null,
@@ -235,19 +274,18 @@ export default {
         enableTime: true
       },
 
-      configTodateTimePicker: {
+      configToDateTimePicker: {
         enableTime: true,
         minDate: null
       },
 
-      showDate: new Date(),
-      disabledFrom: false,
-      id: 0,
-      url: '',
-      title: '',
-      startDate: '',
-      endDate: '',
-      labelLocal: 'none'
+      newEvent: {
+        start: null,
+        end: null,
+        disabledFrom: false,
+        disabledDatesTo: false,
+        title: ''
+      }
     }
   },
   computed: {
@@ -270,14 +308,31 @@ export default {
     }
   },
   methods: {
-    showAddEventDialog () {
-      this.addEventPrompt.active = true
+    displayObject (object, displayKey = 'displayName') {
+      const ret = []
+      Object.values(this.editedEvent.category).forEach((element) => {
+        ret.unshift(element[displayKey])
+      })
+      return ret
+    },
+    addEvent () {
+      console.log('adding event')
+
+      const event = {
+        type: 'ATHLETIC_TRAINING',
+        start: this.newEvent.start,
+        end: this.newEvent.end,
+        location: 1,
+        category: [1, 3, 4, 5, 6],
+        resourcetype: 'Event'
+      }
+      this.$store.dispatch('calendar/addEvent', event)
     },
     handleDateClick (arg) {
       console.log('handling date click', arg)
     },
     handleEventClick (arg) {
-      console.log('event click arf', arg.event.id)
+      console.log('event click', arg)
       if (this.$acl.not.check('isCoach') && new Date(arg.event.start).valueOf() < new Date().valueOf()) {
         this.$vs.notify({
           color: 'danger',
@@ -286,13 +341,12 @@ export default {
         })
         return false
       }
-
       this.editedEvent = Object.values(this.calendarEvents).find(obj => {
         return obj.id === parseInt(arg.event.id)
       })
 
       // IDEA: Check with userChildren() array
-      console.log('participants', this.editedEvent['participants'])
+      // console.log('participants', this.editedEvent['participants'])
       const myChildrenOnEvent = this.editedEvent['participants'].filter(obj => {
         console.log('obj', obj)
         return obj.family_id === this.$store.state.AppActiveUser.profile.family_id
@@ -310,16 +364,9 @@ export default {
       this.childAddToEventPrompt.active = true
     },
     handleSelect (arg) {
-      console.log('handling select click', arg)
+      this.newEvent.start = arg.start
+      this.newEvent.end = arg.end
       this.addEventPrompt.active = true
-      const event = {
-        id: new Date().getTime(),
-        title: 'Something',
-        start: arg.start,
-        end: arg.end,
-        allDay: arg.allDay
-      }
-      this.$store.dispatch('calendar/addEvent', event)
     },
     handleEventMouseEnter (arg) {
       // console.log('handling mouse event enter', arg)
@@ -367,8 +414,8 @@ export default {
     changeUserChildrenOnEvent () {
       const payload = {
         'eventID': this.editedEvent.id,
-        'selected': this.childAddToEventPrompt.selected,
-        'onEvent': this.childAddToEventPrompt.onEvent
+        'eventAdd': this.childAddToEventPrompt.selected,
+        'eventDelete': this.childAddToEventPrompt.onEvent
       }
 
       this.$store.dispatch('calendar/changeEventMembers', payload)
@@ -377,6 +424,16 @@ export default {
   created () {
     this.$store.dispatch('calendar/fetchEvents')
     this.$store.dispatch('family/fetchFamily', this.$store.state.AppActiveUser.profile.family_id)
+
+    if (this.$acl.check('isCoach')) {
+      console.log('Hello coach')
+      this.$store.dispatch('calendar/fetchCategories').then((response) => {
+        this.addEventPrompt.options = this.addEventPrompt.category.selected = response.data.results
+      })
+      this.$store.dispatch('calendar/fetchEventChoices').then((response) => {
+        this.addEventPrompt.type.options = Object.values(response.data.EventTypeChoices)
+      })
+    }
   }
 }
 

@@ -3,15 +3,24 @@ from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
-from apps.events.models import Event, Season
-from apps.events.api.serializers import EventPolymorphicSerializer, SeasonSerializer
+from apps.events.models import Event, Season, Category
+from apps.events.api.serializers import (EventPolymorphicSerializer, SeasonSerializer, CategorySerializer,
+                                         EventChangePolymorphicSerializer)
 from apps.events.api.permissions import IsOwnerOrReadOnly, IsOwnFamilyOrReadOnly
 
 # RES: https://github.com/LondonAppDeveloper/recipe-app-api/blob/master/app/recipe/views.py
 # RES: https://stackoverflow.com/questions/51016896/how-to-serialize-inherited-models-in-django-rest-framework
 from apps.users.models import Profile
+from core.choices import get_all_choices
+from core.views import get_object_custom_queryset
+
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    serializer_class = CategorySerializer
+
+    def get_queryset(self):
+        return get_object_custom_queryset(self.request, Category).order_by('year_from')
 
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -20,6 +29,14 @@ class EventViewSet(viewsets.ModelViewSet):
     # permission_classes = [IsOwnFamilyOrReadOnly]
     # filter_backends = [SearchFilter]
     # search_fields = ["name"]
+
+    # https://github.com/LondonAppDeveloper/recipe-app-api/blob/master/app/recipe/views.py
+    def get_serializer_class(self):
+        """Return appropriate serializer class"""
+        custom = ["create", "update", "partial_update"]
+        if self.action in custom:
+            return EventChangePolymorphicSerializer
+        return EventPolymorphicSerializer
 
     def get_event(self, pk):
         return get_object_or_404(Event, pk=pk)
@@ -34,17 +51,10 @@ class EventViewSet(viewsets.ModelViewSet):
         event = self.get_event(event_id)
         event_serializer = EventPolymorphicSerializer(event)
 
-        # RELEASE delete this test data
-        # request.data["users"]["add"] = ["testsets", "asdasdaasdasd", "asdasdasdasdas", "sdasda"]
-        # request.data["users"]["delete"] = []
-
         users = request.data.get("users", None)
         if not users:
             Response(status=status.HTTP_400_BAD_REQUEST)
 
-        # [] -> delete everyove
-        # ["admin"] -> find my child, remove every, add only admin
-        # ["admin", "ASdasd", "Asdasd", "asdasd"] -> find my child, remove every, add only admin
         failed = []
         for user in users.get("add", ""):
             # print("add", user)
@@ -53,6 +63,7 @@ class EventViewSet(viewsets.ModelViewSet):
             except Http404:
                 failed.append(user)
                 print("User", user, "not found")
+                # raise ValidationError("User %s not found" % user)
                 pass
 
         for user in users.get("delete", ""):
@@ -62,21 +73,20 @@ class EventViewSet(viewsets.ModelViewSet):
             except Http404:
                 failed.append(user)
                 print("User", user, "not found")
+                # raise ValidationError("User %s not found" % user)
                 pass
 
         if len(failed) > 0:
-            return Response(failed, status=status.HTTP_404_NOT_FOUND)
+            return Response({"failed": failed}, status=status.HTTP_404_NOT_FOUND)
 
         return Response(event_serializer.data, status=status.HTTP_200_OK)
 
+    @action(detail=False, url_path='choices')
+    def get_event_choices(self, request):
+        return Response(get_all_choices(), status=status.HTTP_200_OK)
+
     def get_queryset(self):
-        queryset = Event.objects.all()
-
-        if self.request.query_params.get('season') == "current":
-            print("Getting events from current season")
-            queryset = queryset.filter(season=Season.objects.get(current=True))
-
-        return queryset
+        return get_object_custom_queryset(self.request, Event).order_by('start')
 
 
 class SeasonViewSet(viewsets.ModelViewSet):

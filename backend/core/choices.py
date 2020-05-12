@@ -3,6 +3,8 @@ import datetime
 from django.db import models
 from django.utils.translation import gettext as _
 
+import sys, inspect
+
 YEAR_CHOICES = [(r, r) for r in range(1984, datetime.date.today().year + 1)]
 
 
@@ -60,3 +62,29 @@ class FamilyRelationChoices(models.TextChoices):
     CHILD = 'CHILD', _('Child')
     SIBLING = 'SIBLING', _('Sibling')
     PARTNER = 'PARTNER', _('Partner')
+
+
+def get_all_classes():
+    ret = []
+    for name, obj in inspect.getmembers(sys.modules[__name__]):
+        if inspect.isclass(obj):
+            ret.append(obj)
+    return ret
+
+
+def get_all_choices():
+    classes = {
+        EventTypeChoices,
+        SkiTypeChoices
+    }
+    # classes = get_all_classes()
+
+    ret = {}
+    # FIXME not return class name but some class attribute
+    for item in classes:
+        choices_dict = {}
+        for choice, value in item.choices:
+            choices_dict[choice] = value
+
+        ret.update({item.__name__: choices_dict})
+    return ret

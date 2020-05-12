@@ -27,15 +27,15 @@
             <table>
               <tr>
                 <td class="font-semibold">Name</td>
-                <td>{{ user_data.first_name }}</td>
-              </tr>
-              <tr>
-                <td class="font-semibold">Email</td>
-                <td>{{ user_data.email }}</td>
+                <td>{{ user_data.displayName }}</td>
               </tr>
               <tr>
                 <td class="font-semibold">Username</td>
                 <td>{{ user_data.username }}</td>
+              </tr>
+              <tr>
+                <td class="font-semibold">Gender</td>
+                <td>{{ user_data.gender}}</td>
               </tr>
             </table>
           </div>
@@ -45,8 +45,8 @@
           <div class="vx-col flex-1" id="account-info-col-2">
             <table>
               <tr>
-                <td class="font-semibold">Surname</td>
-                <td>{{ user_data.last_name}}</td>
+                <td class="font-semibold">Email</td>
+                <td>{{ user_data.email }}</td>
               </tr>
               <tr>
                 <td class="font-semibold">Role</td>
@@ -71,11 +71,11 @@
             <table>
               <tr>
                 <td class="font-semibold">Birth Date</td>
-                <td>{{ user_data.dob }}</td>
+                <td>{{ user_data.birth_date }}</td>
               </tr>
               <tr>
                 <td class="font-semibold">Mobile</td>
-                <td>{{ user_data.mobile }}</td>
+                <td>{{ user_data.phone_number }}</td>
               </tr>
               <tr>
                 <td class="font-semibold">Website</td>
@@ -83,49 +83,52 @@
               </tr>
             </table>
           </vx-card>
+          <vs-button v-if="user_data.userRole === 'child'" icon-pack="feather" icon="icon-bar-chart" class="mr-4"
+                     :to="{name: 'app-user-stats',  params: { userId: this.$route.params.userId }}">Show statistics
+          </vs-button>
         </div>
 
       </div>
 
-      <vx-card>
-        <div class="vx-row">
-          <div class="vx-col w-full">
-            <div class="flex items-end px-3">
-              <feather-icon svgClasses="w-6 h-6" icon="LockIcon" class="mr-2"/>
-              <span class="font-medium text-lg leading-none">Permissions</span>
-            </div>
-            <vs-divider/>
-          </div>
-        </div>
+      <!--      <vx-card>-->
+      <!--        <div class="vx-row">-->
+      <!--          <div class="vx-col w-full">-->
+      <!--            <div class="flex items-end px-3">-->
+      <!--              <feather-icon svgClasses="w-6 h-6" icon="LockIcon" class="mr-2"/>-->
+      <!--              <span class="font-medium text-lg leading-none">Permissions</span>-->
+      <!--            </div>-->
+      <!--            <vs-divider/>-->
+      <!--          </div>-->
+      <!--        </div>-->
 
-        <div class="block overflow-x-auto">
-          <table class="w-full permissions-table">
-            <tr>
-              <!--
-                You can also use `Object.keys(Object.values(data_local.permissions)[0])` this logic if you consider,
-                our data structure. You just have to loop over above variable to get table headers.
-                Below we made it simple. So, everyone can understand.
-               -->
-              <th class="font-semibold text-base text-left px-3 py-2"
-                  v-for="heading in ['Module', 'Read', 'Write', 'Create', 'Delete']" :key="heading">{{ heading }}
-              </th>
-            </tr>
+      <!--        <div class="block overflow-x-auto">-->
+      <!--          <table class="w-full permissions-table">-->
+      <!--            <tr>-->
+      <!--              &lt;!&ndash;-->
+      <!--                You can also use `Object.keys(Object.values(data_local.permissions)[0])` this logic if you consider,-->
+      <!--                our data structure. You just have to loop over above variable to get table headers.-->
+      <!--                Below we made it simple. So, everyone can understand.-->
+      <!--               &ndash;&gt;-->
+      <!--              <th class="font-semibold text-base text-left px-3 py-2"-->
+      <!--                  v-for="heading in ['Module', 'Read', 'Write', 'Create', 'Delete']" :key="heading">{{ heading }}-->
+      <!--              </th>-->
+      <!--            </tr>-->
 
-            <tr v-for="(val, name) in user_data.permissions" :key="name">
-              <td class="px-3 py-2">{{ name }}</td>
-              <td v-for="(permission, name) in val" class="px-3 py-2" :key="name+permission">
-                <vs-checkbox v-model="val[name]" class="pointer-events-none"/>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <!-- TODO only if user is from save family or you have access-->
-        <div class="vx-col w-full flex" id="account-manage-buttons">
-          <vs-button icon-pack="feather" icon="icon-bar-chart" class="mr-4"
-                     :to="{name: 'app-user-stats',  params: { userId: this.$route.params.userId }}">More stats
-          </vs-button>
-        </div>
-      </vx-card>
+      <!--            <tr v-for="(val, name) in user_data.permissions" :key="name">-->
+      <!--              <td class="px-3 py-2">{{ name }}</td>-->
+      <!--              <td v-for="(permission, name) in val" class="px-3 py-2" :key="name+permission">-->
+      <!--                <vs-checkbox v-model="val[name]" class="pointer-events-none"/>-->
+      <!--              </td>-->
+      <!--            </tr>-->
+      <!--          </table>-->
+      <!--        </div>-->
+      <!--        &lt;!&ndash; TODO only if user is from save family or you have access&ndash;&gt;-->
+      <!--        <div class="vx-col w-full flex" id="account-manage-buttons">-->
+      <!--          <vs-button icon-pack="feather" icon="icon-bar-chart" class="mr-4"-->
+      <!--                     :to="{name: 'app-user-stats',  params: { userId: this.$route.params.userId }}">More stats-->
+      <!--          </vs-button>-->
+      <!--        </div>-->
+      <!--      </vx-card>-->
     </div>
   </div>
 </template>

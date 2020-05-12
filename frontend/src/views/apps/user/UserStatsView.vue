@@ -4,44 +4,13 @@
       <span>Statistic for this user not found. </span>
     </vs-alert>
 
-    <!--    <div class="vx-row">-->
-    <!--      <div class="vx-col w-full w-1/2 sm:w-1/2 lg:w-1/3"-->
-    <!--           v-for="(item, key) in user_stats"-->
-    <!--           :key="key">-->
-    <!--        <vx-card :title="`${item.name}`" class="mb-10">-->
-    <!--          <template slot="actions">-->
-    <!--            <feather-icon icon="HelpCircleIcon" svgClasses="w-6 h-6 text-grey"></feather-icon>-->
-    <!--          </template>-->
+    <vue-apex-charts ref="userChart1" type="bar" height="350" :options="chartOptions"
+                     :series="series"></vue-apex-charts>
 
-    <!--          &lt;!&ndash; CHART &ndash;&gt;-->
-    <!--          <template slot="no-body">-->
-    <!--            <div class="mt-10">-->
-    <!--              <vue-apex-charts-->
-    <!--                :options="goalOverviewRadialBar.chartOptions"-->
-    <!--                :series="[28]"-->
-    <!--                height="240"-->
-    <!--                type="radialBar"/>-->
-    <!--            </div>-->
-    <!--          </template>-->
-    <!--          &lt;!&ndash; DATA &ndash;&gt;-->
-    <!--          <div-->
-    <!--            class="flex justify-between text-center mt-4"-->
-    <!--            slot="no-body-bottom"-->
-    <!--            v-if="true">-->
-    <!--            <div class="w-1/2 border border-solid d-theme-border-grey-light border-r-0 border-b-0 border-l-0">-->
-    <!--              <p class="mt-4">Completed</p>-->
-    <!--              <p class="mb-4 text-3xl font-semibold">{{item.count}}</p>-->
-    <!--            </div>-->
-    <!--            <div class="w-1/2 border border-solid d-theme-border-grey-light border-r-0 border-b-0">-->
-    <!--              <p class="mt-4">Total</p>-->
-    <!--              <p class="mb-4 text-3xl font-semibold">{{item.total}}</p>-->
-    <!--            </div>-->
-    <!--          </div>-->
-    <!--        </vx-card>-->
-    <!--      </div>-->
-    <!--    </div>-->
+    <vue-apex-charts ref="userChart2" width="300" height="300" type="donut" :options="chartOptions2"
+                     :series="series2"></vue-apex-charts>
 
-    <vue-apex-charts type="bar" height="350" :options="chartOptions" :series="series"></vue-apex-charts>
+    <pre>{{user_stats}}</pre>
   </div>
 </template>
 
@@ -56,6 +25,13 @@ export default {
   },
   data () {
     return {
+      chartOptions2: {
+        chart: {
+          id: 'basic-donut'
+        },
+        labels: ['a', 'b', 'c']
+      },
+      series2: [30, 40, 45],
       series: [],
       chartOptions: {
         chart: {
@@ -81,13 +57,6 @@ export default {
             text: undefined
           }
         },
-        tooltip: {
-          y: {
-            formatter: function (val) {
-              return val
-            }
-          }
-        },
         fill: {
           opacity: 1
         },
@@ -111,131 +80,70 @@ export default {
     }
   },
   methods: {
-    async changeCategories (data) {
-      ApexCharts.exec('chart1', 'updateOptions', {
-        xaxis: {
-          categories: data
-        }
+    processData () {
+      const seasons = []
+      const series = {}
+      // this.user_stats =
+      //   {
+      //     '2018-2019': {
+      //       'SKI_TRAINING': {
+      //         'name': 'Ski Training',
+      //         'count': 1,
+      //         'total': 1
+      //       },
+      //       'ATHLETIC_TRAINING': {
+      //         'name': 'Athletic Training',
+      //         'count': 1,
+      //         'total': 5
+      //       }
+      //     },
+      //     '2017-2018': {
+      //       'SKI_TRAINING': {
+      //         'name': 'Ski Training',
+      //         'count': 5,
+      //         'total': 20
+      //       },
+      //       'ATHLETIC_TRAINING': {
+      //         'name': 'Athletic Training',
+      //         'count': 15,
+      //         'total': 10
+      //       }
+      //     }
+      //   }
+      Object.entries(this.user_stats).forEach(([season, data]) => {
+        seasons.push(season)
+        series[season] = []
+        Object.entries(data).forEach(([key, value]) => {
+          if (!series[season].hasOwnProperty(key)) {
+            series[season][key] = { ...series[season][key], ...value }
+            series[season][key] = { ...series[season][key], ...{ data: [] } }
+          }
+          // Here is the line where in data which i want to sho i pushing values
+          series[season][key]['data'].push(value.count)
+        })
       })
-    },
-    async processData () {
-      // TODO return data via server, this must be the best way smt like /stats/summary/
-      // this.$vs.loading()
-      const categories = []
-      const data = []
-      const series = []
+      // console.log('series', series)
+      // console.log('seasons', seasons)
+      this.$refs.userChart1.updateOptions({ xaxis: { categories: seasons } })
+      this.$refs.userChart2.updateOptions({ xaxis: { categories: seasons } })
 
-      const testUserData = {
-        '2018-2019': {
-          'SKI_TRAINING': {
-            'name': 'Ski Training',
-            'count': 3,
-            'total': 3
-          },
-          'ATHLETIC_TRAINING': {
-            'name': 'Athletic Training',
-            'count': 0,
-            'total': 1
-          },
-          'SKI_RACE': {
-            'name': 'Ski Race',
-            'count': 1,
-            'total': 2
-          },
-          'SKI_CAMP': {
-            'name': 'Ski Camp',
-            'count': 0,
-            'total': 0
-          },
-          'VIDEO_ANALYZE': {
-            'name': 'Video Analyze',
-            'count': 1,
-            'total': 1
-          },
-          'MEETING': {
-            'name': 'Meeting',
-            'count': 0,
-            'total': 0
-          }
-        },
-        '2017-2018': {
-          'SKI_TRAINING': {
-            'name': 'Ski Training',
-            'count': 0,
-            'total': 0
-          },
-          'ATHLETIC_TRAINING': {
-            'name': 'Athletic Training',
-            'count': 1,
-            'total': 0
-          },
-          'SKI_RACE': {
-            'name': 'Ski Race',
-            'count': 1,
-            'total': 1
-          },
-          'SKI_CAMP': {
-            'name': 'Ski Camp',
-            'count': 0,
-            'total': 0
-          },
-          'VIDEO_ANALYZE': {
-            'name': 'Video Analyze',
-            'count': 0,
-            'total': 0
-          },
-          'MEETING': {
-            'name': 'Meeting',
-            'count': 0,
-            'total': 0
-          }
-        }
-      }
-
-      for (const [season, stats] of Object.entries(testUserData)) {
-        categories.push(season)
-        console.log(`Value of ${season}: ${stats}`)
-        for (const [key, value] of Object.entries(stats)) {
-          console.log(`Value of ${key}: ${value}`)
-          if (!series.hasOwnProperty(key)) {
-            series[key] = {
-              name: value.name,
-              data: []
-            }
-          }
-          series[key]['data'].push(value.count)
-        }
-      }
-      const demo = [{
-        name: 'Ski Training',
-        data: [44, 55, 41, 37, 22, 43, 21]
-      }, {
-        name: 'Ski Race',
-        data: [53, 32, 33, 52, 13, 43, 32]
-      }, {
-        name: 'Ski Camp',
-        data: [44, 55, 41, 37, 22, 43, 21]
-      }, {
-        name: 'Athletic Training',
-        data: [53, 32, 33, 52, 13, 43, 32]
-      }, {
-        name: 'Meeting',
-        data: [12, 17, 11, 9, 15, 11, 20]
-      }, {
-        name: 'Video Analyze',
-        data: [9, 7, 5, 8, 6, 9, 4]
-      }]
-      console.log('categories', categories)
-      await this.changeCategories(categories)
-      console.log('series', series)
-      console.log('demo', demo)
 
       const cleanData = []
-      Object.values(series).forEach((element) => {
-        cleanData.unshift(element)
+      Object.values(series).forEach((el) => {
+        Object.entries(el).forEach(([key, value]) => {
+          const magenicIndex = cleanData.findIndex(vendor => vendor.name === value.name)
+          if (magenicIndex > -1) {
+            cleanData[magenicIndex].data.push(...value.data)
+          } else {
+            cleanData.push({
+              name: value.name,
+              data: value.data
+            })
+          }
+        })
       })
+      // console.log('cleanData final', cleanData)
       this.series = cleanData
-      // this.$vs.loading.close()
     }
   },
   created () {
@@ -244,23 +152,13 @@ export default {
       this.$store.registerModule('userManagement', moduleUserManagement)
       moduleUserManagement.isRegistered = true
     }
-    // TODO: Do it on server and return data in correct format like this
-    // this.$store.dispatch('family/fetchCompleteUserStatsGraph'
-    //      const demo = [{
-    //        name: 'Ski Training',
-    //        data: [44, 55, 41, 37, 22, 43, 21]
-    //      }, {
-    //        name: 'Ski Race',
-    //        data: [53, 32, 33, 52, 13, 43, 32]
-    //      }]
-
     this.$store.dispatch('family/fetchUserStats',
       {
         username: this.$route.params.userId
       })
       .then(res => {
         // this.$vs.loading.close()
-        this.user_stats = res.data
+        this.user_stats = res.data.data
         this.processData()
       })
       .catch(err => {
@@ -270,7 +168,6 @@ export default {
           this.user_not_found = true
         }
       })
-
   }
 }
 

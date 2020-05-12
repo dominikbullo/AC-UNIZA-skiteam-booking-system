@@ -15,8 +15,8 @@ export default {
    *
    * @default fetching from current active season
    */
-  fetchEvents ({ commit }, payload = { query: { season: 'current' } }) {
-    console.log('payload fetch events', payload)
+  fetchEvents ({ commit }, payload = { query: { season: {} } }) {
+    // console.log('payload fetch events', payload)
 
     return new Promise((resolve, reject) => {
       axios.get('/event/', {
@@ -43,12 +43,37 @@ export default {
         })
     })
   },
+  fetchEventChoices ({ commit }, payload) {
+    return new Promise((resolve, reject) => {
+      axios.get('/events/choices/')
+        .then((response) => {
+          commit('SET_EVENT_CHOICES', response.data)
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
+  },
+  fetchCategories ({ commit }, payload) {
+    return new Promise((resolve, reject) => {
+      axios.get('/categories/')
+        .then((response) => {
+          commit('SET_CATEGORIES', response.data.results)
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
+  },
   changeEventMembers ({ commit }, payload) {
+    console.log('payload 1s', payload)
     const apiPayload = {
-      'add': payload.selected.filter(x => !payload.onEvent.includes(x)),
-      'delete': payload.onEvent.filter(x => !payload.selected.includes(x))
+      'add': payload.eventAdd.filter(x => !payload.eventDelete.includes(x)),
+      'delete': payload.eventDelete.filter(x => !payload.eventAdd.includes(x))
     }
-    console.log('delete', apiPayload)
+    console.log('apiPayload', apiPayload)
 
     return new Promise((resolve, reject) => {
       axios.post(`event/${payload.eventID}/change/`, { users: apiPayload })
@@ -90,17 +115,18 @@ export default {
   },
   addEvent ({ commit }, event) {
     console.log('add event in actions', event)
-    commit('ADD_EVENT', event.data)
-    // return new Promise((resolve, reject) => {
-    //   axios.post('/events/', event)
-    //     .then((response) => {
-    //       commit('ADD_EVENT', response.data)
-    //       resolve(response)
-    //     })
-    //     .catch((error) => {
-    //       reject(error)
-    //     })
-    // })
+    return new Promise((resolve, reject) => {
+      axios.post('/events/', event)
+        .then((response) => {
+          commit('ADD_EVENT', response.data)
+          // Update category & location by store data
+          // commit('UPDATE_EVENT', response)
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
   }
   // updateOrAddEvent ({ commit }, event) {
   //   commit('UPDATE_EVENT', event.data)

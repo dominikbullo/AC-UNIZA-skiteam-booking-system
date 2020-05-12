@@ -68,7 +68,7 @@
       ref="password"
       type="password"
       v-model="password"
-      v-validate="'required|min:6'"/>
+      v-validate="'required|min:8'"/>
     <span class="text-danger text-sm">{{ errors.first('password') }}</span>
 
     <vs-input
@@ -81,7 +81,7 @@
       name="confirm_password"
       type="password"
       v-model="confirm_password"
-      v-validate="'min:6|confirmed:password'"/>
+      v-validate="'min:8|confirmed:password'"/>
     <span class="text-danger text-sm">{{ errors.first('confirm_password') }}</span>
 
     <vs-checkbox class="mt-6" v-model="isTermsConditionAccepted">{{ $t('message.terms_accept') }}.</vs-checkbox>
@@ -185,7 +185,8 @@ export default {
         notify: this.$vs.notify
       }
 
-      this.$store.dispatch('auth/registerUserDRF', payload).then(() => {
+      this.$store.dispatch('auth/registerUserDRF', payload).then((response) => {
+        this.$router.push(this.$router.currentRoute.query.to || '/')
         this.$vs.loading.close()
       }).catch(error => {
         this.$vs.loading.close()
