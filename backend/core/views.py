@@ -6,7 +6,7 @@ def get_object_custom_queryset(request, db_object):
         print("Getting all events")
         return db_object.objects.all()
 
-    print("Getting ONLY CURRENT season data")
+    # print("Getting ONLY CURRENT season data")
     return db_object.objects.filter(season=Season.objects.get(current=True))
 
 

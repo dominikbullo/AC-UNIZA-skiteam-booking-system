@@ -55,6 +55,18 @@ export default {
         })
     })
   },
+  fetchLocations ({ commit }, payload) {
+    return new Promise((resolve, reject) => {
+      axios.get('/locations/')
+        .then((response) => {
+          commit('SET_LOCATIONS', response.data.results)
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
+  },
   fetchCategories ({ commit }, payload) {
     return new Promise((resolve, reject) => {
       axios.get('/categories/')
@@ -119,8 +131,6 @@ export default {
       axios.post('/events/', event)
         .then((response) => {
           commit('ADD_EVENT', response.data)
-          // Update category & location by store data
-          // commit('UPDATE_EVENT', response)
           resolve(response)
         })
         .catch((error) => {

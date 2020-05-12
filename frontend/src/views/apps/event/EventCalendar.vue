@@ -310,23 +310,26 @@ export default {
   methods: {
     displayObject (object, displayKey = 'displayName') {
       const ret = []
+      console.log('object', object)
+
       Object.values(this.editedEvent.category).forEach((element) => {
-        ret.unshift(element[displayKey])
+        ret.push(element[displayKey])
       })
+
       return ret
     },
     addEvent () {
       console.log('adding event')
-
       const event = {
-        type: 'ATHLETIC_TRAINING',
+        type: 'SKI_TRAINING',
         start: this.newEvent.start,
         end: this.newEvent.end,
         location: 1,
         category: [1, 3, 4, 5, 6],
-        resourcetype: 'Event'
+        resourcetype: 'SkiTraining'
       }
-      this.$store.dispatch('calendar/addEvent', event)
+      this.newEvent = event
+      this.$store.dispatch('calendar/addEvent', this.newEvent)
     },
     handleDateClick (arg) {
       console.log('handling date click', arg)
@@ -345,10 +348,22 @@ export default {
         return obj.id === parseInt(arg.event.id)
       })
 
+      if (this.$acl.check('isCoach')) {
+        const categoriesOnEvent = []
+        const category = this.$store.state.calendar.eventConfig.categories
+        Object.values(category).forEach((categoryOnEvent) => {
+          categoriesOnEvent.push(category.find(function (entry) {
+              return entry.id === categoryOnEvent.id
+            })
+          )
+        })
+        this.editedEvent.category = categoriesOnEvent
+      }
+
       // IDEA: Check with userChildren() array
       // console.log('participants', this.editedEvent['participants'])
       const myChildrenOnEvent = this.editedEvent['participants'].filter(obj => {
-        console.log('obj', obj)
+        // console.log('obj', obj)
         return obj.family_id === this.$store.state.AppActiveUser.profile.family_id
       })
       // console.log('myChildOnEvent', myChildOnEvent)
@@ -427,6 +442,9 @@ export default {
 
     if (this.$acl.check('isCoach')) {
       console.log('Hello coach')
+      this.$store.dispatch('calendar/fetchLocations').then((response) => {
+        this.addEventPrompt.options = this.addEventPrompt.category.selected = response.data.results
+      })
       this.$store.dispatch('calendar/fetchCategories').then((response) => {
         this.addEventPrompt.options = this.addEventPrompt.category.selected = response.data.results
       })

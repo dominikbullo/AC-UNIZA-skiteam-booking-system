@@ -15,8 +15,11 @@ export default {
   SET_EVENTS (state, events) {
     state.events = events
   },
-  SET_CATEGORIES (state, events) {
-    state.eventConfig.categories = events
+  SET_CATEGORIES (state, categories) {
+    state.eventConfig.categories = categories
+  },
+  SET_LOCATIONS (state, locations) {
+    state.eventConfig.locations = locations
   },
   SET_EVENT_CHOICES (state, choices) {
     state.eventConfig.choices = choices

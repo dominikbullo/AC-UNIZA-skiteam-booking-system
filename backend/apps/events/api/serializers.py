@@ -6,7 +6,7 @@ from rest_polymorphic.serializers import PolymorphicSerializer
 
 from apps.family.api.serializers import ChildSerializer
 from core import choices
-from apps.events.models import Event, SkiTraining, SkiRace, Season, Category, Location
+from apps.events.models import Event, SkiTraining, SkiRace, Season, Category, Location, RaceOrganizer
 
 from apps.family.models import Child
 from apps.users.api.serializers import BaseProfileSerializer
@@ -22,14 +22,6 @@ class SeasonSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     displayName = serializers.CharField(source='get_name_display', read_only=True)
 
-    def create(self, validated_data):
-        print("test")
-        return validated_data
-
-    def update(self, instance, validated_data):
-        print("test")
-        return instance
-
     class Meta:
         model = Category
         exclude = ("members",)
@@ -37,6 +29,11 @@ class CategorySerializer(serializers.ModelSerializer):
 
 # RES: https://github.com/richardtallent/vue-simple-calendar#calendar-item-properties
 # RES(Nested relationships): https://medium.com/@raaj.akshar/creating-reverse-related-objects-with-django-rest-framework-b1952ddff1c
+
+class RaceOrganizerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RaceOrganizer
+        fields = "__all__"
 
 
 class LocationSerializer(serializers.ModelSerializer):
@@ -51,6 +48,8 @@ class BaseEventChangeSerializer(serializers.ModelSerializer):
     participants = BaseProfileSerializer(many=True, required=False)
     season = SeasonSerializer(many=False, read_only=True)
 
+    # RES: https://stackoverflow.com/questions/28706072/drf-3-creating-many-to-many-update-create-serializer-with-though-table
+    # RES: https://www.django-rest-framework.org/api-guide/relations/#primarykeyrelatedfield
     category = serializers.PrimaryKeyRelatedField(
         many=True,
         queryset=Category.objects.all()
@@ -72,6 +71,10 @@ class BaseEventChangeSerializer(serializers.ModelSerializer):
                     raise ValidationError("Category %s isn't from current season" % str(category))
 
         return data
+
+    class Meta:
+        fields = "__all__"
+        depth = 2
 
 
 class BaseEventSerializer(BaseEventChangeSerializer):

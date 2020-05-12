@@ -4,9 +4,9 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from apps.events.models import Event, Season, Category
+from apps.events.models import Event, Season, Category, Location, RaceOrganizer
 from apps.events.api.serializers import (EventPolymorphicSerializer, SeasonSerializer, CategorySerializer,
-                                         EventChangePolymorphicSerializer)
+                                         EventChangePolymorphicSerializer, LocationSerializer, RaceOrganizerSerializer)
 from apps.events.api.permissions import IsOwnerOrReadOnly, IsOwnFamilyOrReadOnly
 
 # RES: https://github.com/LondonAppDeveloper/recipe-app-api/blob/master/app/recipe/views.py
@@ -92,3 +92,13 @@ class EventViewSet(viewsets.ModelViewSet):
 class SeasonViewSet(viewsets.ModelViewSet):
     queryset = Season.objects.all()
     serializer_class = SeasonSerializer
+
+
+class LocationViewSet(viewsets.ModelViewSet):
+    queryset = Location.objects.all()
+    serializer_class = LocationSerializer
+
+
+class RaceOrganizerViewSet(viewsets.ModelViewSet):
+    queryset = RaceOrganizer.objects.all()
+    serializer_class = RaceOrganizerSerializer

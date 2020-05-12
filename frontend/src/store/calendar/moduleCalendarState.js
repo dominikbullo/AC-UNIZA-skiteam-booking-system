@@ -14,6 +14,7 @@ export default {
   eventConfig: {
     choices: [],
     categories: [],
+    locations: [],
     labels: []
   }
 }
