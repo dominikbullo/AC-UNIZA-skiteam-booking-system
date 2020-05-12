@@ -131,23 +131,35 @@
           <label class="text-sm">Event type</label>
           <!-- RES: https://vue-select.org/ -->
           <v-select
+            label="displayName"
+            :reduce="item => item.key"
             v-model="addEventPrompt.type.selected"
             :options="addEventPrompt.type.options"/>
         </div>
 
         <div class="mt-4">
+          <label class="text-sm">Skis</label>
+          <v-select
+            label="displayName"
+            :reduce="item => item.key"
+            v-model="addEventPrompt.skis.selected"
+            :options="addEventPrompt.skis.options"/>
+        </div>
+
+        <div class="mt-4">
           <label class="text-sm">Categories</label>
-          <!-- RES: https://vue-select.org/ -->
+          {{ addEventPrompt.category.selected }}
           <v-select multiple
                     :closeOnSelect="false"
                     label="displayName"
+                    :reduce="category => category.id"
                     v-model="addEventPrompt.category.selected"
                     :options="addEventPrompt.category.options"/>
         </div>
 
         <div class="mt-4">
           <label class="text-sm">Start</label>
-          <flat-pickr v-model="newEvent.startDate"
+          <flat-pickr v-model="newEvent.start"
                       :config="datePickerConfig"
                       class="w-full"
                       v-validate="'required'"
@@ -157,7 +169,7 @@
 
         <div class="mt-4">
           <label class="text-sm">End</label>
-          <flat-pickr v-model="newEvent.endDate"
+          <flat-pickr v-model="newEvent.end"
                       :config="datePickerConfig"
                       class="w-full"
                       v-validate="'required'"
@@ -260,13 +272,18 @@ export default {
           options: []
         },
         type: {
+          selected: 'SKI_TRAINING',
+          options: []
+        },
+        skis: {
+          selected: 'ALL',
+          options: []
+        },
+        organizers: {
           selected: [],
           options: []
         }
       },
-
-      fromDate: null,
-      toDate: null,
 
       configFromdateTimePicker: {
         minDate: new Date(),
@@ -282,9 +299,9 @@ export default {
       newEvent: {
         start: null,
         end: null,
-        disabledFrom: false,
-        disabledDatesTo: false,
-        title: ''
+        type: '',
+        // TODO location
+        location: 1
       }
     }
   },
@@ -319,17 +336,23 @@ export default {
       return ret
     },
     addEvent () {
-      console.log('adding event')
-      const event = {
-        type: 'SKI_TRAINING',
-        start: this.newEvent.start,
-        end: this.newEvent.end,
-        location: 1,
-        category: [1, 3, 4, 5, 6],
-        resourcetype: 'SkiTraining'
+      // TODO: Automatic with selecting event
+      let resourcetype = 'Event'
+
+      if (this.addEventPrompt.type.selected === 'SKI_TRAINING') {
+        resourcetype = 'SkiTraining'
       }
-      this.newEvent = event
-      this.$store.dispatch('calendar/addEvent', this.newEvent)
+      if (this.addEventPrompt.type.selected === 'SKI_RACE') {
+        resourcetype = 'SkiRace'
+      }
+
+      const addToEvent = {
+        category: this.addEventPrompt.category.selected,
+        skis: this.addEventPrompt.skis.selected,
+        type: this.addEventPrompt.type.selected,
+        resourcetype
+      }
+      this.$store.dispatch('calendar/addEvent', { ...this.newEvent, ...addToEvent })
     },
     handleDateClick (arg) {
       console.log('handling date click', arg)
@@ -379,6 +402,7 @@ export default {
       this.childAddToEventPrompt.active = true
     },
     handleSelect (arg) {
+      console.log('arg', arg)
       this.newEvent.start = arg.start
       this.newEvent.end = arg.end
       this.addEventPrompt.active = true
@@ -434,6 +458,14 @@ export default {
       }
 
       this.$store.dispatch('calendar/changeEventMembers', payload)
+    },
+    cleanData (object, key = 'id') {
+      const id = []
+      Object.values(object).forEach((item) => {
+        id.push(item[key])
+      })
+      console.log(id)
+      return id
     }
   },
   created () {
@@ -442,14 +474,24 @@ export default {
 
     if (this.$acl.check('isCoach')) {
       console.log('Hello coach')
-      this.$store.dispatch('calendar/fetchLocations').then((response) => {
-        this.addEventPrompt.options = this.addEventPrompt.category.selected = response.data.results
+
+      this.$store.dispatch('calendar/fetchRaceOrganizers').then((res) => {
+        console.log('raceorganizers', res.data.results)
       })
-      this.$store.dispatch('calendar/fetchCategories').then((response) => {
-        this.addEventPrompt.options = this.addEventPrompt.category.selected = response.data.results
+
+      this.$store.dispatch('calendar/fetchLocations').then((res) => {
+        console.log('locations', res.data.results)
       })
-      this.$store.dispatch('calendar/fetchEventChoices').then((response) => {
-        this.addEventPrompt.type.options = Object.values(response.data.EventTypeChoices)
+
+      this.$store.dispatch('calendar/fetchCategories').then((res) => {
+        this.addEventPrompt.category.options = res.data.results
+        this.addEventPrompt.category.selected = this.cleanData(this.addEventPrompt.category.options)
+      })
+
+
+      this.$store.dispatch('calendar/fetchEventChoices').then((res) => {
+        this.addEventPrompt.type.options = res.data.EventTypeChoices
+        this.addEventPrompt.skis.options = res.data.SkiTypeChoices
       })
     }
   }

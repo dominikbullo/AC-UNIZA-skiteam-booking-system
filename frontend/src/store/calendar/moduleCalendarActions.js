@@ -67,6 +67,18 @@ export default {
         })
     })
   },
+  fetchRaceOrganizers ({ commit }, payload) {
+    return new Promise((resolve, reject) => {
+      axios.get('/race-organizer/')
+        .then((response) => {
+          // commit('SET_LOCATIONS', response.data.results)
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
+  },
   fetchCategories ({ commit }, payload) {
     return new Promise((resolve, reject) => {
       axios.get('/categories/')

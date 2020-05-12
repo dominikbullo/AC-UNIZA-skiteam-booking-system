@@ -82,9 +82,12 @@ def get_all_choices():
     ret = {}
     # FIXME not return class name but some class attribute
     for item in classes:
-        choices_dict = {}
+        choices = []
         for choice, value in item.choices:
-            choices_dict[choice] = value
+            choices.append({
+                "key"        : choice,
+                "displayName": value,
+            })
 
-        ret.update({item.__name__: choices_dict})
+        ret.update({item.__name__: choices})
     return ret
