@@ -13,14 +13,14 @@ from apps.events.api.permissions import IsOwnerOrReadOnly, IsOwnFamilyOrReadOnly
 # RES: https://stackoverflow.com/questions/51016896/how-to-serialize-inherited-models-in-django-rest-framework
 from apps.users.models import Profile
 from core.choices import get_all_choices
-from core.views import get_custom_queryset
+from core.views import get_object_custom_queryset
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = CategorySerializer
 
     def get_queryset(self):
-        return get_custom_queryset(self.request, Category).order_by('year_from')
+        return get_object_custom_queryset(self.request, Category).order_by('year_from')
 
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -86,7 +86,7 @@ class EventViewSet(viewsets.ModelViewSet):
         return Response(get_all_choices(), status=status.HTTP_200_OK)
 
     def get_queryset(self):
-        return get_custom_queryset(self.request, Event).order_by('start')
+        return get_object_custom_queryset(self.request, Event).order_by('start')
 
 
 class SeasonViewSet(viewsets.ModelViewSet):

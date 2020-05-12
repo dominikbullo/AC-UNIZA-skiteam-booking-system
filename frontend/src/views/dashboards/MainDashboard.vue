@@ -236,8 +236,8 @@ export default {
         .then((res) => {
           // FIXME
           // console.log('res data', res.data)
-          this.stats = Object.values(res.data)[0]
-          return res.data
+          this.stats = Object.values(res.data.data)[0]
+          return res.data.data
         })
     },
     getDisplayStats (stats) {

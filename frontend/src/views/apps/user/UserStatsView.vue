@@ -1,49 +1,16 @@
 <template>
   <div id="page-user-stats-view">
-    <pre>{{user_stats}}</pre>
     <vs-alert color="danger" title="User Not Found" :active.sync="user_not_found">
       <span>Statistic for this user not found. </span>
     </vs-alert>
 
-    <!--    <div class="vx-row">-->
-    <!--      <div class="vx-col w-full w-1/2 sm:w-1/2 lg:w-1/3"-->
-    <!--           v-for="(item, key) in user_stats"-->
-    <!--           :key="key">-->
-    <!--        <vx-card :title="`${item.name}`" class="mb-10">-->
-    <!--          <template slot="actions">-->
-    <!--            <feather-icon icon="HelpCircleIcon" svgClasses="w-6 h-6 text-grey"></feather-icon>-->
-    <!--          </template>-->
-
-    <!--          &lt;!&ndash; CHART &ndash;&gt;-->
-    <!--          <template slot="no-body">-->
-    <!--            <div class="mt-10">-->
-    <!--              <vue-apex-charts-->
-    <!--                :options="goalOverviewRadialBar.chartOptions"-->
-    <!--                :series="[28]"-->
-    <!--                height="240"-->
-    <!--                type="radialBar"/>-->
-    <!--            </div>-->
-    <!--          </template>-->
-    <!--          &lt;!&ndash; DATA &ndash;&gt;-->
-    <!--          <div-->
-    <!--            class="flex justify-between text-center mt-4"-->
-    <!--            slot="no-body-bottom"-->
-    <!--            v-if="true">-->
-    <!--            <div class="w-1/2 border border-solid d-theme-border-grey-light border-r-0 border-b-0 border-l-0">-->
-    <!--              <p class="mt-4">Completed</p>-->
-    <!--              <p class="mb-4 text-3xl font-semibold">{{item.count}}</p>-->
-    <!--            </div>-->
-    <!--            <div class="w-1/2 border border-solid d-theme-border-grey-light border-r-0 border-b-0">-->
-    <!--              <p class="mt-4">Total</p>-->
-    <!--              <p class="mb-4 text-3xl font-semibold">{{item.total}}</p>-->
-    <!--            </div>-->
-    <!--          </div>-->
-    <!--        </vx-card>-->
-    <!--      </div>-->
-    <!--    </div>-->
-
     <vue-apex-charts ref="userChart1" type="bar" height="350" :options="chartOptions"
                      :series="series"></vue-apex-charts>
+
+    <vue-apex-charts ref="userChart2" width="300" height="300" type="donut" :options="chartOptions2"
+                     :series="series2"></vue-apex-charts>
+
+    <pre>{{user_stats}}</pre>
   </div>
 </template>
 
@@ -58,6 +25,13 @@ export default {
   },
   data () {
     return {
+      chartOptions2: {
+        chart: {
+          id: 'basic-donut'
+        },
+        labels: ['a', 'b', 'c']
+      },
+      series2: [30, 40, 45],
       series: [],
       chartOptions: {
         chart: {
@@ -81,13 +55,6 @@ export default {
         yaxis: {
           title: {
             text: undefined
-          }
-        },
-        tooltip: {
-          y: {
-            formatter: function (val) {
-              return val
-            }
           }
         },
         fill: {
@@ -116,7 +83,6 @@ export default {
     processData () {
       const seasons = []
       const series = {}
-      console.log('data', this.user_stats)
       // this.user_stats =
       //   {
       //     '2018-2019': {
@@ -152,23 +118,22 @@ export default {
             series[season][key] = { ...series[season][key], ...value }
             series[season][key] = { ...series[season][key], ...{ data: [] } }
           }
+          // Here is the line where in data which i want to sho i pushing values
           series[season][key]['data'].push(value.count)
         })
       })
-      console.log('series', series)
-      console.log('seasons', seasons)
+      // console.log('series', series)
+      // console.log('seasons', seasons)
       this.$refs.userChart1.updateOptions({ xaxis: { categories: seasons } })
-      console.log('***************************************************************')
+      this.$refs.userChart2.updateOptions({ xaxis: { categories: seasons } })
+
 
       const cleanData = []
-      console.log('aaaabp_cleanData', cleanData)
       Object.values(series).forEach((el) => {
         Object.entries(el).forEach(([key, value]) => {
-          console.log('cleanData.some(e => e.name === key)', cleanData.some(e => e.name === value.name))
-
           const magenicIndex = cleanData.findIndex(vendor => vendor.name === value.name)
           if (magenicIndex > -1) {
-            cleanData[magenicIndex].data.push(value.count)
+            cleanData[magenicIndex].data.push(...value.data)
           } else {
             cleanData.push({
               name: value.name,
@@ -177,7 +142,7 @@ export default {
           }
         })
       })
-      console.log('cleanData final', cleanData)
+      // console.log('cleanData final', cleanData)
       this.series = cleanData
     }
   },
@@ -187,23 +152,13 @@ export default {
       this.$store.registerModule('userManagement', moduleUserManagement)
       moduleUserManagement.isRegistered = true
     }
-    // TODO: Do it on server and return data in correct format like this
-    // this.$store.dispatch('family/fetchCompleteUserStatsGraph'
-    //      const demo = [{
-    //        name: 'Ski Training',
-    //        data: [44, 55, 41, 37, 22, 43, 21]
-    //      }, {
-    //        name: 'Ski Race',
-    //        data: [53, 32, 33, 52, 13, 43, 32]
-    //      }]
-
     this.$store.dispatch('family/fetchUserStats',
       {
         username: this.$route.params.userId
       })
       .then(res => {
         // this.$vs.loading.close()
-        this.user_stats = res.data
+        this.user_stats = res.data.data
         this.processData()
       })
       .catch(err => {
@@ -213,7 +168,6 @@ export default {
           this.user_not_found = true
         }
       })
-
   }
 }
 

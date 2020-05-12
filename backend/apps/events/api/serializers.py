@@ -60,7 +60,7 @@ class BaseEventChangeSerializer(serializers.ModelSerializer):
         many=False,
         queryset=Location.objects.all()
     )
-    
+
     def validate(self, data):
         # If doesnt have season then default current season
         if not data.get('season'):
@@ -174,13 +174,16 @@ class UserStatSerializer(serializers.ModelSerializer):
         # TODO
         #  Check if is kid
         kid = Child.objects.get(user__profile=user)
-        ret = {}
+        ret = {
+            "user": BaseProfileSerializer(instance=user).data,
+            "data": {}
+        }
         for season in seasons:
-            print("season ", season)
             try:
                 # TODO category -> user which can be on this event
+                # FIXME if event category is none then it breaks
                 kid_asc = kid.categories.get(season=season)
-                ret[str(season)] = {}
+                ret["data"][str(season)] = {}
                 print("foud and creating child", season)
             except Exception:
                 continue
@@ -197,10 +200,10 @@ class UserStatSerializer(serializers.ModelSerializer):
                 }
 
                 events = Event.objects.filter(**query).order_by('start')
-                ret[str(season)][event_type] = {}
-                ret[str(season)][event_type]["name"] = value
-                ret[str(season)][event_type]["count"] = user.events.filter(**query).count()
-                ret[str(season)][event_type]["total"] = events.count()
+                ret["data"][str(season)][event_type] = {}
+                ret["data"][str(season)][event_type]["name"] = value
+                ret["data"][str(season)][event_type]["count"] = user.events.filter(**query).count()
+                ret["data"][str(season)][event_type]["total"] = events.count()
 
         return ret
 
