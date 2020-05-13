@@ -1,12 +1,18 @@
 <template>
-  <div id="page-user-stats-view">
+  <div id="page-users-stats-view">
 
-    <vs-button v-on:click="changeChart">Update</vs-button>
-    <vs-button v-on:click=" processData">Process</vs-button>
-    <vue-apex-charts width="300" height="300" type="donut" :options="chartOptions" :series="series"></vue-apex-charts>
-    <vue-apex-charts ref="totalPresenceChart" type="bar" height="350" :options="barChart.chartOptions"
-                     :series="barChart.series"></vue-apex-charts>
-    <pre>{{usersData}}</pre>
+    <!--    <vs-button v-on:click="changeChart">Update</vs-button>-->
+    <!--    <vs-button v-on:click=" processData">Process</vs-button>-->
+    <!--    <vue-apex-charts width="300" height="300" type="donut" :options="chartOptions" :series="series"></vue-apex-charts>-->
+
+    <div class="vx-row">
+      <div class="vx-col  w-full mb-base">
+        <vx-card title="Number of event of child in season">
+          <vue-apex-charts ref="totalPresenceChart" type="bar" height="350" :options="barChart.chartOptions"
+                           :series="barChart.series"></vue-apex-charts>
+        </vx-card>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -16,6 +22,14 @@ import moduleUserManagement from '@/store/user-management/moduleUserManagement.j
 
 import VueApexCharts from 'vue-apexcharts'
 
+const themeColors = [
+  '#008FFB',
+  '#7367f0',
+  '#EA5455',
+  '#28C76F',
+  '#FF9F43',
+  '#ff00c8'
+]
 export default {
   components: {
     VueApexCharts
@@ -37,11 +51,20 @@ export default {
         },
         series: [],
         chartOptions: {
+          colors: themeColors,
           dataLabels: {
             enabled: false
           },
           xaxis: {
             categories: []
+          },
+          tooltip: {
+            theme: 'dark',
+            y: {
+              formatter (val) {
+                return val
+              }
+            }
           }
         }
       }
@@ -236,7 +259,8 @@ export default {
       // It working as expected until this -> don't touch it!
 
       const cleanData = []
-      Object.values(series['2018-2019']).forEach((el) => {
+      // TODO select season
+      Object.values(series[seasons[0]]).forEach((el) => {
         // Object.entries(el).forEach(([key, value]) => {
         //   // FIXME thi is always -1
         //   const magenicIndex = cleanData.findIndex(vendor => vendor[key] === value)
@@ -273,8 +297,7 @@ export default {
         }
       ]
     }
-  }
-  ,
+  },
   created () {
     if (!moduleUserManagement.isRegistered) {
       this.$store.registerModule('userManagement', moduleUserManagement)

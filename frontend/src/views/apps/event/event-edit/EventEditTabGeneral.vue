@@ -43,7 +43,7 @@
             <span slot="off">Skis type</span>
             <div class="mt-2">
               <vs-radio v-model="data_local.skis_type" vs-value="ALL" class="mr-4">All</vs-radio>
-              <vs-radio v-model="data_local.skis_type" vs-value="SG" class="mr-4">SG</vs-radio>
+              <vs-radio v-model="data_local.skis_type" vs-value="GS" class="mr-4">GS</vs-radio>
               <vs-radio v-model="data_local.skis_type" vs-value="SL">SL</vs-radio>
             </div>
           </div>

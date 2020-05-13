@@ -1,6 +1,17 @@
 process.env.VUE_APP_VERSION = require('./package.json').version
 
 module.exports = {
+  publicPath: '/',
+  transpileDependencies: [
+    'resize-detector'
+  ],
+  configureWebpack: {
+    optimization: {
+      splitChunks: {
+        chunks: 'all'
+      }
+    }
+  },
   lintOnSave: false,
   devServer: {
     hot: true,
@@ -8,6 +19,10 @@ module.exports = {
     disableHostCheck: true,
     historyApiFallback: true,
     public: '0.0.0.0:8000',
+    overlay: {
+      warnings: true,
+      errors: true
+    },
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',

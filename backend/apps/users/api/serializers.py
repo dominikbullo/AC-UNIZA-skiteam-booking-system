@@ -14,11 +14,14 @@ from apps.users.models import Profile
 
 class BaseProfileSerializer(serializers.ModelSerializer):
     family_id = serializers.SerializerMethodField()
-    # first_name = serializers.CharField(source='user.first_name', read_only=True)
-    # last_name = serializers.CharField(source='user.last_name', read_only=True)
+    displayName = serializers.CharField(source='user.full_name', read_only=True)
+
+    # Used in user list
+    first_name = serializers.CharField(source='user.first_name', read_only=True)
+    last_name = serializers.CharField(source='user.last_name', read_only=True)
+
     username = serializers.CharField(source='user.username', read_only=True)
     userRole = serializers.CharField(source='user_role', read_only=True)
-    displayName = serializers.CharField(source='user.full_name', read_only=True)
 
     # RES: https://stackoverflow.com/questions/48073471/django-rest-framework-get-data-based-on-current-userid-token
     def get_family_id(self, instance):
@@ -33,7 +36,7 @@ class BaseProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ("id", "family_id", "username", "userRole", "displayName")
+        exclude = ("events", "avatar", "user_role", "location",)
         read_only_fields = "id", "family_id", "user_role"
 
 

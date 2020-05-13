@@ -56,7 +56,13 @@ class Location(models.Model):
     additional_info = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
-        return "%s - %s" % (self.name, self.ski_slope)
+        return self.display_name
+
+    @property
+    def display_name(self):
+        if self.ski_slope and self.ski_slope != "":
+            return "%s - %s" % (self.name, self.ski_slope)
+        return self.name
 
     class Meta:
         unique_together = (('name', 'ski_slope'),)
@@ -127,6 +133,12 @@ class RaceOrganizer(models.Model):
     club = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
+        return self.display_name
+
+    @property
+    def display_name(self):
+        if self.club and self.club != "":
+            return "%s | %s" % (self.name, self.club)
         return self.name
 
     def clean(self):

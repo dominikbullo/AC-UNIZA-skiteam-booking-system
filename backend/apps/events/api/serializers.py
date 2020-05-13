@@ -14,6 +14,8 @@ from apps.users.models import Profile
 
 
 class SeasonSerializer(serializers.ModelSerializer):
+    displayName = serializers.CharField(source='get_name_display', read_only=True)
+
     class Meta:
         model = Season
         fields = "__all__"
@@ -31,12 +33,16 @@ class CategorySerializer(serializers.ModelSerializer):
 # RES(Nested relationships): https://medium.com/@raaj.akshar/creating-reverse-related-objects-with-django-rest-framework-b1952ddff1c
 
 class RaceOrganizerSerializer(serializers.ModelSerializer):
+    displayName = serializers.CharField(source='display_name', read_only=True)
+
     class Meta:
         model = RaceOrganizer
         fields = "__all__"
 
 
 class LocationSerializer(serializers.ModelSerializer):
+    displayName = serializers.CharField(source='display_name', read_only=True)
+
     class Meta:
         model = Location
         fields = "__all__"

@@ -28,6 +28,7 @@
       <vs-prompt
         :active.sync="childAddToEventPrompt.active"
         :is-valid="validForm"
+        id="add-event-prompt"
         @accept="changeUserChildrenOnEvent"
         accept-text="Save"
         class="calendar-child-add-event-dialog"
@@ -45,7 +46,7 @@
                 <tr>
                   <td class="font-bold">Location</td>
                   <!-- TODO: Location with slope maybe? -->
-                  <td>{{ editedEvent.location.name }}</td>
+                  <td>{{ editedEvent.location.displayName }}</td>
                 </tr>
                 <tr>
                   <td class="font-bold">Category</td>
@@ -62,7 +63,7 @@
                   <td class="font-bold">Start</td>
                   <td>{{ editedEvent.start | time }}</td>
                 </tr>
-                <tr>
+                <tr v-if="SKI_EVENTS.includes(editedEvent.type)">
                   <td class="font-bold">Skis</td>
                   <td>{{ editedEvent.skis_type }}</td>
                 </tr>
@@ -74,15 +75,11 @@
                   <td class="font-bold">End</td>
                   <td>{{ editedEvent.end | time }}</td>
                 </tr>
-                <tr>
-                  <td class="font-bold">Skis</td>
-                  <td>{{ editedEvent.skis_type }}</td>
-                </tr>
               </table>
             </div>
           </div>
           <!-- TODO: if exist -->
-          <div class="vx-row">
+          <div v-if="editedEvent.additional_info" class="vx-row">
             <div class="vx-col">
               <p class="font-bold mr-5">Additional information:</p>
               <p>{{ editedEvent.additional_info }}</p>
@@ -127,28 +124,59 @@
         class="calendar-add-event-dialog"
         title="Add event">
 
-        <div class="mt-4">
-          <label class="text-sm">Event type</label>
-          <!-- RES: https://vue-select.org/ -->
-          <v-select
-            label="displayName"
-            :reduce="item => item.key"
-            v-model="addEventPrompt.type.selected"
-            :options="addEventPrompt.type.options"/>
+        <div class="vx-row">
+          <div class="vx-col md:w-1/2 w-full">
+            <div class="mt-4">
+              <label class="text-sm">Event type</label>
+              <!-- RES: https://vue-select.org/ -->
+              <v-select
+                label="displayName"
+                :reduce="item => item.key"
+                v-model="addEventPrompt.type.selected"
+                :options="addEventPrompt.type.options"/>
+            </div>
+          </div>
+
+          <div class="vx-col md:w-1/2 w-full">
+            <div class="mt-4">
+              <label class="text-sm">Location</label>
+              <v-select
+                label="displayName"
+                :reduce="item => item.id"
+                v-model="addEventPrompt.location.selected"
+                :options="addEventPrompt.location.options"/>
+            </div>
+          </div>
         </div>
 
-        <div class="mt-4">
-          <label class="text-sm">Skis</label>
-          <v-select
-            label="displayName"
-            :reduce="item => item.key"
-            v-model="addEventPrompt.skis.selected"
-            :options="addEventPrompt.skis.options"/>
+        <div class="vx-row">
+          <div class="vx-col md:w-1/2 w-full">
+            <div v-if="SKI_EVENTS.includes(addEventPrompt.type.selected)" class="mt-4">
+              <label class="text-sm">Skis</label>
+              <v-select
+                label="displayName"
+                :reduce="item => item.key"
+                v-model="addEventPrompt.skis.selected"
+                :options="addEventPrompt.skis.options"/>
+            </div>
+          </div>
+
+          <div class="vx-col md:w-1/2 w-full">
+            <div v-if="addEventPrompt.type.selected === 'SKI_RACE'" class="vx-col w-full">
+              <div class="mt-4">
+                <label class="text-sm">Organizer</label>
+                <v-select
+                  label="displayName"
+                  :reduce="category => category.id"
+                  v-model="addEventPrompt.raceOrganizer.selected"
+                  :options="addEventPrompt.raceOrganizer.options"/>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="mt-4">
           <label class="text-sm">Categories</label>
-          {{ addEventPrompt.category.selected }}
           <v-select multiple
                     :closeOnSelect="false"
                     label="displayName"
@@ -156,29 +184,31 @@
                     v-model="addEventPrompt.category.selected"
                     :options="addEventPrompt.category.options"/>
         </div>
-
-        <div class="mt-4">
-          <label class="text-sm">Start</label>
-          <flat-pickr v-model="newEvent.start"
-                      :config="datePickerConfig"
-                      class="w-full"
-                      v-validate="'required'"
-                      name="start"/>
-          <span class="text-danger text-sm" v-show="errors.has('start')">{{ errors.first('start') }}</span>
+        <div class="vx-row">
+          <div class="vx-col md:w-1/2 w-full">
+            <div class="mt-4">
+              <label class="text-sm">Start</label>
+              <flat-pickr v-model="newEvent.start"
+                          :config="datePickerConfig"
+                          class="w-full"
+                          v-validate="'required'"
+                          name="start"/>
+              <span class="text-danger text-sm" v-show="errors.has('start')">{{ errors.first('start') }}</span>
+            </div>
+          </div>
+          <div class="vx-col md:w-1/2 w-full">
+            <div class="mt-4">
+              <label class="text-sm">End</label>
+              <flat-pickr v-model="newEvent.end"
+                          :config="datePickerConfig"
+                          class="w-full"
+                          v-validate="'required'"
+                          name="end"/>
+              <span class="text-danger text-sm" v-show="errors.has('end')">{{ errors.first('end') }}</span>
+            </div>
+          </div>
         </div>
-
-        <div class="mt-4">
-          <label class="text-sm">End</label>
-          <flat-pickr v-model="newEvent.end"
-                      :config="datePickerConfig"
-                      class="w-full"
-                      v-validate="'required'"
-                      name="end"/>
-          <span class="text-danger text-sm" v-show="errors.has('end')">{{ errors.first('end') }}</span>
-        </div>
-        {{newEvent}}
       </vs-prompt>
-
     </vx-card>
   </div>
 </template>
@@ -210,6 +240,8 @@ export default {
         interactionPlugin,
         listPlugin// needed for dateClick
       ],
+
+      SKI_EVENTS: ['SKI_TRAINING', 'SKI_RACE', 'SKI_CAMP'],
 
       calendarConfig: {
         locale: skLocale,
@@ -279,8 +311,12 @@ export default {
           selected: 'ALL',
           options: []
         },
-        organizers: {
+        raceOrganizer: {
           selected: [],
+          options: []
+        },
+        location: {
+          selected: null,
           options: []
         }
       },
@@ -299,9 +335,7 @@ export default {
       newEvent: {
         start: null,
         end: null,
-        type: '',
-        // TODO location
-        location: 1
+        type: ''
       }
     }
   },
@@ -327,32 +361,35 @@ export default {
   methods: {
     displayObject (object, displayKey = 'displayName') {
       const ret = []
-      console.log('object', object)
-
-      Object.values(this.editedEvent.category).forEach((element) => {
+      Object.values(object).forEach((element) => {
         ret.push(element[displayKey])
       })
 
       return ret
     },
-    addEvent () {
+    getExtraInfo () {
       // TODO: Automatic with selecting event
-      let resourcetype = 'Event'
-
       if (this.addEventPrompt.type.selected === 'SKI_TRAINING') {
-        resourcetype = 'SkiTraining'
+        return { resourcetype: 'SkiTraining' }
       }
       if (this.addEventPrompt.type.selected === 'SKI_RACE') {
-        resourcetype = 'SkiRace'
+        return {
+          resourcetype: 'SkiRace',
+          organizer: this.addEventPrompt.raceOrganizer.selected
+        }
       }
-
-      const addToEvent = {
+      return { resourcetype: 'Event' }
+    },
+    addEvent () {
+      const eventForm = {
         category: this.addEventPrompt.category.selected,
         skis: this.addEventPrompt.skis.selected,
         type: this.addEventPrompt.type.selected,
-        resourcetype
+        location: this.addEventPrompt.location.selected
       }
-      this.$store.dispatch('calendar/addEvent', { ...this.newEvent, ...addToEvent })
+      const event = { ...this.newEvent, ...eventForm, ...this.getExtraInfo() }
+
+      this.$store.dispatch('calendar/addEvent', event)
     },
     handleDateClick (arg) {
       console.log('handling date click', arg)
@@ -371,17 +408,17 @@ export default {
         return obj.id === parseInt(arg.event.id)
       })
 
-      if (this.$acl.check('isCoach')) {
-        const categoriesOnEvent = []
-        const category = this.$store.state.calendar.eventConfig.categories
-        Object.values(category).forEach((categoryOnEvent) => {
-          categoriesOnEvent.push(category.find(function (entry) {
-              return entry.id === categoryOnEvent.id
-            })
-          )
-        })
-        this.editedEvent.category = categoriesOnEvent
-      }
+      // if (this.$acl.check('isCoach')) {
+      //   const categoriesOnEvent = []
+      //   const category = this.$store.state.calendar.eventConfig.categories
+      //   Object.values(category).forEach((categoryOnEvent) => {
+      //     categoriesOnEvent.push(category.find(function (entry) {
+      //         return entry.id === categoryOnEvent.id
+      //       })
+      //     )
+      //   })
+      //   this.editedEvent.category = categoriesOnEvent
+      // }
 
       // IDEA: Check with userChildren() array
       // console.log('participants', this.editedEvent['participants'])
@@ -477,10 +514,14 @@ export default {
 
       this.$store.dispatch('calendar/fetchRaceOrganizers').then((res) => {
         console.log('raceorganizers', res.data.results)
+        this.addEventPrompt.raceOrganizer.options = res.data.results
+        this.addEventPrompt.raceOrganizer.selected = this.cleanData(this.addEventPrompt.raceOrganizer.options)[0]
       })
 
       this.$store.dispatch('calendar/fetchLocations').then((res) => {
         console.log('locations', res.data.results)
+        this.addEventPrompt.location.options = res.data.results
+        this.addEventPrompt.location.selected = this.cleanData(this.addEventPrompt.location.options)[0]
       })
 
       this.$store.dispatch('calendar/fetchCategories').then((res) => {
@@ -500,7 +541,6 @@ export default {
 </script>
 
 <style lang='scss'>
-
   // you must include each plugins' css
   // paths prefixed with ~ signify node_modules
   @import '~@fullcalendar/core/main.css';
@@ -558,6 +598,22 @@ export default {
   only screen and (min-width: 636px) and (max-width: 991px) {
     #event-info-col-1 {
       width: calc(100% - 5rem) !important;
+    }
+  }
+
+  .con-vs-dialog .vs-dialog {
+    max-width: 650px;
+  }
+
+  @media only screen and (max-width: 768px) {
+    .con-vs-dialog .vs-dialog {
+      max-width: 400px;
+    }
+  }
+
+  @media only screen and (max-width: 425px) {
+    .con-vs-dialog .vs-dialog {
+      max-width: 90%;
     }
   }
 
