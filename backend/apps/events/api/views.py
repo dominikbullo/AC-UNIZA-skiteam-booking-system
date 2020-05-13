@@ -8,12 +8,12 @@ from rest_framework.response import Response
 from apps.events.models import Event, Season, Category, Location, RaceOrganizer
 from apps.events.api.serializers import (EventPolymorphicSerializer, SeasonSerializer, CategorySerializer,
                                          EventChangePolymorphicSerializer, LocationSerializer, RaceOrganizerSerializer)
-from apps.events.api.permissions import IsCoachOrReadOnly
 
 # RES: https://github.com/LondonAppDeveloper/recipe-app-api/blob/master/app/recipe/views.py
 # RES: https://stackoverflow.com/questions/51016896/how-to-serialize-inherited-models-in-django-rest-framework
 from apps.users.models import Profile
 from core.choices import get_all_choices
+from core.permissions import IsCoachOrReadOnly
 from core.views import get_object_custom_queryset
 
 

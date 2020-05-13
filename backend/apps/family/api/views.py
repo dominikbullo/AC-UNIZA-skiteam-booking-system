@@ -6,18 +6,19 @@ from rest_framework.response import Response
 
 from apps.events.api.serializers import UserStatSerializer
 from apps.events.models import Season
+from apps.family.api.permissions import IsOwnFamilyOrReadOnly
 from apps.family.models import Family, FamilyMember, Child
 from apps.family.api.serializers import FamilySerializer, FamilyMemberSerializer, ChildSerializer
 
 # https://github.com/LondonAppDeveloper/recipe-app-api/blob/master/app/recipe/views.py
-from core.views import get_object_custom_queryset, get_season_by_query
+from core.permissions import IsCoachOrReadOnly
 
 
 class FamilyViewSet(viewsets.ModelViewSet):
     # TODO permissions
     queryset = Family.objects.all()
     serializer_class = FamilySerializer
-    # permission_classes = [IsOwnFamilyOrReadOnly]
+    permission_classes = [IsOwnFamilyOrReadOnly, IsCoachOrReadOnly]
     filter_backends = [SearchFilter]
     search_fields = ["name"]
 
@@ -29,6 +30,7 @@ class FamilyMemberViewSet(mixins.UpdateModelMixin,
     # TODO permissions
     queryset = FamilyMember.objects.all()
     serializer_class = FamilyMemberSerializer
+    permission_classes = [IsOwnFamilyOrReadOnly, IsCoachOrReadOnly]
     filter_backends = [SearchFilter]
     search_fields = ["user"]
 
@@ -37,6 +39,7 @@ class ChildViewSet(viewsets.ModelViewSet):
     # TODO permissions
     queryset = Child.objects.all()
     serializer_class = ChildSerializer
+    permission_classes = [IsOwnFamilyOrReadOnly, IsCoachOrReadOnly]
 
     # filter_backends = [SearchFilter]
     # search_fields = ["user.username"]

@@ -15,6 +15,7 @@ from apps.events.api.serializers import UserStatSerializer
 
 from apps.users.models import Profile
 from apps.users.api.serializers import ProfileAvatarSerializer, DetailProfileSerializer, UserDetailSerializer
+from core.permissions import IsCoachOrReadOnly
 from core.views import get_object_custom_queryset, get_season_by_query
 
 
@@ -33,7 +34,7 @@ class ProfileViewSet(mixins.UpdateModelMixin,
     """ Will be used when all users can see each other """
     queryset = Profile.objects.all()
     serializer_class = DetailProfileSerializer
-    # permission_classes = [IsAuthenticated, IsOwnProfileOrReadOnly]
+    permission_classes = [IsCoachOrReadOnly]
 
     __basic_fields = ('user__username', 'user_role', "gender")
     filter_backends = (DjangoFilterBackend, SearchFilter)
