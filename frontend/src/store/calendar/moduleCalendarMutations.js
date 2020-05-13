@@ -27,8 +27,10 @@ export default {
   UPDATE_EVENT (state, event) {
     const eventIndex = state.events.findIndex((e) => e.id === event.id)
     if (eventIndex === -1) {
+      console.log('[MUT] Event push')
       state.events.push(event)
     } else {
+      console.log('[MUT] Event update')
       Object.assign(state.events[eventIndex], event)
     }
   },

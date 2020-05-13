@@ -129,7 +129,7 @@ export default {
       delete event['participants']
       axios.patch(`/event/${event.id}/`, event)
         .then((response) => {
-          commit('UPDATE_EVENT', response)
+          commit('UPDATE_EVENT', response.data)
           resolve(response)
         })
         .catch((error) => {

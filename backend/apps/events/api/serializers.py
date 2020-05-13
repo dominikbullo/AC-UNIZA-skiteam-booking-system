@@ -111,7 +111,7 @@ class SkiRaceSerializer(BaseEventSerializer):
 class EventChangeSerializer(BaseEventChangeSerializer):
 
     def validate(self, data):
-        super(EventChangeSerializer, self).validate(data)
+        validated_data = super(EventChangeSerializer, self).validate(data)
         event_type = data.get("type")
         if event_type == choices.EventTypeChoices.SKI_TRAINING:
             raise ValidationError("Bad resourcetype for %s" % event_type)
@@ -119,7 +119,7 @@ class EventChangeSerializer(BaseEventChangeSerializer):
         if event_type == choices.EventTypeChoices.SKI_RACE:
             raise ValidationError("Bad resourcetype for %s" % event_type)
 
-        return data
+        return validated_data
 
     class Meta:
         model = Event
@@ -129,11 +129,11 @@ class EventChangeSerializer(BaseEventChangeSerializer):
 class SkiTrainingChangeSerializer(BaseEventChangeSerializer):
 
     def validate(self, data):
-        super(SkiTrainingChangeSerializer, self).validate(data)
-        event_type = data.get("type")
-        if event_type != choices.EventTypeChoices.SKI_TRAINING:
-            raise ValidationError("Bad resourcetype for %s" % event_type)
-        return data
+        validated_data = super(SkiTrainingChangeSerializer, self).validate(data)
+        # event_type = data.get("type")
+        # if event_type != choices.EventTypeChoices.SKI_TRAINING:
+        #     raise ValidationError("Bad resourcetype for %s" % event_type)
+        return validated_data
 
     class Meta:
         model = SkiTraining
@@ -143,11 +143,11 @@ class SkiTrainingChangeSerializer(BaseEventChangeSerializer):
 class SkiRaceChangeSerializer(BaseEventChangeSerializer):
 
     def validate(self, data):
-        super(SkiRaceChangeSerializer, self).validate(data)
+        validated_data = super(SkiRaceChangeSerializer, self).validate(data)
         event_type = data.get("type")
         if event_type != choices.EventTypeChoices.SKI_RACE:
             raise ValidationError("Bad resourcetype for %s" % event_type)
-        return data
+        return validated_data
 
     class Meta:
         model = SkiRace

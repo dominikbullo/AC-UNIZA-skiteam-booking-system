@@ -17,6 +17,8 @@
           @eventClick="handleEventClick"
           @eventMouseEnter="handleEventMouseEnter"
           @select="handleSelect"
+          @eventDrop="handleEventDrop"
+          @eventResize="handleEventResize"
           :views="calendarConfig.views"
           :default-view="calendarConfig.views.defaultView"
           :editable="calendarConfig.editable"
@@ -444,6 +446,39 @@ export default {
       this.newEvent.end = arg.end
       this.addEventPrompt.active = true
     },
+    handleEventChange (arg) {
+      console.log('handling change in event', arg.event.id, arg)
+      const event = {
+        id: arg.event.id,
+        start: arg.event.start,
+        end: arg.event.end
+      }
+
+      this.$store.dispatch('calendar/editEvent', { ...event, ...this.getExtraInfo() })
+        .then(res => {
+          this.$vs.notify({
+            color: 'success',
+            title: 'Event Updated',
+            text: 'The selected event was successfully updated'
+          })
+        })
+        .catch(err => {
+          this.$vs.notify({
+            color: 'danger',
+            title: 'Event Not Changed',
+            text: err.message
+          })
+          console.error(err)
+        })
+    },
+    handleEventDrop (eventDropInfo) {
+      console.log('dropped', eventDropInfo)
+      this.handleEventChange(eventDropInfo)
+    },
+    handleEventResize (eventResizeInfo) {
+      console.log('resized', eventResizeInfo)
+      this.handleEventChange(eventResizeInfo)
+    },
     handleEventMouseEnter (arg) {
       // console.log('handling mouse event enter', arg)
     },
@@ -501,7 +536,6 @@ export default {
       Object.values(object).forEach((item) => {
         id.push(item[key])
       })
-      console.log(id)
       return id
     }
   },
@@ -513,13 +547,13 @@ export default {
       console.log('Hello coach')
 
       this.$store.dispatch('calendar/fetchRaceOrganizers').then((res) => {
-        console.log('raceorganizers', res.data.results)
+        // console.log('raceorganizers', res.data.results)
         this.addEventPrompt.raceOrganizer.options = res.data.results
         this.addEventPrompt.raceOrganizer.selected = this.cleanData(this.addEventPrompt.raceOrganizer.options)[0]
       })
 
       this.$store.dispatch('calendar/fetchLocations').then((res) => {
-        console.log('locations', res.data.results)
+        // console.log('locations', res.data.results)
         this.addEventPrompt.location.options = res.data.results
         this.addEventPrompt.location.selected = this.cleanData(this.addEventPrompt.location.options)[0]
       })
