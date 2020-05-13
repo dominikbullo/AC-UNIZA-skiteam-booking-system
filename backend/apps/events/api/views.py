@@ -2,12 +2,13 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from apps.events.models import Event, Season, Category, Location, RaceOrganizer
 from apps.events.api.serializers import (EventPolymorphicSerializer, SeasonSerializer, CategorySerializer,
                                          EventChangePolymorphicSerializer, LocationSerializer, RaceOrganizerSerializer)
-from apps.events.api.permissions import IsOwnerOrReadOnly, IsOwnFamilyOrReadOnly
+from apps.events.api.permissions import IsCoachOrReadOnly
 
 # RES: https://github.com/LondonAppDeveloper/recipe-app-api/blob/master/app/recipe/views.py
 # RES: https://stackoverflow.com/questions/51016896/how-to-serialize-inherited-models-in-django-rest-framework
@@ -25,8 +26,8 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
 class EventViewSet(viewsets.ModelViewSet):
     serializer_class = EventPolymorphicSerializer
+    permission_classes = [IsCoachOrReadOnly]
 
-    # permission_classes = [IsOwnFamilyOrReadOnly]
     # filter_backends = [SearchFilter]
     # search_fields = ["name"]
 
@@ -45,7 +46,7 @@ class EventViewSet(viewsets.ModelViewSet):
         return get_object_or_404(Profile, user__username=username)
 
     # RES: https://stackoverflow.com/questions/36365326/django-rest-framework-doesnt-serialize-serializermethodfield
-    @action(detail=True, methods=['post'], url_path='change')
+    @action(detail=True, methods=['post'], url_path='change', permission_classes=[AllowAny])
     def add_users_to_event(self, request, pk=None):
         event_id = pk
         event = self.get_event(event_id)
@@ -92,13 +93,16 @@ class EventViewSet(viewsets.ModelViewSet):
 class SeasonViewSet(viewsets.ModelViewSet):
     queryset = Season.objects.all()
     serializer_class = SeasonSerializer
+    permission_classes = [IsCoachOrReadOnly]
 
 
 class LocationViewSet(viewsets.ModelViewSet):
     queryset = Location.objects.all()
     serializer_class = LocationSerializer
+    permission_classes = [IsCoachOrReadOnly]
 
 
 class RaceOrganizerViewSet(viewsets.ModelViewSet):
     queryset = RaceOrganizer.objects.all()
     serializer_class = RaceOrganizerSerializer
+    permission_classes = [IsCoachOrReadOnly]

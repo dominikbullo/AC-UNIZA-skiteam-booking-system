@@ -1,19 +1,16 @@
 from rest_framework import permissions
 
+from core import choices
 
-class IsOwnFamilyOrReadOnly(permissions.BasePermission):
 
-    def has_object_permission(self, request, view, obj):
+class IsCoachOrReadOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:
             return True
 
-        return obj.user == request.user
+        isCoach = request.user.profile.user_role == choices.UserTypeChoices.COACH
+        isAdmin = request.user.profile.user_role == choices.UserTypeChoices.ADMIN
 
-
-class IsOwnerOrReadOnly(permissions.BasePermission):
-
-    def has_object_permission(self, request, view, obj):
-        if request.method in permissions.SAFE_METHODS:
-            return True
-
-        return obj.user_profile == request.user.profile
+        print("Allow {user} view {view} -> {allow}".format(user=request.user, view=str(view),
+                                                           allow=isCoach or isAdmin))
+        return isCoach or isAdmin

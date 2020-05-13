@@ -8,7 +8,6 @@ from apps.events.api.serializers import UserStatSerializer
 from apps.events.models import Season
 from apps.family.models import Family, FamilyMember, Child
 from apps.family.api.serializers import FamilySerializer, FamilyMemberSerializer, ChildSerializer
-from apps.family.api.permissions import IsOwnerOrReadOnly, IsOwnFamilyOrReadOnly
 
 # https://github.com/LondonAppDeveloper/recipe-app-api/blob/master/app/recipe/views.py
 from core.views import get_object_custom_queryset, get_season_by_query
