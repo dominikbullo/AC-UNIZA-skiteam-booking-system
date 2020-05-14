@@ -27,4 +27,4 @@ RUN pip install -r requirements_dev.txt
 COPY ./scripts/entrypoint.sh ./scripts/start.sh ./scripts/gunicorn.sh /
 
 WORKDIR /app
-EXPOSE 8000
+#EXPOSE 8000

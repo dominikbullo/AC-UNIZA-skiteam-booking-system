@@ -21,6 +21,9 @@ export default {
   SET_LOCATIONS (state, locations) {
     state.eventConfig.locations = locations
   },
+  SET_ORGANIZERS (state, locations) {
+    state.eventConfig.organizers = locations
+  },
   SET_EVENT_CHOICES (state, choices) {
     state.eventConfig.choices = choices
   },

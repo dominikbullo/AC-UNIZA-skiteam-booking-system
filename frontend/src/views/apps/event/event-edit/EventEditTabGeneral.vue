@@ -1,5 +1,5 @@
 <template>
-  <div id="user-edit-tab-info">
+  <div id="event-edit-tab-general">
     <p>{{data}}</p>
     <br>
     <p>{{data_local}}</p>
@@ -7,11 +7,9 @@
 
     <div class="vx-row">
       <div class="vx-col w-full md:w-1/2">
-        <!-- Col Content -->
-        <div>
-          <!-- DOB -->
 
-          <div class="mt-4">
+        <div class="vx-row mt-4">
+          <div class="vx-col w-1/2">
             <label class="text-sm">Start</label>
             <flat-pickr v-model="data_local.start"
                         :config="datePickerConfig"
@@ -19,46 +17,81 @@
                         v-validate="'required'" name="start"/>
             <span class="text-danger text-sm" v-show="errors.has('start')">{{ errors.first('start') }}</span>
           </div>
-
-          <div class="mt-4">
+          <div class="vx-col w-1/2">
             <label class="text-sm">End</label>
             <flat-pickr v-model="data_local.end"
                         :config="datePickerConfig" class="w-full"
                         v-validate="'required'" name="dob"/>
             <span class="text-danger text-sm" v-show="errors.has('end')">{{ errors.first('end') }}</span>
           </div>
+        </div>
 
-          <div class="mt-4">
-            <label class="text-sm">Categories</label>
-            <!-- RES: https://vue-select.org/ -->
-            <v-select multiple
-                      :closeOnSelect="false"
+        <div class="mt-4">
+          <label class="text-sm">Categories</label>
+          <!-- RES: https://vue-select.org/ -->
+          <v-select multiple
+                    :closeOnSelect="false"
+                    label="displayName"
+                    :reduce="item => item.id"
+                    v-model="data_local.category"
+                    :options="categories"/>
+        </div>
+
+        <div class="vx-row mt-4">
+          <!--          TODO: Cannot change type, because of aplication logic, but maybe they will want to-->
+          <!--          <div class="vx-col w-1/2">-->
+          <!--            <label class="text-sm">Event type</label>-->
+          <!--            <v-select :clearable="false"-->
+          <!--                      label="displayName"-->
+          <!--                      :reduce="item => item.id"-->
+          <!--                      v-model="data_local.type"-->
+          <!--                      :options="choices.EventTypeChoices"/>-->
+          <!--            <span class="text-danger text-sm" v-show="errors.has('start')">{{ errors.first('start') }}</span>-->
+          <!--          </div>-->
+
+          <div class="vx-col w-1/2">
+            <label class="text-sm">Location</label>
+            <v-select :clearable="false"
                       label="displayName"
-                      :reduce="category => category.id"
-                      v-model="data_local.category"
-                      :options="getCategories"/>
+                      :reduce="item => item.id"
+                      v-model="data_local.location"
+                      :options="locations"/>
+            <span class="text-danger text-sm" v-show="errors.has('end')">{{ errors.first('end') }}</span>
           </div>
 
-          <div v-if="data_local.skis_type" class="mt-4">
+
+          <div v-if="data_local.skis_type" class="vx-col w-1/2 mt-4">
             <span slot="off">Skis type</span>
+
             <div class="mt-2">
-              <vs-radio v-model="data_local.skis_type" vs-value="ALL" class="mr-4">All</vs-radio>
-              <vs-radio v-model="data_local.skis_type" vs-value="GS" class="mr-4">GS</vs-radio>
-              <vs-radio v-model="data_local.skis_type" vs-value="SL">SL</vs-radio>
+              <vs-radio :key="item.key" v-for="item in this.choices.SkiTypeChoices"
+                        v-model="data_local.skis_type"
+                        :vs-value="item.key"
+                        vs-w="6"
+                        class="mr-4">
+                <span class="sm:inline hidden">{{item.displayName}}</span>
+              </vs-radio>
             </div>
           </div>
+          <div v-if="data_local.type === 'SKI_RACE'" class="vx-col w-1/2">
+            <label class="text-sm">Race Organizer</label>
+            <flat-pickr v-model="data_local.end"
+                        :config="datePickerConfig" class="w-full"
+                        v-validate="'required'" name="dob"/>
+            <span class="text-danger text-sm" v-show="errors.has('end')">{{ errors.first('end') }}</span>
+          </div>
+        </div>
 
-          <!-- Gender -->
-          <div class="mt-4">
-            <div class="vx-col w-full">
-              <div class="mt-8 flex flex-wrap items-center">
-                <!--                <vs-button class="mt-2" icon-pack="feather" icon="icon-x" type="border" color="warning"-->
-                <!--                           @click="reset_data">Cancel event-->
-                <!--                </vs-button>-->
-                <vs-button class="mt-2" icon-pack="feather" icon="icon-trash-2" type="border" color="danger"
-                           @click="deleteEvent">Delete event
-                </vs-button>
-              </div>
+
+        <div class="mt-4">
+          <div class="vx-col w-full">
+            <div class="mt-8 flex flex-wrap items-center">
+              <!--                <vs-button class="mt-2" icon-pack="feather" icon="icon-x" type="border" color="warning"-->
+              <!--                           @click="reset_data">Cancel event-->
+              <!--                </vs-button>-->
+              <vs-button class="mt-2" icon-pack="feather" icon="icon-trash-2" type="border" color="danger"
+                         @click="deleteEvent">Delete event
+              </vs-button>
             </div>
           </div>
         </div>
@@ -153,12 +186,25 @@ export default {
     validateForm () {
       return !this.errors.any()
     },
-    getCategories () {
+    categories () {
       return this.$store.state.calendar.eventConfig.categories
+    },
+    locations () {
+      return this.$store.state.calendar.eventConfig.locations
+    },
+    organizers () {
+      return this.$store.state.calendar.eventConfig.organizers
+    },
+    choices () {
+      return this.$store.state.calendar.eventConfig.choices
     }
+
   },
   created () {
     this.$store.dispatch('calendar/fetchCategories')
+    this.$store.dispatch('calendar/fetchLocations')
+    this.$store.dispatch('calendar/fetchRaceOrganizers')
+    this.$store.dispatch('calendar/fetchEventChoices')
   },
   methods: {
     save_changes () {

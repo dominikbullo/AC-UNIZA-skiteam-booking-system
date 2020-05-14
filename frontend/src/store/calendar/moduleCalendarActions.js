@@ -71,7 +71,7 @@ export default {
     return new Promise((resolve, reject) => {
       axios.get('/race-organizer/')
         .then((response) => {
-          // commit('SET_LOCATIONS', response.data.results)
+          commit('SET_ORGANIZERS', response.data.results)
           resolve(response)
         })
         .catch((error) => {

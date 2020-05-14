@@ -131,22 +131,22 @@
             <div class="mt-4">
               <label class="text-sm">Event type</label>
               <!-- RES: https://vue-select.org/ -->
-              <v-select
-                label="displayName"
-                :reduce="item => item.key"
-                v-model="addEventPrompt.type.selected"
-                :options="addEventPrompt.type.options"/>
+              <v-select :clearable="false"
+                        label="displayName"
+                        :reduce="item => item.key"
+                        v-model="addEventPrompt.type.selected"
+                        :options="addEventPrompt.type.options"/>
             </div>
           </div>
 
           <div class="vx-col md:w-1/2 w-full">
             <div class="mt-4">
               <label class="text-sm">Location</label>
-              <v-select
-                label="displayName"
-                :reduce="item => item.id"
-                v-model="addEventPrompt.location.selected"
-                :options="addEventPrompt.location.options"/>
+              <v-select :clearable="false"
+                        label="displayName"
+                        :reduce="item => item.id"
+                        v-model="addEventPrompt.location.selected"
+                        :options="addEventPrompt.location.options"/>
             </div>
           </div>
         </div>
@@ -155,11 +155,11 @@
           <div class="vx-col md:w-1/2 w-full">
             <div v-if="SKI_EVENTS.includes(addEventPrompt.type.selected)" class="mt-4">
               <label class="text-sm">Skis</label>
-              <v-select
-                label="displayName"
-                :reduce="item => item.key"
-                v-model="addEventPrompt.skis.selected"
-                :options="addEventPrompt.skis.options"/>
+              <v-select :clearable="false"
+                        label="displayName"
+                        :reduce="item => item.key"
+                        v-model="addEventPrompt.skis.selected"
+                        :options="addEventPrompt.skis.options"/>
             </div>
           </div>
 
@@ -167,11 +167,11 @@
             <div v-if="addEventPrompt.type.selected === 'SKI_RACE'" class="vx-col w-full">
               <div class="mt-4">
                 <label class="text-sm">Organizer</label>
-                <v-select
-                  label="displayName"
-                  :reduce="category => category.id"
-                  v-model="addEventPrompt.raceOrganizer.selected"
-                  :options="addEventPrompt.raceOrganizer.options"/>
+                <v-select :clearable="false"
+                          label="displayName"
+                          :reduce="category => category.id"
+                          v-model="addEventPrompt.raceOrganizer.selected"
+                          :options="addEventPrompt.raceOrganizer.options"/>
               </div>
             </div>
           </div>

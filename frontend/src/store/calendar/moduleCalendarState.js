@@ -15,6 +15,7 @@ export default {
     choices: [],
     categories: [],
     locations: [],
+    organizers: [],
     labels: []
   }
 }
