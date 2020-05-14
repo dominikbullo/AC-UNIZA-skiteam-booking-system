@@ -6,7 +6,7 @@ from rest_framework.response import Response
 
 from apps.events.models import Event, Season, Category, Location, RaceOrganizer
 from apps.events.api.serializers import (EventPolymorphicSerializer, SeasonSerializer, CategorySerializer,
-                                         EventChangePolymorphicSerializer, LocationSerializer, RaceOrganizerSerializer)
+                                         LocationSerializer, RaceOrganizerSerializer)
 from apps.events.api.permissions import IsOwnerOrReadOnly, IsOwnFamilyOrReadOnly
 
 # RES: https://github.com/LondonAppDeveloper/recipe-app-api/blob/master/app/recipe/views.py
@@ -29,14 +29,6 @@ class EventViewSet(viewsets.ModelViewSet):
     # permission_classes = [IsOwnFamilyOrReadOnly]
     # filter_backends = [SearchFilter]
     # search_fields = ["name"]
-
-    # https://github.com/LondonAppDeveloper/recipe-app-api/blob/master/app/recipe/views.py
-    def get_serializer_class(self):
-        """Return appropriate serializer class"""
-        custom = ["create", "update", "partial_update"]
-        if self.action in custom:
-            return EventChangePolymorphicSerializer
-        return EventPolymorphicSerializer
 
     def get_event(self, pk):
         return get_object_or_404(Event, pk=pk)

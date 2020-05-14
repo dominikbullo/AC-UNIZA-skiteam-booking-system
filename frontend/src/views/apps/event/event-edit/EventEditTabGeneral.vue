@@ -205,6 +205,7 @@ export default {
     this.$store.dispatch('calendar/fetchLocations')
     this.$store.dispatch('calendar/fetchRaceOrganizers')
     this.$store.dispatch('calendar/fetchEventChoices')
+    this.reset_data()
   },
   methods: {
     save_changes () {
@@ -215,8 +216,6 @@ export default {
       // FIXME
       const event = Object.assign({}, this.data_local)
       delete event['season']
-      delete event['category']
-      delete event['location']
 
       this.$store.dispatch('calendar/editEvent', event)
         .then(res => {
@@ -235,8 +234,19 @@ export default {
           console.error(err)
         })
     },
+    cleanData (data, key = 'id') {
+      const cleanData = []
+      Object.values(data).forEach((element) => {
+        cleanData.unshift(element[key])
+      })
+      return cleanData
+    },
     reset_data () {
+      // TODO: Maybe not neet to include some stuf -> later cleanup
       this.data_local = Object.assign({}, this.data)
+
+      this.data_local.category = this.cleanData(this.data.category)
+      this.data_local.location = this.data_local.location.id
     },
     deleteEvent () {
       this.$store.dispatch('calendar/deleteEvent', this.data)

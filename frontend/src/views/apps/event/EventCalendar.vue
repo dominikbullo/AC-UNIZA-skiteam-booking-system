@@ -22,6 +22,8 @@
           :views="calendarConfig.views"
           :default-view="calendarConfig.views.defaultView"
           :editable="calendarConfig.editable"
+          min-time="06:00:00"
+          max-time="20:00:00"
           height="parent"
         />
       </div>

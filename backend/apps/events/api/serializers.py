@@ -4,7 +4,6 @@ from rest_framework.exceptions import ValidationError
 
 from rest_polymorphic.serializers import PolymorphicSerializer
 
-from apps.family.api.serializers import ChildSerializer
 from core import choices
 from apps.events.models import Event, SkiTraining, SkiRace, Season, Category, Location, RaceOrganizer
 
@@ -48,23 +47,20 @@ class LocationSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class BaseEventChangeSerializer(serializers.ModelSerializer):
+class BaseEventSerializer(serializers.ModelSerializer):
+    def __init__(self, *args, **kwargs):
+        super(BaseEventSerializer, self).__init__(*args, **kwargs)
+        if self.context['request'].method == 'GET':
+            self.fields['category'] = CategorySerializer(many=True)
+            self.fields['location'] = LocationSerializer(many=False)
+
     title = serializers.CharField(source='get_type_display', read_only=True)
+    season = SeasonSerializer(many=False, read_only=True, required=False)
+
+    category = serializers.PrimaryKeyRelatedField(many=True, queryset=Category.objects.all())
+    location = serializers.PrimaryKeyRelatedField(many=False, queryset=Location.objects.all())
 
     participants = BaseProfileSerializer(many=True, required=False)
-    season = SeasonSerializer(many=False, read_only=True)
-
-    # RES: https://stackoverflow.com/questions/28706072/drf-3-creating-many-to-many-update-create-serializer-with-though-table
-    # RES: https://www.django-rest-framework.org/api-guide/relations/#primarykeyrelatedfield
-    category = serializers.PrimaryKeyRelatedField(
-        many=True,
-        queryset=Category.objects.all()
-    )
-
-    location = serializers.PrimaryKeyRelatedField(
-        many=False,
-        queryset=Location.objects.all()
-    )
 
     def validate(self, data):
         # If doesnt have season then default current season
@@ -78,40 +74,21 @@ class BaseEventChangeSerializer(serializers.ModelSerializer):
 
         return data
 
+    def to_representation(self, instance):
+        self.fields["category"] = CategorySerializer(instance.category.all(), many=True, read_only=True)
+        self.fields["location"] = LocationSerializer(instance.location, many=False, read_only=True)
+        to_representation = super(BaseEventSerializer, self).to_representation(instance)
+        return to_representation
+
     class Meta:
         fields = "__all__"
         depth = 2
 
 
-class BaseEventSerializer(BaseEventChangeSerializer):
-    category = CategorySerializer(many=True, read_only=True)
-    location = LocationSerializer(read_only=True)
-
-
 class EventSerializer(BaseEventSerializer):
-    class Meta:
-        model = Event
-        fields = "__all__"
-
-
-class SkiTrainingSerializer(BaseEventSerializer):
-    class Meta:
-        model = SkiTraining
-        fields = "__all__"
-        read_only_fields = ('type',)
-
-
-class SkiRaceSerializer(BaseEventSerializer):
-    class Meta:
-        model = SkiRace
-        fields = "__all__"
-        read_only_fields = ('type',)
-
-
-class EventChangeSerializer(BaseEventChangeSerializer):
 
     def validate(self, data):
-        validated_data = super(EventChangeSerializer, self).validate(data)
+        validated_data = super(EventSerializer, self).validate(data)
         event_type = data.get("type")
         if event_type == choices.EventTypeChoices.SKI_TRAINING:
             raise ValidationError("Bad resourcetype for %s" % event_type)
@@ -126,10 +103,10 @@ class EventChangeSerializer(BaseEventChangeSerializer):
         exclude = ("polymorphic_ctype",)
 
 
-class SkiTrainingChangeSerializer(BaseEventChangeSerializer):
+class SkiTrainingSerializer(BaseEventSerializer):
 
     def validate(self, data):
-        validated_data = super(SkiTrainingChangeSerializer, self).validate(data)
+        validated_data = super(SkiTrainingSerializer, self).validate(data)
         # event_type = data.get("type")
         # if event_type != choices.EventTypeChoices.SKI_TRAINING:
         #     raise ValidationError("Bad resourcetype for %s" % event_type)
@@ -140,10 +117,10 @@ class SkiTrainingChangeSerializer(BaseEventChangeSerializer):
         fields = "__all__"
 
 
-class SkiRaceChangeSerializer(BaseEventChangeSerializer):
+class SkiRaceSerializer(BaseEventSerializer):
 
     def validate(self, data):
-        validated_data = super(SkiRaceChangeSerializer, self).validate(data)
+        validated_data = super(SkiRaceSerializer, self).validate(data)
         event_type = data.get("type")
         if event_type != choices.EventTypeChoices.SKI_RACE:
             raise ValidationError("Bad resourcetype for %s" % event_type)
@@ -160,14 +137,6 @@ class EventPolymorphicSerializer(PolymorphicSerializer):
         Event      : EventSerializer,
         SkiTraining: SkiTrainingSerializer,
         SkiRace    : SkiRaceSerializer,
-    }
-
-
-class EventChangePolymorphicSerializer(PolymorphicSerializer):
-    model_serializer_mapping = {
-        Event      : EventChangeSerializer,
-        SkiTraining: SkiTrainingChangeSerializer,
-        SkiRace    : SkiRaceChangeSerializer,
     }
 
 
