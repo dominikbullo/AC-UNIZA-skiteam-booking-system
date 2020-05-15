@@ -75,9 +75,11 @@
           </div>
           <div v-if="data_local.type === 'SKI_RACE'" class="vx-col w-1/2">
             <label class="text-sm">Race Organizer</label>
-            <flat-pickr v-model="data_local.end"
-                        :config="datePickerConfig" class="w-full"
-                        v-validate="'required'" name="dob"/>
+            <v-select :clearable="false"
+                      label="displayName"
+                      :reduce="item => item.id"
+                      v-model="data_local.organizer"
+                      :options="organizers"/>
             <span class="text-danger text-sm" v-show="errors.has('end')">{{ errors.first('end') }}</span>
           </div>
         </div>
@@ -245,8 +247,13 @@ export default {
       // TODO: Maybe not neet to include some stuf -> later cleanup
       this.data_local = Object.assign({}, this.data)
 
+
       this.data_local.category = this.cleanData(this.data.category)
       this.data_local.location = this.data_local.location.id
+
+      if (this.data.hasOwnProperty('organizer')) {
+        this.data_local.organizer = this.data_local.organizer.id
+      }
     },
     deleteEvent () {
       this.$store.dispatch('calendar/deleteEvent', this.data)

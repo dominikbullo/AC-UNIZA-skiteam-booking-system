@@ -25,6 +25,7 @@
           min-time="06:00:00"
           max-time="20:00:00"
           height="parent"
+          class="custom-class"
         />
       </div>
 
@@ -32,10 +33,9 @@
       <vs-prompt
         :active.sync="childAddToEventPrompt.active"
         :is-valid="validForm"
-        id="add-event-prompt"
         @accept="changeUserChildrenOnEvent"
         accept-text="Save"
-        class="calendar-child-add-event-dialog"
+        class="my-prompt"
         title="Sign up child to event">
 
 
@@ -125,11 +125,11 @@
         :is-valid="true"
         @accept="addEvent"
         accept-text="Add event"
-        class="calendar-add-event-dialog"
+        class="my-prompt"
         title="Add event">
 
         <div class="vx-row">
-          <div class="vx-col md:w-1/2 w-full">
+          <div class="vx-col sm:w-1/2 w-full">
             <div class="mt-4">
               <label class="text-sm">Event type</label>
               <!-- RES: https://vue-select.org/ -->
@@ -141,7 +141,7 @@
             </div>
           </div>
 
-          <div class="vx-col md:w-1/2 w-full">
+          <div class="vx-col sm:w-1/2 w-full">
             <div class="mt-4">
               <label class="text-sm">Location</label>
               <v-select :clearable="false"
@@ -154,7 +154,7 @@
         </div>
 
         <div class="vx-row">
-          <div class="vx-col md:w-1/2 w-full">
+          <div class="vx-col w-1/2">
             <div v-if="SKI_EVENTS.includes(addEventPrompt.type.selected)" class="mt-4">
               <label class="text-sm">Skis</label>
               <v-select :clearable="false"
@@ -165,7 +165,7 @@
             </div>
           </div>
 
-          <div class="vx-col md:w-1/2 w-full">
+          <div class="vx-col w-1/2">
             <div v-if="addEventPrompt.type.selected === 'SKI_RACE'" class="vx-col w-full">
               <div class="mt-4">
                 <label class="text-sm">Organizer</label>
@@ -189,7 +189,7 @@
                     :options="addEventPrompt.category.options"/>
         </div>
         <div class="vx-row">
-          <div class="vx-col md:w-1/2 w-full">
+          <div class="vx-col sm:w-1/2 w-full">
             <div class="mt-4">
               <label class="text-sm">Start</label>
               <flat-pickr v-model="newEvent.start"
@@ -200,7 +200,7 @@
               <span class="text-danger text-sm" v-show="errors.has('start')">{{ errors.first('start') }}</span>
             </div>
           </div>
-          <div class="vx-col md:w-1/2 w-full">
+          <div class="vx-col sm:w-1/2 w-full">
             <div class="mt-4">
               <label class="text-sm">End</label>
               <flat-pickr v-model="newEvent.end"
@@ -253,9 +253,9 @@ export default {
         editable: this.$acl.check('isCoach'),
         header: {
           // left: 'prev,next today addEvent',
-          left: 'prev,next today',
+          left: 'timeGridThreeDay,timeGridWeek,dayGridMonth,listWeek',// this will place the button on the right hand side
           center: 'title',
-          right: 'timeGridThreeDay,timeGridWeek,dayGridMonth,listWeek' // this will place the button on the right hand side
+          right: 'today prev,next'
         },
         views: {
           timeGridThreeDay: {
@@ -263,7 +263,7 @@ export default {
             duration: { days: 3 },
             buttonText: '3 dni'
           },
-          defaultView: 'timeGridWeek'
+          defaultView: (screen.width <= 670 ? 'timeGridThreeDay' : 'timeGridWeek')
         },
         customButtons: {
           addEvent: {
@@ -539,13 +539,8 @@ export default {
         id.push(item[key])
       })
       return id
-    }
-  },
-  created () {
-    this.$store.dispatch('calendar/fetchEvents')
-    this.$store.dispatch('family/fetchFamily', this.$store.state.AppActiveUser.profile.family_id)
-
-    if (this.$acl.check('isCoach')) {
+    },
+    fetchConfigData () {
       console.log('Hello coach')
 
       this.$store.dispatch('calendar/fetchRaceOrganizers').then((res) => {
@@ -570,6 +565,14 @@ export default {
         this.addEventPrompt.type.options = res.data.EventTypeChoices
         this.addEventPrompt.skis.options = res.data.SkiTypeChoices
       })
+    }
+  },
+  created () {
+    this.$store.dispatch('calendar/fetchEvents')
+    this.$store.dispatch('family/fetchFamily', this.$store.state.AppActiveUser.profile.family_id)
+
+    if (this.$acl.check('isCoach')) {
+      this.fetchConfigData()
     }
   }
 }
@@ -637,20 +640,30 @@ export default {
     }
   }
 
-  .con-vs-dialog .vs-dialog {
-    max-width: 650px;
-  }
 
-  @media only screen and (max-width: 768px) {
-    .con-vs-dialog .vs-dialog {
-      max-width: 400px;
+  .my-prompt {
+    .vs-dialog {
+      max-width: 650px;
+    }
+
+    /*@media only screen and (max-width: 768px) {*/
+    /*  .vs-dialog {*/
+    /*    max-width: 400px;*/
+    /*  }*/
+    /*}*/
+    @media only screen and (max-width: 570px) {
+      .vs-dialog {
+        max-width: 90%;
+      }
     }
   }
 
-  @media only screen and (max-width: 425px) {
-    .con-vs-dialog .vs-dialog {
-      max-width: 90%;
-    }
+  .fc-left .fc-button-group {
+    display: block;
+  }
+
+  .fc-toolbar h2 {
+    font-size: 1.5em;
   }
 
 

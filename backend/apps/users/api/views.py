@@ -65,7 +65,7 @@ class CustomConfirmEmailView(APIView):
         self.object = confirmation = self.get_object()
         confirmation.confirm(self.request)
         # A React Router Route will handle the failure scenario
-        return HttpResponseRedirect('/login/success')
+        return HttpResponseRedirect('/login')
 
     def get_object(self, queryset=None):
         key = self.kwargs['key']
@@ -76,7 +76,7 @@ class CustomConfirmEmailView(APIView):
             try:
                 email_confirmation = queryset.get(key=key.lower())
             except EmailConfirmation.DoesNotExist:
-                # A React Router Route will handle the failure scenario
+                # TODO: some page on FE to react to this
                 return HttpResponseRedirect('/login/failure/')
         return email_confirmation
 

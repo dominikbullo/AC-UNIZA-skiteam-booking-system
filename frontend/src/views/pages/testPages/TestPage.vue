@@ -10,8 +10,11 @@
       <p>Your current role is <strong>{{ $acl.get[0] }}</strong>.</p>
 
       <div class="demo-alignment mb-base">
-        <vs-radio v-model="userRole" vs-value="editor">Editor</vs-radio>
-        <vs-radio v-model="userRole" vs-value="admin">Admin</vs-radio>
+        <vs-radio v-model="userRole" vs-value="admin">admin</vs-radio>
+        <vs-radio v-model="userRole" vs-value="coach">coach</vs-radio>
+        <vs-radio v-model="userRole" vs-value="parent">parent</vs-radio>
+        <vs-radio v-model="userRole" vs-value="child">child</vs-radio>
+        <vs-radio v-model="userRole" vs-value="public">public</vs-radio>
       </div>
 
       <vx-card card-border code-toggler no-shadow title="Buttons">

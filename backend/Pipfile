@@ -57,6 +57,7 @@ Werkzeug = "*"
 whitenoise = "*"
 "psycopg2-binary" = "*"
 "urllib3" = "*"
+drf-writable-nested = "*"
 
 [dev-packages]
 bump2version = "*"

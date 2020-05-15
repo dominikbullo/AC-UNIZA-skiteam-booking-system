@@ -1,15 +1,19 @@
 from django.utils import timezone
+
+from drf_writable_nested.serializers import WritableNestedModelSerializer
+
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from rest_polymorphic.serializers import PolymorphicSerializer
 
 from core import choices
-from apps.events.models import Event, SkiTraining, SkiRace, Season, Category, Location, RaceOrganizer
 
+from apps.events.models import Event, SkiTraining, SkiRace, Season, Category, Location, RaceOrganizer
 from apps.family.models import Child
-from apps.users.api.serializers import BaseProfileSerializer
 from apps.users.models import Profile
+
+from apps.users.api.serializers import BaseProfileSerializer
 
 
 class SeasonSerializer(serializers.ModelSerializer):
@@ -50,7 +54,7 @@ class LocationSerializer(serializers.ModelSerializer):
 class BaseEventSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         super(BaseEventSerializer, self).__init__(*args, **kwargs)
-        if self.context['request'].method == 'GET':
+        if self.context.get("request") and self.context['request'].method == 'GET':
             self.fields['category'] = CategorySerializer(many=True)
             self.fields['location'] = LocationSerializer(many=False)
 
@@ -118,6 +122,12 @@ class SkiTrainingSerializer(BaseEventSerializer):
 
 
 class SkiRaceSerializer(BaseEventSerializer):
+    def __init__(self, *args, **kwargs):
+        super(SkiRaceSerializer, self).__init__(*args, **kwargs)
+        if self.context.get("request") and self.context['request'].method == 'GET':
+            self.fields['organizer'] = RaceOrganizerSerializer(many=True)
+
+    organizer = serializers.PrimaryKeyRelatedField(many=False, queryset=RaceOrganizer.objects.all())
 
     def validate(self, data):
         validated_data = super(SkiRaceSerializer, self).validate(data)
@@ -125,6 +135,11 @@ class SkiRaceSerializer(BaseEventSerializer):
         if event_type != choices.EventTypeChoices.SKI_RACE:
             raise ValidationError("Bad resourcetype for %s" % event_type)
         return validated_data
+
+    def to_representation(self, instance):
+        self.fields["organizer"] = RaceOrganizerSerializer(instance.organizer, many=False, read_only=True)
+        to_representation = super(SkiRaceSerializer, self).to_representation(instance)
+        return to_representation
 
     class Meta:
         model = SkiRace

@@ -36,7 +36,7 @@ class BaseProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        exclude = ("events", "avatar", "user_role", "location",)
+        exclude = ("events", "avatar", "location",)
         read_only_fields = "id", "family_id", "user_role"
 
 

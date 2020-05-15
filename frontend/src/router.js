@@ -389,7 +389,28 @@ const router = new Router({
               }
             ],
             pageTitle: 'Charts',
-            rule: 'isParent'
+            rule: 'isChild'
+          }
+        },
+        // TODO detail stats for coach if i have more real data
+        {
+          path: '/page/statistics/detail',
+          name: 'page-statistics',
+          component: () => import('@/views/pages/stats/Statistics.vue'),
+          meta: {
+            breadcrumb: [
+              {
+                title: 'Home',
+                url: '/'
+              },
+              { title: 'Statistics' },
+              {
+                title: 'Apex Charts',
+                active: true
+              }
+            ],
+            pageTitle: 'Charts',
+            rule: 'isChild'
           }
         }
       ]
