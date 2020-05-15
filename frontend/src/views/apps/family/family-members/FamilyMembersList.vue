@@ -428,6 +428,7 @@ export default {
         }
       },
       set (val) {
+        console.log('val', val)
         this.gridApi.paginationGoToPage(val - 1)
       }
     },
@@ -535,6 +536,9 @@ export default {
         }
       }
     }
+  },
+  mounted () {
+    this.gridApi = this.gridOptions.api
   },
   created () {
     this.$store.dispatch('family/fetchFamily', this.$store.state.AppActiveUser.profile.family_id)
