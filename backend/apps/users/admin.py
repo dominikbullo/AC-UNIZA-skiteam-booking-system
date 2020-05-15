@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Permission
 
-from apps.family.models import FamilyMember
+from apps.family.models import FamilyMember, Child
 from apps.users.forms import CustomUserCreationForm, CustomUserChangeForm
 from apps.users.models import User, Profile
 
@@ -14,6 +14,13 @@ class ProfileInline(admin.StackedInline):
     verbose_name_plural = 'Profile'
     fk_name = 'user'
     filter_horizontal = ('events',)
+
+
+class ChildInline(admin.StackedInline):
+    model = Child
+    can_delete = False
+    verbose_name_plural = 'Children'
+    fk_name = 'user'
 
 
 class FamilyMemberInLine(admin.StackedInline):
@@ -28,9 +35,9 @@ class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = User
-    list_display = UserAdmin.list_display + ("get_user_role",)
+    list_display = UserAdmin.list_display + ("date_joined", "last_login", "get_user_role",)
 
-    inlines = [ProfileInline, FamilyMemberInLine]
+    inlines = [ProfileInline, FamilyMemberInLine, ChildInline]
 
     def get_user_role(self, instance):
         try:
