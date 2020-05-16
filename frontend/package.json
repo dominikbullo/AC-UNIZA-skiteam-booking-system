@@ -5,10 +5,10 @@
   "scripts": {
     "serve": "npm i && vue-cli-service serve",
     "build": "vue-cli-service build",
+    "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
-    "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
-    "test:unit": "vue-cli-service test:unit"
+    "docs:dev": "vuepress dev docs"
   },
   "dependencies": {
     "@chenfengyuan/vue-countdown": "^1.1.2",
@@ -77,6 +77,7 @@
     "@fullhuman/postcss-purgecss": "^1.2.0",
     "@vue/cli-plugin-babel": "^3.7.0",
     "@vue/cli-plugin-eslint": "^3.7.0",
+    "@vue/cli-plugin-pwa": "^4.3.1",
     "@vue/cli-service": "^3.7.0",
     "axios-mock-adapter": "^1.17.0",
     "node-sass": "^4.12.0",
