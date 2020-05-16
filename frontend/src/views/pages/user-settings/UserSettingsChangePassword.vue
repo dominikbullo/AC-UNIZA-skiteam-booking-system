@@ -42,6 +42,13 @@ export default {
     switchVisibility () {
       this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password'
     },
+    save_changes () {
+      // REQUEST http://localhost:8000/api/profile/8/password-change/
+      // GET TOKEN
+      // UPDATE TOKEN
+      // TEST if is still login in drf or login again
+
+    },
     resetData () {
       this.old_password = ''
       this.new_password = ''
