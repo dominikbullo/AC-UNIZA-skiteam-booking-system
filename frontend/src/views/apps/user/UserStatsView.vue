@@ -80,40 +80,15 @@ export default {
     }
   },
   methods: {
-    processData () {
+    formatData () {
       const seasons = []
       const series = {}
-      // this.user_stats =
-      //   {
-      //     '2018-2019': {
-      //       'SKI_TRAINING': {
-      //         'name': 'Ski Training',
-      //         'count': 1,
-      //         'total': 1
-      //       },
-      //       'ATHLETIC_TRAINING': {
-      //         'name': 'Athletic Training',
-      //         'count': 1,
-      //         'total': 5
-      //       }
-      //     },
-      //     '2017-2018': {
-      //       'SKI_TRAINING': {
-      //         'name': 'Ski Training',
-      //         'count': 5,
-      //         'total': 20
-      //       },
-      //       'ATHLETIC_TRAINING': {
-      //         'name': 'Athletic Training',
-      //         'count': 15,
-      //         'total': 10
-      //       }
-      //     }
-      //   }
-      Object.entries(this.user_stats).forEach(([season, data]) => {
+
+      Object.keys(this.user_stats).forEach((season) => {
         seasons.push(season)
         series[season] = []
-        Object.entries(data).forEach(([key, value]) => {
+
+        Object.entries(this.user_stats[season]).forEach(([key, value]) => {
           if (!series[season].hasOwnProperty(key)) {
             series[season][key] = { ...series[season][key], ...value }
             series[season][key] = { ...series[season][key], ...{ data: [] } }
@@ -121,13 +96,11 @@ export default {
           // Here is the line where in data which i want to sho i pushing values
           series[season][key]['data'].push(value.count)
         })
+
       })
-      // console.log('series', series)
-      // console.log('seasons', seasons)
-      this.$refs.userChart1.updateOptions({ xaxis: { categories: seasons } })
-      this.$refs.userChart2.updateOptions({ xaxis: { categories: seasons } })
-
-
+      return { seasons, series }
+    },
+    cleanData (series) {
       const cleanData = []
       Object.values(series).forEach((el) => {
         Object.entries(el).forEach(([key, value]) => {
@@ -142,12 +115,18 @@ export default {
           }
         })
       })
-      // console.log('cleanData final', cleanData)
-      this.series = cleanData
+      return cleanData
+    },
+    processData () {
+      const { seasons, series } = this.formatData()
+
+      this.$refs.userChart1.updateOptions({ xaxis: { categories: seasons } })
+      this.series = this.cleanData(series)
+      this.$vs.loading.close()
     }
   },
   created () {
-    // this.$vs.loading()
+    this.$vs.loading()
     if (!moduleUserManagement.isRegistered) {
       this.$store.registerModule('userManagement', moduleUserManagement)
       moduleUserManagement.isRegistered = true

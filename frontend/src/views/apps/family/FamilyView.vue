@@ -28,29 +28,29 @@
                 <td class="font-semibold">Family Name</td>
                 <td>{{ family_data.name }}</td>
               </tr>
-              <tr>
-                <td class="font-semibold">Created</td>
-                <td>{{ family_data.name }}</td>
-              </tr>
+              <!--              <tr>-->
+              <!--                <td class="font-semibold">Created</td>-->
+              <!--                <td>{{ family_data.name }}</td>-->
+              <!--              </tr>-->
 
             </table>
           </div>
           <!-- /Information - Col 1 -->
 
           <!-- Information - Col 2 -->
-          <div class="vx-col flex-1" id="account-info-col-2">
-            <table>
-              <tr>
-                <td class="font-semibold">Admin</td>
-                <td>{{ family_data.name }}</td>
-              </tr>
-              <tr>
-                <td class="font-semibold">Contact</td>
-                <td>{{ family_data.name }}</td>
-              </tr>
+          <!--          <div class="vx-col flex-1" id="account-info-col-2">-->
+          <!--            <table>-->
+          <!--              <tr>-->
+          <!--                <td class="font-semibold">Admin</td>-->
+          <!--                <td>{{ family_data.name }}</td>-->
+          <!--              </tr>-->
+          <!--              <tr>-->
+          <!--                <td class="font-semibold">Contact</td>-->
+          <!--                <td>{{ family_data.name }}</td>-->
+          <!--              </tr>-->
 
-            </table>
-          </div>
+          <!--            </table>-->
+          <!--          </div>-->
           <!-- /Information - Col 2 -->
 
           <!--          <div class="vx-col w-full flex" id="account-manage-buttons">-->

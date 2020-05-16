@@ -1,11 +1,7 @@
 <template>
   <div id="event-edit-tab-participants">
-    <ul>
-      <li>- [ ] Pekne to usporiadať</li>
-    </ul>
     <div class="vx-row">
       <div class="vx-col w-full md:w-1/2">
-        <!--        <pre>{{data_local.participants}}</pre>-->
         <!--        <pre>{{data_local}}</pre>-->
         <div class="flex items-end mb-5">
           <span class="leading-none font-medium">Have been logged in to the event</span>
@@ -41,7 +37,7 @@
     </div>
     <div class="vx-row">
       <div class="vx-col w-full">
-        {{data_local}}
+        <!--        {{data_local}}-->
         <div class="mt-8 flex flex-wrap items-center justify-end">
           <vs-button :disabled="!validateForm" @click="changeEventParticipants" class="ml-auto mt-2">Save Changes
           </vs-button>

@@ -23,6 +23,8 @@ class BaseProfileSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)
     userRole = serializers.CharField(source='user_role', read_only=True)
 
+    gender = serializers.CharField(source='get_gender_display', read_only=True)
+
     # RES: https://stackoverflow.com/questions/48073471/django-rest-framework-get-data-based-on-current-userid-token
     def get_family_id(self, instance):
         try:
