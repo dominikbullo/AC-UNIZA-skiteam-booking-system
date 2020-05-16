@@ -113,7 +113,7 @@ const router = new Router({
           }
         },
         {
-          path: '/apps/user/user-view/:userId',
+          path: '/apps/user/:userId/view',
           name: 'app-user-view',
           component: () => import('@/views/apps/user/UserView.vue'),
           meta: {
