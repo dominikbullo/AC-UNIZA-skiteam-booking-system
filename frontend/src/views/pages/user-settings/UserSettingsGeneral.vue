@@ -1,6 +1,6 @@
 <template>
   <vx-card no-shadow>
-
+    {{data}}
     <!-- Img Row -->
     <!--    <div class="flex flex-wrap items-center mb-base">-->
     <!--      <vs-avatar :src="activeUserInfo.photoURL" size="70px" class="mr-4 mb-4"/>-->
@@ -24,18 +24,14 @@
       </div>
     </div>
 
-    <!--    <vs-input class="w-full mb-base" icon-pack="feather" icon="icon-user" label-placeholder="Username"-->
-    <!--              v-model="username"></vs-input>-->
-    <!-- FIXME: If email change then need to verified again -->
-    <vs-input class="w-full mb-base" icon-pack="feather" icon="icon-mail" label-placeholder="Email"
-              v-model="email"></vs-input>
-    <!--    <vs-input class="w-full mb-base" icon-pack="feather" icon="icon-user" label-placeholder="Full Name"-->
-    <!--              v-model="full_name"></vs-input>-->
-
+    <div class="vx-col sm:w-1/2 w-full mb-2">
+      <vs-input class="w-full mb-base" icon-pack="feather" icon="icon-mail" label-placeholder="Email"
+                v-model="email"></vs-input>
+    </div>
 
     <!-- Save & Reset Button -->
     <div class="flex flex-wrap items-center justify-end">
-      <vs-button class="ml-auto mt-2">Save Changes</vs-button>
+      <vs-button class="ml-auto mt-2" @click="saveData">Save Changes</vs-button>
       <vs-button class="ml-4 mt-2" type="border" color="warning" @click="resetData">Reset</vs-button>
     </div>
   </vx-card>
@@ -59,17 +55,31 @@ export default {
   computed: {
     activeUserInfo () {
       return this.$store.state.AppActiveUser
+    },
+    validateForm () {
+      return !this.errors.any()
     }
   },
   methods: {
     resetData () {
       // TODO: for loop -> if key update
-      this.username = this.$store.state.AppActiveUser.username
-      this.name = this.$store.state.AppActiveUser.displayName
-      this.email = this.$store.state.AppActiveUser.email
-      this.full_name = this.$store.state.AppActiveUser.displayName
       this.first_name = this.$store.state.AppActiveUser.first_name
       this.last_name = this.$store.state.AppActiveUser.last_name
+      this.email = this.$store.state.AppActiveUser.email
+      // this.username = this.$store.state.AppActiveUser.username
+      // this.name = this.$store.state.AppActiveUser.displayName
+      // this.full_name = this.$store.state.AppActiveUser.displayName
+    },
+    saveData () {
+      if (!this.validateForm) return
+
+      const payload = {
+        first_name: this.first_name,
+        last_name: this.last_name,
+        email: this.email
+      }
+      throw new Error('saveData - Not implemented yet!')
+      this.$store.dispatch('editUser', payload)
     }
   }
 }

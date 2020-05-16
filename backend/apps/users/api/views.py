@@ -9,7 +9,6 @@ from rest_framework.filters import SearchFilter
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.generics import UpdateAPIView
 from rest_framework.authtoken.models import Token
 
 from apps.events.models import Season
@@ -29,7 +28,7 @@ class AvatarUpdateView(generics.UpdateAPIView):
 
 
 # RES: https://stackoverflow.com/questions/38845051/how-to-update-user-password-in-django-rest-framework
-class ChangePasswordView(UpdateAPIView):
+class ChangePasswordView(generics.UpdateAPIView):
     serializer_class = ChangePasswordSerializer
 
     def update(self, request, *args, **kwargs):

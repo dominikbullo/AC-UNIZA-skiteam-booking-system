@@ -36,6 +36,9 @@ export default {
   computed: {
     activeUserInfo () {
       return this.$store.state.AppActiveUser
+    },
+    validateForm () {
+      return !this.errors.any()
     }
   },
   methods: {
@@ -47,6 +50,14 @@ export default {
       // GET TOKEN
       // UPDATE TOKEN
       // TEST if is still login in drf or login again
+      if (!this.validateForm) return
+      const payload = {
+        old_password: this.old_password,
+        new_password1: this.new_password,
+        new_password2: this.confirm_new_password
+      }
+      throw new Error('saveData - Not implemented yet!')
+      this.$store.dispatch('passwordChange', payload)
 
     },
     resetData () {
