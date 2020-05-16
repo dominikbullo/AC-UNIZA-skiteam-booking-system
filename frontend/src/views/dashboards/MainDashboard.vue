@@ -16,17 +16,17 @@
         </vx-card>
       </div>
 
-      <!-- Select season -->
-      <!--      <div class="vx-col w-full md:w-1/2 mb-base">-->
-      <!--        <vx-card title="Season Selection (not implemented yet)" no-shadow card-border>-->
-      <!--          <v-select-->
-      <!--            v-model="seasonSelection.selected"-->
-      <!--            :options="seasonSelection.options"-->
-      <!--            :clearable="false"-->
-      <!--            :searchable="false"-->
-      <!--          />-->
-      <!--        </vx-card>-->
-      <!--      </div>-->
+      <div class="vx-col w-full md:w-1/2 mb-base">
+        <vx-card title="Season Selection" no-shadow card-border>
+          <v-select
+            v-model="seasonSelection.selected"
+            :options="seasonSelection.options"
+            :clearable="false"
+            :searchable="false"
+            @input="getUserStatsForSeason"
+          />
+        </vx-card>
+      </div>
     </div>
 
     <!--    &lt;!&ndash; TODO: maybe for each statictic roll out field ?&ndash;&gt;-->
@@ -109,17 +109,15 @@ export default {
   },
   data () {
     return {
-      childSelection:
-        {
-          selected: [],
-          options: []
-        },
+      childSelection: {
+        selected: [],
+        options: []
+      },
 
-      seasonSelection:
-        {
-          selected: [],
-          options: []
-        },
+      seasonSelection: {
+        selected: [],
+        options: []
+      },
 
       stats: {},
 
@@ -226,18 +224,28 @@ export default {
     }
   },
   methods: {
-    getUserStats () {
-      console.log('getUserStats', this.childSelection.selected)
+    getUserStatsForSeason () {
       this.$store.dispatch('family/fetchUserStats',
         {
           username: this.childSelection.selected.user.profile.id,
           query: { season: this.seasonSelection.selected }
         })
         .then((res) => {
-          // FIXME
-          // console.log('res data', res.data)
-          this.stats = Object.values(res.data.data)[0]
-          return res.data.data
+          console.log('res', Object.keys(res.data.data))
+          this.stats = Object.values(res.data.data[this.seasonSelection.selected])
+        })
+    },
+    getUserStats () {
+      this.$store.dispatch('family/fetchUserStats',
+        {
+          username: this.childSelection.selected.user.profile.id
+        })
+        .then((res) => {
+          console.log('res', res.data.data)
+          console.log('res', Object.keys(res.data.data))
+          this.seasonSelection.options = Object.keys(res.data.data)
+          this.seasonSelection.selected = this.seasonSelection.options[0]
+          this.stats = Object.values(res.data.data[this.seasonSelection.selected])
         })
     },
     getDisplayStats (stats) {

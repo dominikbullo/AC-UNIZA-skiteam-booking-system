@@ -16,11 +16,11 @@ class ProfileInline(admin.StackedInline):
     filter_horizontal = ('events',)
 
 
-class ChildInline(admin.StackedInline):
-    model = Child
-    can_delete = False
-    verbose_name_plural = 'Children'
-    fk_name = 'user'
+# class ChildInline(admin.StackedInline):
+#     model = Child
+#     can_delete = False
+#     verbose_name_plural = 'Children'
+#     fk_name = 'user'
 
 
 class FamilyMemberInLine(admin.StackedInline):
@@ -37,7 +37,7 @@ class CustomUserAdmin(UserAdmin):
     model = User
     list_display = UserAdmin.list_display + ("date_joined", "last_login", "get_user_role",)
 
-    inlines = [ProfileInline, FamilyMemberInLine, ChildInline]
+    inlines = [ProfileInline, FamilyMemberInLine]
 
     def get_user_role(self, instance):
         try:

@@ -6,10 +6,17 @@
     <!--    <vue-apex-charts width="300" height="300" type="donut" :options="chartOptions" :series="series"></vue-apex-charts>-->
 
     <div class="vx-row">
-      <div class="vx-col  w-full mb-base">
+      <div class="vx-col w-full mb-base">
         <vx-card title="Number of event of child in season">
           <vue-apex-charts ref="totalPresenceChart" type="bar" height="350" :options="barChart.chartOptions"
                            :series="barChart.series"></vue-apex-charts>
+        </vx-card>
+      </div>
+
+      <div class="vx-col w-full mb-base">
+        <vx-card title="Number of event of child in season">
+          <vue-apex-charts ref="usersChartCount" type="bar" height="450"
+                           :options="chartOptions" :series="seriesCount"></vue-apex-charts>
         </vx-card>
       </div>
     </div>
@@ -39,11 +46,61 @@ export default {
       usersData: {},
       chartOptions: {
         chart: {
-          id: 'basic-donut'
+          type: 'bar',
+          height: 350,
+          stacked: true,
+          toolbar: {
+            show: true
+          },
+          zoom: {
+            enabled: true
+          }
         },
-        labels: ['a', 'b', 'c']
+        responsive: [{
+          breakpoint: 480,
+          options: {
+            legend: {
+              position: 'bottom',
+              offsetX: -10,
+              offsetY: 0
+            }
+          }
+        }],
+        plotOptions: {
+          bar: {
+            horizontal: false
+          }
+        },
+        xaxis: {
+          type: 'datetime',
+          categories: ['01/01/2011 GMT', '01/02/2011 GMT', '01/03/2011 GMT', '01/04/2011 GMT',
+            '01/05/2011 GMT', '01/06/2011 GMT'
+          ]
+        },
+        legend: {
+          position: 'right',
+          offsetY: 40
+        },
+        fill: {
+          opacity: 1
+        }
       },
-      series: [30, 40, 45],
+      seriesCount: [
+        {
+          name: 'PRODUCT A',
+          data: [44, 55, 41, 67, 22, 43]
+        }, {
+          name: 'PRODUCT B',
+          data: [13, 23, 20, 8, 13, 27]
+        }, {
+          name: 'PRODUCT C',
+          data: [11, 17, 15, 15, 21, 14]
+        }, {
+          name: 'PRODUCT D',
+          data: [21, 7, 25, 13, 22, 8]
+        }
+      ],
+
 
       barChart: {
         chart: {
@@ -78,11 +135,6 @@ export default {
       let entries = {}
       const seasonMap = new Map()
       const eventTypeMap = new Map()
-
-      console.log('processing data....', this.usersData)
-      // Get keys
-      // 2018-2019
-
 
       this.usersData.forEach((el) => {
         categories.push(el.user.displayName)
@@ -124,89 +176,6 @@ export default {
       console.log('uniqueEventTypeInData', uniqueEventTypeInData)
       console.log('categories', categories)
       console.log('entries', entries)
-
-      // const seasons = []
-      // const series = {}
-      // Object.entries(this.user_stats).forEach(([season, data]) => {
-      //   seasons.push(season)
-      //   series[season] = []
-      //   Object.entries(data).forEach(([key, value]) => {
-      //     if (!series[season].hasOwnProperty(key)) {
-      //       series[season][key] = { ...series[season][key], ...value }
-      //       series[season][key] = { ...series[season][key], ...{ data: [] } }
-      //     }
-      //     // Here is the line where in data which i want to sho i pushing values
-      //     series[season][key]['data'].push(value.count)
-      //   })
-      // })
-      // console.log('series', series)
-      // console.log('seasons', seasons)
-      // this.$refs.userChart1.updateOptions({ xaxis: { categories: seasons } })
-      //
-      //
-      // const cleanData = []
-      // Object.values(series).forEach((el) => {
-      //   Object.entries(el).forEach(([key, value]) => {
-      //     const magenicIndex = cleanData.findIndex(vendor => vendor.name === value.name)
-      //     if (magenicIndex > -1) {
-      //       cleanData[magenicIndex].data.push(...value.data)
-      //     } else {
-      //       cleanData.push({
-      //         name: value.name,
-      //         data: value.data
-      //       })
-      //     }
-      //   })
-      // })
-      // console.log('cleanData final', cleanData)
-      // this.series = cleanData
-      //
-
-      // console.log('processing data....')
-      // console.log('data', this.usersData)
-      // console.log('.users', this.usersData.users)
-      // this.usersData.users.forEach((el) => {
-      //   categories.push(el.displayName)
-      //   Object.entries(el.data).forEach(([key, value]) => {
-      //     console.log('key', key)
-      //     console.log('value', value)
-      //     if (!map.has(key)) {
-      //       map.set(key, true)
-      //       uniqueEventTypes.push(key)
-      //       entries.push({
-      //         id: el.id,
-      //         count: value.count,
-      //         total: value.total
-      //       })
-      //     } else {
-      //       console.log('pushi************************ng', el)
-      //       console.log(entries)
-      //       entries[key].count.push('testCount')
-      //       entries[key].total.push('testTotal')
-      //     }
-      //   })
-      // })
-
-      // this.usersData.users.forEach((el) => {
-      //   Object.entries(el.data).forEach(([key, value]) => {
-      //     console.log('key', key)
-      //     console.log('value', value)
-      //     if (map.has(key)) {
-      //       map.set(key, true)
-      //       uniqueEventTypes.push(key)
-      //     }
-      //   })
-      // })
-
-      //
-      // console.log('result', uniqueEventTypes)
-      // console.log('cat', categories)
-      // console.log('entries', entries)
-
-      // console.log('here')
-      // console.log('here')
-      // console.log('here')
-      // console.log('here')
     },
     processData () {
       const seasons = []
@@ -218,7 +187,6 @@ export default {
       this.usersData.forEach((user) => {
         // If has no datapoint
         if (Object.keys(user.data).length === 0) {
-          console.log('no data hier')
           return
         }
         users.push(user.user.displayName)
@@ -234,11 +202,6 @@ export default {
           // console.log('season', season)
           Object.entries(data).forEach(([key, value]) => {
 
-            // if (!eventTypeMap.has(key)) {
-            //   eventTypeMap.set(key, true)
-            //   series[season][key] = { ...series[season][key], ...value }
-            //   series[season][key] = { ...series[season][key], ...{ data: [] } }
-            // }
 
             // console.log('series[season][key] BP', series[season][key])
             if (!series[season].hasOwnProperty(key)) {

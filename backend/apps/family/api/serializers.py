@@ -92,7 +92,7 @@ class FamilyMemberSerializer(serializers.ModelSerializer):
 class FamilySerializer(serializers.ModelSerializer):
     members = FamilyMemberSerializer(many=True, read_only=True)
 
-    # children = ChildSerializer(many=True, read_only=True)
+    children = ChildSerializer(many=True, read_only=True)
 
     class Meta:
         model = Family

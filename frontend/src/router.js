@@ -135,7 +135,7 @@ const router = new Router({
         {
           path: '/apps/user/:userId?/stats',
           name: 'app-user-stats',
-          component: () => import('@/views/apps/user/UserStatsView.vue'),
+          component: () => import('@/views/apps/user/stats/UserStatsView.vue'),
           meta: {
             breadcrumb: [
               {
@@ -395,7 +395,7 @@ const router = new Router({
         // TODO detail stats for coach if i have more real data
         {
           path: '/page/statistics/detail',
-          name: 'page-statistics',
+          name: 'page-statistics-detail',
           component: () => import('@/views/pages/stats/Statistics.vue'),
           meta: {
             breadcrumb: [
