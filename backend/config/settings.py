@@ -63,6 +63,7 @@ THIRD_PARTY_APPS = [
 
     'django_excel_fixture',
     'django_filters',
+    'django_rest_passwordreset',
 ]
 
 LOCAL_APPS = [
@@ -120,7 +121,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': str(ROOT_DIR('db.sqlite3')),
+        'NAME'  : str(ROOT_DIR('db.sqlite3')),
     }
 }
 
@@ -197,10 +198,10 @@ WSGI_APPLICATION = 'config.wsgi.application'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': STATICFILES_DIRS,
+        'DIRS'   : STATICFILES_DIRS,
         'OPTIONS': {
-            'debug': DEBUG,
-            'loaders': [
+            'debug'             : DEBUG,
+            'loaders'           : [
                 'django.template.loaders.filesystem.Loader',
                 'django.template.loaders.app_directories.Loader',
             ],
@@ -217,7 +218,6 @@ TEMPLATES = [
         },
     },
 ]
-
 
 # PASSWORD STORAGE SETTINGS
 # ------------------------------------------------------------------------------
@@ -257,7 +257,6 @@ AUTHENTICATION_BACKENDS = (
 AUTH_USER_MODEL = 'users.User'
 
 SITE_ID = 1
-
 
 # DJANGO REST FRAMEWORK
 # ------------------------------------------------------------------------------
@@ -300,7 +299,6 @@ REST_FRAMEWORK = {
     'PAGE_SIZE'                     : 100
 }
 
-
 # raven sentry client
 # See https://docs.sentry.io/clients/python/integrations/django/
 INSTALLED_APPS += ['raven.contrib.django.raven_compat']
@@ -311,48 +309,48 @@ MIDDLEWARE = RAVEN_MIDDLEWARE + MIDDLEWARE
 SENTRY_DSN = env.str('SENTRY_DSN')
 SENTRY_CLIENT = 'raven.contrib.django.raven_compat.DjangoClient'
 LOGGING = {
-    'version': 1,
+    'version'                 : 1,
     'disable_existing_loggers': True,
-    'root': {
-        'level': 'WARNING',
+    'root'                    : {
+        'level'   : 'WARNING',
         'handlers': ['sentry'],
     },
-    'formatters': {
+    'formatters'              : {
         'verbose': {
             'format': '%(levelname)s %(asctime)s %(module)s '
                       '%(process)d %(thread)d %(message)s'
         },
     },
-    'handlers': {
-        'sentry': {
+    'handlers'                : {
+        'sentry' : {
             'level': 'ERROR',
             'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
         },
         'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
+            'level'    : 'DEBUG',
+            'class'    : 'logging.StreamHandler',
             'formatter': 'verbose'
         }
     },
-    'loggers': {
-        'django.db.backends': {
-            'level': 'ERROR',
-            'handlers': ['console'],
+    'loggers'                 : {
+        'django.db.backends'            : {
+            'level'    : 'ERROR',
+            'handlers' : ['console'],
             'propagate': False,
         },
-        'raven': {
-            'level': 'DEBUG',
-            'handlers': ['console'],
+        'raven'                         : {
+            'level'    : 'DEBUG',
+            'handlers' : ['console'],
             'propagate': False,
         },
-        'sentry.errors': {
-            'level': 'DEBUG',
-            'handlers': ['console'],
+        'sentry.errors'                 : {
+            'level'    : 'DEBUG',
+            'handlers' : ['console'],
             'propagate': False,
         },
         'django.security.DisallowedHost': {
-            'level': 'ERROR',
-            'handlers': ['console', 'sentry'],
+            'level'    : 'ERROR',
+            'handlers' : ['console', 'sentry'],
             'propagate': False,
         },
     },

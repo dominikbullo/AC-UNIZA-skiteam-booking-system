@@ -450,7 +450,7 @@ const router = new Router({
           }
         },
         {
-          path: '/reset-password/:uid/:token',
+          path: '/reset-password/:token',
           name: 'page-reset-password',
           component: () => import('@/views/pages/ResetPassword.vue'),
           meta: {
@@ -529,6 +529,7 @@ router.beforeEach((to, from, next) => {
   const publicPages = [
     '/login',
     '/forgot-password',
+    '/reset-password',
     '/register',
     '/pages/error-404',
     '/pages/error-500',

@@ -2,15 +2,15 @@
   <vx-card no-shadow>
 
     <!-- Img Row -->
-    <div class="flex flex-wrap items-center mb-base">
-      <vs-avatar :src="activeUserInfo.photoURL" size="70px" class="mr-4 mb-4"/>
-      <!--TODO change photo-->
-      <div>
-        <vs-button class="mr-4 sm:mb-0 mb-2">Upload photo</vs-button>
-        <vs-button type="border" color="danger">Remove</vs-button>
-        <p class="text-sm mt-2">Allowed JPG, GIF or PNG. Max size of 800kB</p>
-      </div>
-    </div>
+    <!--    <div class="flex flex-wrap items-center mb-base">-->
+    <!--      <vs-avatar :src="activeUserInfo.photoURL" size="70px" class="mr-4 mb-4"/>-->
+    <!--      &lt;!&ndash;TODO change photo&ndash;&gt;-->
+    <!--      <div>-->
+    <!--        <vs-button class="mr-4 sm:mb-0 mb-2">Upload photo</vs-button>-->
+    <!--        <vs-button type="border" color="danger">Remove</vs-button>-->
+    <!--        <p class="text-sm mt-2">Allowed JPG, GIF or PNG. Max size of 800kB</p>-->
+    <!--      </div>-->
+    <!--    </div>-->
 
     <!-- Info -->
     <div class="vx-row">
@@ -24,13 +24,13 @@
       </div>
     </div>
 
-    <vs-input class="w-full mb-base" icon-pack="feather" icon="icon-user" label-placeholder="Username"
-              v-model="username"></vs-input>
+    <!--    <vs-input class="w-full mb-base" icon-pack="feather" icon="icon-user" label-placeholder="Username"-->
+    <!--              v-model="username"></vs-input>-->
     <!-- FIXME: If email change then need to verified again -->
     <vs-input class="w-full mb-base" icon-pack="feather" icon="icon-mail" label-placeholder="Email"
               v-model="email"></vs-input>
-    <vs-input class="w-full mb-base" icon-pack="feather" icon="icon-user" label-placeholder="Full Name"
-              v-model="full_name"></vs-input>
+    <!--    <vs-input class="w-full mb-base" icon-pack="feather" icon="icon-user" label-placeholder="Full Name"-->
+    <!--              v-model="full_name"></vs-input>-->
 
 
     <!-- Save & Reset Button -->
