@@ -46,5 +46,32 @@ export default {
           reject(error)
         })
     })
+  },
+  editUser ({ commit }, payload) {
+    const id = this.state.AppActiveUser.id
+    return new Promise((resolve, reject) => {
+      axios.patch(`/profile/${id}/`, payload)
+        .then((response) => {
+          console.log('user', response)
+          commit('UPDATE_USER_INFO', response.data, { root: true })
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
+  },
+  resetPassword ({ commit }, payload) {
+    console.log('resetPassword')
+    return new Promise((resolve, reject) => {
+      axios.put('/profile/password-change/', payload)
+        .then((response) => {
+          // TODO commit token or logout
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
   }
 }

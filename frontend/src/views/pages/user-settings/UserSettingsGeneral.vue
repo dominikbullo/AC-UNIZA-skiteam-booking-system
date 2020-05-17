@@ -1,6 +1,5 @@
 <template>
   <vx-card no-shadow>
-    {{data}}
     <!-- Img Row -->
     <!--    <div class="flex flex-wrap items-center mb-base">-->
     <!--      <vs-avatar :src="activeUserInfo.photoURL" size="70px" class="mr-4 mb-4"/>-->
@@ -24,33 +23,36 @@
       </div>
     </div>
 
-    <div class="vx-col sm:w-1/2 w-full mb-2">
-      <vs-input class="w-full mb-base" icon-pack="feather" icon="icon-mail" label-placeholder="Email"
-                v-model="email"></vs-input>
-    </div>
+    <!--    <div class="vx-col sm:w-1/2 w-full mb-2">-->
+    <!--      <vs-input class="w-full mb-base" icon-pack="feather" icon="icon-mail" label-placeholder="Email"-->
+    <!--                v-model="email"></vs-input>-->
+    <!--    </div>-->
 
     <!-- Save & Reset Button -->
     <div class="flex flex-wrap items-center justify-end">
-      <vs-button class="ml-auto mt-2" @click="saveData">Save Changes</vs-button>
-      <vs-button class="ml-4 mt-2" type="border" color="warning" @click="resetData">Reset</vs-button>
+      <vs-button class="ml-auto mt-2" @click="save_data">Save Changes</vs-button>
+      <vs-button class="ml-4 mt-2" type="border" color="warning" @click="reset_data">Reset</vs-button>
     </div>
   </vx-card>
 </template>
 
 <script>
+import moduleUserManagement from '@/store/user-management/moduleUserManagement'
+
 export default {
   data () {
     return {
-      username: '',
-      name: '',
       email: '',
-      full_name: '',
       first_name: '',
       last_name: ''
     }
   },
   created () {
-    this.resetData()
+    if (!moduleUserManagement.isRegistered) {
+      this.$store.registerModule('userManagement', moduleUserManagement)
+      moduleUserManagement.isRegistered = true
+    }
+    this.reset_data()
   },
   computed: {
     activeUserInfo () {
@@ -61,25 +63,20 @@ export default {
     }
   },
   methods: {
-    resetData () {
+    reset_data () {
       // TODO: for loop -> if key update
       this.first_name = this.$store.state.AppActiveUser.first_name
       this.last_name = this.$store.state.AppActiveUser.last_name
       this.email = this.$store.state.AppActiveUser.email
-      // this.username = this.$store.state.AppActiveUser.username
-      // this.name = this.$store.state.AppActiveUser.displayName
-      // this.full_name = this.$store.state.AppActiveUser.displayName
     },
-    saveData () {
+    save_data () {
       if (!this.validateForm) return
 
       const payload = {
         first_name: this.first_name,
-        last_name: this.last_name,
-        email: this.email
+        last_name: this.last_name
       }
-      throw new Error('saveData - Not implemented yet!')
-      this.$store.dispatch('editUser', payload)
+      this.$store.dispatch('userManagement/editUser', payload)
     }
   }
 }
