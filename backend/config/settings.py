@@ -100,10 +100,16 @@ SECRET_KEY = env.str('SECRET_KEY')
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
 DOMAIN = env.str('DOMAIN')
 
+# RES: https://stackoverflow.com/questions/6367014/how-to-send-email-via-django
 # EMAIL CONFIGURATION
 # ------------------------------------------------------------------------------
 EMAIL_PORT = env.int('EMAIL_PORT', default='1025')
 EMAIL_HOST = env.str('EMAIL_HOST', default='mailhog')
+# EMAIL_HOST_USER = env.str('EMAIL_HOST_USER', default='')
+# EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD')
+# DEFAULT_FROM_EMAIL = env.str('DEFAULT_FROM_EMAIL')
+# SERVER_EMAIL = env.str('SERVER_EMAIL')
+# EMAIL_USE_TLS = True
 
 # MANAGER CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -244,13 +250,11 @@ AUTH_PASSWORD_VALIDATORS = [
 # ------------------------------------------------------------------------------
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
-    # 'users.auth.CustomEmailAuthBackend.EmailAuthBackend'
     "django.contrib.auth.backends.ModelBackend",
 
     # `allauth` specific authentication methods, such as login by e-mail
     "allauth.account.auth_backends.AuthenticationBackend",
 )
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Custom user app defaults
 # Select the correct user model

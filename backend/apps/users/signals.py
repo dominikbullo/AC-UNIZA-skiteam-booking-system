@@ -12,36 +12,30 @@ from core.utils import send_custom_mail
 from apps.events.models import Season, Event
 
 
-def send_email_if_flag_enabled(sender, instance, **kwargs):
+def notify_users(sender, instance, **kwargs):
+    # If is forced to send email
     if instance.send_email:
-        send_custom_mail(instance)
-        print("Sending mails, because send email was check")
-        instance.send_email = False
+        send_custom_mail(instance, "event_info")
+        return
 
-
-@transaction.atomic
-def send_email_if_canceled_change(sender, instance, **kwargs):
     try:
         old = sender.objects.select_for_update().get(pk=instance.pk)
     except sender.DoesNotExist:
-        pass  # Object is new, so field hasn't technically changed, but you may want to do something else here.
+        pass  # Object is new
     else:
         # If event was canceled
         if not old.canceled and instance.canceled:
-            send_custom_mail(instance, old)
-            print("send_email() because event has been canceled")
+            send_custom_mail(instance, "event_canceled")
             return
 
         # If event was canceled but is live again
         if old.canceled and not instance.canceled:
-            send_custom_mail(instance, old)
-            print("send_email() because event has been canceled but is live again")
+            send_custom_mail(instance, "event_recreated", old)
             return
 
 
 def pre_save_for_all_subclasses(model_class):
-    pre_save.connect(send_email_if_flag_enabled, model_class)
-    pre_save.connect(send_email_if_canceled_change, model_class)
+    pre_save.connect(notify_users, model_class)
     if len(model_class.__subclasses__()) > 0:
         for subClass in model_class.__subclasses__():
             pre_save_for_all_subclasses(subClass)

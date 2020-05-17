@@ -1,9 +1,9 @@
 <template>
   <div id="event-edit-tab-general">
-    <p>{{data}}</p>
-    <br>
-    <p>{{data_local}}</p>
-    <br>
+    <!--    <p>{{data}}</p>-->
+    <!--    <br>-->
+    <!--    <p>{{data_local}}</p>-->
+    <!--    <br>-->
 
     <div class="vx-row">
       <div class="vx-col w-full md:w-1/2">

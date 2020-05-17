@@ -7,32 +7,41 @@ def custom_create_user(**params):
     return get_user_model().objects.create_user(**params)
 
 
-def send_custom_mail(new_event, old_event=None):
+def send_custom_mail(new_event, template_file, old_event=None):
     context = {
-        'event': new_event
+        'event'    : new_event,
+        "old_event": old_event
     }
 
     # render email text
-    email_html_message = render_to_string('email/event_canceled.html', context)
-    email_plaintext_message = "plain"
+    email_html_message = render_to_string(f'email/event/{template_file}.html', context)
+    email_plaintext_message = render_to_string(f'email/event/{template_file}.txt', context)
 
-    # TODO Allow users to "unfollow", but for now it's ok
-    emails = []
-    for user in get_user_model().objects.all():
-        email = user.email
-        if email:
-            emails.append(email)
-
+    emails = getEmailList()
     print("sending emails to ", emails)
+
     msg = EmailMultiAlternatives(
         # title:
-        "Password Reset for {title}".format(title="Some website title"),
+        "Event update from SportAgenda",
         # message:
         email_plaintext_message,
         # from:
         "noreply@somehost.local",
         # to:
         emails
+
     )
+
     msg.attach_alternative(email_html_message, "text/html")
     msg.send()
+
+
+def getEmailList():
+    # TODO Allow users to "unfollow", but for now it's ok
+    emails = []
+    # Alternative EmailAddress.objects.all()
+    for user in get_user_model().objects.all():
+        email = user.email
+        if email:
+            emails.append(email)
+    return emails
