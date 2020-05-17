@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from apps.events.models import Category, Season
 from apps.family.models import Child, FamilyMember, Family
 
-from apps.users.api.serializers import CustomRegisterSerializer, UserDetailSerializer
+from apps.users.api.serializers import CustomRegisterSerializer, BaseUserSerializer
 from apps.users.models import Profile
 
 
@@ -82,7 +82,7 @@ class ChildSerializer(serializers.ModelSerializer):
 
 
 class FamilyMemberSerializer(serializers.ModelSerializer):
-    user = UserDetailSerializer(read_only=True)
+    user = BaseUserSerializer(read_only=True)
 
     class Meta:
         model = FamilyMember

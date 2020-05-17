@@ -1,18 +1,24 @@
 <template>
   <vx-card no-shadow>
-
     <vs-input class="w-full mb-base" :type="passwordFieldType" label-placeholder="Old Password"
-              v-model="old_password" icon-pack="feather" icon="icon-lock"/>
+              v-model="old_password" name="old_password" icon-pack="feather" icon="icon-lock"/>
+
     <vs-input class="w-full mb-base" :type="passwordFieldType" label-placeholder="New Password"
-              v-model="new_password" icon-pack="feather" icon="icon-lock"/>
+              v-model="new_password" name="new_password" data-vv-as="password" v-validate="'required|min:8'"
+              icon-pack="feather"
+              icon="icon-lock"/>
+
     <vs-input class="w-full mb-base" :type="passwordFieldType" label-placeholder="Confirm Password"
-              v-model="confirm_new_password" icon-pack="feather" icon="icon-lock"/>
+              v-model="confirm_new_password" data-vv-as="password" v-validate="'min:8|confirmed:password'"
+              icon-pack="feather"
+              name="confirm_password"
+              icon="icon-lock"/>
 
     <!-- Save & Reset Button -->
     <div class="flex flex-wrap items-center justify-end">
       <vs-button class="ml-auto mt-2">Save Changes</vs-button>
       <vs-button class="ml-4 mt-2" type="border" color="warning" @click="resetData">Reset</vs-button>
-      <vs-button class="ml-4 mt-2" @click="switchVisibility">show / hide</vs-button>
+      <!--      <vs-button class="ml-4 mt-2" @click="switchVisibility">show / hide</vs-button>-->
     </div>
   </vx-card>
 </template>
@@ -30,11 +36,29 @@ export default {
   computed: {
     activeUserInfo () {
       return this.$store.state.AppActiveUser
+    },
+    validateForm () {
+      return !this.errors.any()
     }
   },
   methods: {
     switchVisibility () {
       this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password'
+    },
+    save_changes () {
+      // REQUEST http://localhost:8000/api/profile/8/password-change/
+      // GET TOKEN
+      // UPDATE TOKEN
+      // TEST if is still login in drf or login again
+      if (!this.validateForm) return
+      const payload = {
+        old_password: this.old_password,
+        new_password1: this.new_password,
+        new_password2: this.confirm_new_password
+      }
+      throw new Error('saveData - Not implemented yet!')
+      this.$store.dispatch('passwordChange', payload)
+
     },
     resetData () {
       this.old_password = ''

@@ -58,6 +58,7 @@ whitenoise = "*"
 "psycopg2-binary" = "*"
 "urllib3" = "*"
 drf-writable-nested = "*"
+django-rest-passwordreset = "*"
 
 [dev-packages]
 bump2version = "*"

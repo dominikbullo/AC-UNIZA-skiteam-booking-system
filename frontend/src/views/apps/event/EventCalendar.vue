@@ -263,7 +263,7 @@ export default {
             duration: { days: 3 },
             buttonText: '3 dni'
           },
-          defaultView: (screen.width <= 670 ? 'timeGridThreeDay' : 'timeGridWeek')
+          defaultView: screen.width <= 670 ? 'timeGridThreeDay' : 'timeGridWeek'
         },
         customButtons: {
           addEvent: {

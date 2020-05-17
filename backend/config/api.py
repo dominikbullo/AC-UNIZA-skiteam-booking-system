@@ -16,7 +16,6 @@ router.extend(events_router)
 router.trailing_slash = '/?'
 
 urlpatterns = [
-    path("", include(router.urls)),
 
     # Used for avatar
     path("", include("apps.users.api.urls")),
@@ -25,4 +24,5 @@ urlpatterns = [
     path("", include("apps.family.api.urls")),
     path("", include("apps.events.api.urls")),
 
+    path("", include(router.urls)),
 ]

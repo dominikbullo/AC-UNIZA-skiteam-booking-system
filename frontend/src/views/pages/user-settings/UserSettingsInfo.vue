@@ -2,10 +2,10 @@
   <vx-card no-shadow>
 
     <!-- Bio -->
-    <vs-textarea label="Bio" v-model="bio" placeholder="Your bio..."/>
+    <!--    <vs-textarea label="Bio" v-model="bio" placeholder="Your bio..."/>-->
 
     <!-- DOB -->
-    <div class="mt-8">
+    <div>
       <label class="text-sm">Birth Date</label>
       <flat-pickr v-model="dob" :config="{ dateFormat: 'd F Y' }" class="w-full"/>
     </div>
@@ -33,9 +33,8 @@
     <div class="mt-8 mb-base">
       <label class="text-sm">Gender</label>
       <div class="mt-2">
-        <vs-radio v-model="gender" vs-value="male" class="mr-4">Male</vs-radio>
-        <vs-radio v-model="gender" vs-value="female" class="mr-4">Female</vs-radio>
-        <vs-radio v-model="gender" vs-value="other">Other</vs-radio>
+        <vs-radio v-model="gender" vs-value="M" class="mr-4">Male</vs-radio>
+        <vs-radio v-model="gender" vs-value="F" class="mr-4">Female</vs-radio>
       </div>
     </div>
 
@@ -61,7 +60,7 @@ export default {
       dob: null,
       country: 'USA',
       lang_known: ['English', 'Russian'],
-      gender: 'male',
+      gender: 'M',
       mobile: '',
       website: ''
 

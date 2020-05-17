@@ -70,12 +70,12 @@ const actions = {
       .catch(e => { console.log(e) })
   },
   passwordReset (context, user) {
-    return axios.post('/api/users/password_reset/', user)
+    return axios.post('/api/profile/password_reset/', user)
       .then(response => { context.commit('setEmailFail', false) })
       .catch(e => { context.commit('setEmailFail', true) })
   },
   passwordChange (context, payload) {
-    return axios.post('/api/users/password_change/', payload)
+    return axios.post('/api/profile/password_change/', payload)
       .then(response => { context.commit('setTokenFail', false) })
       .catch(e => { context.commit('setTokenFail', true) })
   }

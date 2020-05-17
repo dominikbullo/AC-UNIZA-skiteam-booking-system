@@ -130,10 +130,8 @@ export default {
       /* eslint-disable */
       if (!this.validateForm) return
 
-      // Here will go your API call for updating data
-      // You can get data in "this.data_local"
-
-      /* eslint-enable */
+      throw new Error('saveData - Not implemented yet!')
+      this.$store.dispatch('editUser', this.data_local)
     },
     reset_data () {
       this.data_local = Object.assign({}, this.data)

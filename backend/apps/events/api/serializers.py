@@ -155,7 +155,7 @@ class EventPolymorphicSerializer(PolymorphicSerializer):
     }
 
 
-class UserStatSerializer(serializers.ModelSerializer):
+class ProfileStatSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         return self.get_data(instance)
