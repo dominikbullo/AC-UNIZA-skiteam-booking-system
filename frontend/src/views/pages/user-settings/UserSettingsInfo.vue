@@ -24,8 +24,8 @@
 
     <!-- Save & Reset Button -->
     <div class="flex flex-wrap items-center justify-end">
-      <vs-button class="ml-auto mt-2" @click="save_data">Save Changes</vs-button>
-      <vs-button class="ml-4 mt-2" type="border" color="warning">Reset</vs-button>
+      <vs-button class="ml-auto mt-2" @click="save_changes">Save Changes</vs-button>
+      <vs-button class="ml-4 mt-2" type="border" color="warning" @click="reset_data">Reset</vs-button>
     </div>
   </vx-card>
 </template>
@@ -74,7 +74,7 @@ export default {
       this.gender = this.$store.state.AppActiveUser.gender
       this.phone_number = this.$store.state.AppActiveUser.phone_number
     },
-    save_data () {
+    save_changes () {
       if (!this.validateForm) return
 
       const payload = {
@@ -84,6 +84,19 @@ export default {
       }
 
       this.$store.dispatch('userManagement/editUser', payload)
+        .then(res => {
+          this.$vs.notify({
+            color: 'success',
+            title: 'User details changed'
+          })
+        })
+        .catch(err => {
+          this.$vs.notify({
+            color: 'danger',
+            title: 'Something went wrong',
+            text: err.message
+          })
+        })
     }
   }
 }

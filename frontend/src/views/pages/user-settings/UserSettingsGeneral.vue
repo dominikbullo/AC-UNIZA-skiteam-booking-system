@@ -30,7 +30,7 @@
 
     <!-- Save & Reset Button -->
     <div class="flex flex-wrap items-center justify-end">
-      <vs-button class="ml-auto mt-2" @click="save_data">Save Changes</vs-button>
+      <vs-button class="ml-auto mt-2" @click="save_changes">Save Changes</vs-button>
       <vs-button class="ml-4 mt-2" type="border" color="warning" @click="reset_data">Reset</vs-button>
     </div>
   </vx-card>
@@ -69,7 +69,7 @@ export default {
       this.last_name = this.$store.state.AppActiveUser.last_name
       this.email = this.$store.state.AppActiveUser.email
     },
-    save_data () {
+    save_changes () {
       if (!this.validateForm) return
 
       const payload = {
@@ -77,6 +77,19 @@ export default {
         last_name: this.last_name
       }
       this.$store.dispatch('userManagement/editUser', payload)
+        .then(res => {
+          this.$vs.notify({
+            color: 'success',
+            title: 'User details changed'
+          })
+        })
+        .catch(err => {
+          this.$vs.notify({
+            color: 'danger',
+            title: 'Something went wrong',
+            text: err.message
+          })
+        })
     }
   }
 }

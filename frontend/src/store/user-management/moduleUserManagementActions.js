@@ -61,12 +61,15 @@ export default {
         })
     })
   },
-  resetPassword ({ commit }, payload) {
-    console.log('resetPassword')
+  changePassword ({ commit }, payload) {
+    console.log('changePassword')
     return new Promise((resolve, reject) => {
       axios.put('/profile/password-change/', payload)
         .then((response) => {
           // TODO commit token or logout
+          // Set accessToken
+          localStorage.setItem('accessToken', response.data.key)
+          commit('auth/SET_BEARER', response.data.token, { root: true })
           resolve(response)
         })
         .catch((error) => {
