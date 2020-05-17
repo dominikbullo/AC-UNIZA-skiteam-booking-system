@@ -1,40 +1,38 @@
 from django.contrib.auth import get_user_model
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
+from django.template.loader import render_to_string
 
 
 def custom_create_user(**params):
     return get_user_model().objects.create_user(**params)
 
 
-def send_custom_mail(new, old=None):
-    try:
-        # print(old)
-        # print(new)
+def send_custom_mail(new_event, old_event=None):
+    context = {
+        'event': new_event
+    }
 
-        if old:
-            send_mail(
-                subject='Udalosť zmenená',
-                message='Event was canceled',
-                from_email="from@example.com",
-                recipient_list=['to@example.com'],
-                fail_silently=False,
-                auth_user=None,
-                auth_password=None,
-                connection=None,
-                html_message=None
-            )
-        else:
-            send_mail(
-                subject='Udalosť zmenená',
-                message='Event is up again canceled',
-                from_email="from@example.com",
-                recipient_list=['to@example.com'],
-                fail_silently=False,
-                auth_user=None,
-                auth_password=None,
-                connection=None,
-                html_message=None
-            )
+    # render email text
+    email_html_message = render_to_string('email/event_canceled.html', context)
+    email_plaintext_message = "plain"
 
-    except Exception as e:
-        print(e)
+    # TODO Allow users to "unfollow", but for now it's ok
+    emails = []
+    for user in get_user_model().objects.all():
+        email = user.email
+        if email:
+            emails.append(email)
+
+    print("sending emails to ", emails)
+    msg = EmailMultiAlternatives(
+        # title:
+        "Password Reset for {title}".format(title="Some website title"),
+        # message:
+        email_plaintext_message,
+        # from:
+        "noreply@somehost.local",
+        # to:
+        emails
+    )
+    msg.attach_alternative(email_html_message, "text/html")
+    msg.send()
