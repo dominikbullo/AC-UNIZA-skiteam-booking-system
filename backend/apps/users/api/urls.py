@@ -9,6 +9,5 @@ router.register(r"profiles?", ProfileViewSet, basename="profile")
 
 urlpatterns = [
     path("profile/<int:pk>/avatar/", AvatarUpdateView.as_view(), name="avatar-update"),
-    path("profile/<int:pk>/password-change/", ChangePasswordView.as_view(), name="password-change"),
-    path("", include(router.urls)),
+    path("profile/password-change/", ChangePasswordView.as_view(), name="password-change"),
 ]

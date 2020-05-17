@@ -13,5 +13,4 @@ router.register(r"child", ChildViewSet, basename="child")
 router.register(r"children", ChildViewSet, basename="children")
 
 urlpatterns = [
-    path("", include(router.urls)),
 ]
