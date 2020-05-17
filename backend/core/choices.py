@@ -37,7 +37,6 @@ class CategoryNameChoices(models.TextChoices):
 
 
 class EventTypeChoices(models.TextChoices):
-    # FIXME Validation -> event must have SkiTraining table if is type SKI_TRAINING
     SKI_TRAINING = 'SKI_TRAINING', _('Ski Training')
     ATHLETIC_TRAINING = 'ATHLETIC_TRAINING', _('Athletic Training')
     SKI_RACE = 'SKI_RACE', _('Ski Race')
