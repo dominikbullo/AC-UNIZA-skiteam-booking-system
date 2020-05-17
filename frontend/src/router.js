@@ -135,7 +135,7 @@ const router = new Router({
         {
           path: '/apps/user/:userId?/stats',
           name: 'app-user-stats',
-          component: () => import('@/views/apps/user/stats/UserStatsView.vue'),
+          component: () => import('@/views/apps/user/UserStatsView.vue'),
           meta: {
             breadcrumb: [
               {
