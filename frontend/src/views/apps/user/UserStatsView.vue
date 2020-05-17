@@ -19,6 +19,13 @@
 import moduleUserManagement from '@/store/user-management/moduleUserManagement.js'
 import VueApexCharts from 'vue-apexcharts'
 
+const stats = {
+  count: 'count123',
+  total: 'total',
+  percentage: 'percentage'
+}
+const dataKey = 'asdasasdad'
+
 export default {
   components: {
     VueApexCharts
@@ -81,24 +88,33 @@ export default {
   },
   methods: {
     formatData () {
-      const seasons = []
       const series = {}
 
       Object.keys(this.user_stats).forEach((season) => {
-        seasons.push(season)
         series[season] = []
 
         Object.entries(this.user_stats[season]).forEach(([key, value]) => {
           if (!series[season].hasOwnProperty(key)) {
+
+            value[dataKey] = {}
             series[season][key] = { ...series[season][key], ...value }
-            series[season][key] = { ...series[season][key], ...{ data: [] } }
+
+            Object.values(stats).forEach((item) => {
+              series[season][key][dataKey][item] = []
+            })
           }
           // Here is the line where in data which i want to sho i pushing values
-          series[season][key]['data'].push(value.count)
+          series[season][key][dataKey][stats.count].push(value.count)
+          series[season][key][dataKey][stats.total].push(value.total)
+          // FIXME or 0
+          series[season][key][dataKey][stats.percentage].push(
+            (value.count / value.total * 100).toFixed(2)
+          )
         })
 
       })
-      return { seasons, series }
+      console.log('series', series)
+      return series
     },
     cleanData (series) {
       const cleanData = []
@@ -106,11 +122,11 @@ export default {
         Object.entries(el).forEach(([key, value]) => {
           const magenicIndex = cleanData.findIndex(vendor => vendor.name === value.name)
           if (magenicIndex > -1) {
-            cleanData[magenicIndex].data.push(...value.data)
+            cleanData[magenicIndex].data.push(...value[dataKey][stats.count])
           } else {
             cleanData.push({
               name: value.name,
-              data: value.data
+              data: value[dataKey][stats.count]
             })
           }
         })
@@ -118,9 +134,11 @@ export default {
       return cleanData
     },
     processData () {
-      const { seasons, series } = this.formatData()
+      const series = this.formatData()
+      const seasons = Object.keys(series)
 
       this.$refs.userChart1.updateOptions({ xaxis: { categories: seasons } })
+
       this.series = this.cleanData(series)
       this.$vs.loading.close()
     }
