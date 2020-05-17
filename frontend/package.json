@@ -1,6 +1,6 @@
 {
   "name": "sport-agenda-app",
-  "version": "2.4.2-alpha",
+  "version": "2.4.3-alpha",
   "private": true,
   "scripts": {
     "serve": "npm i && vue-cli-service serve",
