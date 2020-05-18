@@ -1,7 +1,6 @@
-from rest_framework import viewsets, mixins, status
+from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
-from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
 from apps.events.api.serializers import ProfileStatSerializer
@@ -11,7 +10,6 @@ from apps.family.models import Family, FamilyMember, Child
 from apps.family.api.serializers import FamilySerializer, FamilyMemberSerializer, ChildSerializer
 
 # https://github.com/LondonAppDeveloper/recipe-app-api/blob/master/app/recipe/views.py
-from core.permissions import IsCoachOrReadOnly
 from core.views import get_object_custom_queryset, get_season_by_query
 
 
@@ -19,9 +17,9 @@ class FamilyViewSet(viewsets.ModelViewSet):
     # TODO permissions
     queryset = Family.objects.all()
     serializer_class = FamilySerializer
-    permission_classes = [IsOwnFamilyOrReadOnly, IsCoachOrReadOnly]
     filter_backends = [SearchFilter]
     search_fields = ["name"]
+
 
 class ChildViewSet(viewsets.ModelViewSet):
     # TODO permissions

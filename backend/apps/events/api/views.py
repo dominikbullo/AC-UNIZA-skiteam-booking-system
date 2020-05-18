@@ -2,7 +2,7 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
 from apps.events.models import Event, Season, Category, Location, RaceOrganizer
@@ -19,6 +19,7 @@ from core.views import get_object_custom_queryset
 
 class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = CategorySerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
         return get_object_custom_queryset(self.request, Category).order_by('year_from')
@@ -85,16 +86,16 @@ class EventViewSet(viewsets.ModelViewSet):
 class SeasonViewSet(viewsets.ModelViewSet):
     queryset = Season.objects.all()
     serializer_class = SeasonSerializer
-    permission_classes = [IsCoachOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class LocationViewSet(viewsets.ModelViewSet):
     queryset = Location.objects.all()
     serializer_class = LocationSerializer
-    permission_classes = [IsCoachOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class RaceOrganizerViewSet(viewsets.ModelViewSet):
     queryset = RaceOrganizer.objects.all()
     serializer_class = RaceOrganizerSerializer
-    permission_classes = [IsCoachOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly]

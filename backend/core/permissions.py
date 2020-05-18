@@ -10,7 +10,7 @@ class IsCoachOrReadOnly(permissions.BasePermission):
 
         isCoach = request.user.profile.user_role == choices.UserTypeChoices.COACH
         isAdmin = request.user.profile.user_role == choices.UserTypeChoices.ADMIN
-
-        print("Allow {user} view {view} -> {allow}".format(user=request.user, view=str(view),
-                                                           allow=isCoach or isAdmin))
+        #
+        # print("Allow {user} view {view} -> {allow}".format(user=request.user, view=str(view),
+        #                                                    allow=isCoach or isAdmin))
         return isCoach or isAdmin

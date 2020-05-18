@@ -13,15 +13,17 @@ from rest_framework.authtoken.models import Token
 
 from apps.events.models import Season
 from apps.events.api.serializers import ProfileStatSerializer
+from apps.users.api.permissions import IsOwnProfileOrReadOnly, IsOwnerOrReadOnly
 
 from apps.users.models import Profile
 from apps.users.api.serializers import ProfileAvatarSerializer, ChangePasswordSerializer, BaseProfileSerializer
 from core.permissions import IsCoachOrReadOnly
-from core.views import get_object_custom_queryset, get_season_by_query
+from core.views import get_season_by_query
 
 
 class AvatarUpdateView(generics.UpdateAPIView):
     serializer_class = ProfileAvatarSerializer
+    permission_classes = [IsAuthenticated, IsOwnProfileOrReadOnly]
 
     def get_object(self):
         profile_object = self.request.user.profile
@@ -31,6 +33,7 @@ class AvatarUpdateView(generics.UpdateAPIView):
 # RES: https://stackoverflow.com/questions/38845051/how-to-update-user-password-in-django-rest-framework
 class ChangePasswordView(generics.UpdateAPIView):
     serializer_class = ChangePasswordSerializer
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
     def update(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -51,7 +54,7 @@ class ProfileViewSet(mixins.UpdateModelMixin,
     """ Will be used when all users can see each other """
     queryset = Profile.objects.all()
     serializer_class = BaseProfileSerializer
-    permission_classes = [IsCoachOrReadOnly]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
     __basic_fields = ('user__username', 'user_role', "gender")
     filter_backends = (DjangoFilterBackend, SearchFilter)
