@@ -185,7 +185,7 @@ const router = new Router({
               },
               { title: 'Family' },
               {
-                title: 'List',
+                title: 'Members List',
                 active: true
               }
             ],
