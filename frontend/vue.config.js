@@ -32,5 +32,19 @@ module.exports = {
       poll: 1000,
       ignored: '/app/node_modules/'
     }
+  },
+  pwa: {
+    name: 'AC UNIZA Ski Team',
+    themeColor: '#10163a',
+    msTileColor: '#000000',
+    appleMobileWebAppCapable: 'yes',
+    appleMobileWebAppStatusBarStyle: 'black',
+
+    // configure the workbox plugin
+    workboxPluginMode: 'InjectManifest',
+    workboxOptions: {
+      swSrc: './src/sw.js',
+      swDest: 'service-worker.js'
+    }
   }
 }
