@@ -35,9 +35,9 @@
         :active.sync="childAddToEventPrompt.active"
         :is-valid="validForm"
         @accept="changeUserChildrenOnEvent"
-        accept-text="Save"
+        :accept-text="$t('Save')"
         class="my-prompt"
-        title="Sign up child to event">
+        :title="$t('Event detail')">
 
 
         <div v-if="editedEvent" id="event-info-table">
@@ -45,16 +45,16 @@
             <div class="vx-col flex-1" id="event-info-col-1">
               <table>
                 <tr>
-                  <td class="font-bold">Type</td>
-                  <td>{{ editedEvent.title }}</td>
+                  <td class="font-bold">{{$t('Event type')}}</td>
+                  <td>{{ $t(editedEvent.title) }}</td>
                 </tr>
                 <tr>
-                  <td class="font-bold">Location</td>
+                  <td class="font-bold">{{$t('Location')}}</td>
                   <!-- TODO: Location with slope maybe? -->
                   <td>{{ editedEvent.location.displayName }}</td>
                 </tr>
                 <tr>
-                  <td class="font-bold">Category</td>
+                  <td class="font-bold">{{$t('Category')}}</td>
                   <td>{{ displayObject(editedEvent.category).toString()}}</td>
                 </tr>
               </table>
@@ -65,11 +65,11 @@
             <div class="vx-col flex-1" id="event-info-col-2">
               <table>
                 <tr>
-                  <td class="font-bold">Start</td>
+                  <td class="font-bold">{{$t('Start')}}</td>
                   <td>{{ editedEvent.start | time }}</td>
                 </tr>
                 <tr v-if="SKI_EVENTS.includes(editedEvent.type)">
-                  <td class="font-bold">Skis</td>
+                  <td class="font-bold">{{$t('Skis')}}</td>
                   <td>{{ editedEvent.skis_type }}</td>
                 </tr>
               </table>
@@ -77,7 +77,7 @@
             <div class="vx-col flex-1" id="event-info-col-3">
               <table>
                 <tr>
-                  <td class="font-bold">End</td>
+                  <td class="font-bold">{{$t('End')}}</td>
                   <td>{{ editedEvent.end | time }}</td>
                 </tr>
               </table>
@@ -86,7 +86,7 @@
           <!-- TODO: if exist -->
           <div v-if="editedEvent.additional_info" class="vx-row">
             <div class="vx-col">
-              <p class="font-bold mr-5">Additional information:</p>
+              <p class="font-bold mr-5">{{$t('Additional Information')}}:</p>
               <p>{{ editedEvent.additional_info }}</p>
             </div>
           </div>
@@ -105,7 +105,7 @@
           </div>
 
           <ul class="centerx">
-            <vs-divider>Your children</vs-divider>
+            <vs-divider>{{$t('Your children')}}</vs-divider>
             <li class="mb-2" :key="child.username" v-for="child in userChildren">
               <vs-checkbox
                 :vs-value="child.username"
@@ -127,12 +127,12 @@
         @accept="addEvent"
         accept-text="Add event"
         class="my-prompt"
-        title="Add event">
+        :title="$t('Add Event')">
 
         <div class="vx-row">
           <div class="vx-col sm:w-1/2 w-full">
             <div class="mt-4">
-              <label class="text-sm">Event type</label>
+              <label class="text-sm">{{$t('Event type')}}</label>
               <!-- RES: https://vue-select.org/ -->
               <v-select :clearable="false"
                         label="displayName"
@@ -144,7 +144,7 @@
 
           <div class="vx-col sm:w-1/2 w-full">
             <div class="mt-4">
-              <label class="text-sm">Location</label>
+              <label class="text-sm">{{$t('Location')}}</label>
               <v-select :clearable="false"
                         label="displayName"
                         :reduce="item => item.id"
@@ -157,7 +157,7 @@
         <div class="vx-row">
           <div class="vx-col w-1/2">
             <div v-if="SKI_EVENTS.includes(addEventPrompt.type.selected)" class="mt-4">
-              <label class="text-sm">Skis</label>
+              <label class="text-sm">{{$t('Skis')}}</label>
               <v-select :clearable="false"
                         label="displayName"
                         :reduce="item => item.key"
@@ -169,7 +169,7 @@
           <div class="vx-col w-1/2">
             <div v-if="addEventPrompt.type.selected === 'SKI_RACE'" class="vx-col w-full">
               <div class="mt-4">
-                <label class="text-sm">Organizer</label>
+                <label class="text-sm">{{$t('Organizer')}}</label>
                 <v-select :clearable="false"
                           label="displayName"
                           :reduce="category => category.id"
@@ -181,7 +181,7 @@
         </div>
 
         <div class="mt-4">
-          <label class="text-sm">Categories</label>
+          <label class="text-sm">{{$t('Category')}}</label>
           <v-select multiple
                     :closeOnSelect="false"
                     label="displayName"
@@ -192,7 +192,7 @@
         <div class="vx-row">
           <div class="vx-col sm:w-1/2 w-full">
             <div class="mt-4">
-              <label class="text-sm">Start</label>
+              <label class="text-sm">{{$t('Start')}}</label>
               <flat-pickr v-model="newEvent.start"
                           :config="datePickerConfig"
                           class="w-full"
@@ -203,7 +203,7 @@
           </div>
           <div class="vx-col sm:w-1/2 w-full">
             <div class="mt-4">
-              <label class="text-sm">End</label>
+              <label class="text-sm">{{$t('End')}}</label>
               <flat-pickr v-model="newEvent.end"
                           :config="datePickerConfig"
                           class="w-full"
@@ -225,6 +225,7 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import listPlugin from '@fullcalendar/list'
 import skLocale from '@fullcalendar/core/locales/sk'
+import enLocale from '@fullcalendar/core/locales/en-gb'
 import vSelect from 'vue-select'
 
 
@@ -249,12 +250,12 @@ export default {
       SKI_EVENTS: ['SKI_TRAINING', 'SKI_RACE', 'SKI_CAMP'],
 
       calendarConfig: {
-        locale: skLocale,
+        locale: this.$i18n.locale === 'sk' ? skLocale : enLocale,
         selectable: this.$acl.check('isCoach'),
         editable: this.$acl.check('isCoach'),
         header: {
           // left: 'prev,next today addEvent',
-          left: 'timeGridThreeDay,timeGridWeek,dayGridMonth,listWeek',// this will place the button on the right hand side
+          left: 'timeGridThreeDay,timeGridWeek,dayGridMonth,listWeek', // this will place the button on the right hand side
           center: 'title',
           right: 'today prev,next'
         },
@@ -262,7 +263,7 @@ export default {
           timeGridThreeDay: {
             type: 'timeGrid',
             duration: { days: 3 },
-            buttonText: '3 dni'
+            buttonText: `3 ${this.$t('day')}`
           },
           defaultView: screen.width <= 670 ? 'timeGridThreeDay' : 'timeGridWeek'
         },
@@ -496,7 +497,7 @@ export default {
         type: 'confirm',
         color: 'danger',
         title: 'Confirm Delete',
-        text: `You are about to delete "${this.editedEvent.title}"`,
+        text: `You are about to delete '${this.editedEvent.title}'`,
         accept: this.deleteEvent,
         acceptText: 'Delete'
       })

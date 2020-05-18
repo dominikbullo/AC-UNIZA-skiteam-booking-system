@@ -3,7 +3,7 @@
     <!-- Select child -->
     <div class="vx-row">
       <div class="vx-col w-full md:w-1/2 mb-base">
-        <vx-card title="Child Selection" no-shadow card-border>
+        <vx-card :title="$t('Child Selection')" no-shadow card-border>
           <!-- RES (DOCS): https://vue-select.org/api/props.html#getoptionlabel -->
           <v-select
             v-model="childSelection.selected"
@@ -17,7 +17,7 @@
       </div>
 
       <div class="vx-col w-full md:w-1/2 mb-base">
-        <vx-card title="Season Selection" no-shadow card-border>
+        <vx-card :title="$t('Season Selection')" no-shadow card-border>
           <v-select
             v-model="seasonSelection.selected"
             :options="seasonSelection.options"
@@ -29,34 +29,11 @@
       </div>
     </div>
 
-    <!--    &lt;!&ndash; TODO: maybe for each statictic roll out field ?&ndash;&gt;-->
-    <!--    <div v-if="stats!==undefined && stats!=={}">-->
-    <!--      <div class="vx-row">-->
-    <!--        <div class="vx-col w-1/2 md:w-1/3 xl:w-1/6"-->
-    <!--             v-for="(item, key) in stats"-->
-    <!--             :key="key">-->
-    <!--          <statistics-card-line-->
-    <!--            class="mb-base"-->
-    <!--            hideChart-->
-    <!--            icon="CheckSquareIcon"-->
-    <!--            :statistic="getDisplayStats(item).percent"-->
-    <!--            :statisticTitle="item.name"/>-->
-
-    <!--          <statistics-card-line-->
-    <!--            class="mb-base"-->
-    <!--            hideChart-->
-    <!--            icon="CheckSquareIcon"-->
-    <!--            :statistic="getDisplayStats(item).ratio"-->
-    <!--            :statisticTitle="item.name"/>-->
-    <!--        </div>-->
-    <!--      </div>-->
-
-
     <div class="vx-row">
       <div class="vx-col w-full w-1/2 sm:w-1/2 lg:w-1/3"
            v-for="(item, key) in stats"
            :key="key">
-        <vx-card :title="`${item.name}`" class="mb-10">
+        <vx-card :title="$t(`${item.name}`)" class="mb-10">
           <template slot="actions">
             <feather-icon icon="HelpCircleIcon" svgClasses="w-6 h-6 text-grey"></feather-icon>
           </template>
@@ -77,11 +54,11 @@
             slot="no-body-bottom"
             v-if="true">
             <div class="w-1/2 border border-solid d-theme-border-grey-light border-r-0 border-b-0 border-l-0">
-              <p class="mt-4">Completed</p>
+              <p class="mt-4">{{ $t('Completed') }}</p>
               <p class="mb-4 text-3xl font-semibold">{{item.count}}</p>
             </div>
             <div class="w-1/2 border border-solid d-theme-border-grey-light border-r-0 border-b-0">
-              <p class="mt-4">Total</p>
+              <p class="mt-4">{{ $t('Total') }}</p>
               <p class="mb-4 text-3xl font-semibold">{{item.total}}</p>
             </div>
           </div>

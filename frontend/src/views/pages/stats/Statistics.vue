@@ -7,7 +7,7 @@
 
     <div class="vx-row">
       <div class="vx-col w-full mb-base">
-        <vx-card title="Number of event of child in actual season">
+        <vx-card :title="$t('graph.total-1')">
           <vue-apex-charts ref="totalPresenceChart" type="bar" height="350" :options="barChart.chartOptions"
                            :series="barChart.series"></vue-apex-charts>
         </vx-card>

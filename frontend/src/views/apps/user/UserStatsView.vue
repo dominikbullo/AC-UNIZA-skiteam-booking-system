@@ -7,7 +7,7 @@
     <div class="vx-row">
 
       <div class="vx-col w-full mb-base">
-        <vx-card title="Number of event of child in season">
+        <vx-card :title="$t('graph.user-1')">
           <vue-apex-charts ref="userChart1" type="bar" height="350" :options="chartOptions"
                            :series="series"></vue-apex-charts>
         </vx-card>
@@ -16,7 +16,7 @@
     <vx-card>
       <div class="vx-row">
         <div class="vx-col w-full md:w-1/2 mb-base">
-          <vx-card title="Season Selection" card-border>
+          <vx-card :title="$t('Season Selection')" no-shadow card-border>
             <v-select
               v-model="seasons.selected"
               :options="seasons.options"
@@ -29,14 +29,14 @@
 
       <div class="vx-row">
         <div class="vx-col w-full md:w-1/2 mb-base">
-          <vx-card title="Number of event of child in season" card-border>
+          <vx-card :title="$t('graph.user-2')"> card-border>
             <vue-apex-charts ref="radialBar" type="radialBar" height="350" :options="chartOptionsRadial"
                              :series="radialChartSeries"></vue-apex-charts>
           </vx-card>
         </div>
 
         <div class="vx-col w-full md:w-1/2 mb-base">
-          <vx-card title="Number of event of child in season" card-border>
+          <vx-card :title="$t('graph.user-3')"> card-border>
             <vue-apex-charts ref="userChart2" height="350" type="pie" :options="chartOptions2"
                              :series="series2"></vue-apex-charts>
           </vx-card>

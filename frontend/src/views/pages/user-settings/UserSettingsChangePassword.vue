@@ -36,7 +36,8 @@
 
     <!-- Save & Reset Button -->
     <div class="flex flex-wrap items-center justify-end">
-      <vs-button class="ml-auto mt-2" @click="save_changes">Change password</vs-button>
+
+      <vs-button class="ml-auto mt-2" @click="save_changes">{{$t('Change Password')}}</vs-button>
       <!--      <vs-button class="ml-4 mt-2" @click="switchVisibility">show / hide</vs-button>-->
     </div>
   </vx-card>

@@ -10,7 +10,7 @@
             <div class="vx-col sm:w-full md:w-full lg:w-1/2 mx-auto self-center  d-theme-dark-bg">
               <div class="px-8 pt-8 register-tabs-container">
                 <div class="vx-card__title mb-4">
-                  <h4 class="mb-4">{{ $t('CreateAccount') }}</h4>
+                  <h4 class="mb-4">{{ $t('Create Account') }}</h4>
                   <p>{{ $t('message.register') }}.</p>
                 </div>
                 <vs-tabs>

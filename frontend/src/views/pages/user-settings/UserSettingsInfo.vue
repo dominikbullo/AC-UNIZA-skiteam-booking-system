@@ -24,8 +24,8 @@
 
     <!-- Save & Reset Button -->
     <div class="flex flex-wrap items-center justify-end">
-      <vs-button class="ml-auto mt-2" @click="save_changes">Save Changes</vs-button>
-      <vs-button class="ml-4 mt-2" type="border" color="warning" @click="reset_data">Reset</vs-button>
+      <vs-button class="ml-auto mt-2" @click="save_changes">{{$t('Save Changes')}}</vs-button>
+      <vs-button class="ml-4 mt-2" type="border" color="warning" @click="reset_data">{{$t('Reset')}}</vs-button>
     </div>
   </vx-card>
 </template>
