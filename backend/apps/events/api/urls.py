@@ -17,5 +17,4 @@ router.register(r"categories", CategoryViewSet, basename="categories")
 router.register(r"category", CategoryViewSet, basename="category")
 
 urlpatterns = [
-    path("", include(router.urls)),
 ]

@@ -10,7 +10,7 @@
 
     <div id="user-data" v-if="user_data">
 
-      <vx-card title="Account" class="mb-base">
+      <vx-card :title="$t('Account')" class="mb-base">
 
         <!-- Avatar -->
         <div class="vx-row">
@@ -67,7 +67,7 @@
 
       <div class="vx-row">
         <div class="vx-col lg:w-1/2 w-full">
-          <vx-card title="Information" class="mb-base">
+          <vx-card :title="$t('Information')" class="mb-base">
             <table>
               <tr>
                 <td class="font-semibold">Birth Date</td>
@@ -84,7 +84,8 @@
             </table>
           </vx-card>
           <vs-button v-if="user_data.userRole === 'child'" icon-pack="feather" icon="icon-bar-chart" class="mr-4"
-                     :to="{name: 'app-user-stats',  params: { userId: this.$route.params.userId }}">Show statistics
+                     :to="{name: 'app-user-stats',  params: { userId: this.$route.params.userId }}">
+            {{$t('Show Statistics')}}
           </vs-button>
         </div>
 

@@ -72,8 +72,8 @@
     <span class="text-danger text-sm">{{ errors.first('password') }}</span>
 
     <vs-input
-      :label-placeholder="$t('ConfirmPassword')"
-      :placeholder="$t('ConfirmPassword')"
+      :label-placeholder="$t('Confirm Password')"
+      :placeholder="$t('Confirm Password')"
       :success="!errors.first('confirm_password') && this.confirm_password !==''"
       :danger="errors.first('confirm_password')"
       class="w-full mt-6"

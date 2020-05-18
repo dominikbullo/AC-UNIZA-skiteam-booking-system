@@ -1,6 +1,7 @@
 <template>
-  <div class="flex">
-    <div class="search-full-container w-full h-full absolute left-0 top-0" :class="{'flex': showFullSearch}" v-show="showFullSearch">
+  <div class="flex mr-2">
+    <div class="search-full-container w-full h-full absolute left-0 top-0" :class="{'flex': showFullSearch}"
+         v-show="showFullSearch">
       <vx-auto-suggest
         ref="navbarSearch"
         :autoFocus="showFullSearch"
@@ -22,7 +23,7 @@
         <!-- Pages Suggestion -->
         <template v-slot:pages="{ suggestion }">
           <div class="flex items-end leading-none py-1">
-            <feather-icon :icon="suggestion.icon" svgClasses="h-5 w-5" class="mr-4" />
+            <feather-icon :icon="suggestion.icon" svgClasses="h-5 w-5" class="mr-4"/>
             <span class="mt-1">{{ suggestion.title }}</span>
           </div>
         </template>
@@ -32,7 +33,8 @@
           <div class="flex items-center justify-between">
             <div class="flex items-center">
               <div class="img-container w-8 mr-3 flex">
-                <img :src="require(`@/assets/images/file-icons/${suggestion.file_ext}.png`)" :alt="suggestion.file_name" class="responsive">
+                <img :src="require(`@/assets/images/file-icons/${suggestion.file_ext}.png`)" :alt="suggestion.file_name"
+                     class="responsive">
               </div>
               <div class="leading-none mt-1">
                 <p class="mb-1">{{ suggestion.file_name }}</p>
@@ -60,7 +62,7 @@
         <!-- No Items Slot -->
         <template v-slot:noResult="{ group_name }">
           <div class="flex items-center">
-            <feather-icon icon="InfoIcon" svgClasses="h-5 w-5" class="mr-4" />
+            <feather-icon icon="InfoIcon" svgClasses="h-5 w-5" class="mr-4"/>
             <span>No results found.</span>
           </div>
         </template>
@@ -71,10 +73,10 @@
         <feather-icon
           icon="XIcon"
           class="px-4 cursor-pointer h-full close-search-icon"
-          @click="showFullSearch = false" />
+          @click="showFullSearch = false"/>
       </div>
     </div>
-    <feather-icon icon="SearchIcon" @click="showFullSearch = true" class="cursor-pointer navbar-fuzzy-search ml-4" />
+    <feather-icon icon="SearchIcon" @click="showFullSearch = true" class="cursor-pointer navbar-fuzzy-search ml-4"/>
   </div>
 </template>
 

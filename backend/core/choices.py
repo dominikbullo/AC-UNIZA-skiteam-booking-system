@@ -37,7 +37,6 @@ class CategoryNameChoices(models.TextChoices):
 
 
 class EventTypeChoices(models.TextChoices):
-    # FIXME Validation -> event must have SkiTraining table if is type SKI_TRAINING
     SKI_TRAINING = 'SKI_TRAINING', _('Ski Training')
     ATHLETIC_TRAINING = 'ATHLETIC_TRAINING', _('Athletic Training')
     SKI_RACE = 'SKI_RACE', _('Ski Race')
@@ -47,9 +46,10 @@ class EventTypeChoices(models.TextChoices):
 
 
 class SkiTypeChoices(models.TextChoices):
-    GIANT_SLALOM = 'GS', _('Giant Slalom')
-    SLALOM = 'SL', _('Slalom')
+    # SUPER_GIANT_SLALOM = 'SG', _('Super Giant Slalom')
     ALL = 'ALL', _('All')
+    SLALOM = 'SL', _('Slalom')
+    GIANT_SLALOM = 'GS', _('Giant Slalom')
 
 
 class GenderChoices(models.TextChoices):

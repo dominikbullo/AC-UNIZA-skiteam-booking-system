@@ -12,36 +12,30 @@ from core.utils import send_custom_mail
 from apps.events.models import Season, Event
 
 
-def send_email_if_flag_enabled(sender, instance, **kwargs):
+def notify_users(sender, instance, **kwargs):
+    # If is forced to send email
     if instance.send_email:
-        send_custom_mail(instance)
-        print("Sending mails, because send email was check")
-        instance.send_email = False
+        send_custom_mail(instance, "event_info")
+        return
 
-
-@transaction.atomic
-def send_email_if_canceled_change(sender, instance, **kwargs):
     try:
         old = sender.objects.select_for_update().get(pk=instance.pk)
     except sender.DoesNotExist:
-        pass  # Object is new, so field hasn't technically changed, but you may want to do something else here.
+        pass  # Object is new
     else:
         # If event was canceled
         if not old.canceled and instance.canceled:
-            send_custom_mail(instance, old)
-            print("send_email() because event has been canceled")
+            send_custom_mail(instance, "event_canceled")
             return
 
         # If event was canceled but is live again
         if old.canceled and not instance.canceled:
-            send_custom_mail(instance, old)
-            print("send_email() because event has been canceled but is live again")
+            send_custom_mail(instance, "event_recreated", old)
             return
 
 
 def pre_save_for_all_subclasses(model_class):
-    pre_save.connect(send_email_if_flag_enabled, model_class)
-    pre_save.connect(send_email_if_canceled_change, model_class)
+    pre_save.connect(notify_users, model_class)
     if len(model_class.__subclasses__()) > 0:
         for subClass in model_class.__subclasses__():
             pre_save_for_all_subclasses(subClass)
@@ -81,3 +75,51 @@ def update_user_email(sender, request, email_address, **kwargs):
 def generate_token(sender, instance, created, **kwargs):
     if created:
         Token.objects.create(user=instance)
+
+
+from django.core.mail import EmailMultiAlternatives
+from django.dispatch import receiver
+from django.template.loader import render_to_string
+from django.urls import reverse
+
+from django_rest_passwordreset.signals import reset_password_token_created
+
+
+@receiver(reset_password_token_created)
+def password_reset_token_created(sender, instance, reset_password_token, *args, **kwargs):
+    """
+    Handles password reset tokens
+    When a token is created, an e-mail needs to be sent to the user
+    :param sender: View Class that sent the signal
+    :param instance: View Instance that sent the signal
+    :param reset_password_token: Token Model Object
+    :param args:
+    :param kwargs:
+    :return:
+    """
+    # send an e-mail to the user
+    context = {
+        'current_user'      : reset_password_token.user,
+        'username'          : reset_password_token.user.username,
+        'email'             : reset_password_token.user.email,
+        'token'             : reset_password_token.key,
+        'reset_password_url': "{}?token={}".format(reverse('password_reset:reset-password-request'),
+                                                   reset_password_token.key)
+    }
+
+    # render email text
+    email_html_message = render_to_string('email/user_reset_password.html', context)
+    email_plaintext_message = render_to_string('email/user_reset_password.txt', context)
+
+    msg = EmailMultiAlternatives(
+        # title:
+        "Password Reset for {title}".format(title="Some website title"),
+        # message:
+        email_plaintext_message,
+        # from:
+        "noreply@somehost.local",
+        # to:
+        [reset_password_token.user.email]
+    )
+    msg.attach_alternative(email_html_message, "text/html")
+    msg.send()

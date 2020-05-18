@@ -1,14 +1,14 @@
 {
   "name": "sport-agenda-app",
-  "version": "2.3.0-alpha",
+  "version": "2.5.1-alpha",
   "private": true,
   "scripts": {
     "serve": "npm i && vue-cli-service serve",
     "build": "vue-cli-service build",
+    "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
-    "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
-    "test:unit": "vue-cli-service test:unit"
+    "docs:dev": "vuepress dev docs"
   },
   "dependencies": {
     "@chenfengyuan/vue-countdown": "^1.1.2",
@@ -20,14 +20,12 @@
     "@fullcalendar/vue": "^4.4.0",
     "ag-grid-community": "^21.0.1",
     "ag-grid-vue": "^21.0.1",
-    "algoliasearch": "^3.33.0",
     "apexcharts": "^3.19.0",
     "axios": "^0.19.0",
     "chart.js": "^2.8.0",
     "core-js": "2.6.11",
     "echarts": "^4.2.1",
     "file-saver": "2.0.2",
-    "firebase": "^6.0.4",
     "instantsearch.css": "^7.3.1",
     "js-cookie": "^2.2.0",
     "jsonwebtoken": "^8.5.1",
@@ -81,17 +79,12 @@
     "@vue/cli-plugin-eslint": "^3.7.0",
     "@vue/cli-plugin-pwa": "^4.3.1",
     "@vue/cli-service": "^3.7.0",
-    "@vue/eslint-config-standard": "^4.0.0",
     "axios-mock-adapter": "^1.17.0",
-    "babel-eslint": "^10.0.1",
-    "eslint": "^5.16.0",
-    "eslint-plugin-vue": "^5.0.0",
-    "node-sass": "^4.13.1",
+    "node-sass": "^4.12.0",
     "purgecss": "^1.3.0",
-    "sass-loader": "^7.3.1",
+    "sass-loader": "^7.1.0",
     "script-loader": "0.7.2",
     "tailwindcss": "^1.0.1",
-    "vue-template-compiler": "^2.6.10",
-    "webpack-bundle-tracker": "^0.4.3"
+    "vue-template-compiler": "^2.6.10"
   }
 }

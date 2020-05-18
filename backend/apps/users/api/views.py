@@ -9,9 +9,10 @@ from rest_framework.filters import SearchFilter
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.authtoken.models import Token
 
 from apps.events.models import Season
-from apps.events.api.serializers import UserStatSerializer
+from apps.events.api.serializers import ProfileStatSerializer
 
 from apps.users.models import Profile
 from apps.users.api.serializers import ProfileAvatarSerializer, DetailProfileSerializer, UserDetailSerializer
@@ -25,6 +26,22 @@ class AvatarUpdateView(generics.UpdateAPIView):
     def get_object(self):
         profile_object = self.request.user.profile
         return profile_object
+
+
+# RES: https://stackoverflow.com/questions/38845051/how-to-update-user-password-in-django-rest-framework
+class ChangePasswordView(generics.UpdateAPIView):
+    serializer_class = ChangePasswordSerializer
+
+    def update(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        # if using drf authtoken, create a new token
+        if hasattr(user, 'auth_token'):
+            user.auth_token.delete()
+        token, created = Token.objects.get_or_create(user=user)
+        # return new token
+        return Response({'token': token.key}, status=status.HTTP_200_OK)
 
 
 class ProfileViewSet(mixins.UpdateModelMixin,
@@ -45,13 +62,13 @@ class ProfileViewSet(mixins.UpdateModelMixin,
     # RES(filtering): https://stackoverflow.com/questions/26595906/django-rest-framework-with-viewset-router-queryset-filtering
     @action(detail=True, methods=['get'], url_path='stats')
     def get_stats(self, request, *args, **kwargs):
-        user = get_object_or_404(Profile, pk=kwargs["pk"])
+        profile = get_object_or_404(Profile, pk=kwargs["pk"])
 
         # TODO refactor
         seasons = get_season_by_query(self.request, Season.objects.all())
 
-        serializer = UserStatSerializer(instance={
-            'user'   : user,
+        serializer = ProfileStatSerializer(instance={
+            'user'   : profile,
             'seasons': seasons,
         })
         return Response(serializer.data)
@@ -66,7 +83,7 @@ class CustomConfirmEmailView(APIView):
         self.object = confirmation = self.get_object()
         confirmation.confirm(self.request)
         # A React Router Route will handle the failure scenario
-        return HttpResponseRedirect('/login/success')
+        return HttpResponseRedirect('/login')
 
     def get_object(self, queryset=None):
         key = self.kwargs['key']
@@ -77,7 +94,7 @@ class CustomConfirmEmailView(APIView):
             try:
                 email_confirmation = queryset.get(key=key.lower())
             except EmailConfirmation.DoesNotExist:
-                # A React Router Route will handle the failure scenario
+                # TODO: some page on FE to react to this
                 return HttpResponseRedirect('/login/failure/')
         return email_confirmation
 

@@ -21,14 +21,19 @@ export default {
   SET_LOCATIONS (state, locations) {
     state.eventConfig.locations = locations
   },
+  SET_ORGANIZERS (state, locations) {
+    state.eventConfig.organizers = locations
+  },
   SET_EVENT_CHOICES (state, choices) {
     state.eventConfig.choices = choices
   },
   UPDATE_EVENT (state, event) {
     const eventIndex = state.events.findIndex((e) => e.id === event.id)
     if (eventIndex === -1) {
+      console.log('[MUT] Event push')
       state.events.push(event)
     } else {
+      console.log('[MUT] Event update')
       Object.assign(state.events[eventIndex], event)
     }
   },

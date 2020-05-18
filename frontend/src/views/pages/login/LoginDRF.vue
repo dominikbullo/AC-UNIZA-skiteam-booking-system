@@ -40,7 +40,7 @@
 export default {
   data () {
     return {
-      email: 'totojetes@sasd.sk',
+      email: 'coach@coach.sk',
       password: 'testing321',
       checkbox_remember_me: true
     }

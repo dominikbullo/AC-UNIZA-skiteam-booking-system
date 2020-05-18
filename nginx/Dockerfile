@@ -3,7 +3,8 @@ FROM node:10-alpine as build-deps
 
 WORKDIR /app/
 
-COPY frontend/package.json frontend/package-lock.json /app/
+COPY frontend/package.json /app/
+RUN npm install @vue/cli -g
 RUN npm install
 
 COPY frontend /app/

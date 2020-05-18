@@ -17,10 +17,16 @@
           @eventClick="handleEventClick"
           @eventMouseEnter="handleEventMouseEnter"
           @select="handleSelect"
+          @eventDrop="handleEventDrop"
+          @eventResize="handleEventResize"
           :views="calendarConfig.views"
           :default-view="calendarConfig.views.defaultView"
           :editable="calendarConfig.editable"
+          min-time="06:00:00"
+          max-time="21:00:00"
+          :scroll-time="minEventTime"
           height="parent"
+          class="custom-class"
         />
       </div>
 
@@ -29,9 +35,9 @@
         :active.sync="childAddToEventPrompt.active"
         :is-valid="validForm"
         @accept="changeUserChildrenOnEvent"
-        accept-text="Save"
-        class="calendar-child-add-event-dialog"
-        title="Sign up child to event">
+        :accept-text="$t('Save')"
+        class="my-prompt"
+        :title="$t('Event detail')">
 
 
         <div v-if="editedEvent" id="event-info-table">
@@ -39,16 +45,16 @@
             <div class="vx-col flex-1" id="event-info-col-1">
               <table>
                 <tr>
-                  <td class="font-bold">Type</td>
-                  <td>{{ editedEvent.title }}</td>
+                  <td class="font-bold">{{$t('Event type')}}</td>
+                  <td>{{ $t(editedEvent.title) }}</td>
                 </tr>
                 <tr>
-                  <td class="font-bold">Location</td>
+                  <td class="font-bold">{{$t('Location')}}</td>
                   <!-- TODO: Location with slope maybe? -->
-                  <td>{{ editedEvent.location.name }}</td>
+                  <td>{{ editedEvent.location.displayName }}</td>
                 </tr>
                 <tr>
-                  <td class="font-bold">Category</td>
+                  <td class="font-bold">{{$t('Category')}}</td>
                   <td>{{ displayObject(editedEvent.category).toString()}}</td>
                 </tr>
               </table>
@@ -59,11 +65,11 @@
             <div class="vx-col flex-1" id="event-info-col-2">
               <table>
                 <tr>
-                  <td class="font-bold">Start</td>
+                  <td class="font-bold">{{$t('Start')}}</td>
                   <td>{{ editedEvent.start | time }}</td>
                 </tr>
-                <tr>
-                  <td class="font-bold">Skis</td>
+                <tr v-if="SKI_EVENTS.includes(editedEvent.type)">
+                  <td class="font-bold">{{$t('Skis')}}</td>
                   <td>{{ editedEvent.skis_type }}</td>
                 </tr>
               </table>
@@ -71,20 +77,16 @@
             <div class="vx-col flex-1" id="event-info-col-3">
               <table>
                 <tr>
-                  <td class="font-bold">End</td>
+                  <td class="font-bold">{{$t('End')}}</td>
                   <td>{{ editedEvent.end | time }}</td>
-                </tr>
-                <tr>
-                  <td class="font-bold">Skis</td>
-                  <td>{{ editedEvent.skis_type }}</td>
                 </tr>
               </table>
             </div>
           </div>
           <!-- TODO: if exist -->
-          <div class="vx-row">
+          <div v-if="editedEvent.additional_info" class="vx-row">
             <div class="vx-col">
-              <p class="font-bold mr-5">Additional information:</p>
+              <p class="font-bold mr-5">{{$t('Additional Information')}}:</p>
               <p>{{ editedEvent.additional_info }}</p>
             </div>
           </div>
@@ -103,7 +105,7 @@
           </div>
 
           <ul class="centerx">
-            <vs-divider>Your children</vs-divider>
+            <vs-divider>{{$t('Your children')}}</vs-divider>
             <li class="mb-2" :key="child.username" v-for="child in userChildren">
               <vs-checkbox
                 :vs-value="child.username"
@@ -124,31 +126,62 @@
         :is-valid="true"
         @accept="addEvent"
         accept-text="Add event"
-        class="calendar-add-event-dialog"
-        title="Add event">
+        class="my-prompt"
+        :title="$t('Add Event')">
 
-        <div class="mt-4">
-          <label class="text-sm">Event type</label>
-          <!-- RES: https://vue-select.org/ -->
-          <v-select
-            label="displayName"
-            :reduce="item => item.key"
-            v-model="addEventPrompt.type.selected"
-            :options="addEventPrompt.type.options"/>
+        <div class="vx-row">
+          <div class="vx-col sm:w-1/2 w-full">
+            <div class="mt-4">
+              <label class="text-sm">{{$t('Event type')}}</label>
+              <!-- RES: https://vue-select.org/ -->
+              <v-select :clearable="false"
+                        label="displayName"
+                        :reduce="item => item.key"
+                        v-model="addEventPrompt.type.selected"
+                        :options="addEventPrompt.type.options"/>
+            </div>
+          </div>
+
+          <div class="vx-col sm:w-1/2 w-full">
+            <div class="mt-4">
+              <label class="text-sm">{{$t('Location')}}</label>
+              <v-select :clearable="false"
+                        label="displayName"
+                        :reduce="item => item.id"
+                        v-model="addEventPrompt.location.selected"
+                        :options="addEventPrompt.location.options"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="vx-row">
+          <div class="vx-col w-1/2">
+            <div v-if="SKI_EVENTS.includes(addEventPrompt.type.selected)" class="mt-4">
+              <label class="text-sm">{{$t('Skis')}}</label>
+              <v-select :clearable="false"
+                        label="displayName"
+                        :reduce="item => item.key"
+                        v-model="addEventPrompt.skis.selected"
+                        :options="addEventPrompt.skis.options"/>
+            </div>
+          </div>
+
+          <div class="vx-col w-1/2">
+            <div v-if="addEventPrompt.type.selected === 'SKI_RACE'" class="vx-col w-full">
+              <div class="mt-4">
+                <label class="text-sm">{{$t('Organizer')}}</label>
+                <v-select :clearable="false"
+                          label="displayName"
+                          :reduce="category => category.id"
+                          v-model="addEventPrompt.raceOrganizer.selected"
+                          :options="addEventPrompt.raceOrganizer.options"/>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="mt-4">
-          <label class="text-sm">Skis</label>
-          <v-select
-            label="displayName"
-            :reduce="item => item.key"
-            v-model="addEventPrompt.skis.selected"
-            :options="addEventPrompt.skis.options"/>
-        </div>
-
-        <div class="mt-4">
-          <label class="text-sm">Categories</label>
-          {{ addEventPrompt.category.selected }}
+          <label class="text-sm">{{$t('Category')}}</label>
           <v-select multiple
                     :closeOnSelect="false"
                     label="displayName"
@@ -156,29 +189,31 @@
                     v-model="addEventPrompt.category.selected"
                     :options="addEventPrompt.category.options"/>
         </div>
-
-        <div class="mt-4">
-          <label class="text-sm">Start</label>
-          <flat-pickr v-model="newEvent.start"
-                      :config="datePickerConfig"
-                      class="w-full"
-                      v-validate="'required'"
-                      name="start"/>
-          <span class="text-danger text-sm" v-show="errors.has('start')">{{ errors.first('start') }}</span>
+        <div class="vx-row">
+          <div class="vx-col sm:w-1/2 w-full">
+            <div class="mt-4">
+              <label class="text-sm">{{$t('Start')}}</label>
+              <flat-pickr v-model="newEvent.start"
+                          :config="datePickerConfig"
+                          class="w-full"
+                          v-validate="'required'"
+                          name="start"/>
+              <span class="text-danger text-sm" v-show="errors.has('start')">{{ errors.first('start') }}</span>
+            </div>
+          </div>
+          <div class="vx-col sm:w-1/2 w-full">
+            <div class="mt-4">
+              <label class="text-sm">{{$t('End')}}</label>
+              <flat-pickr v-model="newEvent.end"
+                          :config="datePickerConfig"
+                          class="w-full"
+                          v-validate="'required'"
+                          name="end"/>
+              <span class="text-danger text-sm" v-show="errors.has('end')">{{ errors.first('end') }}</span>
+            </div>
+          </div>
         </div>
-
-        <div class="mt-4">
-          <label class="text-sm">End</label>
-          <flat-pickr v-model="newEvent.end"
-                      :config="datePickerConfig"
-                      class="w-full"
-                      v-validate="'required'"
-                      name="end"/>
-          <span class="text-danger text-sm" v-show="errors.has('end')">{{ errors.first('end') }}</span>
-        </div>
-        {{newEvent}}
       </vs-prompt>
-
     </vx-card>
   </div>
 </template>
@@ -190,6 +225,7 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import listPlugin from '@fullcalendar/list'
 import skLocale from '@fullcalendar/core/locales/sk'
+import enLocale from '@fullcalendar/core/locales/en-gb'
 import vSelect from 'vue-select'
 
 
@@ -211,23 +247,25 @@ export default {
         listPlugin// needed for dateClick
       ],
 
+      SKI_EVENTS: ['SKI_TRAINING', 'SKI_RACE', 'SKI_CAMP'],
+
       calendarConfig: {
-        locale: skLocale,
+        locale: this.$i18n.locale === 'sk' ? skLocale : enLocale,
         selectable: this.$acl.check('isCoach'),
         editable: this.$acl.check('isCoach'),
         header: {
           // left: 'prev,next today addEvent',
-          left: 'prev,next today',
+          left: 'timeGridThreeDay,timeGridWeek,dayGridMonth,listWeek', // this will place the button on the right hand side
           center: 'title',
-          right: 'timeGridThreeDay,timeGridWeek,dayGridMonth,listWeek' // this will place the button on the right hand side
+          right: 'today prev,next'
         },
         views: {
           timeGridThreeDay: {
             type: 'timeGrid',
             duration: { days: 3 },
-            buttonText: '3 dni'
+            buttonText: `3 ${this.$t('day')}`
           },
-          defaultView: 'timeGridWeek'
+          defaultView: screen.width <= 670 ? 'timeGridThreeDay' : 'timeGridWeek'
         },
         customButtons: {
           addEvent: {
@@ -279,8 +317,12 @@ export default {
           selected: 'ALL',
           options: []
         },
-        organizers: {
+        raceOrganizer: {
           selected: [],
+          options: []
+        },
+        location: {
+          selected: null,
           options: []
         }
       },
@@ -299,13 +341,15 @@ export default {
       newEvent: {
         start: null,
         end: null,
-        type: '',
-        // TODO location
-        location: 1
+        type: ''
       }
     }
   },
   computed: {
+    minEventTime () {
+      // TODO min time for view
+      return '07:00:00'
+    },
     calendarEvents () {
       return this.$store.state.calendar.events
     },
@@ -327,32 +371,35 @@ export default {
   methods: {
     displayObject (object, displayKey = 'displayName') {
       const ret = []
-      console.log('object', object)
-
-      Object.values(this.editedEvent.category).forEach((element) => {
+      Object.values(object).forEach((element) => {
         ret.push(element[displayKey])
       })
 
       return ret
     },
-    addEvent () {
+    getExtraInfo () {
       // TODO: Automatic with selecting event
-      let resourcetype = 'Event'
-
       if (this.addEventPrompt.type.selected === 'SKI_TRAINING') {
-        resourcetype = 'SkiTraining'
+        return { resourcetype: 'SkiTraining' }
       }
       if (this.addEventPrompt.type.selected === 'SKI_RACE') {
-        resourcetype = 'SkiRace'
+        return {
+          resourcetype: 'SkiRace',
+          organizer: this.addEventPrompt.raceOrganizer.selected
+        }
       }
-
-      const addToEvent = {
+      return { resourcetype: 'Event' }
+    },
+    addEvent () {
+      const eventForm = {
         category: this.addEventPrompt.category.selected,
         skis: this.addEventPrompt.skis.selected,
         type: this.addEventPrompt.type.selected,
-        resourcetype
+        location: this.addEventPrompt.location.selected
       }
-      this.$store.dispatch('calendar/addEvent', { ...this.newEvent, ...addToEvent })
+      const event = { ...this.newEvent, ...eventForm, ...this.getExtraInfo() }
+
+      this.$store.dispatch('calendar/addEvent', event)
     },
     handleDateClick (arg) {
       console.log('handling date click', arg)
@@ -371,17 +418,17 @@ export default {
         return obj.id === parseInt(arg.event.id)
       })
 
-      if (this.$acl.check('isCoach')) {
-        const categoriesOnEvent = []
-        const category = this.$store.state.calendar.eventConfig.categories
-        Object.values(category).forEach((categoryOnEvent) => {
-          categoriesOnEvent.push(category.find(function (entry) {
-              return entry.id === categoryOnEvent.id
-            })
-          )
-        })
-        this.editedEvent.category = categoriesOnEvent
-      }
+      // if (this.$acl.check('isCoach')) {
+      //   const categoriesOnEvent = []
+      //   const category = this.$store.state.calendar.eventConfig.categories
+      //   Object.values(category).forEach((categoryOnEvent) => {
+      //     categoriesOnEvent.push(category.find(function (entry) {
+      //         return entry.id === categoryOnEvent.id
+      //       })
+      //     )
+      //   })
+      //   this.editedEvent.category = categoriesOnEvent
+      // }
 
       // IDEA: Check with userChildren() array
       // console.log('participants', this.editedEvent['participants'])
@@ -407,6 +454,39 @@ export default {
       this.newEvent.end = arg.end
       this.addEventPrompt.active = true
     },
+    handleEventChange (arg) {
+      console.log('handling change in event', arg.event.id, arg)
+      const event = {
+        id: arg.event.id,
+        start: arg.event.start,
+        end: arg.event.end
+      }
+
+      this.$store.dispatch('calendar/editEvent', { ...event, ...this.getExtraInfo() })
+        .then(res => {
+          this.$vs.notify({
+            color: 'success',
+            title: 'Event Updated',
+            text: 'The selected event was successfully updated'
+          })
+        })
+        .catch(err => {
+          this.$vs.notify({
+            color: 'danger',
+            title: 'Event Not Changed',
+            text: err.message
+          })
+          console.error(err)
+        })
+    },
+    handleEventDrop (eventDropInfo) {
+      console.log('dropped', eventDropInfo)
+      this.handleEventChange(eventDropInfo)
+    },
+    handleEventResize (eventResizeInfo) {
+      console.log('resized', eventResizeInfo)
+      this.handleEventChange(eventResizeInfo)
+    },
     handleEventMouseEnter (arg) {
       // console.log('handling mouse event enter', arg)
     },
@@ -417,7 +497,7 @@ export default {
         type: 'confirm',
         color: 'danger',
         title: 'Confirm Delete',
-        text: `You are about to delete "${this.editedEvent.title}"`,
+        text: `You are about to delete '${this.editedEvent.title}'`,
         accept: this.deleteEvent,
         acceptText: 'Delete'
       })
@@ -464,23 +544,21 @@ export default {
       Object.values(object).forEach((item) => {
         id.push(item[key])
       })
-      console.log(id)
       return id
-    }
-  },
-  created () {
-    this.$store.dispatch('calendar/fetchEvents')
-    this.$store.dispatch('family/fetchFamily', this.$store.state.AppActiveUser.profile.family_id)
-
-    if (this.$acl.check('isCoach')) {
+    },
+    fetchConfigData () {
       console.log('Hello coach')
 
       this.$store.dispatch('calendar/fetchRaceOrganizers').then((res) => {
-        console.log('raceorganizers', res.data.results)
+        // console.log('raceorganizers', res.data.results)
+        this.addEventPrompt.raceOrganizer.options = res.data.results
+        this.addEventPrompt.raceOrganizer.selected = this.cleanData(this.addEventPrompt.raceOrganizer.options)[0]
       })
 
       this.$store.dispatch('calendar/fetchLocations').then((res) => {
-        console.log('locations', res.data.results)
+        // console.log('locations', res.data.results)
+        this.addEventPrompt.location.options = res.data.results
+        this.addEventPrompt.location.selected = this.cleanData(this.addEventPrompt.location.options)[0]
       })
 
       this.$store.dispatch('calendar/fetchCategories').then((res) => {
@@ -494,13 +572,20 @@ export default {
         this.addEventPrompt.skis.options = res.data.SkiTypeChoices
       })
     }
+  },
+  created () {
+    this.$store.dispatch('calendar/fetchEvents')
+    this.$store.dispatch('family/fetchFamily', this.$store.state.AppActiveUser.profile.family_id)
+
+    if (this.$acl.check('isCoach')) {
+      this.fetchConfigData()
+    }
   }
 }
 
 </script>
 
 <style lang='scss'>
-
   // you must include each plugins' css
   // paths prefixed with ~ signify node_modules
   @import '~@fullcalendar/core/main.css';
@@ -559,6 +644,32 @@ export default {
     #event-info-col-1 {
       width: calc(100% - 5rem) !important;
     }
+  }
+
+
+  .my-prompt {
+    .vs-dialog {
+      max-width: 650px;
+    }
+
+    /*@media only screen and (max-width: 768px) {*/
+    /*  .vs-dialog {*/
+    /*    max-width: 400px;*/
+    /*  }*/
+    /*}*/
+    @media only screen and (max-width: 570px) {
+      .vs-dialog {
+        max-width: 90%;
+      }
+    }
+  }
+
+  .fc-left .fc-button-group {
+    display: block;
+  }
+
+  .fc-toolbar h2 {
+    font-size: 1.5em;
   }
 
 

@@ -2,6 +2,8 @@ from django.conf.urls import url
 from django.urls import path, include
 
 from apps.users.api.views import CustomConfirmEmailView
+from django.urls import path, include
+from . import views as acc_views
 
 urlpatterns = [
 
@@ -14,7 +16,10 @@ urlpatterns = [
     url(r'^register/account-confirm-email/(?P<key>[-:\w]+)/$', CustomConfirmEmailView.as_view(),
         name='account_confirm_email'),
     path("register/", include('rest_auth.registration.urls')),
+    
+    # NEW: The django-rest-passwordreset urls to request a token and confirm pw-reset
+    path('reset-password/', include('django_rest_passwordreset.urls', namespace='password_reset')),
 
     # RES PASSWROD RESET : https://stackoverflow.com/questions/53945056/django-rest-auth-password-reset
-    url(r'^', include('django.contrib.auth.urls')),
+    # url(r'^', include('django.contrib.auth.urls')),
 ]

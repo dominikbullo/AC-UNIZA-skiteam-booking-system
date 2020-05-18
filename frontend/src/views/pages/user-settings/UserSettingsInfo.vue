@@ -2,47 +2,30 @@
   <vx-card no-shadow>
 
     <!-- Bio -->
-    <vs-textarea label="Bio" v-model="bio" placeholder="Your bio..."/>
-
-    <!-- DOB -->
-    <div class="mt-8">
-      <label class="text-sm">Birth Date</label>
-      <flat-pickr v-model="dob" :config="{ dateFormat: 'd F Y' }" class="w-full"/>
+    <!--    <vs-textarea label="Bio" v-model="bio" placeholder="Your bio..."/>-->
+    <div>
+      <label style="font-size: 10px">{{ $t('BirthDate') }}</label>
+      <flat-pickr :config="datePickerConfig" class="w-full"
+                  v-model="birth_date"/>
+      <span class="text-danger text-sm">{{ errors.first('birth_date') }}</span>
     </div>
 
-    <!-- Country -->
-    <!--    <div class="mt-8">-->
-    <!--      <label class="text-sm">Country</label>-->
-    <!--      <v-select v-model="country" :options="countryOptions" :dir="$vs.rtl ? 'rtl' : 'ltr'"/>-->
-    <!--    </div>-->
-
-    <!-- Languages -->
-    <!--    <div class="mt-8">-->
-    <!--      <label class="text-sm">Languages</label>-->
-    <!--      <v-select v-model="lang_known" multiple :closeOnSelect="false" :options="langOptions"-->
-    <!--                :dir="$vs.rtl ? 'rtl' : 'ltr'"/>-->
-    <!--    </div>-->
-
     <!-- Mobile Number -->
-    <vs-input class="w-full mt-8" type="number" label-placeholder="Mobile" v-model="mobile"/>
-
-    <!-- Website  -->
-    <!--    <vs-input class="w-full mt-8" label-placeholder="Website" v-model="website"/>-->
+    <vs-input class="w-full mt-8" type="phone_number" label-placeholder="Mobile" v-model="phone_number"/>
 
     <!-- Gender -->
     <div class="mt-8 mb-base">
       <label class="text-sm">Gender</label>
       <div class="mt-2">
-        <vs-radio v-model="gender" vs-value="male" class="mr-4">Male</vs-radio>
-        <vs-radio v-model="gender" vs-value="female" class="mr-4">Female</vs-radio>
-        <vs-radio v-model="gender" vs-value="other">Other</vs-radio>
+        <vs-radio v-model="gender" vs-value="Male" class="mr-4">Male</vs-radio>
+        <vs-radio v-model="gender" vs-value="Female" class="mr-4">Female</vs-radio>
       </div>
     </div>
 
     <!-- Save & Reset Button -->
     <div class="flex flex-wrap items-center justify-end">
-      <vs-button class="ml-auto mt-2">Save Changes</vs-button>
-      <vs-button class="ml-4 mt-2" type="border" color="warning">Reset</vs-button>
+      <vs-button class="ml-auto mt-2" @click="save_changes">{{$t('Save Changes')}}</vs-button>
+      <vs-button class="ml-4 mt-2" type="border" color="warning" @click="reset_data">{{$t('Reset')}}</vs-button>
     </div>
   </vx-card>
 </template>
@@ -50,6 +33,9 @@
 <script>
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
+import { Slovak } from 'flatpickr/dist/l10n/sk.js'
+
+import moduleUserManagement from '@/store/user-management/moduleUserManagement'
 
 export default {
   components: {
@@ -57,40 +43,60 @@ export default {
   },
   data () {
     return {
-      bio: this.$store.state.AppActiveUser.about,
-      dob: null,
-      country: 'USA',
-      lang_known: ['English', 'Russian'],
-      gender: 'male',
-      mobile: '',
-      website: ''
-
-      // // Options
-      // countryOptions: [
-      //   { label: 'Australia',  value: 'australia'  },
-      //   { label: 'France',     value: 'france'     },
-      //   { label: 'Germany',    value: 'germany'    },
-      //   { label: 'India',      value: 'india'      },
-      //   { label: 'Jordan',     value: 'jordan'     },
-      //   { label: 'Morocco',    value: 'morocco'    },
-      //   { label: 'Portuguese', value: 'portuguese' },
-      //   { label: 'Syria',      value: 'syria'      },
-      //   { label: 'USA',        value: 'usa'        }
-      // ],
-      // langOptions: [
-      //   { label: 'English',  value: 'english'  },
-      //   { label: 'Spanish',  value: 'spanish'  },
-      //   { label: 'French',   value: 'french'   },
-      //   { label: 'Russian',  value: 'russian'  },
-      //   { label: 'German',   value: 'german'   },
-      //   { label: 'Arabic',   value: 'arabic'   },
-      //   { label: 'Sanskrit', value: 'sanskrit' }
-      // ]
+      datePickerConfig: {
+        altFormat: 'd.m.Y',
+        altInput: true,
+        locale: Slovak
+      },
+      birth_date: null,
+      gender: 'M',
+      phone_number: ''
     }
+  },
+  created () {
+    if (!moduleUserManagement.isRegistered) {
+      this.$store.registerModule('userManagement', moduleUserManagement)
+      moduleUserManagement.isRegistered = true
+    }
+    this.reset_data()
   },
   computed: {
     activeUserInfo () {
       return this.$store.state.AppActiveUser
+    },
+    validateForm () {
+      return !this.errors.any()
+    }
+  },
+  methods: {
+    reset_data () {
+      this.birth_date = this.$store.state.AppActiveUser.birth_date
+      this.gender = this.$store.state.AppActiveUser.gender
+      this.phone_number = this.$store.state.AppActiveUser.phone_number
+    },
+    save_changes () {
+      if (!this.validateForm) return
+
+      const payload = {
+        birth_date: this.birth_date,
+        phone_number: this.phone_number,
+        gender: this.gender
+      }
+
+      this.$store.dispatch('userManagement/editUser', payload)
+        .then(res => {
+          this.$vs.notify({
+            color: 'success',
+            title: 'User details changed'
+          })
+        })
+        .catch(err => {
+          this.$vs.notify({
+            color: 'danger',
+            title: 'Something went wrong',
+            text: err.message
+          })
+        })
     }
   }
 }

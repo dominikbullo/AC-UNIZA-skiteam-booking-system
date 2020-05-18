@@ -56,7 +56,13 @@ class Location(models.Model):
     additional_info = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
-        return "%s - %s" % (self.name, self.ski_slope)
+        return self.display_name
+
+    @property
+    def display_name(self):
+        if self.ski_slope and self.ski_slope != "":
+            return "%s - %s" % (self.name, self.ski_slope)
+        return self.name
 
     class Meta:
         unique_together = (('name', 'ski_slope'),)
@@ -123,11 +129,19 @@ class SkiTraining(SkiEvent):
 
 class RaceOrganizer(models.Model):
     # SLA/Public/ZSL
-    name = models.CharField(max_length=15, default="SLA")
+    name = models.CharField(max_length=50)
+    shorthand = models.CharField(max_length=15)
+    website = models.URLField(max_length=200, blank=True, null=True)
     club = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
-        return self.name
+        return self.display_name
+
+    @property
+    def display_name(self):
+        if self.club and self.club != "":
+            return "%s | %s" % (self.shorthand, self.club)
+        return self.shorthand
 
     def clean(self):
         """

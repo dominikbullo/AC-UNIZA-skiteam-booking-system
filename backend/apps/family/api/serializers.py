@@ -3,9 +3,10 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers, status
 from rest_framework.response import Response
 
+from apps.events.models import Category, Season
 from apps.family.models import Child, FamilyMember, Family
 
-from apps.users.api.serializers import CustomRegisterSerializer, UserDetailSerializer
+from apps.users.api.serializers import CustomRegisterSerializer, BaseUserSerializer
 from apps.users.models import Profile
 
 
@@ -52,22 +53,24 @@ class ChildSerializer(serializers.ModelSerializer):
         Profile.objects.get_or_create(user=user, **profile_data)
         user.profile.save()
 
-        # if validated_data["user"].get("email", None):
-        #     # TODO add email adress
-        #     setup_user_email(self.context['request'], user, [])
-        #     send_email_confirmation(self.context['request'], user, signup=False)
-        #     # user.add_email_address(self.context['request'], validated_data["user"]["email"])
-
         if not validated_data.get("parent", None):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
+        # Get parent and create child
         parent = FamilyMember.objects.get(user=validated_data.get("parent"))
-
-        # TODO doesn't found parent
         child = Child.objects.create(user=user, family_id=parent.family_id)
-        # # TODO try save there
-        # user.save()
-        # user.profile.save()
+
+        # Match categories for this child
+        query_category = {
+            "season"         : Season.objects.get(current=True),
+            "year_from__lte" : user.profile.birth_date.year,
+            "year_until__gte": user.profile.birth_date.year
+        }
+        matched_category = Category.objects.filter(**query_category)
+
+        # Add matching category from current season to child
+        child.categories.set(matched_category)
+
         child.save()
         return child
 
@@ -79,7 +82,7 @@ class ChildSerializer(serializers.ModelSerializer):
 
 
 class FamilyMemberSerializer(serializers.ModelSerializer):
-    user = UserDetailSerializer(read_only=True)
+    user = BaseUserSerializer(read_only=True)
 
     class Meta:
         model = FamilyMember
@@ -89,7 +92,7 @@ class FamilyMemberSerializer(serializers.ModelSerializer):
 class FamilySerializer(serializers.ModelSerializer):
     members = FamilyMemberSerializer(many=True, read_only=True)
 
-    # children = ChildSerializer(many=True, read_only=True)
+    children = ChildSerializer(many=True, read_only=True)
 
     class Meta:
         model = Family

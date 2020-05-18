@@ -1,6 +1,7 @@
 from allauth.account.models import EmailAddress
 
 from django.contrib.auth import get_user_model
+from django.utils.translation import gettext_lazy as _
 
 from rest_auth.models import TokenModel
 from rest_auth.registration.serializers import RegisterSerializer
@@ -13,14 +14,20 @@ from apps.users.models import Profile
 
 
 class BaseProfileSerializer(serializers.ModelSerializer):
+    # Used on FE
     family_id = serializers.SerializerMethodField()
-    # first_name = serializers.CharField(source='user.first_name', read_only=True)
-    # last_name = serializers.CharField(source='user.last_name', read_only=True)
+    displayName = serializers.CharField(source='user.full_name', read_only=True)
     username = serializers.CharField(source='user.username', read_only=True)
     userRole = serializers.CharField(source='user_role', read_only=True)
-    displayName = serializers.CharField(source='user.full_name', read_only=True)
 
-    # RES: https://stackoverflow.com/questions/48073471/django-rest-framework-get-data-based-on-current-userid-token
+    # Used in updating
+    first_name = serializers.CharField(source='user.first_name')
+    last_name = serializers.CharField(source='user.last_name')
+    email = serializers.EmailField(source='user.email')
+
+    gender = serializers.CharField(source='get_gender_display')
+    avatar = serializers.ImageField(read_only=True)
+
     def get_family_id(self, instance):
         try:
             return get_object_or_404(FamilyMember, user=instance.user).family_id
@@ -31,20 +38,28 @@ class BaseProfileSerializer(serializers.ModelSerializer):
             print("User does not have family or is not family member!")
             return -1
 
+    def update(self, instance, validated_data):
+        """Update a user, setting the password correctly and return it"""
+        user_data = validated_data.pop('user', None)
+        user = instance.user
+
+        if user_data:
+            # TODO validate and test
+            user.first_name = user_data.get('first_name', user.first_name)
+            user.last_name = user_data.get('last_name', user.last_name)
+            user.email = user_data.get('email', user.email)
+            # user.username = user_data.get('username', user.username)
+            user.save()
+
+        profile = super().update(instance, validated_data)
+        profile.save()
+
+        return profile
+
     class Meta:
         model = Profile
-        fields = ("id", "family_id", "username", "userRole", "displayName")
-        read_only_fields = "id", "family_id", "user_role"
-
-
-class DetailProfileSerializer(BaseProfileSerializer):
-    email = serializers.DateTimeField(source='user.email', read_only=True)
-    avatar = serializers.ImageField(read_only=True)
-
-    class Meta:
-        model = Profile
-        exclude = ("user", "events")
-        read_only_fields = 'family_id', "user_role"
+        exclude = ("events", "location", "user",)
+        read_only_fields = "id", "family_id", "user_role", "events"
 
 
 class RegisterProfileSerializer(serializers.ModelSerializer):
@@ -61,7 +76,7 @@ class ProfileAvatarSerializer(serializers.ModelSerializer):
         fields = ("avatar",)
 
 
-class BasicUserSerializer(serializers.ModelSerializer):
+class BaseUserSerializer(serializers.ModelSerializer):
     """Serializer for the users object"""
     verified_email = serializers.SerializerMethodField()
 
@@ -75,21 +90,12 @@ class BasicUserSerializer(serializers.ModelSerializer):
         except EmailAddress.DoesNotExist:
             return None
 
-    def update(self, instance, validated_data):
-        # TODO custom update
-        return instance
-
     class Meta:
         model = get_user_model()
         fields = (
             'id', 'email', "username", 'first_name', "last_name", "verified_email", "profile")
         # exclude = ("password", "last_login", "is_superuser", "is_staff", "is_active",)
         read_only_fields = 'id', 'verified_email', "email",
-
-
-class UserDetailSerializer(BasicUserSerializer):
-    # https://stackoverflow.com/questions/41394761/the-create-method-does-not-support-writable-nested-fields-by-default
-    profile = DetailProfileSerializer(read_only=True)
 
 
 class CustomRegisterSerializer(RegisterSerializer):
@@ -136,8 +142,39 @@ class TokenSerializer(serializers.ModelSerializer):
     """
     Serializer for Token model.
     """
-    user = UserDetailSerializer(many=False, read_only=True)  # this is add by myself.
+    user = BaseUserSerializer(many=False, read_only=True)  # this is add by myself.
 
     class Meta:
         model = TokenModel
         fields = ('key', 'user')
+
+
+from django.contrib.auth import password_validation
+from rest_framework import serializers
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(max_length=128, write_only=True, required=True)
+    new_password1 = serializers.CharField(max_length=128, write_only=True, required=True)
+    new_password2 = serializers.CharField(max_length=128, write_only=True, required=True)
+
+    def validate_old_password(self, value):
+        user = self.context['request'].user
+        if not user.check_password(value):
+            raise serializers.ValidationError(
+                _('Your old password was entered incorrectly. Please enter it again.')
+            )
+        return value
+
+    def validate(self, data):
+        if data['new_password1'] != data['new_password2']:
+            raise serializers.ValidationError({'new_password2': _("The two password fields didn't match.")})
+        password_validation.validate_password(data['new_password1'], self.context['request'].user)
+        return data
+
+    def save(self, **kwargs):
+        password = self.validated_data['new_password1']
+        user = self.context['request'].user
+        user.set_password(password)
+        user.save()
+        return user

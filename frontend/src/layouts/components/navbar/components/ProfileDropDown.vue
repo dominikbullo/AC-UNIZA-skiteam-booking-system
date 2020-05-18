@@ -30,26 +30,12 @@
             <span class="ml-2">{{ $t('Family') }}</span>
           </li>
 
-          <!--          <li-->
-          <!--            class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"-->
-          <!--            @click="$router.push('/apps/todo').catch(() => {})">-->
-          <!--            <feather-icon icon="CheckSquareIcon" svgClasses="w-4 h-4" />-->
-          <!--            <span class="ml-2">Tasks</span>-->
-          <!--          </li>-->
-
-          <!--          <li-->
-          <!--            class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"-->
-          <!--            @click="$router.push('/apps/chat').catch(() => {})">-->
-          <!--            <feather-icon icon="MessageSquareIcon" svgClasses="w-4 h-4" />-->
-          <!--            <span class="ml-2">Chat</span>-->
-          <!--          </li>-->
-
-          <!--          <li-->
-          <!--            class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"-->
-          <!--            @click="$router.push('/apps/eCommerce/wish-list').catch(() => {})">-->
-          <!--            <feather-icon icon="HeartIcon" svgClasses="w-4 h-4" />-->
-          <!--            <span class="ml-2">Wish List</span>-->
-          <!--          </li>-->
+          <li v-if="this.$store.state.AppActiveUser.userRole === 'child'"
+              class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
+              @click="$router.push('/apps/user/stats').catch(() => {})">
+            <feather-icon icon="PieChartIcon" svgClasses="w-4 h-4"/>
+            <span class="ml-2">{{ $t('My stats') }}</span>
+          </li>
 
           <vs-divider class="m-1"/>
 

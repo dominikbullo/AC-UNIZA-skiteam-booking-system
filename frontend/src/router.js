@@ -113,7 +113,7 @@ const router = new Router({
           }
         },
         {
-          path: '/apps/user/user-view/:userId',
+          path: '/apps/user/:userId/view',
           name: 'app-user-view',
           component: () => import('@/views/apps/user/UserView.vue'),
           meta: {
@@ -389,7 +389,28 @@ const router = new Router({
               }
             ],
             pageTitle: 'Charts',
-            rule: 'isParent'
+            rule: 'isChild'
+          }
+        },
+        // TODO detail stats for coach if i have more real data
+        {
+          path: '/page/statistics/detail',
+          name: 'page-statistics-detail',
+          component: () => import('@/views/pages/stats/Statistics.vue'),
+          meta: {
+            breadcrumb: [
+              {
+                title: 'Home',
+                url: '/'
+              },
+              { title: 'Statistics' },
+              {
+                title: 'Apex Charts',
+                active: true
+              }
+            ],
+            pageTitle: 'Charts',
+            rule: 'isChild'
           }
         }
       ]
@@ -429,7 +450,7 @@ const router = new Router({
           }
         },
         {
-          path: '/reset-password/:uid/:token',
+          path: '/reset-password/:token',
           name: 'page-reset-password',
           component: () => import('@/views/pages/ResetPassword.vue'),
           meta: {
@@ -508,6 +529,7 @@ router.beforeEach((to, from, next) => {
   const publicPages = [
     '/login',
     '/forgot-password',
+    '/reset-password',
     '/register',
     '/pages/error-404',
     '/pages/error-500',
