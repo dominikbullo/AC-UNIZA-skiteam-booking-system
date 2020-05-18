@@ -3,11 +3,9 @@
 
 <body>
 
-<h1>Event is up again</h1>
+<h1>Udalosť obnovená</h1>
 
-<p>Dear {{ event }}</p>
-<p>Dear {{ event.start }}</p>
-<p>Dear {{ event.end }}</p>
-N
+<p>Udalosť, ktorá sa mala konať {{ event.start }} a bola zrušená, je opäť obnovená.</p>
+
 </body>
 </html>
