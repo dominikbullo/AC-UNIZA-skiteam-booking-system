@@ -38,7 +38,7 @@ export default {
   fetchUserStats ({ commit }, payload = { query: { season: {} } }) {
 
     let localId = this.state.AppActiveUser.profile.id
-    console.log('fetchUserStats', localId)
+    // console.log('fetchUserStats', localId)
 
     if ('username' in payload && payload.username !== undefined) {
       localId = payload.username

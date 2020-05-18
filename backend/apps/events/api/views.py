@@ -28,7 +28,6 @@ class EventViewSet(viewsets.ModelViewSet):
     serializer_class = EventPolymorphicSerializer
     permission_classes = [IsCoachOrReadOnly]
 
-    # permission_classes = [IsOwnFamilyOrReadOnly]
     # filter_backends = [SearchFilter]
     # search_fields = ["name"]
 

@@ -38,7 +38,7 @@ class CustomRegisterChildSerializer(CustomRegisterSerializer):
 class ChildSerializer(serializers.ModelSerializer):
     user = CustomRegisterChildSerializer(required=True)
 
-    family = serializers.HyperlinkedRelatedField(read_only=True, view_name="family:family-detail")
+    family = serializers.HyperlinkedRelatedField(read_only=True, view_name="family-detail")
 
     def create(self, validated_data):
         # TODO validated data ?

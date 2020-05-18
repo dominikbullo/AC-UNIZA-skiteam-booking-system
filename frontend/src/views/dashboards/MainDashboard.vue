@@ -208,7 +208,7 @@ export default {
           query: { season: this.seasonSelection.selected }
         })
         .then((res) => {
-          console.log('res', Object.keys(res.data.data))
+          // console.log('res', Object.keys(res.data.data))
           this.stats = Object.values(res.data.data[this.seasonSelection.selected])
         })
     },
@@ -218,8 +218,6 @@ export default {
           username: this.childSelection.selected.user.profile.id
         })
         .then((res) => {
-          console.log('res', res.data.data)
-          console.log('res', Object.keys(res.data.data))
           this.seasonSelection.options = Object.keys(res.data.data)
           this.seasonSelection.selected = this.seasonSelection.options[0]
           this.stats = Object.values(res.data.data[this.seasonSelection.selected])
