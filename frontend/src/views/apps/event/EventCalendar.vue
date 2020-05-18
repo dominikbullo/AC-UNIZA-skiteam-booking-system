@@ -23,7 +23,8 @@
           :default-view="calendarConfig.views.defaultView"
           :editable="calendarConfig.editable"
           min-time="06:00:00"
-          max-time="20:00:00"
+          max-time="21:00:00"
+          :scroll-time="minEventTime"
           height="parent"
           class="custom-class"
         />
@@ -344,6 +345,10 @@ export default {
     }
   },
   computed: {
+    minEventTime () {
+      // TODO min time for view
+      return '07:00:00'
+    },
     calendarEvents () {
       return this.$store.state.calendar.events
     },
