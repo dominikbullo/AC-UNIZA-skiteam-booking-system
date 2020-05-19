@@ -105,13 +105,13 @@ export default {
   },
   data () {
     return {
-      first_name: 'DefaultMeno',
-      last_name: 'DefaultPriezvisko',
+      first_name: process.env.VUE_APP_NAME || '',
+      last_name: process.env.VUE_APP_SURNAME || '',
       birth_date: this.moment().format('YYYY-MM-DD'),
-      email: 'totojetes@sasd.sk',
+      email: process.env.VUE_APP_LOGIN || '',
       gender: 'M',
-      password: 'testing321',
-      confirm_password: 'testing321',
+      password: process.env.VUE_APP_PASS || '',
+      confirm_password: process.env.VUE_APP_PASS || '',
       isTermsConditionAccepted: true,
 
 
@@ -186,23 +186,20 @@ export default {
       }
 
       this.$store.dispatch('auth/registerUserDRF', payload).then((response) => {
+        this.$store.dispatch('updateUserRole', {
+          aclChangeRole: this.$acl.change,
+          userRole: response.data.user.profile.userRole
+        })
         this.$router.push(this.$router.currentRoute.query.to || '/')
         this.$vs.loading.close()
+        this.$vs.notify({
+          color: 'success',
+          title: 'User Created'
+        })
       }).catch(error => {
         this.$vs.loading.close()
         //https://stackoverflow.com/questions/29626729/how-to-function-call-using-this-inside-foreach-loop/29626762
         // TODO -> into formu not as notifier
-
-        Object.keys(error.response.data).forEach(function (key) {
-          console.log(error.response.data)
-          this.$vs.notify({
-            title: `Error in ${key}`,
-            text: error.response.data[key][0],
-            iconPack: 'feather',
-            icon: 'icon-alert-circle',
-            color: 'danger'
-          })
-        }, this)
       })
     }
   }

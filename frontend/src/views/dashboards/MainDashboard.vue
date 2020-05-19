@@ -213,15 +213,17 @@ export default {
         })
     },
     getUserStats () {
-      this.$store.dispatch('family/fetchUserStats',
-        {
-          username: this.childSelection.selected.user.profile.id
-        })
-        .then((res) => {
-          this.seasonSelection.options = Object.keys(res.data.data)
-          this.seasonSelection.selected = this.seasonSelection.options[0]
-          this.stats = Object.values(res.data.data[this.seasonSelection.selected])
-        })
+      if (this.childSelection.selected !== undefined) {
+        this.$store.dispatch('family/fetchUserStats',
+          {
+            username: this.childSelection.selected.user.profile.id
+          })
+          .then((res) => {
+            this.seasonSelection.options = Object.keys(res.data.data)
+            this.seasonSelection.selected = this.seasonSelection.options[0]
+            this.stats = Object.values(res.data.data[this.seasonSelection.selected])
+          })
+      }
     },
     getDisplayStats (stats) {
       // console.log("stat", stats)

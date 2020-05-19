@@ -40,8 +40,8 @@
 export default {
   data () {
     return {
-      email: 'coach@coach.sk',
-      password: 'testing321',
+      email: process.env.VUE_APP_LOGIN || '',
+      password: process.env.VUE_APP_PASS || '',
       checkbox_remember_me: true
     }
   },

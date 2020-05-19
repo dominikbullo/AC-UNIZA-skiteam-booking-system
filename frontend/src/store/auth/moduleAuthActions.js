@@ -8,7 +8,6 @@
 ========================================================================================== */
 
 import drf from '../../http/requests/auth/drf'
-import router from '@/router'
 
 export default {
   loginDRF ({ commit }, payload) {
@@ -35,7 +34,6 @@ export default {
           commit('SET_BEARER', response.data.key)
 
           // Navigate User to homepage
-          // acl.change('admin')
           // router.push(router.currentRoute.query.to || '/')
 
           resolve(response)
@@ -58,15 +56,15 @@ export default {
     //   }
     // }
     const {
-      first_name,
-      last_name,
-      user_role,
-      birth_date,
-      email,
-      gender,
-      password,
-      confirmPassword
-    } = payload.userDetails
+            first_name,
+            last_name,
+            user_role,
+            birth_date,
+            email,
+            gender,
+            password,
+            confirmPassword
+          } = payload.userDetails
 
     console.log('payload', payload.userDetails)
 
@@ -78,13 +76,14 @@ export default {
 
       drf.registerUserEmail(first_name, last_name, user_role, birth_date, email, gender, password)
         .then(response => {
-          // TODO response.token
           localStorage.setItem('accessToken', response.data.key)
 
+          // Update user details
           commit('UPDATE_USER_INFO', response.data.user, { root: true })
+          commit('UPDATE_USER_INFO', response.data.user.profile, { root: true })
 
-          // Redirect User
-          router.push(router.currentRoute.query.to || '/')
+          // Set bearer token in axios
+          commit('SET_BEARER', response.data.key)
 
           resolve(response)
         }).catch(error => {
