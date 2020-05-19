@@ -2,7 +2,6 @@
   <div>
     <vs-input
       v-validate="'required|min:3'"
-      data-vv-validate-on="blur"
       name="email"
       icon-no-border
       icon="icon icon-user"
@@ -13,7 +12,6 @@
     <span class="text-danger text-sm">{{ errors.first('email') }}</span>
 
     <vs-input
-      data-vv-validate-on="blur"
       v-validate="'required|min:6'"
       type="password"
       name="password"

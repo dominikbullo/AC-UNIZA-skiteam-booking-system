@@ -1,38 +1,49 @@
 <template>
   <vx-card no-shadow>
-    <vs-input class="w-full mb-base" :type="passwordFieldType"
+    <vs-input class="w-full mt-6"
+              :label-placeholder="$t('Old password')"
+              :placeholder="$t('Old password')"
               :danger="errors.first('old_password')"
-              label-placeholder="Old Password"
               v-model="old_password"
               data-vv-as="password"
-              ref="password"
+              name="old_password"
+              ref="old_password"
+              type="password"
               icon-pack="feather"
               icon="icon-lock"
               v-validate="'required|min:8'"/>
     <span class="text-danger text-sm">{{ errors.first('old_password') }}</span>
 
-    <vs-input class="w-full mb-base" :type="passwordFieldType"
-              :danger="errors.first('new_password')"
-              label-placeholder="New Password"
-              v-model="new_password"
-              name="new_password"
-              ref="new_password"
-              data-vv-as="password"
-              v-validate="'required|min:8'"
-              icon-pack="feather"
-              icon="icon-lock"/>
-    <span class="text-danger text-sm">{{ errors.first('new_password') }}</span>
+    <vs-input
+      :label-placeholder="$t('New password')"
+      :placeholder="$t('New password')"
+      :danger="errors.first('confirm_password')"
+      class="w-full mt-6"
+      name="password"
+      data-vv-as="password"
+      ref="password"
+      type="password"
+      icon-pack="feather"
+      icon="icon-lock"
+      v-model="new_password"
+      v-validate="'required|min:8'"/>
+    <span class="text-danger text-sm">{{ errors.first('password') }}</span>
 
-    <vs-input class="w-full mb-base" :type="passwordFieldType"
-              label-placeholder="Confirm Password"
-              :danger="errors.first('confirm_password')"
-              v-model="confirm_new_password"
-              data-vv-as="password"
-              v-validate="'min:8|confirmed:new_password'"
-              icon-pack="feather"
-              name="confirm_password"
-              icon="icon-lock"/>
+    <vs-input
+      :label-placeholder="$t('Confirm Password')"
+      :placeholder="$t('Confirm Password')"
+      :danger="errors.first('confirm_password')"
+      data-vv-validate-on="blur"
+      class="w-full mt-6"
+      data-vv-as="password"
+      name="confirm_password"
+      type="password"
+      icon-pack="feather"
+      icon="icon-lock"
+      v-model="confirm_new_password"
+      v-validate="'min:8|confirmed:password'"/>
     <span class="text-danger text-sm">{{ errors.first('confirm_password') }}</span>
+
 
     <!-- Save & Reset Button -->
     <div class="flex flex-wrap items-center justify-end">
@@ -75,7 +86,7 @@ export default {
     },
     save_changes () {
       console.log('exit?', !this.validateForm)
-      // if (!this.validateForm) return
+      if (!this.validateForm) return
 
       const payload = {
         old_password: this.old_password,
