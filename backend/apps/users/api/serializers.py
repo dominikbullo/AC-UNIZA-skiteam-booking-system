@@ -24,9 +24,17 @@ class BaseProfileSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(source='user.first_name')
     last_name = serializers.CharField(source='user.last_name')
     email = serializers.EmailField(source='user.email')
+    verified_email = serializers.SerializerMethodField()
 
     gender = serializers.CharField(source='get_gender_display')
     avatar = serializers.ImageField(read_only=True)
+
+    def get_verified_email(self, obj):
+        try:
+            email_address = EmailAddress.objects.get(user__profile=obj)
+            return email_address.verified
+        except EmailAddress.DoesNotExist:
+            return None
 
     def get_family_id(self, instance):
         try:
