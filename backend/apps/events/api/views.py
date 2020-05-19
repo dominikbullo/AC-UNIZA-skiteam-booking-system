@@ -84,18 +84,18 @@ class EventViewSet(viewsets.ModelViewSet):
 
 
 class SeasonViewSet(viewsets.ModelViewSet):
-    queryset = Season.objects.all()
+    queryset = Season.objects.all().order_by("start_date")
     serializer_class = SeasonSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class LocationViewSet(viewsets.ModelViewSet):
-    queryset = Location.objects.all()
+    queryset = Location.objects.all().order_by('name')
     serializer_class = LocationSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class RaceOrganizerViewSet(viewsets.ModelViewSet):
-    queryset = RaceOrganizer.objects.all()
+    queryset = RaceOrganizer.objects.all().order_by('name')
     serializer_class = RaceOrganizerSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
