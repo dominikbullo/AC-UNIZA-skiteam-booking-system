@@ -147,6 +147,8 @@
 <script>
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
+import { Slovak } from 'flatpickr/dist/l10n/sk.js'
+
 import vSelect from 'vue-select'
 
 export default {
@@ -166,6 +168,7 @@ export default {
       data_local: JSON.parse(JSON.stringify(this.data)),
 
       datePickerConfig: {
+        locale: Slovak,
         enableTime: true,
         altInput: true,
         altFormat: 'd.m.Y H:i'

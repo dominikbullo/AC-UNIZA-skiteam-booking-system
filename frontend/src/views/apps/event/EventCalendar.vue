@@ -231,10 +231,11 @@ import listPlugin from '@fullcalendar/list'
 import skLocale from '@fullcalendar/core/locales/sk'
 import enLocale from '@fullcalendar/core/locales/en-gb'
 import vSelect from 'vue-select'
-
+import 'vue-select/dist/vue-select.css'
 
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
+import { Slovak } from 'flatpickr/dist/l10n/sk.js'
 
 export default {
   components: {
@@ -294,6 +295,7 @@ export default {
       },
 
       datePickerConfig: {
+        locale: Slovak,
         enableTime: true,
         altInput: true,
         altFormat: 'd.m.Y H:i'
@@ -665,11 +667,6 @@ export default {
       .vs-dialog {
         max-width: 90%;
       }
-    }
-
-    .vs-dialog input {
-      background: #3f3f40 !important;
-
     }
   }
 
