@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import moment from 'moment'
 
 Vue.filter('capitalize', function (value) {
   if (!value) return ''
@@ -49,12 +50,13 @@ Vue.filter('time', function (value, is24HrFormat = false) {
 
 Vue.filter('date', function (value, fullDate = false) {
   value = String(value)
-  const date = value.slice(8, 10).trim()
-  const month = value.slice(4, 7).trim()
-  const year = value.slice(11, 15)
-
-  if (!fullDate) return `${date} ${month}`
-  else return `${date} ${month} ${year}`
+  if (value) {
+    if (!fullDate) {
+      return moment(String(value)).format('DD.MM.YYYY')
+    } else {
+      return moment(String(value)).format('DD.MM.YYYY hh:mm')
+    }
+  }
 })
 
 Vue.filter('month', function (val, showYear = true) {

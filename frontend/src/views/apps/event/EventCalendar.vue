@@ -45,6 +45,10 @@
             <div class="vx-col flex-1" id="event-info-col-1">
               <table>
                 <tr>
+                  <td class="font-bold">{{$t('Date')}}</td>
+                  <td>{{ editedEvent.start | date }}</td>
+                </tr>
+                <tr>
                   <td class="font-bold">{{$t('Event type')}}</td>
                   <td>{{ $t(editedEvent.title) }}</td>
                 </tr>
@@ -66,7 +70,7 @@
               <table>
                 <tr>
                   <td class="font-bold">{{$t('Start')}}</td>
-                  <td>{{ editedEvent.start | time }}</td>
+                  <td>{{ editedEvent.start | time(true) }}</td>
                 </tr>
                 <tr v-if="SKI_EVENTS.includes(editedEvent.type)">
                   <td class="font-bold">{{$t('Skis')}}</td>
@@ -78,7 +82,7 @@
               <table>
                 <tr>
                   <td class="font-bold">{{$t('End')}}</td>
-                  <td>{{ editedEvent.end | time }}</td>
+                  <td>{{ editedEvent.end | time(true) }}</td>
                 </tr>
               </table>
             </div>
@@ -393,7 +397,7 @@ export default {
     addEvent () {
       const eventForm = {
         category: this.addEventPrompt.category.selected,
-        skis: this.addEventPrompt.skis.selected,
+        skis_type: this.addEventPrompt.skis.selected,
         type: this.addEventPrompt.type.selected,
         location: this.addEventPrompt.location.selected
       }
