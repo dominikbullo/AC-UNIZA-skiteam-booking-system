@@ -666,6 +666,15 @@ export default {
         max-width: 90%;
       }
     }
+
+    .vs-dialog input {
+      background: #3f3f40 !important;
+
+    }
+  }
+
+  .flatpickr-input[type="hidden"] + input {
+    color: #c2c6dc;
   }
 
   .fc-left .fc-button-group {
@@ -675,6 +684,5 @@ export default {
   .fc-toolbar h2 {
     font-size: 1.5em;
   }
-
 
 </style>

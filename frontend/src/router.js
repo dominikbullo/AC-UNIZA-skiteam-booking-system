@@ -149,7 +149,7 @@ const router = new Router({
               }
             ],
             pageTitle: 'User Stats',
-            rule: 'isCoach'
+            rule: 'isChild'
           }
         },
         {
