@@ -45,7 +45,7 @@
             <div class="vx-col flex-1" id="event-info-col-1">
               <table>
                 <tr>
-                  <td class="font-bold">{{$t('Date')}}</td>
+                  <td class="font-bold">{{$t('Start date')}}</td>
                   <td>{{ editedEvent.start | date }}</td>
                 </tr>
                 <tr>

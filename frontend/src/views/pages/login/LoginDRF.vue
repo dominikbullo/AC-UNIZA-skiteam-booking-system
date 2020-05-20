@@ -21,11 +21,11 @@
       :label-placeholder="$t('Password')"
       v-model="password"
       class="w-full mt-6"/>
-    <span class="text-danger text-sm">{{ errors.first('password') }}</span>
+    <span class="text-danger text-sm">{{ errors.first('Password') }}</span>
 
     <div class="flex flex-wrap justify-between my-5">
-      <vs-checkbox v-model="checkbox_remember_me" class="mb-3">{{ $t('RememberMe') }}</vs-checkbox>
-      <router-link to="/forgot-password">{{ $t('ForgotPassword') }}?</router-link>
+      <!--      <vs-checkbox v-model="checkbox_remember_me" class="mb-3">{{ $t('RememberMe') }}</vs-checkbox>-->
+      <!--      <router-link to="/forgot-password">{{ $t('ForgotPassword') }}?</router-link>-->
     </div>
     <div class="flex flex-wrap justify-between mb-3">
       <vs-button type="border" @click="registerUser">{{ $t('Register') }}</vs-button>

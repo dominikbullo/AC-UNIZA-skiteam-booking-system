@@ -105,11 +105,10 @@ DOMAIN = env.str('DOMAIN')
 # ------------------------------------------------------------------------------
 EMAIL_PORT = env.int('EMAIL_PORT', default='1025')
 EMAIL_HOST = env.str('EMAIL_HOST', default='mailhog')
-# EMAIL_HOST_USER = env.str('EMAIL_HOST_USER', default='')
-# EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD')
-# DEFAULT_FROM_EMAIL = env.str('DEFAULT_FROM_EMAIL')
-# SERVER_EMAIL = env.str('SERVER_EMAIL')
-# EMAIL_USE_TLS = True
+EMAIL_HOST_USER = env.str('EMAIL_HOST_USER', default='noreply@sportagenda.local')
+EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD', default='')
+EMAIL_USE_TSL = env.bool('EMAIL_USE_TSL', default=True)
+EMAIL_USE_SSL = env.bool('EMAIL_USE_SSL', default=False)
 
 # MANAGER CONFIGURATION
 # ------------------------------------------------------------------------------

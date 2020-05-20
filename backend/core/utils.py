@@ -2,6 +2,8 @@ from django.contrib.auth import get_user_model
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.template.loader import render_to_string
 
+from config import settings
+
 
 def custom_create_user(**params):
     return get_user_model().objects.create_user(**params)
@@ -26,7 +28,7 @@ def send_custom_mail(new_event, template_file, old_event=None):
         # message:
         email_plaintext_message,
         # from:
-        "noreply@somehost.local",
+        settings.EMAIL_HOST_USER,
         # to:
         emails
 
