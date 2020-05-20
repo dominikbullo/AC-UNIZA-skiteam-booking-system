@@ -90,7 +90,8 @@ export default {
       return !this.errors.any()
     },
     usersData () {
-      return this.$store.state.userManagement.users
+      // Filter only child, but in future could delete this filter
+      return this.$store.state.userManagement.users.filter(member => member.userRole === 'child')
     }
   },
   methods: {
