@@ -4,7 +4,7 @@
 ![Language](https://img.shields.io/static/v1?label=Language&message=Python&color=blue)
 
 # Sport Agenda
-Web app for complete managing a sports club. Events, recording child statistics by time, calculating payouts for coaches and so on...
+Web app for complete managing a sport clubs. Events, recording child statistics by time, calculating payouts for coaches and so on...
 
 ## Getting Started
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
