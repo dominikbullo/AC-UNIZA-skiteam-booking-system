@@ -31,11 +31,10 @@ def send_custom_mail(new_event, template_file, old_event=None):
         settings.EMAIL_HOST_USER,
         # to:
         emails
-
     )
 
     msg.attach_alternative(email_html_message, "text/html")
-    msg.send()
+    msg.send(fail_silently=True)
 
 
 def getEmailList():

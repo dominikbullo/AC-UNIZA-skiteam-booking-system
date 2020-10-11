@@ -50,9 +50,9 @@ THIRD_PARTY_APPS = [
     'corsheaders',
 
     # https://django-rest-auth.readthedocs.io/en/latest/installation.html
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.facebook',
+    # 'allauth.socialaccount',
+    # 'allauth.socialaccount.providers.google',
+    # 'allauth.socialaccount.providers.facebook',
 
     'polymorphic',
 
@@ -125,21 +125,14 @@ MANAGERS = ADMINS
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME'  : str(ROOT_DIR('db.sqlite3')),
-    }
+        'ENGINE'  : 'django.db.backends.postgresql_psycopg2',
+        'NAME'    : env.str('POSTGRES_DB'),
+        'USER'    : env.str('POSTGRES_USER'),
+        'PASSWORD': env.str('POSTGRES_PASSWORD'),
+        'HOST'    : 'postgres',
+        'PORT'    : 5432,
+    },
 }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': env.str('POSTGRES_DB'),
-#         'USER': env.str('POSTGRES_USER'),
-#         'PASSWORD': env.str('POSTGRES_PASSWORD'),
-#         'HOST': 'postgres',
-#         'PORT': 5432,
-#     },
-# }
 
 # GENERAL CONFIGURATION
 # ------------------------------------------------------------------------------

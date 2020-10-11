@@ -25,18 +25,25 @@ services:
     working_dir: /app
     restart: on-failure
 
+  # postgres database
   postgres:
-    image: postgres:10-alpine
+    image: postgres
     volumes:
-      - sportagenda_data:/var/lib/postgresql/data
-    env_file: .env.dev
-
-  mailhog:
-    image: mailhog/mailhog
+      - sportagenda_data:/var/lib/postgresql/data/ # persist data even if container shuts down
     ports:
-      - "8025:8025"
-    logging:
-      driver: none
+      - "5432:5432"
+    env_file: .env
+
+  # pgadmin for managing postgis db (runs at localhost:5050)
+  # To add the above postgres server to pgadmin, use hostname as defined by docker: 'postgres'
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.sk
+      - PGADMIN_DEFAULT_PASSWORD=admin
+      - PGADMIN_LISTEN_PORT=5050
+    ports:
+      - "5050:5050"
 
   nginx:
     image: nginx:alpine
