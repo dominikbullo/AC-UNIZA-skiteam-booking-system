@@ -50,9 +50,9 @@ THIRD_PARTY_APPS = [
     'corsheaders',
 
     # https://django-rest-auth.readthedocs.io/en/latest/installation.html
-    # 'allauth.socialaccount',
-    # 'allauth.socialaccount.providers.google',
-    # 'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.facebook',
 
     'polymorphic',
 

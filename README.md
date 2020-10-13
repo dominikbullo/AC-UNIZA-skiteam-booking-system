@@ -33,7 +33,7 @@ docker-compose up --build
 If all works well, you should be able to create an admin account with:
 
 ```
-docker-compose run backend python manage.py createsuperuser
+docker-compose run --rm backend python manage.py createsuperuser
 ```
 
 End with an example of getting some data out of the system or using it for a little demo
@@ -55,7 +55,7 @@ docker-compose run backend python manage.py test
 Explain what these tests test and why
 
 ```
-docker-compose run backend flake8 --exit-zero  --statistics
+docker-compose run --rm backend flake8 --exit-zero  --statistics
 ```
 
 ## Deploy app
