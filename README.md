@@ -47,7 +47,7 @@ Explain how to run the automated tests for this system
 Explain what these tests test and why
 
 ```
-docker-compose run backend python manage.py test
+docker-compose run --rm backend python manage.py test
 ```
 
 ### And coding style tests
