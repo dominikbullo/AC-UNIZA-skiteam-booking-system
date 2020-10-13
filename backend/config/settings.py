@@ -120,6 +120,10 @@ ADMINS = [
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#managers
 MANAGERS = ADMINS
 
+# Should be before database config
+# RES: https://stackoverflow.com/a/31661756
+SITE_ID = 1
+
 # DATABASE CONFIGURATION
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
@@ -251,8 +255,6 @@ AUTHENTICATION_BACKENDS = (
 # Custom user app defaults
 # Select the correct user model
 AUTH_USER_MODEL = 'users.User'
-
-SITE_ID = 1
 
 # DJANGO REST FRAMEWORK
 # ------------------------------------------------------------------------------
