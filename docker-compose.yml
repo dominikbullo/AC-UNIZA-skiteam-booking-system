@@ -34,6 +34,13 @@ services:
       - "5432:5432"
     env_file: .env.dev
 
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+    logging:
+      driver: none
+
   # pgadmin for managing postgis db (runs at localhost:5050)
   # To add the above postgres server to pgadmin, use hostname as defined by docker: 'postgres'
   pgadmin:
