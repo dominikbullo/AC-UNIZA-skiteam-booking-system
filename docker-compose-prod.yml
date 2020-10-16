@@ -18,7 +18,7 @@ services:
     env_file: .env
 
   postgres:
-    image: postgres:10-alpine
+    image: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
     env_file: .env
@@ -27,15 +27,14 @@ services:
     build:
       context: .
       dockerfile: nginx/Dockerfile
-    ports:
-      - "80:80"
+    expose:
+      - 80
     depends_on:
       - backend
     volumes:
       - ./backend/media/:/media/
       - ./backend/staticfiles/:/staticfiles/
       - ./nginx/prod.conf:/etc/nginx/nginx.conf:ro
-
 
 
   backups:
@@ -46,3 +45,9 @@ services:
     volumes:
       - /tmp/backups/:/backups/
 
+  watchtower:
+    image: v2tec/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /root/.docker/config.json:/config.json
+    command: --interval 30

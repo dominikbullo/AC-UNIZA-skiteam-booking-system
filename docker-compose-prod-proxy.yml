@@ -16,13 +16,9 @@ services:
     entrypoint: /entrypoint.sh
     restart: on-failure
     env_file: .env
-    environment:
-      VIRTUAL_HOST: ${DOMAIN}
-      LETSENCRYPT_HOST: ${DOMAIN}
-      LETSENCRYPT_EMAIL: ${ADMIN_EMAIL}
 
   postgres:
-    image: postgres:10-alpine
+    image: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
     env_file: .env
@@ -44,6 +40,7 @@ services:
       LETSENCRYPT_HOST: ${DOMAIN}
       LETSENCRYPT_EMAIL: ${ADMIN_EMAIL}
 
+
   backups:
     image: prodrigestivill/postgres-backup-local
     restart: on-failure
@@ -52,8 +49,10 @@ services:
     volumes:
       - /tmp/backups/:/backups/
 
-networks:
-  default:
-    external:
-      name: nginx-proxy
+  watchtower:
+    image: v2tec/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /root/.docker/config.json:/config.json
+    command: --interval 30
 
