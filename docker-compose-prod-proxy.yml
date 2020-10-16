@@ -56,3 +56,7 @@ services:
       - /root/.docker/config.json:/config.json
     command: --interval 30
 
+networks:
+  proxy:
+    external:
+      name: nginx-proxy
