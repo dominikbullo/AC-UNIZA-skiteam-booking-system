@@ -1,4 +1,4 @@
-name: Sport Club Management System via Docker
+name: SportAgenda
 
 on: [push]
 
@@ -9,8 +9,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Build the services in the docker-compose.yml file
     - uses: actions/checkout@v2
+
+    - name: Build the services in the docker-compose.yml file
       run: docker-compose up --build
 
     - name: Flake8
