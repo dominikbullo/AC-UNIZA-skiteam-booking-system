@@ -3,16 +3,42 @@ name: Test Publish Docker image
 on: [push]
 
 jobs:
-  push_to_registry:
-    name: Push Docker image to Docker Hub
+  build:
+
     runs-on: ubuntu-latest
+
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+
+      - name: Build prod version
+        run: docker-compose -f docker-compose-prod.yml up --build -d
+
+      - name: Show docker cointainers
+        run: docker ps
+
       - name: Push to Docker Hub
         uses: docker/build-push-action@v1
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: ${{ secrets.DOCKER_REPO }}
-          tag_with_ref: true
+        tag_with_ref: true
+
+
+
+#  dockerize:
+##  deploy:
+#    push_to_registry:
+#      name: Push Docker image to Docker Hub
+#      runs-on: ubuntu-latest
+#      steps:
+#        - name: Check out the repo
+#          uses: actions/checkout@v2
+#        - name: Push to Docker Hub
+#          uses: docker/build-push-action@v1
+#          with:
+#            username: ${{ secrets.DOCKER_USERNAME }}
+#            password: ${{ secrets.DOCKER_PASSWORD }}
+#            repository: ${{ secrets.DOCKER_REPO }}
+#            tag_with_ref: true
