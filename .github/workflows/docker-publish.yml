@@ -46,8 +46,8 @@ jobs:
           echo VERSION=$VERSION
           VERSION=working2
 
-          docker tag $IMAGE_NAME_backend:$VERSION $IMAGE_ID:$VERSION
-          docker tag $IMAGE_NAME_nginx:$VERSION $IMAGE_ID:$VERSION
+          docker tag $IMAGE_NAME_backend $IMAGE_ID:$VERSION
+          docker tag $IMAGE_NAME_nginx $IMAGE_ID:$VERSION
 
           docker push $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
