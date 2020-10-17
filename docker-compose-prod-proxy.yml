@@ -33,9 +33,3 @@ services:
       - ./backend/media/:/media/
       - ./backend/staticfiles/:/staticfiles/
       - ./nginx/prod.conf:/etc/nginx/nginx.conf:ro
-
-
-networks:
-  default:
-    external:
-      name: nginx-proxy
