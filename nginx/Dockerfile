@@ -8,7 +8,7 @@ RUN npm install @vue/cli -g
 RUN npm install
 
 COPY frontend /app/
-COPY .env /app/.env
+#COPY .env /app/.env #TODO for testing CI/CD disabled
 RUN npm run build
 
 # Stage 2 - nginx & frontend dist
