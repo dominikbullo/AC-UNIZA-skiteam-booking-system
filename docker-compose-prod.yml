@@ -1,4 +1,4 @@
-version: '3.3'
+version: "3"
 
 volumes:
     postgres_data: {}
@@ -27,8 +27,8 @@ services:
     build:
       context: .
       dockerfile: nginx/Dockerfile
-    expose:
-      - 80
+    ports:
+      - "8000:80"
     depends_on:
       - backend
     volumes:
@@ -44,10 +44,3 @@ services:
       - postgres
     volumes:
       - /tmp/backups/:/backups/
-
-  watchtower:
-    image: v2tec/watchtower
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /root/.docker/config.json:/config.json
-    command: --interval 30
