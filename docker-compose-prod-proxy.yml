@@ -15,13 +15,11 @@ services:
     command: /gunicorn.sh
     entrypoint: /entrypoint.sh
     restart: on-failure
-    env_file: .env
 
   postgres:
     image: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    env_file: .env
 
   nginx:
     build:
