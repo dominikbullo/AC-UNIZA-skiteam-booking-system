@@ -1,5 +1,8 @@
 version: '3.3'
 
+volumes:
+    postgres_data: {}
+
 services:
   backend:
     build:
@@ -11,6 +14,11 @@ services:
     command: /gunicorn.sh
     entrypoint: /entrypoint.sh
     restart: on-failure
+
+  postgres:
+    image: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
   nginx:
     build:
