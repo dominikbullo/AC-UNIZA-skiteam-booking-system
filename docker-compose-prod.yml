@@ -3,19 +3,17 @@ version: "3"
 volumes:
     postgres_data: {}
 
-
 services:
   backend:
-    build:
-      context: ./backend
+    image: ghcr.io/dominikbullo/sportagenda_backend:working
     depends_on:
       - postgres
     volumes:
       - ./backend:/app
     command: /gunicorn.sh
     entrypoint: /entrypoint.sh
-    restart: on-failure
     env_file: .env
+    restart: on-failure
 
   postgres:
     image: postgres
@@ -24,17 +22,20 @@ services:
     env_file: .env
 
   nginx:
-    build:
-      context: .
-      dockerfile: nginx/Dockerfile
-    ports:
-      - "8000:80"
+    image: ghcr.io/dominikbullo/sportagenda_nginx:working
+    expose:
+      - 80
     depends_on:
       - backend
     volumes:
       - ./backend/media/:/media/
       - ./backend/staticfiles/:/staticfiles/
       - ./nginx/prod.conf:/etc/nginx/nginx.conf:ro
+    environment:
+      VIRTUAL_HOST: ${DOMAIN}
+      LETSENCRYPT_HOST: ${DOMAIN}
+      LETSENCRYPT_EMAIL: ${ADMIN_EMAIL}
+
 
 
   backups:
@@ -44,3 +45,9 @@ services:
       - postgres
     volumes:
       - /tmp/backups/:/backups/
+
+
+networks:
+  default:
+    external:
+      name: nginx-proxy
