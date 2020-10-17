@@ -281,4 +281,3 @@ typings/
 /backend/media/
 /backend/staticfiles/
 /.old/
-!/server_setup/Hosting multiple SSL-enabled sites with Docker and Nginx - Serverwise.url
