@@ -5,7 +5,7 @@ volumes:
 
 services:
   backend:
-    image: ghcr.io/dominikbullo/sportagenda_backend:working
+    image: ghcr.io/dominikbullo/sportagenda_backend
     depends_on:
       - postgres
     volumes:
@@ -22,7 +22,7 @@ services:
     env_file: .env
 
   nginx:
-    image: ghcr.io/dominikbullo/sportagenda_nginx:working
+    image: ghcr.io/dominikbullo/sportagenda_nginx
     expose:
       - 80
     depends_on:
