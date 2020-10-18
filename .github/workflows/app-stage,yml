@@ -1,0 +1,112 @@
+name: Deploy to stage
+
+on:
+  push:
+    # Publish `master` as Docker `latest` image.
+    branches:
+      - deploy
+
+    # Publish `v1.2.3` tags as releases.
+    tags:
+      - v*
+
+env:
+  # TODO: Change variable to your image's name.
+  # Check if version is correct - pushing only master and dev branches or tags
+  IMAGE_NAME: sportagenda
+
+jobs:
+  # Run tests.
+  # See also https://docs.docker.com/docker-hub/builds/automated-testing/
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: Build prod version
+        run: docker-compose -f docker-compose-ci.yml build
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: Flake8
+        run: docker-compose run --rm backend flake8 --exit-zero  --statistics
+
+      - name: Test
+        run: docker-compose run --rm backend python manage.py test
+
+  # Push image to GitHub Packages.
+  # See also https://docs.docker.com/docker-hub/builds/
+  push_to_registry:
+    # Ensure test job passes before pushing image.
+    needs: [ build, test ]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    name: Push Docker image to GitHub Packages
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: Show docker images
+        run: docker images
+
+      - name: Log into GitHub Container Registry
+        # TODO: Create a PAT with `read:packages` and `write:packages` scopes and save it as an Actions secret `CR_PAT`
+        run: echo "${{ secrets.CR_PAT }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Push latest image to GitHub Container Registry
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
+
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          echo VERSION=$VERSION
+
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          echo VERSION=$VERSION
+
+          # Use Docker `develop` tag as "latest" version for staging
+          [ "$VERSION" == "develop" ] && VERSION=develop
+
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+
+          docker tag $IMAGE_NAME_backend $IMAGE_ID:$VERSION
+          docker tag $IMAGE_NAME_nginx $IMAGE_ID:$VERSION
+
+          docker push $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
+
+  deploy:
+    # Ensure test job passes before pushing image.
+    needs: push_to_registry
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    # Deploy beta for ski team
+    # !Using force pull image to override changes on server
+    name: Deploy to VPS
+    steps:
+      - name: ls -a via ssh
+        uses: garygrossgarten/github-action-ssh@release
+        with:
+          command: |
+            cd ${{ secrets.PROJECT_DIR }}
+            git reset --hard HEAD
+            git pull origin develop
+            docker-compose -f docker-compose-prod.yml up -d --build --force-recreate --no-deps
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.HOST_USERNAME }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          privateKey: ${{ secrets.PRIVATE_KEY}}
