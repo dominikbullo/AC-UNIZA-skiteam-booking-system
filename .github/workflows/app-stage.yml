@@ -14,6 +14,8 @@ env:
   # TODO: Change variable to your image's name.
   # Check if version is correct - pushing only master and dev branches or tags
   IMAGE_NAME: sportagenda
+  BACKEND: _backend
+  NGINX: _nginx
 
 jobs:
   # Run tests.
@@ -74,11 +76,18 @@ jobs:
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
 
-          docker tag $IMAGE_NAME_backend $IMAGE_ID:$VERSION
-          docker tag $IMAGE_NAME_nginx $IMAGE_ID:$VERSION
+          echo BACKEND=$BACKEND
+          echo NGINX=$NGINX
 
-          docker push $IMAGE_ID:$VERSION
-          docker push $IMAGE_ID:$VERSION
+          echo docker tag $IMAGE_NAME$BACKEND $IMAGE_ID$BACKEND:$VERSION
+          echo docker tag $IMAGE_NAME$NGINX $IMAGE_ID$NGINX:$VERSION
+
+          # TODO: better solution
+          docker tag $IMAGE_NAME$BACKEND $IMAGE_ID$BACKEND:$VERSION
+          docker tag $IMAGE_NAME$NGINX $IMAGE_ID$NGINX:$VERSION
+
+          docker push $IMAGE_ID$BACKEND:$VERSION
+          docker push $IMAGE_ID$NGINX:$VERSION
 
   deploy:
     # Ensure test job passes before pushing image.
