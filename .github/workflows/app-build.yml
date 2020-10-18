@@ -20,8 +20,8 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v2
 
-      - name: Build & up prod version
-        run: docker-compose -f docker-compose-ci.yml up --build
+      - name: Build via docker compose
+        run: docker-compose build
 
       - name: Show docker processes
         run: docker ps
@@ -37,5 +37,5 @@ jobs:
       - name: Flake8
         run: docker-compose run --rm backend flake8 --exit-zero  --statistics
 
-      - name: Test
+      - name: Unit tests
         run: docker-compose run --rm backend python manage.py test

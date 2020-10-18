@@ -16,12 +16,6 @@ services:
     restart: on-failure
     env_file: .env.dev
 
-
-  postgres:
-    image: postgres
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
   nginx:
     build:
       context: .
