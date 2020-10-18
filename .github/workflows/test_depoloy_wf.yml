@@ -1,0 +1,27 @@
+name: Deploy services
+
+on: [push]
+#on:
+#  workflow_run:
+#    workflows:
+#      - Publish packages
+#    types:
+#      - completed
+#    branches:
+#      - main
+
+jobs:
+    name: Deploy to VPS
+    steps:
+      - name: Executing remote command to rebuild images
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.HOST_USERNAME }}
+          PORT: ${{ secrets.PORT }}
+          KEY: ${{ secrets.PRIVATE_KEY }}
+          script: |
+            cd ${{ secrets.PROJECT_DIR }}
+            git reset --hard HEAD
+            git pull origin develop
+            docker-compose -f docker-compose-prod.yml up -d --build --force-recreate --no-deps
