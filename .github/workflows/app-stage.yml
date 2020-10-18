@@ -88,7 +88,6 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.HOST_USERNAME }}
           key: ${{ secrets.PRIVATE_KEY }}
-          passphrase: ${{ secrets.PASSPHRASE }}
           script: |
             cd ${{ secrets.PROJECT_DIR }}
             git reset --hard HEAD
