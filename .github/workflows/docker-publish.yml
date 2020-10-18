@@ -1,6 +1,14 @@
-name: Publish Docker image
+name: Build, test & push image new image on master
 
-on: [push]
+on:
+  push:
+    # Publish `master` as Docker `latest` image.
+    branches:
+      - master
+
+    # Publish `v1.2.3` tags as releases.
+    tags:
+      - v*
 
 env:
   # TODO: Change variable to your image's name.
@@ -8,9 +16,12 @@ env:
   IMAGE_NAME: sportagenda
 
 jobs:
-  push_to_registry:
-    name: Push Docker image to GitHub Packages
+  # Run tests.
+  # See also https://docs.docker.com/docker-hub/builds/automated-testing/
+  build:
+
     runs-on: ubuntu-latest
+
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
@@ -18,14 +29,50 @@ jobs:
       - name: Build prod version
         run: docker-compose -f docker-compose-ci.yml build
 
-      - name: Show docker cointainers
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: Flake8
+        run: docker-compose run --rm backend flake8 --exit-zero  --statistics
+
+      - name: Test
+        run: docker-compose run --rm backend python manage.py test
+
+#      - name: Run tests
+#        run: |
+#          if [ -f docker-compose.test.yml ]; then
+#            docker-compose --file docker-compose.test.yml build
+#            docker-compose --file docker-compose.test.yml run sut
+#          else
+#            docker build . --file Dockerfile
+#          fi
+
+  # Push image to GitHub Packages.
+  # See also https://docs.docker.com/docker-hub/builds/
+  push_to_registry:
+    # Ensure test job passes before pushing image.
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    name: Push Docker image to GitHub Packages
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: Show docker images
         run: docker images
 
       - name: Log into GitHub Container Registry
       # TODO: Create a PAT with `read:packages` and `write:packages` scopes and save it as an Actions secret `CR_PAT`
         run: echo "${{ secrets.CR_PAT }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Push image to GitHub Container Registry
+      - name: Push latest image to GitHub Container Registry
         run: |
           IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
 
@@ -40,11 +87,9 @@ jobs:
 
           # Use Docker `latest` tag convention
           [ "$VERSION" == "master" ] && VERSION=latest
-          [ "$VERSION" == "develop" ] && VERSION=develop
 
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
-          VERSION=working2
 
           docker tag $IMAGE_NAME_backend $IMAGE_ID:$VERSION
           docker tag $IMAGE_NAME_nginx $IMAGE_ID:$VERSION
@@ -52,3 +97,13 @@ jobs:
           docker push $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
 
+  deploy:
+    # Ensure test job passes before pushing image.
+    needs: push_to_registry
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    name: Deploy to VPS
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2

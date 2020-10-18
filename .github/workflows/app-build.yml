@@ -1,0 +1,44 @@
+name: Build & test
+
+on:
+  push:
+    # Publish `master` as Docker `latest` image.
+    branches:
+      - !master
+
+    # Publish `v1.2.3` tags as releases.
+    tags:
+      - !v*
+
+  # Run tests for any PRs.
+  pull_request:
+
+jobs:
+  # Run tests.
+  # See also https://docs.docker.com/docker-hub/builds/automated-testing/
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: Build & up prod version
+        run: docker-compose -f docker-compose-ci.yml up --build
+
+      - name: Show docker processes
+        run: docker ps
+
+      - name: Show docker images
+        run: docker images
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Flake8
+        run: docker-compose run --rm backend flake8 --exit-zero  --statistics
+
+      - name: Test
+        run: docker-compose run --rm backend python manage.py test
