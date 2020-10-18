@@ -1,7 +1,5 @@
-version: '3.3'
-
-volumes:
-    postgres_data: {}
+# Used for creating image, pushing to registry which will be deployed
+version: "3"
 
 services:
   backend:

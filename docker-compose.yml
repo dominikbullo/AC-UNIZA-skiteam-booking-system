@@ -1,4 +1,5 @@
-version: "3.3"
+# Used for developing purposes on local dev machine
+version: "3"
 
 volumes:
   sportagenda_data: {}
