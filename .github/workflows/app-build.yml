@@ -2,22 +2,18 @@ name: Build & test
 
 on:
   push:
-    # Publish `master` as Docker `latest` image.
-    branches:
-      - !master
+    branches-ignore:
+      - master
 
     # Publish `v1.2.3` tags as releases.
-    tags:
+    tags-ignore:
       - !v*
 
-  # Run tests for any PRs.
   pull_request:
 
 jobs:
-  # Run tests.
-  # See also https://docs.docker.com/docker-hub/builds/automated-testing/
-  build:
 
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -32,6 +28,7 @@ jobs:
 
       - name: Show docker images
         run: docker images
+
   test:
     needs: build
     runs-on: ubuntu-latest
