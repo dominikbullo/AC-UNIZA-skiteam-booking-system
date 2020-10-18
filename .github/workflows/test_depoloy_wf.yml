@@ -1,6 +1,6 @@
 name: Deploy services
 
-on: [push]
+on: []
 #on:
 #  workflow_run:
 #    workflows:
