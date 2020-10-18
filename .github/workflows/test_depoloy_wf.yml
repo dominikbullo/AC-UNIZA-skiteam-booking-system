@@ -20,8 +20,9 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
-          USERNAME: ${{ secrets.HOST_USERNAME }}
-          KEY: ${{ secrets.PRIVATE_KEY }}
+          username: ${{ secrets.HOST_USERNAME }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
           script: |
             cd ${{ secrets.PROJECT_DIR }}
             git reset --hard HEAD
