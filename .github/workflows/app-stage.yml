@@ -18,7 +18,7 @@ env:
   NGINX: _nginx
 
 jobs:
-  build:
+  push_to_registry:
     runs-on: ubuntu-latest
 
     name: Build, test & push to registry
