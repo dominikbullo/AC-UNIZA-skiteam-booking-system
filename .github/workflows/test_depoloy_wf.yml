@@ -11,6 +11,7 @@ on: [push]
 #      - main
 
 jobs:
+  deploy:
     name: Deploy to VPS
     steps:
       - name: Executing remote command to rebuild images
@@ -18,7 +19,6 @@ jobs:
         with:
           host: ${{ secrets.HOST }}
           USERNAME: ${{ secrets.HOST_USERNAME }}
-          PORT: ${{ secrets.PORT }}
           KEY: ${{ secrets.PRIVATE_KEY }}
           script: |
             cd ${{ secrets.PROJECT_DIR }}
