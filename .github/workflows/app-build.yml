@@ -12,24 +12,25 @@ on:
 
 jobs:
 
-  build_and_test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
 
-      - name: Build via docker compose
-        run: docker-compose build
+      - name: Build prod version
+        run: docker-compose -f docker-compose-ci.yml build
 
-      - name: Show docker processes
-        run: docker ps
+  test:
+    runs-on: ubuntu-latest
 
-      - name: Show docker images
-        run: docker images
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
 
       - name: Flake8
         run: docker-compose run --rm backend flake8 --exit-zero  --statistics
 
-      - name: Unit tests
+      - name: Test
         run: docker-compose run --rm backend python manage.py test
