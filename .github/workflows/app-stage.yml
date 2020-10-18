@@ -35,7 +35,7 @@ jobs:
   # See also https://docs.docker.com/docker-hub/builds/
   push_to_registry:
     # Ensure test job passes before pushing image.
-    needs: [ build, test ]
+    needs: test
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
 
