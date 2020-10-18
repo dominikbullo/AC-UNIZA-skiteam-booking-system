@@ -1,4 +1,4 @@
-name: Build, test & push image new image on master
+name: Deploy to prod
 
 on:
   push:
