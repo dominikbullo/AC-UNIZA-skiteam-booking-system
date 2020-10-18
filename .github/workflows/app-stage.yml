@@ -18,36 +18,22 @@ env:
   NGINX: _nginx
 
 jobs:
-  # Run tests.
-  # See also https://docs.docker.com/docker-hub/builds/automated-testing/
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check out the repo
-        uses: actions/checkout@v2
-
-      - name: Flake8
-        run: docker-compose run --rm backend flake8 --exit-zero  --statistics
-
-      - name: Test
-        run: docker-compose run --rm backend python manage.py test
-
-  # Push image to GitHub Packages.
-  # See also https://docs.docker.com/docker-hub/builds/
   push_to_registry:
-    # Ensure test job passes before pushing image.
-    needs: test
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
 
-    name: Push images to GitHub Packages
+    name: Build, test & push to registry
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
 
       - name: Build prod version
         run: docker-compose -f docker-compose-ci.yml build
+
+      - name: Flake8
+        run: docker-compose run --rm backend flake8 --exit-zero  --statistics
+
+      - name: Unit tests
+        run: docker-compose run --rm backend python manage.py test
 
       - name: Show docker images
         run: docker images
@@ -82,7 +68,6 @@ jobs:
           echo docker tag $IMAGE_NAME$BACKEND $IMAGE_ID$BACKEND:$VERSION
           echo docker tag $IMAGE_NAME$NGINX $IMAGE_ID$NGINX:$VERSION
 
-          # TODO: better solution
           docker tag $IMAGE_NAME$BACKEND $IMAGE_ID$BACKEND:$VERSION
           docker tag $IMAGE_NAME$NGINX $IMAGE_ID$NGINX:$VERSION
 
@@ -90,24 +75,22 @@ jobs:
           docker push $IMAGE_ID$NGINX:$VERSION
 
   deploy:
-    # Ensure test job passes before pushing image.
-    needs: push_to_registry
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push'
-
     # Deploy beta for ski team
     # !Using force pull image to override changes on server
     name: Deploy to VPS
+    needs: push_to_registry
+    runs-on: ubuntu-latest
+
     steps:
-      - name: ls -a via ssh
-        uses: garygrossgarten/github-action-ssh@release
+      - name: Executing remote command to rebuild images
+        uses: appleboy/ssh-action@master
         with:
-          command: |
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.HOST_USERNAME }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          script: |
             cd ${{ secrets.PROJECT_DIR }}
             git reset --hard HEAD
             git pull origin develop
             docker-compose -f docker-compose-prod.yml up -d --build --force-recreate --no-deps
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.HOST_USERNAME }}
-          passphrase: ${{ secrets.PASSPHRASE }}
-          privateKey: ${{ secrets.PRIVATE_KEY}}
