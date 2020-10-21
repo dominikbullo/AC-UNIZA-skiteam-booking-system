@@ -1,64 +1,34 @@
-# Used for developing purposes on local dev machine
 version: "3"
-
-volumes:
-  sportagenda_data: {}
 
 services:
   backend:
-    build:
-      context: ./backend
-    depends_on:
-      - postgres
-    volumes:
-      - ./backend:/app
-    command: /start.sh
+    image: ghcr.io/dominikbullo/sportagenda_backend:${IMAGE_VERSION}
+    command: /gunicorn.sh
     entrypoint: /entrypoint.sh
     restart: on-failure
-    env_file: .env.dev
+    depends_on:
+      - postgres
+    env_file: .env
 
-  frontend:
-    image: node:lts-alpine
-    command: npm run serve
-    volumes:
-      - ./.env:/app/.env:ro
-      - ./frontend:/app
-    working_dir: /app
-    restart: on-failure
-
-  # postgres database
   postgres:
     image: postgres
-    volumes:
-      - sportagenda_data:/var/lib/postgresql/data/ # persist data even if container shuts down
-    ports:
-      - "5432:5432"
-    env_file: .env.dev
-
-  mailhog:
-    image: mailhog/mailhog
-    ports:
-      - "8025:8025"
-    logging:
-      driver: none
-
-  # pgadmin for managing postgis db (runs at localhost:5050)
-  # To add the above postgres server to pgadmin, use hostname as defined by docker: 'postgres'
-  pgadmin:
-    image: dpage/pgadmin4
-    ports:
-      - "5050:5050"
-    env_file: .env.dev
+    env_file: .env
 
   nginx:
-    image: nginx:alpine
-    ports:
-      - "8000:80"
+    image: ghcr.io/dominikbullo/sportagenda_nginx:${IMAGE_VERSION}
     depends_on:
       - backend
+    expose:
+      - 80
     volumes:
-      - ./backend/media/:/media/
-      - ./backend/staticfiles/:/staticfiles/
-      - ./nginx/dev.conf:/etc/nginx/nginx.conf:ro
-    logging:
-      driver: none
+      - ./nginx/prod.conf:/etc/nginx/nginx.conf:ro
+    environment:
+      VIRTUAL_HOST: ${DOMAIN}
+      LETSENCRYPT_HOST: ${DOMAIN}
+      LETSENCRYPT_EMAIL: ${ADMIN_EMAIL}
+
+
+networks:
+  default:
+    external:
+      name: nginx-proxy
