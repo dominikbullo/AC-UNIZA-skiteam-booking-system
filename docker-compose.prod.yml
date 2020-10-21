@@ -1,0 +1,35 @@
+# Used on to download images and deploy site
+version: "3"
+
+volumes:
+    postgres_data_stage: {}
+
+services:
+  backend:
+    command: /gunicorn.sh
+    entrypoint: /entrypoint.sh
+    volumes:
+      - ./backend:/app
+    restart: on-failure
+    env_file: .env
+
+  postgres:
+    volumes:
+      - postgres_data_stage:/var/lib/postgresql/data # persist data even if container shuts down
+    env_file: .env
+
+
+  nginx:
+    volumes:
+      - ./backend/media/:/media/
+      - ./backend/staticfiles/:/staticfiles/
+      - ./nginx/prod.conf:/etc/nginx/nginx.conf:ro
+    environment:
+      VIRTUAL_HOST: ${DOMAIN}
+      LETSENCRYPT_HOST: ${DOMAIN}
+      LETSENCRYPT_EMAIL: ${ADMIN_EMAIL}
+
+networks:
+  default:
+    external:
+      name: nginx-proxy

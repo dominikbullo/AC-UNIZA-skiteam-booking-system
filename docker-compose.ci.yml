@@ -1,0 +1,15 @@
+# Used for creating image, pushing to registry which will be deployed
+version: "3"
+
+services:
+  backend:
+    build:
+      context: ./backend
+
+  postgres:
+    env_file: .env.dev
+
+  nginx:
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
