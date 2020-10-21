@@ -47,7 +47,7 @@
                 <!-- ABOUT CARD -->
                 <vx-card title="About" class="mt-base">
                     <!-- ACTION SLOT -->
-                    <template slot="actions">
+                    <template v-slot:actions>
                         <feather-icon icon="MoreHorizontalIcon"></feather-icon>
                     </template>
 
@@ -223,7 +223,7 @@
 
                 <vx-card title="Suggestions" class="mt-base">
                     <!-- ACTION SLOT -->
-                    <template slot="actions">
+                    <template v-slot:actions>
                         <feather-icon icon="MoreHorizontalIcon"></feather-icon>
                     </template>
 
@@ -240,7 +240,7 @@
                             </div>
                         </li>
                     </ul>
-                    <template slot="footer">
+                    <template v-slot:footer>
                     <vs-button icon-pack="feather" icon="icon-plus" class="w-full">Load More</vs-button>
                     </template>
                 </vx-card>

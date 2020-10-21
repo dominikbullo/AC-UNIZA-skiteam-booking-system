@@ -42,7 +42,7 @@
             </div>
         </div>
 
-        <template slot="codeContainer">
+        <template v-slot:codeContainer>
 &lt;!-- Full width column --&gt;
 &lt;div class=&quot;flex mb-4&quot;&gt;
   &lt;div class=&quot;flex-1 bg-grid-color h-12&quot;&gt;&lt;/div&gt;

@@ -5,14 +5,14 @@
 
         <vs-table :data="users">
 
-            <template slot="thead">
+            <template v-slot:thead>
                 <vs-th>Email</vs-th>
                 <vs-th>Name</vs-th>
                 <vs-th>Website</vs-th>
                 <vs-th>Nro</vs-th>
             </template>
 
-            <template slot-scope="{data}">
+            <template v-slot="{data}">
                 <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
                     <vs-td :data="tr.email">
                         {{tr.email}}
@@ -27,7 +27,7 @@
                         {{tr.id}}
                     </vs-td>
 
-                    <template class="expand-user" slot="expand">
+                    <template class="expand-user" v-slot:expand>
                         <div class="con-expand-users w-full">
                             <div class="con-btns-user flex items-center justify-between">
                                 <div class="con-userx flex items-center justify-start">
@@ -50,7 +50,7 @@
             </template>
         </vs-table>
 
-        <template slot="codeContainer">
+        <template v-slot:codeContainer>
 &lt;template&gt;
   &lt;vs-table :data=&quot;users&quot;&gt;
 

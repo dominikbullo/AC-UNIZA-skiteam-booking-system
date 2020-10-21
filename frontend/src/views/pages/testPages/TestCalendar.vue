@@ -14,7 +14,7 @@
           :plugins="calendarPlugins"
           :weekends="calendarWeekends"
           @dateClick="handleDateClick"
-          class='demo-app-calendar'
+          class="demo-app-calendar"
           default-view="timeGridWeek"
           editable="true"
           max-time="21:00:00"
@@ -57,7 +57,7 @@ export default {
   },
   methods: {
     handleDateClick (arg) {
-      if (confirm('Would you like to add an event to ' + arg.dateStr + ' ?')) {
+      if (confirm(`Would you like to add an event to ${  arg.dateStr  } ?`)) {
         this.calendarEvents.push({ // add new event data
           title: 'New Event',
           start: arg.date,

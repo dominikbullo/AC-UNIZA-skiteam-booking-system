@@ -1,6 +1,6 @@
 <template>
   <div id="page-user-stats-view">
-    <vs-alert color="danger" title="User Not Found" :active.sync="user_not_found">
+    <vs-alert color="danger" title="User Not Found" v-model:active="user_not_found">
       <span>Statistic for this user not found. </span>
     </vs-alert>
 

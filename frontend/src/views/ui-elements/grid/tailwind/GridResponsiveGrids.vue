@@ -21,7 +21,7 @@
             </div>
         </div>
 
-        <template slot="codeContainer">
+        <template v-slot:codeContainer>
 &lt;div class=&quot;flex flex-wrap&quot;&gt;
   &lt;div class=&quot;w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6 mb-4 bg-grid-color&quot;&gt;&lt;/div&gt;
   &lt;div class=&quot;w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6 mb-4 bg-grid-color-secondary&quot;&gt;&lt;/div&gt;
@@ -35,7 +35,7 @@
 </template>
 
 <script>
-export default{
+export default {
   data () {
     return {
       colClass: 'w-full'

@@ -56,15 +56,15 @@ export default {
     //   }
     // }
     const {
-            first_name,
-            last_name,
-            user_role,
-            birth_date,
-            email,
-            gender,
-            password,
-            confirmPassword
-          } = payload.userDetails
+      first_name,
+      last_name,
+      user_role,
+      birth_date,
+      email,
+      gender,
+      password,
+      confirmPassword
+    } = payload.userDetails
 
     console.log('payload', payload.userDetails)
 
@@ -90,8 +90,8 @@ export default {
         // TODO send error messages
         // How to display serializers validation error in vue
         // https://github.com/axios/axios/issues/960
-        reject(error)
-      })
+          reject(error)
+        })
     })
   }
 }

@@ -5,14 +5,14 @@
 
         <vs-table :data="users">
 
-            <template slot="thead">
+            <template v-slot:thead>
                 <vs-th>Email</vs-th>
                 <vs-th>Name</vs-th>
                 <vs-th>Website</vs-th>
                 <vs-th>Nro</vs-th>
             </template>
 
-            <template slot-scope="{data}">
+            <template v-slot="{data}">
                 <vs-tr :state="indextr == 2 || indextr == 5 ? 'success':indextr == 6 ? 'danger':null" :key="indextr" v-for="(tr, indextr) in data">
                     <vs-td :data="data[indextr].email">
                         {{data[indextr].email}}
@@ -30,7 +30,7 @@
             </template>
         </vs-table>
 
-        <template slot="codeContainer">
+        <template v-slot:codeContainer>
 &lt;template&gt;
   &lt;vs-table :data=&quot;users&quot;&gt;
 

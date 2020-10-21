@@ -5,7 +5,7 @@
           <vx-input-group class="mb-base mr-3">
             <vs-input v-model="mailTo" placeholder="Email" />
 
-            <template slot="append">
+            <template v-slot:append>
               <div class="append-text btn-addon">
                 <vs-button type="border" @click="mailTo = ''" class="whitespace-no-wrap">Send Invoice</vs-button>
               </div>
@@ -79,7 +79,7 @@
                 <!-- INVOICE TASKS TABLE -->
                 <vs-table hoverFlat :data="invoiceData.tasks">
                     <!-- HEADER -->
-                    <template slot="thead">
+                    <template v-slot:thead>
                         <vs-th class="pointer-events-none">TASK DESCRIPTION</vs-th>
                         <vs-th class="pointer-events-none">HOURS</vs-th>
                         <vs-th class="pointer-events-none">RATE</vs-th>
@@ -87,7 +87,7 @@
                     </template>
 
                     <!-- DATA -->
-                    <template slot-scope="{data}">
+                    <template v-slot="{data}">
                         <vs-tr v-for="(tr, index) in data" :key="index">
                             <vs-td :data="data[index].task">{{ data[index].task }}</vs-td>
                             <vs-td :data="data[index].hours">{{ data[index].hours }}</vs-td>

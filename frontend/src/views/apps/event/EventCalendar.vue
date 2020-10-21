@@ -32,7 +32,7 @@
 
       <!-- Add child to EVENT -->
       <vs-prompt
-        :active.sync="childAddToEventPrompt.active"
+        v-model:active="childAddToEventPrompt.active"
         :is-valid="validForm"
         @accept="changeUserChildrenOnEvent"
         :accept-text="$t('Save')"
@@ -126,7 +126,7 @@
 
       <!-- ADD EVENT -->
       <vs-prompt
-        :active.sync="addEventPrompt.active"
+        v-model:active="addEventPrompt.active"
         :is-valid="true"
         @accept="addEvent"
         accept-text="Add event"

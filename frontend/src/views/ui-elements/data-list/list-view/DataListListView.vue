@@ -82,7 +82,7 @@
         </vs-dropdown>
       </div>
 
-      <template slot="thead">
+      <template v-slot:thead>
         <vs-th sort-key="name">Name</vs-th>
         <vs-th sort-key="category">Category</vs-th>
         <vs-th sort-key="popularity">Popularity</vs-th>
@@ -91,7 +91,7 @@
         <vs-th>Action</vs-th>
       </template>
 
-        <template slot-scope="{data}">
+        <template v-slot="{data}">
           <tbody>
             <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
 

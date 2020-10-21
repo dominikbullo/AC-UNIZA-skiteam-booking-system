@@ -23,6 +23,7 @@
     "ag-grid-vue": "^24.1.0",
     "apexcharts": "^3.22.0",
     "axios": "^0.20.0",
+    "babel-eslint": "^10.1.0",
     "chart.js": "^2.9.4",
     "core-js": "3.6.5",
     "echarts": "^4.9.0",
@@ -38,7 +39,7 @@
     "register-service-worker": "^1.7.1",
     "swiper": "^6.3.4",
     "vee-validate": "^3.4.2",
-    "vue": "^2.6.12",
+    "vue": "^3.0.0-beta.1",
     "vue-acl": "4.1.10",
     "vue-apexcharts": "^1.6.0",
     "vue-awesome-swiper": "^4.1.1",
@@ -74,7 +75,7 @@
     "vuejs-datepicker": "^1.6.2",
     "vuepress": "1.7.1",
     "vuesax": "3.12.2",
-    "vuex": "^3.5.1",
+    "vuex": "^4.0.0-alpha.1",
     "xlsx": "^0.16.8"
   },
   "devDependencies": {
@@ -83,12 +84,14 @@
     "@vue/cli-plugin-eslint": "^4.5.8",
     "@vue/cli-plugin-pwa": "^4.5.8",
     "@vue/cli-service": "^4.5.8",
+    "@vue/compiler-sfc": "^3.0.0-beta.1",
     "axios-mock-adapter": "^1.18.2",
+    "eslint-plugin-vue": "^7.0.0-alpha.0",
     "node-sass": "^4.14.1",
     "purgecss": "^3.0.0",
     "sass-loader": "^10.0.3",
     "script-loader": "0.7.2",
     "tailwindcss": "^1.9.5",
-    "vue-template-compiler": "^2.6.12"
+    "vue-cli-plugin-vue-next": "~0.1.4"
   }
 }

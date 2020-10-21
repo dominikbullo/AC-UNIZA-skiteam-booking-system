@@ -5,7 +5,7 @@
             <chartjs-component-doughnut-chart :height="250" :data="data" :options="options"></chartjs-component-doughnut-chart>
         </div>
 
-        <template slot="codeContainer">
+        <template v-slot:codeContainer>
 &lt;script&gt;
 import { Doughnut } from 'vue-chartjs'
 

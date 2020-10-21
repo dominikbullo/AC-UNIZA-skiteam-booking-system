@@ -25,7 +25,7 @@ import VueApexCharts from 'vue-apexcharts'
 import chartConfigs from './chartConfigs.js'
 import _color from '@/assets/utils/color.js'
 
-export default{
+export default {
   props: {
     icon: {
       type: String,

@@ -5,7 +5,7 @@
 ========================================================================================== */
 
 
-import Vue from 'vue'
+import Vue, { createApp, h } from 'vue'
 import App from './App.vue'
 import './registerServiceWorker'
 
@@ -120,17 +120,8 @@ Vue.use(VueRaven, {
 })
 
 
-// Vue select css
-// Note: In latest version you have to add it separately
-// import 'vue-select/dist/vue-select.css';
-
-Vue.config.productionTip = false
-
-
-new Vue({
-  router,
-  store,
+createApp({
   i18n,
   acl,
-  render: h => h(App)
-}).$mount('#app')
+  render: () => h(App)
+}).use(router).use(store).mount('#app')

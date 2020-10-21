@@ -20,7 +20,7 @@
             </GmapMap>
         </div>
 
-        <template slot="codeContainer">
+        <template v-slot:codeContainer>
 &lt;template&gt;
   &lt;GmapMap
     :center=&quot;center&quot;

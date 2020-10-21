@@ -2,7 +2,7 @@ import axios from '../../../axios'
 import store from '../../../../store/store.js'
 
 // Token Refresh
-let isAlreadyFetchingAccessToken = false
+const isAlreadyFetchingAccessToken = false
 let subscribers = []
 
 function onAccessTokenFetched (access_token) {

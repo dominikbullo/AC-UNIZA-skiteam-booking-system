@@ -5,26 +5,26 @@
 
         <vs-table :data="users">
 
-            <template slot="thead">
+            <template v-slot:thead>
                 <vs-th>Email</vs-th>
                 <vs-th>Name</vs-th>
                 <vs-th>Nro1</vs-th>
                 <vs-th>Nro2</vs-th>
             </template>
 
-            <template slot-scope="{data}">
+            <template v-slot="{data}">
                 <vs-tr :key="indextr" v-for="(tr, indextr) in data">
 
                     <vs-td :data="tr.email">
                         {{tr.email}}
-                        <template slot="edit">
+                        <template v-slot:edit>
                             <vs-input v-model="tr.email" class="inputx" placeholder="Email" />
                         </template>
                     </vs-td>
 
                     <vs-td :data="tr.username">
                         {{tr.username}}
-                        <template slot="edit">
+                        <template v-slot:edit>
                             <vs-select label="Users" v-model="tr.username">
                                 <vs-select-item :key="index" :value="item.name" :text="item.name" v-for="(item,index) in users" />
                             </vs-select>
@@ -33,14 +33,14 @@
 
                     <vs-td :data="tr.id">
                         {{tr.id}}
-                        <template slot="edit">
+                        <template v-slot:edit>
                             <vs-input-number v-model="tr.id" />
                         </template>
                     </vs-td>
 
                     <vs-td :data="tr.id">
                         {{tr.id}}
-                        <template slot="edit">
+                        <template v-slot:edit>
                             <vs-slider :max="20" v-model="tr.id" />
                         </template>
                     </vs-td>
@@ -49,7 +49,7 @@
             </template>
         </vs-table>
 
-        <template slot="codeContainer">
+        <template v-slot:codeContainer>
 &lt;template&gt;
   &lt;vs-table :data=&quot;users&quot;&gt;
 

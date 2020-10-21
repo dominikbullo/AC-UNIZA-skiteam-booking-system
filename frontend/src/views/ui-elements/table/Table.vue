@@ -27,7 +27,7 @@ import TableFilterSorter from './TableFilterSorter.vue'
 import TableMiscellaneous from './TableMiscellaneous.vue'
 import TableSsr from './TableSSR.vue'
 
-export default{
+export default {
   components: {
     TableDefault,
     TableStriped,

@@ -30,42 +30,42 @@ const actions = {
       .catch(e => { console.log(e) })
   },
   getUser (context, userId) {
-    return axios.get('/api/users/' + userId)
+    return axios.get(`/api/users/${  userId}`)
       .then(response => { context.commit('setUser', response.data) })
       .catch(e => { console.log(e) })
   },
   createUser (context, payload) {
-    var avatar = payload.avatar
+    const avatar = payload.avatar
     delete payload.avatar
 
     return axios.post('/api/users/', payload)
       .then(response => {
         // Image upload
         if (typeof avatar === 'object') {
-          let data = new FormData()
+          const data = new FormData()
           data.append('avatar', avatar)
-          return axios.patch('/api/users/' + response.data.id, data)
+          return axios.patch(`/api/users/${  response.data.id}`, data)
         }
       })
       .catch(e => { console.log(e) })
   },
   editUser (context, payload) {
-    var avatar = payload.avatar
+    const avatar = payload.avatar
     delete payload.avatar
 
-    return axios.patch('/api/users/' + payload.id, payload)
+    return axios.patch(`/api/users/${  payload.id}`, payload)
       .then(response => {
         // Image upload
         if (typeof avatar === 'object') {
-          let data = new FormData()
+          const data = new FormData()
           data.append('avatar', avatar)
-          return axios.patch('/api/users/' + payload.id, data)
+          return axios.patch(`/api/users/${  payload.id}`, data)
         }
       })
       .catch(e => { console.log(e) })
   },
   deleteUser (context, userId) {
-    return axios.delete('/api/users/' + userId)
+    return axios.delete(`/api/users/${  userId}`)
       .then(response => {})
       .catch(e => { console.log(e) })
   },

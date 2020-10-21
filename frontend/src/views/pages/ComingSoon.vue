@@ -12,7 +12,7 @@
         <div class="count-down text-center">
           <countdown :time="new Date('03/31/2020 00:00:00').getTime() - new Date().getTime()">
 
-            <template slot-scope="props">
+            <template v-slot="props">
 
               <div class="single-counter">
                 <span class="timer">{{ props.days }}</span>

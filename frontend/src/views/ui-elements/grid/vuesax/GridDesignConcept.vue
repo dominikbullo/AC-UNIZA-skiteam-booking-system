@@ -36,7 +36,7 @@
             </vs-row>
         </div>
 
-        <template slot="codeContainer">
+        <template v-slot:codeContainer>
 &lt;vs-row&gt;
   &lt;vs-col vs-type=&quot;flex&quot; vs-justify=&quot;center&quot; vs-align=&quot;center&quot; vs-w=&quot;12&quot;&gt;
     100%

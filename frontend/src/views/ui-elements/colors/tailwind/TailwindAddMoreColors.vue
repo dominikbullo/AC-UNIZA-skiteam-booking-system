@@ -14,7 +14,7 @@ colors: {
 }
         </prism>
 
-        <template slot="codeContainer">
+        <template v-slot:codeContainer>
 
         </template>
 
@@ -27,7 +27,7 @@ colors: {
 <script>
 import Prism from 'vue-prism-component'
 
-export default{
+export default {
   components: {
     Prism
   }
