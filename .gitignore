@@ -281,3 +281,4 @@ typings/
 /backend/media/
 /backend/staticfiles/
 /.old/
+docker-compose.override.yml
