@@ -45,21 +45,21 @@
             <div class="vx-col flex-1" id="event-info-col-1">
               <table>
                 <tr>
-                  <td class="font-bold">{{$t('Start date')}}</td>
+                  <td class="font-bold">{{ $t('Start date') }}</td>
                   <td>{{ editedEvent.start | date }}</td>
                 </tr>
                 <tr>
-                  <td class="font-bold">{{$t('Event type')}}</td>
+                  <td class="font-bold">{{ $t('Event type') }}</td>
                   <td>{{ $t(editedEvent.title) }}</td>
                 </tr>
                 <tr>
-                  <td class="font-bold">{{$t('Location')}}</td>
+                  <td class="font-bold">{{ $t('Location') }}</td>
                   <!-- TODO: Location with slope maybe? -->
                   <td>{{ editedEvent.location.displayName }}</td>
                 </tr>
                 <tr>
-                  <td class="font-bold">{{$t('Category')}}</td>
-                  <td>{{ displayObject(editedEvent.category).toString()}}</td>
+                  <td class="font-bold">{{ $t('Category') }}</td>
+                  <td>{{ displayObject(editedEvent.category).toString() }}</td>
                 </tr>
               </table>
             </div>
@@ -69,11 +69,11 @@
             <div class="vx-col flex-1" id="event-info-col-2">
               <table>
                 <tr>
-                  <td class="font-bold">{{$t('Start')}}</td>
+                  <td class="font-bold">{{ $t('Start') }}</td>
                   <td>{{ editedEvent.start | time(true) }}</td>
                 </tr>
                 <tr v-if="SKI_EVENTS.includes(editedEvent.type)">
-                  <td class="font-bold">{{$t('Skis')}}</td>
+                  <td class="font-bold">{{ $t('Skis') }}</td>
                   <td>{{ editedEvent.skis_type }}</td>
                 </tr>
               </table>
@@ -81,7 +81,7 @@
             <div class="vx-col flex-1" id="event-info-col-3">
               <table>
                 <tr>
-                  <td class="font-bold">{{$t('End')}}</td>
+                  <td class="font-bold">{{ $t('End') }}</td>
                   <td>{{ editedEvent.end | time(true) }}</td>
                 </tr>
               </table>
@@ -90,7 +90,7 @@
           <!-- TODO: if exist -->
           <div v-if="editedEvent.additional_info" class="vx-row">
             <div class="vx-col">
-              <p class="font-bold mr-5">{{$t('Additional Information')}}:</p>
+              <p class="font-bold mr-5">{{ $t('Additional Information') }}:</p>
               <p>{{ editedEvent.additional_info }}</p>
             </div>
           </div>
@@ -109,13 +109,13 @@
           </div>
 
           <ul class="centerx">
-            <vs-divider>{{$t('Your children')}}</vs-divider>
+            <vs-divider>{{ $t('Your children') }}</vs-divider>
             <li class="mb-2" :key="child.username" v-for="child in userChildren">
               <vs-checkbox
                 :vs-value="child.username"
                 color="success"
                 v-model="childAddToEventPrompt.selected">
-                {{ child.first_name}} {{ child.last_name}}
+                {{ child.first_name }} {{ child.last_name }}
               </vs-checkbox>
             </li>
           </ul>
@@ -136,7 +136,7 @@
         <div class="vx-row">
           <div class="vx-col sm:w-1/2 w-full">
             <div class="mt-4">
-              <label class="text-sm">{{$t('Event type')}}</label>
+              <label class="text-sm">{{ $t('Event type') }}</label>
               <!-- RES: https://vue-select.org/ -->
               <v-select :clearable="false"
                         label="displayName"
@@ -148,7 +148,7 @@
 
           <div class="vx-col sm:w-1/2 w-full">
             <div class="mt-4">
-              <label class="text-sm">{{$t('Location')}}</label>
+              <label class="text-sm">{{ $t('Location') }}</label>
               <v-select :clearable="false"
                         label="displayName"
                         :reduce="item => item.id"
@@ -161,7 +161,7 @@
         <div class="vx-row">
           <div class="vx-col w-1/2">
             <div v-if="SKI_EVENTS.includes(addEventPrompt.type.selected)" class="mt-4">
-              <label class="text-sm">{{$t('Skis')}}</label>
+              <label class="text-sm">{{ $t('Skis') }}</label>
               <v-select :clearable="false"
                         label="displayName"
                         :reduce="item => item.key"
@@ -173,7 +173,7 @@
           <div class="vx-col w-1/2">
             <div v-if="addEventPrompt.type.selected === 'SKI_RACE'" class="vx-col w-full">
               <div class="mt-4">
-                <label class="text-sm">{{$t('Organizer')}}</label>
+                <label class="text-sm">{{ $t('Organizer') }}</label>
                 <v-select :clearable="false"
                           label="displayName"
                           :reduce="category => category.id"
@@ -185,7 +185,7 @@
         </div>
 
         <div class="mt-4">
-          <label class="text-sm">{{$t('Category')}}</label>
+          <label class="text-sm">{{ $t('Category') }}</label>
           <v-select multiple
                     :closeOnSelect="false"
                     label="displayName"
@@ -196,7 +196,7 @@
         <div class="vx-row">
           <div class="vx-col sm:w-1/2 w-full">
             <div class="mt-4">
-              <label class="text-sm">{{$t('Start')}}</label>
+              <label class="text-sm">{{ $t('Start') }}</label>
               <flat-pickr v-model="newEvent.start"
                           :config="datePickerConfig"
                           class="w-full"
@@ -207,7 +207,7 @@
           </div>
           <div class="vx-col sm:w-1/2 w-full">
             <div class="mt-4">
-              <label class="text-sm">{{$t('End')}}</label>
+              <label class="text-sm">{{ $t('End') }}</label>
               <flat-pickr v-model="newEvent.end"
                           :config="datePickerConfig"
                           class="w-full"
@@ -592,94 +592,94 @@ export default {
 </script>
 
 <style lang='scss'>
-  // you must include each plugins' css
-  // paths prefixed with ~ signify node_modules
-  @import '~@fullcalendar/core/main.css';
-  @import '~@fullcalendar/daygrid/main.css';
-  @import '~@fullcalendar/timegrid/main.css';
+// you must include each plugins' css
+// paths prefixed with ~ signify node_modules
+//@import '~@fullcalendar/core/main.css';
+@import '~@fullcalendar/daygrid/main.css';
+@import '~@fullcalendar/timegrid/main.css';
 
-  #event-calendar-app {
-    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
-    font-size: 14px;
-  }
+#event-calendar-app {
+  font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+  font-size: 14px;
+}
 
-  .calendar-view {
-    margin: 0 auto;
-    max-height: calc(var(--vh, 1vh) * 100 - 16.2rem);
-  }
+.calendar-view {
+  margin: 0 auto;
+  max-height: calc(var(--vh, 1vh) * 100 - 16.2rem);
+}
 
-  .fc-unthemed td.fc-today {
-    background: #0C112E;
-  }
+.fc-unthemed td.fc-today {
+  background: #0C112E;
+}
 
-  .fc-list-heading td {
-    background: #00b0d3;
-    color: white;
-  }
+.fc-list-heading td {
+  background: #00b0d3;
+  color: white;
+}
 
-  #event-info-table {
-    table {
+#event-info-table {
+  table {
+    td {
+      padding-right: .5rem;
+      padding-bottom: .8rem;
+      word-break: break-all;
+    }
+
+    &:not(.permissions-table) {
       td {
-        padding-right: .5rem;
-        padding-bottom: .8rem;
-        word-break: break-all;
-      }
-
-      &:not(.permissions-table) {
-        td {
-          @media screen and (max-width: 370px) {
-            display: block;
-          }
+        @media screen and (max-width: 370px) {
+          display: block;
         }
       }
     }
   }
+}
 
-  .my-column {
-    table {
-      td {
-        padding-right: .5rem;
-        padding-bottom: .8rem;
-        word-break: break-all;
-      }
+.my-column {
+  table {
+    td {
+      padding-right: .5rem;
+      padding-bottom: .8rem;
+      word-break: break-all;
     }
   }
+}
 
-  @media screen and (min-width: 1201px) and (max-width: 1211px),
-  only screen and (min-width: 636px) and (max-width: 991px) {
-    #event-info-col-1 {
-      width: calc(100% - 5rem) !important;
-    }
+@media screen and (min-width: 1201px) and (max-width: 1211px),
+only screen and (min-width: 636px) and (max-width: 991px) {
+  #event-info-col-1 {
+    width: calc(100% - 5rem) !important;
+  }
+}
+
+
+.my-prompt {
+  .vs-dialog {
+    max-width: 650px;
   }
 
-
-  .my-prompt {
+  /*@media only screen and (max-width: 768px) {*/
+  /*  .vs-dialog {*/
+  /*    max-width: 400px;*/
+  /*  }*/
+  /*}*/
+  @media only screen and (max-width: 570px) {
     .vs-dialog {
-      max-width: 650px;
-    }
-
-    /*@media only screen and (max-width: 768px) {*/
-    /*  .vs-dialog {*/
-    /*    max-width: 400px;*/
-    /*  }*/
-    /*}*/
-    @media only screen and (max-width: 570px) {
-      .vs-dialog {
-        max-width: 90%;
-      }
+      max-width: 90%;
     }
   }
+}
 
-  .flatpickr-input[type="hidden"] + input {
-    color: #c2c6dc;
-  }
+.flatpickr-input[type="hidden"] + input {
+  color: #c2c6dc;
+}
 
-  .fc-left .fc-button-group {
-    display: block;
-  }
+.fc-left .fc-button-group {
+  display: block;
+}
 
-  .fc-toolbar h2 {
-    font-size: 1.5em;
-  }
+.fc-toolbar h2 {
+  font-size: 1.5em;
+}
 
 </style>

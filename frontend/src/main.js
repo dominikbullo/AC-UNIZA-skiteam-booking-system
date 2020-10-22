@@ -5,7 +5,7 @@
 ========================================================================================== */
 
 
-import Vue, { createApp, h } from 'vue'
+import Vue from 'vue'
 import App from './App.vue'
 import './registerServiceWorker'
 
@@ -70,7 +70,7 @@ import VueTour from 'vue-tour'
 
 
 // VeeValidate
-import VeeValidate from 'vee-validate'
+import * as VeeValidate from 'vee-validate'
 
 
 // Google Maps
@@ -120,8 +120,17 @@ Vue.use(VueRaven, {
 })
 
 
-createApp({
+// Vue select css
+// Note: In latest version you have to add it separately
+// import 'vue-select/dist/vue-select.css';
+
+Vue.config.productionTip = false
+
+
+new Vue({
+  router,
+  store,
   i18n,
   acl,
-  render: () => h(App)
-}).use(router).use(store).mount('#app')
+  render: h => h(App)
+}).$mount('#app')
