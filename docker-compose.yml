@@ -3,6 +3,8 @@ version: "3"
 services:
   backend:
     image: ghcr.io/dominikbullo/sportagenda_backend:${IMAGE_VERSION}
+    command: /gunicorn.sh
+    entrypoint: /entrypoint.sh
     depends_on:
       - postgres
     env_file: .env
@@ -15,10 +17,11 @@ services:
     image: ghcr.io/dominikbullo/sportagenda_nginx:${IMAGE_VERSION}
     depends_on:
       - backend
+    expose:
+      - 80
     env_file: .env
     environment:
       VIRTUAL_HOST: ${DOMAIN}
-      VIRTUAL_PORT: 8000
       LETSENCRYPT_HOST: ${DOMAIN}
       LETSENCRYPT_EMAIL: ${ADMIN_EMAIL}
 

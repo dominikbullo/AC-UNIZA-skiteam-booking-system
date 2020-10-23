@@ -8,31 +8,16 @@ services:
   backend:
     volumes:
       - ./backend:/app
-    command: /gunicorn.sh
-    entrypoint: /entrypoint.sh
     restart: on-failure
-    env_file: .env
 
   postgres:
     volumes:
       - postgres_data_stage:/var/lib/postgresql/data # persist data even if container shuts down
-    env_file: .env
 
   nginx:
+    ports:
+      - "80:80"
     volumes:
       - ./backend/media/:/media/
       - ./backend/staticfiles/:/staticfiles/
       - ./nginx/prod.conf:/etc/nginx/nginx.conf:ro
-    ports:
-      - "8000:80"
-    env_file: .env
-    environment:
-      VIRTUAL_HOST: ${DOMAIN}
-      VIRTUAL_PORT: 8000
-      LETSENCRYPT_HOST: ${DOMAIN}
-      LETSENCRYPT_EMAIL: ${ADMIN_EMAIL}
-
-networks:
-  default:
-    external:
-      name: nginx-proxy
