@@ -5,7 +5,6 @@ services:
   backend:
     build:
       context: ./backend
-    command: /start.sh
     env_file: .env.dev
 
   postgres:
