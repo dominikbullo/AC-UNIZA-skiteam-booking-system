@@ -3,7 +3,6 @@ version: "3"
 services:
   backend:
     image: ghcr.io/dominikbullo/sportagenda_backend:${IMAGE_VERSION}
-    command: /gunicorn.sh
     entrypoint: /entrypoint.sh
     depends_on:
       - postgres
