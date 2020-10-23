@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build prod version
-        run: docker-compose build
+        run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml build
 
       - name: Flake8
         run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml  run --rm backend flake8 --exit-zero  --statistics
