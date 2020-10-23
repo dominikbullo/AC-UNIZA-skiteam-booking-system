@@ -16,9 +16,5 @@ services:
       - backend
     expose:
       - 80
-    environment:
-      VIRTUAL_HOST: ${DOMAIN}
-      LETSENCRYPT_HOST: ${DOMAIN}
-      LETSENCRYPT_EMAIL: ${ADMIN_EMAIL}
 
 
