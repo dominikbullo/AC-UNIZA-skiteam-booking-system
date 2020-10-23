@@ -6,6 +6,7 @@ services:
     build:
       context: ./backend
     command: /start.sh
+    env_file: .env.dev
 
   postgres:
     env_file: .env.dev
@@ -14,3 +15,4 @@ services:
     build:
       context: .
       dockerfile: nginx/Dockerfile
+    env_file: .env.dev
