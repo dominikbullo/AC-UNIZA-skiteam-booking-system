@@ -17,6 +17,7 @@ services:
     env_file: .env
 
   postgres:
+    image: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data # persist data even if container shuts down
     env_file: .env
