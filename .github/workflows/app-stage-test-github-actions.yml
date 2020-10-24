@@ -41,7 +41,7 @@ jobs:
         run: docker images
 
       - name: Build prod version
-        run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml build
+        run: sudo docker-compose -f docker-compose.yml -f docker-compose.ci.yml build
 
       - name: Flake8
         run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml  run --rm backend flake8 --exit-zero  --statistics
