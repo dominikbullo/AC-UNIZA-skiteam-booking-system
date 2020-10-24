@@ -2,7 +2,7 @@ name: Deploy to staging server
 
 on:
   workflow_run:
-    workflows: ["Build & Publish to GitHub Container Registry"]
+    workflows: ["Build & Publish to registry"]
     branches: [develop]
     types:
       - completed
