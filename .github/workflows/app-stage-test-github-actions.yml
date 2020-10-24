@@ -1,0 +1,50 @@
+name: Deploy to stage
+
+on:
+  push:
+    branches:
+      - develop
+
+    # Publish `v1.2.3` tags as releases.
+    tags:
+      - v*
+
+env:
+  # TODO: Change variable to your image's name.
+  # Check if version is correct - pushing only master and dev branches or tags
+  IMAGE_NAME: sportagenda
+  BACKEND: _backend
+  NGINX: _nginx
+
+jobs:
+  push_to_registry:
+    runs-on: ubuntu-latest
+
+    name: Build, test & push to registry
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: Check Docker-compose version
+        uses: docker-compose --version
+
+      - name: Check Docker-compose version
+        uses: docker info
+
+      - name: Check Docker
+        uses: sudo service docker status
+
+      - name: Add Docker user
+        uses: sudo usermod -aG docker ${USER}
+
+      - name: Show docker images
+        run: docker images
+
+      - name: Build prod version
+        run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml build
+
+      - name: Flake8
+        run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml  run --rm backend flake8 --exit-zero  --statistics
+
+      - name: Unit tests
+        run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml run --rm backend python manage.py test
