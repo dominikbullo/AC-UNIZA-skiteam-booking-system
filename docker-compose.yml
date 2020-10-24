@@ -1,19 +1,56 @@
 version: "3"
 
+volumes:
+  sportagenda_data: {}
+
 services:
   backend:
-    image: ghcr.io/dominikbullo/sportagenda_backend:${IMAGE_VERSION}
+    build:
+      context: ./backend
     depends_on:
       - postgres
+    volumes:
+      - ./backend:/app
+    command: /start.sh
+    entrypoint: /entrypoint.sh
+    restart: on-failure
+    env_file: .env.dev
 
+  frontend:
+    image: node:lts-alpine
+    command: npm run serve
+    volumes:
+      - ./.env:/app/.env:ro
+      - ./frontend:/app
+    working_dir: /app
+    restart: on-failure
+
+  # postgres database
   postgres:
     image: postgres
+    volumes:
+      - sportagenda_data:/var/lib/postgresql/data/ # persist data even if container shuts down
+    ports:
+      - "5432:5432"
+    env_file: .env.dev
+
+  # pgadmin for managing postgis db (runs at localhost:5050)
+  # To add the above postgres server to pgadmin, use hostname as defined by docker: 'postgres'
+  pgadmin:
+    image: dpage/pgadmin4
+    env_file: .env.dev
+    ports:
+      - "5050:5050"
 
   nginx:
-    image: ghcr.io/dominikbullo/sportagenda_nginx:${IMAGE_VERSION}
+    image: nginx:alpine
+    ports:
+      - "8000:80"
     depends_on:
       - backend
-    expose:
-      - 80
-
-
+    volumes:
+      - ./backend/media/:/media/
+      - ./backend/staticfiles/:/staticfiles/
+      - ./nginx/dev.conf:/etc/nginx/nginx.conf:ro
+    logging:
+      driver: none

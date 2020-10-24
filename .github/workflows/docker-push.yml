@@ -1,0 +1,117 @@
+name: Publish GitHub Container Registry
+
+on:
+  push:
+    # Publish `master` as Docker `latest` image.
+    # Publish `develop` as Docker `develop` image.
+    branches:
+      - master
+      - develop
+
+    # Publish `v1.2.3` tags as releases.
+    tags:
+      - v*
+
+  # Run tests for any PRs.
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: Run tests
+        run: |
+          if [ -f docker-compose.test.yml ]; then
+            docker-compose -f docker-compose.test.yml build
+            docker-compose -f docker-compose.test.yml run --rm backend flake8 --exit-zero  --statistics
+            docker-compose -f docker-compose.test.yml run --rm backend python manage.py test
+          else
+            docker build ./backend --file backend/Dockerfile
+            docker build . --file nginx/Dockerfile
+          fi
+
+  build_backend:
+    name: build backend
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    env:
+      IMAGE_NAME: sportagenda_backend
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: Build backend image
+        run: docker build ./backend --file backend/Dockerfile --tag $IMAGE_NAME
+
+      - name: Push backend image to GitHub Container Registry
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
+
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          echo VERSION=$VERSION
+
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          echo VERSION=$VERSION
+
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "master" ] && VERSION=latest
+
+          echo IMAGE_NAME=$IMAGE_NAME
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+          echo docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+
+          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
+
+  build_nginx:
+    name: Build frontend
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    env:
+      IMAGE_NAME: sportagenda_nginx
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: build nginx image
+        run: docker build . --file nginx/Dockerfile --tag $IMAGE_NAME
+
+      - name: Push nginx image to GitHub Container Registry
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
+
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          echo VERSION=$VERSION
+
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          echo VERSION=$VERSION
+
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "master" ] && VERSION=latest
+
+          echo IMAGE_NAME=$IMAGE_NAME
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+          echo docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+
+          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION

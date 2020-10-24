@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - postgres
+    command: /start.sh
+    entrypoint: /entrypoint.sh
+    restart: on-failure
+    env_file: .env.dev
+
+  # postgres database
+  postgres:
+    image: postgres
+    env_file: .env.dev
+

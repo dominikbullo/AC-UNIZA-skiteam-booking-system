@@ -6,6 +6,9 @@ volumes:
 
 services:
   backend:
+    image: "ghcr.io/dominikbullo/sportagenda_backend:${IMAGE_VERSION}"
+    depends_on:
+      - postgres
     volumes:
       - ./backend:/app
     entrypoint: /entrypoint.sh
@@ -19,6 +22,9 @@ services:
     env_file: .env
 
   nginx:
+    image: "ghcr.io/dominikbullo/sportagenda_nginx:${IMAGE_VERSION}"
+    depends_on:
+      - backend
     volumes:
       - ./backend/media/:/media/
       - ./backend/staticfiles/:/staticfiles/
