@@ -1,0 +1,26 @@
+name: Deploy to staging server
+
+on:
+  workflow_run:
+    workflows: ["Build & Publish to GitHub Container Registry"]
+    branches: [develop]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to staging server
+        uses: garygrossgarten/github-action-ssh@release
+        with:
+          command: |
+            cd ${{ secrets.STAGE_PROJECT_DIR }}
+            git reset --hard HEAD
+            git pull origin develop
+            docker-compose -f staging.yml up -d --build --force-recreate --no-deps
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.HOST_USERNAME }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          privateKey: ${{ secrets.PRIVATE_KEY}}

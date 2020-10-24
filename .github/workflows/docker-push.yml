@@ -1,4 +1,4 @@
-name: Publish GitHub Container Registry
+name: Build & Publish to GitHub Container Registry
 
 on:
   push:
@@ -34,8 +34,8 @@ jobs:
             docker build . --file nginx/Dockerfile
           fi
 
-  build_backend:
-    name: build backend
+  push_backend_to_registry:
+    name: build & push backend
     needs: test
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
@@ -78,8 +78,8 @@ jobs:
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
 
-  build_nginx:
-    name: Build frontend
+  push_nginx_to_registry:
+    name: build & push frontend
     needs: test
     runs-on: ubuntu-latest
     if: github.event_name == 'push'

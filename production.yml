@@ -2,11 +2,11 @@
 version: "3"
 
 volumes:
-    postgres_data_stage: {}
+    postgres_data: {}
 
 services:
   backend:
-    image: ghcr.io/dominikbullo/sportagenda_backend:develop
+    image: ghcr.io/dominikbullo/sportagenda_backend:latest
     depends_on:
       - postgres
     volumes:
@@ -18,11 +18,11 @@ services:
 
   postgres:
     volumes:
-      - postgres_data_stage:/var/lib/postgresql/data # persist data even if container shuts down
+      - postgres_data:/var/lib/postgresql/data # persist data even if container shuts down
     env_file: .env
 
   nginx:
-    image: ghcr.io/dominikbullo/sportagenda_nginx:develop
+    image: ghcr.io/dominikbullo/sportagenda_nginx:latest
     depends_on:
       - backend
     volumes:
