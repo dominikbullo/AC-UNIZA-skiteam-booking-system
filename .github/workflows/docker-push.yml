@@ -49,6 +49,9 @@ jobs:
       - name: Build backend image
         run: docker build ./backend --file backend/Dockerfile --tag $IMAGE_NAME
 
+      - name: Log into GitHub Container Registry
+        run: echo "${{ secrets.CR_PAT }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
+
       - name: Push backend image to GitHub Container Registry
         run: |
           IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
@@ -89,6 +92,9 @@ jobs:
 
       - name: build nginx image
         run: docker build . --file nginx/Dockerfile --tag $IMAGE_NAME
+
+      - name: Log into GitHub Container Registry
+        run: echo "${{ secrets.CR_PAT }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Push nginx image to GitHub Container Registry
         run: |
