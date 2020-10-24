@@ -17,10 +17,10 @@ env:
   NGINX: _nginx
 
 jobs:
-  push_to_registry:
+  test:
     runs-on: ubuntu-latest
 
-    name: Build, test & push to registry
+    name: Test Docker
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
@@ -39,6 +39,9 @@ jobs:
 
       - name: Show docker images
         run: docker images
+
+      - name: Build prod version
+        run: docker-compose build
 
       - name: Build prod version
         run: sudo docker-compose -f docker-compose.yml -f docker-compose.ci.yml build
