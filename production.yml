@@ -1,0 +1,41 @@
+# Used on to download images and deploy site
+version: "3"
+
+volumes:
+    postgres_data: {}
+
+services:
+  backend:
+    image: ghcr.io/dominikbullo/sportagenda_backend:latest
+    depends_on:
+      - postgres
+    volumes:
+      - ./backend:/app
+    entrypoint: /entrypoint.sh
+    command: /gunicorn.sh
+    restart: on-failure
+    env_file: .env
+
+  postgres:
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # persist data even if container shuts down
+    env_file: .env
+
+  nginx:
+    image: ghcr.io/dominikbullo/sportagenda_nginx:latest
+    depends_on:
+      - backend
+    volumes:
+      - ./backend/media/:/media/
+      - ./backend/staticfiles/:/staticfiles/
+      - ./nginx/prod.conf:/etc/nginx/nginx.conf:ro
+    env_file: .env
+    environment:
+      VIRTUAL_HOST: ${DOMAIN}
+      LETSENCRYPT_HOST: ${DOMAIN}
+      LETSENCRYPT_EMAIL: ${ADMIN_EMAIL}
+
+networks:
+  default:
+    external:
+      name: nginx-proxy

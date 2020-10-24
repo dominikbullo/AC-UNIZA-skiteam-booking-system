@@ -5,7 +5,7 @@
             <chartjs-component-polar-area-chart :height="250" :data="data" :options="options"></chartjs-component-polar-area-chart>
         </div>
 
-        <template slot="codeContainer">
+        <template v-slot:codeContainer>
 &lt;script&gt;
 import { PolarArea } from 'vue-chartjs'
 

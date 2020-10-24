@@ -5,7 +5,7 @@
             <chartjs-component-scatter-chart :height="300" :data="data" :options="options"></chartjs-component-scatter-chart>
         </div>
 
-        <template slot="codeContainer">
+        <template v-slot:codeContainer>
 &lt;script&gt;
 import { Scatter } from 'vue-chartjs'
 

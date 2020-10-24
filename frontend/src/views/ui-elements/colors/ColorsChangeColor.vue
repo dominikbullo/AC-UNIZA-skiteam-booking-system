@@ -36,7 +36,7 @@ this.$vs.theme({
             </li>
         </ul>
 
-        <template slot="codeContainer">
+        <template v-slot:codeContainer>
 &lt;template&gt;
   &lt;ul class=&quot;demo-alignment text-white&quot;&gt;
     &lt;li class=&quot;colorprimaryx&quot;&gt;

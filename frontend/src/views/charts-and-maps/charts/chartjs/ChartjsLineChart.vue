@@ -5,7 +5,7 @@
             <chartjs-component-line-chart :height="250" :data="data" :options="options"></chartjs-component-line-chart>
         </div>
 
-        <template slot="codeContainer">
+        <template v-slot:codeContainer>
 &lt;script&gt;
 import { Line } from 'vue-chartjs'
 

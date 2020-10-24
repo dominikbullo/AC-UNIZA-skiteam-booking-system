@@ -5,14 +5,14 @@
 
         <vs-table multiple v-model="selected" pagination max-items="3" search :data="users">
 
-            <template slot="thead">
+            <template v-slot:thead>
                 <vs-th sort-key="email">Email</vs-th>
                 <vs-th sort-key="username">Name</vs-th>
                 <vs-th sort-key="website">Website</vs-th>
                 <vs-th sort-key="id">Nro</vs-th>
             </template>
 
-            <template slot-scope="{data}">
+            <template v-slot="{data}">
                 <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
 
                     <vs-td :data="data[indextr].email">
@@ -39,7 +39,7 @@
 {{ selected }}
         </prism>
 
-        <template slot="codeContainer">
+        <template v-slot:codeContainer>
 &lt;template&gt;
   &lt;vs-table multiple v-model=&quot;selected&quot; pagination max-items=&quot;3&quot; search :data=&quot;users&quot;&gt;
 

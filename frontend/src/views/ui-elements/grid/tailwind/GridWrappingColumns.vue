@@ -13,7 +13,7 @@
             </div>
         </div>
 
-        <template slot="codeContainer">
+        <template v-slot:codeContainer>
 &lt;div class=&quot;flex flex-wrap -mb-4&quot;&gt;
   &lt;div class=&quot;w-1/3 mb-4 bg-grid-color-secondary h-12&quot;&gt;&lt;/div&gt;
   &lt;div class=&quot;w-1/3 mb-4 bg-grid-color h-12&quot;&gt;&lt;/div&gt;

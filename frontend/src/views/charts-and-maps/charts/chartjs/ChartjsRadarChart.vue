@@ -5,7 +5,7 @@
             <chartjs-component-radar-chart :height="250" :data="data" :options="options"></chartjs-component-radar-chart>
         </div>
 
-        <template slot="codeContainer">
+        <template v-slot:codeContainer>
 &lt;script&gt;
 import { Radar } from 'vue-chartjs'
 

@@ -17,7 +17,7 @@
             </div>
         </div>
 
-        <template slot="codeContainer">
+        <template v-slot:codeContainer>
 &lt;!-- Narrower side column --&gt;
 &lt;div class=&quot;flex mb-4&quot;&gt;
   &lt;div class=&quot;w-3/4 bg-grid-color h-12&quot;&gt;&lt;/div&gt;

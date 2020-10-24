@@ -1,6 +1,6 @@
 <template>
   <div id="page-family-edit">
-    <vs-alert :active.sync="family_not_found" color="danger" title="User Not Found">
+    <vs-alert v-model:active="family_not_found" color="danger" title="User Not Found">
       <span>Family record with id: {{ $route.params.familyID }} not found. </span>
       <span>
         <span>Check </span><router-link :to="{name:'page-user-list'}"

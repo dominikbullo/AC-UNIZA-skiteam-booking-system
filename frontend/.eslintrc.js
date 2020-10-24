@@ -1,14 +1,14 @@
 module.exports = {
-  root: true,
-  env: {
+  'root': true,
+  'env': {
     node: true,
     browser: true
   },
   'extends': [
-    'plugin:vue/essential',
+    'plugin:vue/vue3-essential',
     'eslint:recommended'
   ],
-  rules: {
+  'rules': {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
 
@@ -25,10 +25,12 @@ module.exports = {
     'no-use-before-define': 'error',
 
     // Stylistic Issues
-    'array-bracket-newline': ['error', {
-      'multiline': true,
-      'minItems': null
-    }],
+    'array-bracket-newline': [
+      'error', {
+        'multiline': true,
+        'minItems': null
+      }
+    ],
     'array-bracket-spacing': 'error',
     'brace-style': ['error', '1tbs', { 'allowSingleLine': true }],
     'block-spacing': 'error',
@@ -43,10 +45,12 @@ module.exports = {
     'multiline-ternary': ['error', 'never'],
     'no-lonely-if': 'error',
     'no-mixed-operators': 'error',
-    'no-multiple-empty-lines': ['error', {
-      'max': 2,
-      'maxEOF': 1
-    }],
+    'no-multiple-empty-lines': [
+      'error', {
+        'max': 2,
+        'maxEOF': 1
+      }
+    ],
     'no-tabs': 'error',
     'no-unneeded-ternary': 'error',
     'no-whitespace-before-property': 'error',
@@ -74,7 +78,7 @@ module.exports = {
     // Vue
     'vue/html-quotes': ['error', 'double']
   },
-  parserOptions: {
+  'parserOptions': {
     parser: 'babel-eslint',
     sourceType: 'module'
   }

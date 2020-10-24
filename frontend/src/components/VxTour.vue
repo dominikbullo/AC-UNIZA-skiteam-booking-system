@@ -1,6 +1,6 @@
 <template>
     <v-tour name="vuexyTour" :steps="steps">
-        <template slot-scope="tour">
+        <template v-slot="tour">
             <transition name="fade">
                 <v-step
                     v-if="tour.currentStep === index"
@@ -74,7 +74,7 @@
 </template>
 
 <script>
-export default{
+export default {
   name: 'vx-tour',
   props: {
     steps: {

@@ -15,7 +15,7 @@
             <li class="bg-transparent text-dark">transparent</li>
         </ul>
 
-        <template slot="codeContainer">
+        <template v-slot:codeContainer>
 
 &lt;ul class=&quot;demo-alignment text-white&quot;&gt;
   &lt;li class=&quot;bg-primary&quot;&gt;primary&lt;/li&gt;

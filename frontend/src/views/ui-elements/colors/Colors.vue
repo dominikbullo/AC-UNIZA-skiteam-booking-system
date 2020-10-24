@@ -17,7 +17,7 @@ import ColorsChangeColor from './ColorsChangeColor.vue'
 import ColorsChangeColorSSR from './ColorsChangeColorSSR.vue'
 import ColorsTailwind from './ColorsTailwind.vue'
 
-export default{
+export default {
   components: {
     ColorsDefault,
     ColorsGradient,

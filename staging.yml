@@ -1,59 +1,41 @@
-version: '3.3'
+# Used on to download images and deploy site
+version: "3"
 
 volumes:
-    postgres_data: {}
-
+    postgres_data_stage: {}
 
 services:
   backend:
-    build:
-      context: ./backend
+    image: ghcr.io/dominikbullo/sportagenda_backend:develop
     depends_on:
       - postgres
     volumes:
       - ./backend:/app
-    command: /gunicorn.sh
     entrypoint: /entrypoint.sh
+    command: /gunicorn.sh
     restart: on-failure
     env_file: .env
-    environment:
-      VIRTUAL_HOST: ${DOMAIN}
-      LETSENCRYPT_HOST: ${DOMAIN}
-      LETSENCRYPT_EMAIL: ${ADMIN_EMAIL}
 
   postgres:
-    image: postgres:10-alpine
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data_stage:/var/lib/postgresql/data # persist data even if container shuts down
     env_file: .env
 
   nginx:
-    build:
-      context: .
-      dockerfile: nginx/Dockerfile
-    expose:
-      - 80
+    image: ghcr.io/dominikbullo/sportagenda_nginx:develop
     depends_on:
       - backend
     volumes:
       - ./backend/media/:/media/
       - ./backend/staticfiles/:/staticfiles/
       - ./nginx/prod.conf:/etc/nginx/nginx.conf:ro
+    env_file: .env
     environment:
       VIRTUAL_HOST: ${DOMAIN}
       LETSENCRYPT_HOST: ${DOMAIN}
       LETSENCRYPT_EMAIL: ${ADMIN_EMAIL}
 
-  backups:
-    image: prodrigestivill/postgres-backup-local
-    restart: on-failure
-    depends_on:
-      - postgres
-    volumes:
-      - /tmp/backups/:/backups/
-
 networks:
   default:
     external:
       name: nginx-proxy
-

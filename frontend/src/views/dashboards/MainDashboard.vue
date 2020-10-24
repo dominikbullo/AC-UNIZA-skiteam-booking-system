@@ -34,7 +34,7 @@
            v-for="(item, key) in stats"
            :key="key">
         <vx-card :title="$t(`${item.name}`)" class="mb-10">
-          <template slot="actions">
+          <template v-slot:actions>
             <feather-icon icon="HelpCircleIcon" svgClasses="w-6 h-6 text-grey"></feather-icon>
           </template>
 

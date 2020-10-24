@@ -6,7 +6,7 @@
       <div class="vx-col w-full lg:w-1/3 mb-base">
         <vx-card title="Sessions By Device">
           <!-- SLOT = ACTION -->
-          <template slot="actions">
+          <template v-slot:actions>
             <change-time-duration-dropdown/>
           </template>
 
@@ -38,7 +38,7 @@
       <div class="vx-col w-full lg:w-1/3 mb-base">
         <vx-card title="Product Orders">
           <!-- SLOT = ACTIONS -->
-          <template slot="actions">
+          <template v-slot:actions>
             <change-time-duration-dropdown/>
           </template>
 
@@ -67,7 +67,7 @@
       <div class="vx-col w-full lg:w-1/3 mb-base">
         <vx-card title="Customers">
           <!-- SLOT = ACTIONS -->
-          <template slot="actions">
+          <template v-slot:actions>
             <change-time-duration-dropdown/>
           </template>
 
@@ -101,7 +101,7 @@
       <div class="vx-col w-full md:w-1/2 lg:w-1/2 xl:w-1/2 mb-base">
         <vx-card title="Sales" subtitle="Last 6 Months">
           <!-- SLOT = ACTION -->
-          <template slot="actions">
+          <template v-slot:actions>
             <feather-icon icon="MoreVerticalIcon" svgClasses="w-6 h-6 text-grey"></feather-icon>
           </template>
           <!-- LABELS -->
@@ -123,7 +123,7 @@
       <div class="vx-col w-full md:w-1/2 lg:w-1/2 xl:w-1/2 mb-base">
         <vx-card title="Support Tracker">
           <!-- CARD ACTION -->
-          <template slot="actions">
+          <template v-slot:actions>
             <change-time-duration-dropdown/>
           </template>
 
@@ -167,7 +167,7 @@
       <div class="vx-col w-full md:w-2/3 mb-base">
         <vx-card title="Revenue">
 
-          <template slot="actions">
+          <template v-slot:actions>
             <feather-icon icon="SettingsIcon" svgClasses="w-6 h-6 text-grey"></feather-icon>
           </template>
 
@@ -198,7 +198,7 @@
       <!-- RADIAL CHART -->
       <div class="vx-col w-full md:w-1/3 mb-base">
         <vx-card title="Goal Overview">
-          <template slot="actions">
+          <template v-slot:actions>
             <feather-icon icon="HelpCircleIcon" svgClasses="w-6 h-6 text-grey"></feather-icon>
           </template>
 
@@ -338,7 +338,7 @@
     <div class="vx-row">
       <div class="vx-col w-full md:w-2/3 lg:w-3/4">
         <vx-card title="Sales" class="mb-base">
-          <template slot="actions">
+          <template v-slot:actions>
             <feather-icon icon="SettingsIcon" svgClasses="w-6 h-6 text-grey"></feather-icon>
           </template>
           <div slot="no-body" class="p-6 pb-0">

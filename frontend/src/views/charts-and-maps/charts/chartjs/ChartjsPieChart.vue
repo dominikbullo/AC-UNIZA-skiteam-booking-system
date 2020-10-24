@@ -5,7 +5,7 @@
             <chartjs-component-pie-chart :height="250" :data="data" :options="options"></chartjs-component-pie-chart>
         </div>
 
-        <template slot="codeContainer">
+        <template v-slot:codeContainer>
 &lt;script&gt;
 import { Pie } from 'vue-chartjs'
 

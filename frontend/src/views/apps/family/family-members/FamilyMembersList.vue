@@ -43,7 +43,7 @@
         </vs-button>
 
         <vs-prompt
-          :active.sync="activePrompt"
+          v-model:active="activePrompt"
           :is-valid="validateForm"
           @accept="addChild"
           accept-text="Add Child"

@@ -9,14 +9,14 @@
 
         <vs-table v-model="selected" @selected="handleSelected" :data="users">
 
-            <template slot="thead">
+            <template v-slot:thead>
                 <vs-th>Email</vs-th>
                 <vs-th>Name</vs-th>
                 <vs-th>Website</vs-th>
                 <vs-th>Nro</vs-th>
             </template>
 
-            <template slot-scope="{data}">
+            <template v-slot="{data}">
                 <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
 
                     <vs-td :data="data[indextr].email">
@@ -45,7 +45,7 @@
 {{ selected }}
         </prism>
 
-        <template slot="codeContainer">
+        <template v-slot:codeContainer>
 &lt;template&gt;
     &lt;vs-table v-model=&quot;selected&quot; @selected=&quot;handleSelected&quot; :data=&quot;users&quot;&gt;
 

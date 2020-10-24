@@ -19,7 +19,7 @@ import GridFlexAlignment from './GridFlexAlignment.vue'
 import GridFlexOrder from './GridFlexOrder.vue'
 import GridResponsiveLayout from './GridResponsiveLayout.vue'
 
-export default{
+export default {
   components: {
     GridOverview,
     GridDesignConcept,

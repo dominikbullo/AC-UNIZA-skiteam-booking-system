@@ -21,7 +21,7 @@
             </div>
         </div>
 
-        <template slot="codeContainer">
+        <template v-slot:codeContainer>
 &lt;div class=&quot;px-2&quot;&gt;
   &lt;div class=&quot;flex -mx-2&quot;&gt;
     &lt;div class=&quot;w-1/3 px-2&quot;&gt;

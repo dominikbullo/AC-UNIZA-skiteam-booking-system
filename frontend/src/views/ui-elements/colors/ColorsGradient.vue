@@ -25,7 +25,7 @@
             </li>
         </ul>
 
-        <template slot="codeContainer">
+        <template v-slot:codeContainer>
 &lt;ul class=&quot;demo-alignment text-white&quot;&gt;
   &lt;li class=&quot;bg-primary-gradient&quot;&gt;primary gradient&lt;/li&gt;
   &lt;li class=&quot;bg-success-gradient&quot;&gt;success gradient&lt;/li&gt;
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-export default{
+export default {
   data () {
     return {
       'defaultColors': [

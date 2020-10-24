@@ -56,16 +56,18 @@ export default {
             enabled: true
           }
         },
-        responsive: [{
-          breakpoint: 480,
-          options: {
-            legend: {
-              position: 'bottom',
-              offsetX: -10,
-              offsetY: 0
+        responsive: [
+          {
+            breakpoint: 480,
+            options: {
+              legend: {
+                position: 'bottom',
+                offsetX: -10,
+                offsetY: 0
+              }
             }
           }
-        }],
+        ],
         plotOptions: {
           bar: {
             horizontal: false
@@ -73,9 +75,7 @@ export default {
         },
         xaxis: {
           type: 'datetime',
-          categories: [
-            '01/01/2011 GMT', '01/02/2011 GMT', '01/03/2011 GMT', '01/04/2011 GMT', '01/05/2011 GMT', '01/06/2011 GMT'
-          ]
+          categories: ['01/01/2011 GMT', '01/02/2011 GMT', '01/03/2011 GMT', '01/04/2011 GMT', '01/05/2011 GMT', '01/06/2011 GMT']
         },
         legend: {
           position: 'right',

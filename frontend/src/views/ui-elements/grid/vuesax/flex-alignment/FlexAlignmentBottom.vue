@@ -9,7 +9,7 @@
             </vs-row>
         </div>
 
-        <template slot="codeContainer">
+        <template v-slot:codeContainer>
 &lt;div class=&quot;grid-layout-container alignment-block&quot;&gt;
   &lt;vs-row
     vs-align=&quot;flex-end&quot;

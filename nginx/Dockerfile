@@ -1,14 +1,13 @@
 # Stage 1 - build frontend app
-FROM node:10-alpine as build-deps
+FROM node:lts-alpine as build-deps
 
 WORKDIR /app/
 
-COPY frontend/package.json /app/
-RUN npm install @vue/cli -g
+COPY frontend/package.json frontend/package-lock.json /app/
 RUN npm install
 
 COPY frontend /app/
-COPY .env /app/.env
+#COPY .env /app/.env #TODO for testing CI/CD disabled
 RUN npm run build
 
 # Stage 2 - nginx & frontend dist

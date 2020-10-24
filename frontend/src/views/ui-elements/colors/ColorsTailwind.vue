@@ -16,7 +16,7 @@ import TailwindTextClasses from './tailwind/TailwindTextClasses.vue'
 import TailwindBackgroundClasses from './tailwind/TailwindBackgroundClasses.vue'
 import TailwindAddMoreColors from './tailwind/TailwindAddMoreColors.vue'
 
-export default{
+export default {
   components: {
     TailwindTextClasses,
     TailwindBackgroundClasses,

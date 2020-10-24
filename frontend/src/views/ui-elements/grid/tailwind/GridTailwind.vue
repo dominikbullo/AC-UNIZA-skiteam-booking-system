@@ -20,7 +20,7 @@ import GridAutoColumnWidth from './GridAutoColumnWidth.vue'
 import GridColumnOrder from './GridColumnOrder.vue'
 import GridSimpleOffset from './GridSimpleOffset.vue'
 
-export default{
+export default {
   components: {
     GridBasicGrid,
     GridResponsiveGrids,

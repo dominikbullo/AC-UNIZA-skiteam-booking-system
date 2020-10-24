@@ -19,7 +19,7 @@
             </vs-row>
         </div>
 
-        <template slot="codeContainer">
+        <template v-slot:codeContainer>
 
 &lt;vs-row vs-w=&quot;12&quot;&gt;
   &lt;vs-col vs-type=&quot;flex&quot; vs-justify=&quot;center&quot; vs-align=&quot;center&quot; vs-lg=&quot;2&quot; vs-sm=&quot;4&quot; vs-xs=&quot;12&quot; &gt;

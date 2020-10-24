@@ -22,7 +22,7 @@
             </div>
         </div>
 
-        <template slot="codeContainer">
+        <template v-slot:codeContainer>
 &lt;template&gt;
   &lt;h6&gt;Panorama at Pembroke College, Cambridge, facing North, looking slightly upwards (10 degrees)&lt;/h6&gt;
   &lt;p class=&quot;mt-3 mb-5&quot;&gt;Point-of-view updates when you pan around&lt;/p&gt;

@@ -20,7 +20,7 @@
             </vs-row>
         </div>
 
-        <template slot="codeContainer">
+        <template v-slot:codeContainer>
 &lt;vs-row vs-type=&quot;flex&quot;&gt;
   &lt;vs-col
     vs-order=&quot;3&quot;

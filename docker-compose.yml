@@ -1,4 +1,4 @@
-version: "3.3"
+version: "3"
 
 volumes:
   sportagenda_data: {}
@@ -38,10 +38,7 @@ services:
   # To add the above postgres server to pgadmin, use hostname as defined by docker: 'postgres'
   pgadmin:
     image: dpage/pgadmin4
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@admin.sk
-      - PGADMIN_DEFAULT_PASSWORD=admin
-      - PGADMIN_LISTEN_PORT=5050
+    env_file: .env.dev
     ports:
       - "5050:5050"
 

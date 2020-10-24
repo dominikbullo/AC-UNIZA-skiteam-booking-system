@@ -14,7 +14,7 @@
           :plugins="calendarPlugins"
           :weekends="calendarWeekends"
           @dateClick="handleDateClick"
-          class='demo-app-calendar'
+          class="demo-app-calendar"
           default-view="timeGridWeek"
           editable="true"
           max-time="21:00:00"
@@ -57,7 +57,7 @@ export default {
   },
   methods: {
     handleDateClick (arg) {
-      if (confirm('Would you like to add an event to ' + arg.dateStr + ' ?')) {
+      if (confirm(`Would you like to add an event to ${arg.dateStr} ?`)) {
         this.calendarEvents.push({ // add new event data
           title: 'New Event',
           start: arg.date,
@@ -75,32 +75,32 @@ export default {
 
 <style lang='scss'>
 
-  // you must include each plugins' css
-  // paths prefixed with ~ signify node_modules
-  @import '../../../../node_modules/@fullcalendar/core/main.css';
-  @import '../../../../node_modules/@fullcalendar/daygrid/main.css';
-  @import '../../../../node_modules/@fullcalendar/timegrid/main.css';
+// you must include each plugins' css
+// paths prefixed with ~ signify node_modules
+@import '../../../../node_modules/@fullcalendar/core/main.css';
+@import '../../../../node_modules/@fullcalendar/daygrid/main.css';
+@import '../../../../node_modules/@fullcalendar/timegrid/main.css';
 
-  .demo-app {
-    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
-    font-size: 14px;
-  }
+.demo-app {
+  font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+  font-size: 14px;
+}
 
-  .demo-app-top {
-    margin: 0 0 3em;
-  }
+.demo-app-top {
+  margin: 0 0 3em;
+}
 
-  .demo-app-calendar {
-    margin: 0 auto;
-    max-width: 900px;
-  }
+.demo-app-calendar {
+  margin: 0 auto;
+  max-width: 900px;
+}
 
-  .fc-unthemed td.fc-today {
-    background: #0C112E;
-  }
+.fc-unthemed td.fc-today {
+  background: #0C112E;
+}
 
-  .fc-list-heading td {
-    background: #00b0d3;
-    color: white;
-  }
+.fc-list-heading td {
+  background: #00b0d3;
+  color: white;
+}
 </style>

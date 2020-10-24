@@ -7,13 +7,13 @@
 
         <vs-table search :data="users">
 
-            <template slot="thead">
+            <template v-slot:thead>
                 <vs-th sort-key="email">Email</vs-th>
                 <vs-th sort-key="username">Name</vs-th>
                 <vs-th sort-key="id">Nro</vs-th>
             </template>
 
-            <template slot-scope="{data}">
+            <template v-slot="{data}">
                 <vs-tr :key="indextr" v-for="(tr, indextr) in data">
 
                     <vs-td :data="data[indextr].email">
@@ -31,7 +31,7 @@
             </template>
         </vs-table>
 
-        <template slot="codeContainer">
+        <template v-slot:codeContainer>
 &lt;vs-table search :data=&quot;users&quot;&gt;
 
   &lt;template slot=&quot;thead&quot;&gt;

@@ -1,7 +1,7 @@
 <template>
   <div id="page-family-view">
 
-    <vs-alert color="danger" title="Family Not Found" :active.sync="family_not_found">
+    <vs-alert color="danger" title="Family Not Found" v-model:active="family_not_found">
       <span>
         <span>Check </span><router-link :to="{name:'app-family-members'}"
                                         class="text-inherit underline">Family List</router-link> or contact administrator

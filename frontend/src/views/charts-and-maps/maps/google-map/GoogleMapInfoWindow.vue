@@ -12,7 +12,7 @@
             </gmap-map>
         </div>
 
-        <template slot="codeContainer">
+        <template v-slot:codeContainer>
 &lt;template&gt;
   &lt;gmap-map :center=&quot;center&quot; :zoom=&quot;15&quot; style=&quot;width: 100%; height: 500px&quot;&gt;
     &lt;gmap-info-window :options=&quot;infoOptions&quot; :position=&quot;infoWindowPos&quot; :opened=&quot;infoWinOpen&quot; @closeclick=&quot;infoWinOpen=false&quot;&gt;

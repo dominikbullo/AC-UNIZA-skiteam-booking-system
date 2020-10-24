@@ -27,7 +27,7 @@
             </li>
         </ul>
 
-        <template slot="codeContainer">
+        <template v-slot:codeContainer>
 Vue.use(Vuesax, {
   theme: {
     colors: {

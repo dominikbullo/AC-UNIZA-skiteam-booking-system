@@ -15,7 +15,7 @@
             <span class="text-transparent">transparent</span>
         </div>
 
-        <template slot="codeContainer">
+        <template v-slot:codeContainer>
 
 &lt;div class=&quot;demo-alignment&quot;&gt;
   &lt;span class=&quot;text-primary&quot;&gt;primary&lt;/span&gt;

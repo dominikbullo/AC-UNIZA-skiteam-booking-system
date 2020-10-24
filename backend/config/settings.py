@@ -360,3 +360,4 @@ RAVEN_CONFIG = {
 
 # enable django-ckeditor integration
 SIMPLE_MAIL_USE_CKEDITOR = True
+SIMPLE_MAIL_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'

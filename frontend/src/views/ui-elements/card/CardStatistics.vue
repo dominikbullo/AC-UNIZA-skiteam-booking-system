@@ -200,7 +200,7 @@
 <script>
 import StatisticsCardLine from '@/components/statistics-cards/StatisticsCardLine.vue'
 
-export default{
+export default {
   components: {
     StatisticsCardLine
   },
@@ -224,32 +224,32 @@ export default{
       .then((response) => { this.subscribersGained = response.data })
       .catch((error) => { console.log(error) })
 
-      // Revenue Generated
+    // Revenue Generated
     this.$http.get('/api/card/card-statistics/revenue')
       .then((response) => { this.revenueGenerated = response.data })
       .catch((error) => { console.log(error) })
 
-      // Sales
+    // Sales
     this.$http.get('/api/card/card-statistics/sales')
       .then((response) => { this.quarterlySales = response.data })
       .catch((error) => { console.log(error) })
 
-      // Orders
+    // Orders
     this.$http.get('/api/card/card-statistics/orders')
       .then((response) => { this.ordersRecevied = response.data })
       .catch((error) => { console.log(error) })
 
-      // Site Traffic gained
+    // Site Traffic gained
     this.$http.get('/api/card/card-statistics/site-traffic')
       .then((response) => { this.siteTraffic = response.data })
       .catch((error) => { console.log(error) })
 
-      // Active Users
+    // Active Users
     this.$http.get('/api/card/card-statistics/active-users')
       .then((response) => { this.activeUsers = response.data })
       .catch((error) => { console.log(error) })
 
-      // Site Traffic gained
+    // Site Traffic gained
     this.$http.get('/api/card/card-statistics/newsletter')
       .then((response) => { this.newsletter = response.data })
       .catch((error) => { console.log(error) })

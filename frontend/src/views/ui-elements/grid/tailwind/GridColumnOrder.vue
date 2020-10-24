@@ -10,7 +10,7 @@
             </div>
         </div>
 
-        <template slot="codeContainer">
+        <template v-slot:codeContainer>
 &lt;div class=&quot;flex md:flex-row-reverse flex-wrap&quot;&gt;
   &lt;div class=&quot;w-full md:w-3/4 bg-grey p-4 text-center text-grey-lighter&quot;&gt;1&lt;/div&gt;
   &lt;div class=&quot;w-full md:w-1/4 bg-grey-light p-4 text-center text-grey-darker&quot;&gt;2&lt;/div&gt;

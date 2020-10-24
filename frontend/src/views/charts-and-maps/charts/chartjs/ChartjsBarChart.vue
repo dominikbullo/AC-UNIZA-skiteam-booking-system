@@ -5,7 +5,7 @@
             <chartjs-component-bar-chart :height="250" :data="data" :options="options"></chartjs-component-bar-chart>
         </div>
 
-        <template slot="codeContainer">
+        <template v-slot:codeContainer>
 &lt;script&gt;
 import { Bar } from 'vue-chartjs'
 

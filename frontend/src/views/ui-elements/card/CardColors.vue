@@ -11,7 +11,7 @@
                 <p class="mb-3">You can use <code>title-color</code> prop to change color of title of card. This prop supports hex, rgba, rgb and theme colors.</p>
                 <p class="mb-3">Oat cake powder sesame snaps. Chocolate bar dessert bonbon chocolate bar pudding apple pie muffin chocolate ice cream. I love bear claw I love.</p>
 
-                <template slot="codeContainer">
+                <template v-slot:codeContainer>
 &lt;vx-card
     title=&quot;Title Color&quot;
     title-color=&quot;primary&quot;
@@ -33,7 +33,7 @@
                 <p class="mb-3">You can use <code>title-color</code> prop to change color of title of card. This prop supports hex, rgba, rgb and theme colors.</p>
                 <p class="mb-3">Oat cake powder sesame snaps. Chocolate bar dessert bonbon chocolate bar pudding apple pie muffin chocolate ice cream. I love bear claw I love.</p>
 
-                <template slot="codeContainer">
+                <template v-slot:codeContainer>
 &lt;vx-card
     title=&quot;Title Color&quot;
     title-color=&quot;success&quot;
@@ -55,7 +55,7 @@
                 code-toggler>
                 <p class="mb-3">You can use <code>subtitle-color</code> prop to change color of subtitle of card. This prop supports hex, rgba, rgb and theme colors.</p>
 
-                <template slot="codeContainer">
+                <template v-slot:codeContainer>
 &lt;vx-card
     title=&quot;Subtitle Color&quot;
     title-color=&quot;primary&quot;
@@ -77,7 +77,7 @@
                 code-toggler>
                 <p class="mb-3">You can use <code>content-color</code> prop to change color of title of card. This prop supports hex, rgba, rgb and theme colors.</p>
 
-                <template slot="codeContainer">
+                <template v-slot:codeContainer>
 &lt;vx-card
     title=&quot;Content Color&quot;
     title-color=&quot;primary&quot;
@@ -101,7 +101,7 @@
                 <p class="mb-3">You can use <strong>card-background</strong> prop to change background color of card. This prop supports hex, rgba, rgb and theme colors.</p>
                 <p class="mb-3">Oat cake powder sesame snaps. Chocolate bar dessert bonbon chocolate bar pudding apple pie muffin chocolate ice cream. I love bear claw I love.</p>
 
-                <template slot="codeContainer">
+                <template v-slot:codeContainer>
 &lt;vx-card
     title=&quot;Background Color&quot;
     title-color=&quot;#fff&quot;
@@ -125,7 +125,7 @@
                 <p class="mb-3">You can use <strong>card-background</strong> prop to change background color of card. This prop supports hex, rgba, rgb and theme colors.</p>
                 <p class="mb-3">Oat cake powder sesame snaps. Chocolate bar dessert bonbon chocolate bar pudding apple pie muffin chocolate ice cream. I love bear claw I love.</p>
 
-                <template slot="codeContainer">
+                <template v-slot:codeContainer>
 &lt;vx-card
     title=&quot;Background Color&quot;
     title-color=&quot;#fff&quot;
@@ -149,7 +149,7 @@
                 <p class="mb-3">You can use <strong>card-background</strong> prop to change background color of card. This prop supports hex, rgba, rgb and theme colors.</p>
                 <p class="mb-3">Oat cake powder sesame snaps. Chocolate bar dessert bonbon chocolate bar pudding apple pie muffin chocolate ice cream. I love bear claw I love.</p>
 
-                <template slot="codeContainer">
+                <template v-slot:codeContainer>
 &lt;vx-card
     title=&quot;Gradient Background Color&quot;
     title-color=&quot;#fff&quot;
@@ -174,7 +174,7 @@
                 <p class="mb-3">You can use <strong>card-background</strong> prop to change background color of card. This prop supports hex, rgba, rgb and theme colors.</p>
                 <p class="mb-3">Oat cake powder sesame snaps. Chocolate bar dessert bonbon chocolate bar pudding apple pie muffin chocolate ice cream. I love bear claw I love.</p>
 
-                <template slot="codeContainer">
+                <template v-slot:codeContainer>
 &lt;vx-card
     title=&quot;Gradient Background Color&quot;
     title-color=&quot;#fff&quot;
@@ -200,7 +200,7 @@
                 <p class="mb-3">You can use <strong>card-background</strong> prop to change background of card. This prop supports hex, rgba, rgb and theme colors.</p>
                 <p class="mb-3">Oat cake powder sesame snaps. Chocolate bar dessert bonbon chocolate bar pudding apple pie muffin chocolate ice cream. I love bear claw I love.</p>
 
-                <template slot="codeContainer">
+                <template v-slot:codeContainer>
 &lt;template&gt;
   &lt;vx-card
       title=&quot;Gradient Background Image&quot;
@@ -239,7 +239,7 @@ export default{
                 <p class="mb-3">You can use <strong>card-background</strong> prop to change background of card. This prop supports hex, rgba, rgb and theme colors.</p>
                 <p class="mb-3">Oat cake powder sesame snaps. Chocolate bar dessert bonbon chocolate bar pudding apple pie muffin chocolate ice cream. I love bear claw I love.</p>
 
-                <template slot="codeContainer">
+                <template v-slot:codeContainer>
 &lt;template&gt;
   &lt;vx-card
       title=&quot;Gradient Background Image&quot;
@@ -270,7 +270,7 @@ export default{
 </template>
 
 <script>
-export default{
+export default {
   data () {
     return {
       card_bg_img_1: require('@/assets/images/pages/card-bg-image-demo-1.jpg'),
