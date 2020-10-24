@@ -1,4 +1,4 @@
-name: Deploy to staging server
+name: Deploy to production server
 
 on:
   workflow_run:
@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy to staging server
+      - name: Deploy to production server
         uses: garygrossgarten/github-action-ssh@release
         with:
           command: |
