@@ -1,4 +1,4 @@
-name: Deploy to stage
+name: Check Gtihub Actions
 
 on:
   push:
@@ -29,13 +29,13 @@ jobs:
         uses: docker-compose --version
 
       - name: Check Docker-compose version
-        uses: docker info
+        run: docker info
 
       - name: Check Docker
-        uses: sudo service docker status
+        run: sudo service docker status
 
       - name: Add Docker user
-        uses: sudo usermod -aG docker ${USER}
+        run: sudo usermod -aG docker ${USER}
 
       - name: Show docker images
         run: docker images
