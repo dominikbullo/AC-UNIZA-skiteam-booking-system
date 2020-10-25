@@ -37,7 +37,7 @@ services:
 volumes:
     postgres_data: {}
 
-#networks:
-#  default:
-#    external:
-#      name: nginx-proxy
+networks:
+  default:
+    external:
+      name: nginx-proxy
