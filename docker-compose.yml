@@ -42,6 +42,13 @@ services:
     ports:
       - "5050:5050"
 
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+    logging:
+      driver: none
+
   nginx:
     image: nginx:alpine
     ports:
