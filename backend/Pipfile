@@ -63,7 +63,6 @@ django-rest-passwordreset = "*"
 [dev-packages]
 bump2version = "*"
 flake8 = "*"
-django-excel-fixture = "*"
 openpyxl = "*"
 
 [requires]

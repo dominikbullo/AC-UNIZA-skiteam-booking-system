@@ -61,7 +61,6 @@ THIRD_PARTY_APPS = [
     'simple_mail',
     'ckeditor',
 
-    'django_excel_fixture',
     'django_filters',
     'django_rest_passwordreset',
 ]
