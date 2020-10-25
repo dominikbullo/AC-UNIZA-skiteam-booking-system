@@ -16,10 +16,10 @@ jobs:
         uses: garygrossgarten/github-action-ssh@release
         with:
           command: |
-            cd ${{ secrets.PROJECT_DIR }}
-            git reset --hard HEAD
-            git pull
-            docker-compose -f production.yml up -d --build --force-recreate --no-deps
+            cd ${{ secrets.PROJECT_DIR }}&&\
+            git reset --hard HEAD &&\
+            git pull &&\
+            docker-compose -f production.yml up -d --build --no-deps
           host: ${{ secrets.HOST }}
           username: ${{ secrets.HOST_USERNAME }}
           passphrase: ${{ secrets.PASSPHRASE }}

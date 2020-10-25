@@ -1,6 +1,6 @@
 [![Coding time tracker](https://wakatime.com/badge/github/dominikbullo/sport_club_management_system.svg)](https://wakatime.com/badge/github/dominikbullo/sport_club_management_system)
 [![CodeFactor](https://www.codefactor.io/repository/github/dominikbullo/sportagenda/badge?s=a10ccabebcfcd8c21b1fd55e2bb9e5a958d28dd4)](https://www.codefactor.io/repository/github/dominikbullo/sportagenda)
-[![Actions Status](https://github.com/dominikbullo/sport_club_management_system/workflows/Sport%20Club%20Management%20System%20via%20Docker/badge.svg)](https://github.com/dominikbullo/sport_club_management_system/actions)
+[![Actions Status](https://github.com/dominikbullo/SportAgenda/workflows/Build%20&%20Publish%20to%20registry/badge.svg)](https://github.com/dominikbullo/SportAgenda/actions)
 ![Language](https://img.shields.io/static/v1?label=Language&message=Python&color=blue)
 
 # Sport Agenda
