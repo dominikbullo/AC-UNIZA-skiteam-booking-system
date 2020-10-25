@@ -1,12 +1,10 @@
 # Used on to download images and deploy site
 version: "3"
 
-volumes:
-    postgres_data: {}
 
 services:
   backend:
-    image: ghcr.io/dominikbullo/sportagenda_backend:latest
+    image: "ghcr.io/dominikbullo/sportagenda_backend:${IMAGE_VERSION}"
     depends_on:
       - postgres
     volumes:
@@ -23,7 +21,7 @@ services:
     env_file: .env
 
   nginx:
-    image: ghcr.io/dominikbullo/sportagenda_nginx:latest
+    image: "ghcr.io/dominikbullo/sportagenda_nginx:${IMAGE_VERSION}"
     depends_on:
       - backend
     volumes:
@@ -36,7 +34,10 @@ services:
       LETSENCRYPT_HOST: ${DOMAIN}
       LETSENCRYPT_EMAIL: ${ADMIN_EMAIL}
 
-networks:
-  default:
-    external:
-      name: nginx-proxy
+volumes:
+    postgres_data: {}
+
+#networks:
+#  default:
+#    external:
+#      name: nginx-proxy

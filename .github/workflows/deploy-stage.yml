@@ -19,7 +19,7 @@ jobs:
             cd ${{ secrets.STAGE_PROJECT_DIR }}
             git reset --hard HEAD
             git pull origin develop
-            docker-compose -f staging.yml up -d --build --force-recreate --no-deps
+            docker-compose -f production.yml up -d --build --no-deps
           host: ${{ secrets.HOST }}
           username: ${{ secrets.HOST_USERNAME }}
           passphrase: ${{ secrets.PASSPHRASE }}
