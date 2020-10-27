@@ -35,8 +35,8 @@ class Category(models.Model):
         choices=CategoryNameChoices.choices,
     )
 
-    # year_from = models.IntegerField(_('Year from'), choices=year_choices(), default=current_year() - 2)
-    # year_until = models.IntegerField(_('Year until'), choices=year_choices(), default=current_year())
+    year_from = models.IntegerField(_('Year from'), choices=year_choices(), default=current_year() - 2)
+    year_until = models.IntegerField(_('Year until'), choices=year_choices(), default=current_year())
 
     def __str__(self):
         return "{name} | {season}".format(name=self.name, season=self.season)

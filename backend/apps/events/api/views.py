@@ -22,7 +22,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
-        return get_object_custom_queryset(self.request, Category)
+        return get_object_custom_queryset(self.request, Category).order_by('year_from')
 
 
 class EventViewSet(viewsets.ModelViewSet):

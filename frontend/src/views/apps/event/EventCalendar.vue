@@ -136,7 +136,7 @@
         <div class="vx-row">
           <div class="vx-col sm:w-1/2 w-full">
             <div class="mt-4">
-              <label class="text-sm">{{ $t('Event type') }}</label>
+              <label class="text-sm">{{ $t('Event type') }} </label>
               <!-- RES: https://vue-select.org/ -->
               <v-select :clearable="false"
                         label="displayName"
@@ -469,21 +469,21 @@ export default {
       }
 
       this.$store.dispatch('calendar/editEvent', { ...event, ...this.getExtraInfo() })
-          .then(res => {
-            this.$vs.notify({
-              color: 'success',
-              title: 'Event Updated',
-              text: 'The selected event was successfully updated'
-            })
+        .then(res => {
+          this.$vs.notify({
+            color: 'success',
+            title: 'Event Updated',
+            text: 'The selected event was successfully updated'
           })
-          .catch(err => {
-            this.$vs.notify({
-              color: 'danger',
-              title: 'Event Not Changed',
-              text: err.message
-            })
-            console.error(err)
+        })
+        .catch(err => {
+          this.$vs.notify({
+            color: 'danger',
+            title: 'Event Not Changed',
+            text: err.message
           })
+          console.error(err)
+        })
     },
     handleEventDrop (eventDropInfo) {
       console.log('dropped', eventDropInfo)
@@ -510,21 +510,21 @@ export default {
     },
     deleteEvent () {
       this.$store.dispatch('calendar/deleteEvent', this.editedEvent)
-          .then(res => {
-            this.$vs.notify({
-              color: 'success',
-              title: 'Event Deleted',
-              text: 'The selected event was successfully deleted'
-            })
+        .then(res => {
+          this.$vs.notify({
+            color: 'success',
+            title: 'Event Deleted',
+            text: 'The selected event was successfully deleted'
           })
-          .catch(err => {
-            this.$vs.notify({
-              color: 'danger',
-              title: 'Event Not Deleted',
-              text: 'The selected user was successfully deleted'
-            })
-            console.error(err)
+        })
+        .catch(err => {
+          this.$vs.notify({
+            color: 'danger',
+            title: 'Event Not Deleted',
+            text: 'The selected user was successfully deleted'
           })
+          console.error(err)
+        })
     },
     showDeleteSuccess () {
       this.$vs.notify({
