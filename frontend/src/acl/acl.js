@@ -5,8 +5,6 @@ import router from '@/router'
 // https://www.npmjs.com/package/vue-acl
 
 Vue.use(AclInstaller)
-// TODO change
-// FIXME change
 let initialRole = 'public'
 
 const userInfo = JSON.parse(localStorage.getItem('userInfo'))

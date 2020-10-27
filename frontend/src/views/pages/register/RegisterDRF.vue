@@ -4,42 +4,42 @@
     <div class="vx-row">
       <div class="vx-col sm:w-1/2 w-full mb-2">
         <vs-input
-          :label-placeholder="$t('First Name')"
-          :placeholder="$t('First Name')"
-          :success="!errors.first('Name') && this.first_name !==''"
-          :danger="errors.first('Name')"
-          class="w-full mt-6"
-          data-vv-validate-on="blur"
-          name="Name"
-          v-model="first_name"
-          v-validate="'required|alpha_dash|min:3'"/>
+            :label-placeholder="$t('First Name')"
+            :placeholder="$t('First Name')"
+            :success="!errors.first('Name') && this.first_name !==''"
+            :danger="errors.first('Name')"
+            class="w-full mt-6"
+            data-vv-validate-on="blur"
+            name="Name"
+            v-model="first_name"
+            v-validate="'required|alpha_dash|min:3'"/>
         <span class="text-danger text-sm">{{ errors.first('Name') }}</span>
       </div>
       <div class="vx-col sm:w-1/2 w-full mb-2">
         <vs-input
-          :label-placeholder="$t('Surname')"
-          :placeholder="$t('Surname')"
-          :success="!errors.first('Surname') && this.last_name !==''"
-          :danger="errors.first('Surname')"
-          class="w-full mt-6"
-          data-vv-validate-on="blur"
-          name="Surname"
-          v-model="last_name"
-          v-validate="'required|alpha_dash|min:3'"/>
+            :label-placeholder="$t('Surname')"
+            :placeholder="$t('Surname')"
+            :success="!errors.first('Surname') && this.last_name !==''"
+            :danger="errors.first('Surname')"
+            class="w-full mt-6"
+            data-vv-validate-on="blur"
+            name="Surname"
+            v-model="last_name"
+            v-validate="'required|alpha_dash|min:3'"/>
         <span class="text-danger text-sm">{{ errors.first('Surname') }}</span>
       </div>
     </div>
 
     <vs-input
-      :label-placeholder="$t('Email')"
-      :placeholder="$t('Email')"
-      :success="!errors.first('Email') && this.email !==''"
-      :danger="errors.first('Email')"
-      class="w-full mt-6"
-      name="Email"
-      type="email"
-      v-model="email"
-      v-validate="'required|email'"/>
+        :label-placeholder="$t('Email')"
+        :placeholder="$t('Email')"
+        :success="!errors.first('Email') && this.email !==''"
+        :danger="errors.first('Email')"
+        class="w-full mt-6"
+        name="Email"
+        type="email"
+        v-model="email"
+        v-validate="'required|email'"/>
     <span class="text-danger text-sm">{{ errors.first('Email') }}</span>
 
     <!-- RES: https://flatpickr.js.org/formatting/ -->
@@ -59,34 +59,34 @@
     </div>
 
     <vs-input
-      :label-placeholder="$t('Password')"
-      :placeholder="$t('Password')"
-      :success="!errors.first('confirm_password') && this.password !=='' && this.confirm_password !==''"
-      :danger="errors.first('confirm_password')"
-      class="w-full mt-6"
-      name="password"
-      ref="password"
-      type="password"
-      v-model="password"
-      v-validate="'required|min:8'"/>
+        :label-placeholder="$t('Password')"
+        :placeholder="$t('Password')"
+        :success="!errors.first('confirm_password') && this.password !=='' && this.confirm_password !==''"
+        :danger="errors.first('confirm_password')"
+        class="w-full mt-6"
+        name="password"
+        ref="password"
+        type="password"
+        v-model="password"
+        v-validate="'required|min:8'"/>
     <span class="text-danger text-sm">{{ errors.first('password') }}</span>
 
     <vs-input
-      :label-placeholder="$t('Confirm Password')"
-      :placeholder="$t('Confirm Password')"
-      :success="!errors.first('confirm_password') && this.confirm_password !==''"
-      :danger="errors.first('confirm_password')"
-      class="w-full mt-6"
-      data-vv-as="password"
-      name="confirm_password"
-      type="password"
-      v-model="confirm_password"
-      v-validate="'min:8|confirmed:password'"/>
+        :label-placeholder="$t('Confirm Password')"
+        :placeholder="$t('Confirm Password')"
+        :success="!errors.first('confirm_password') && this.confirm_password !==''"
+        :danger="errors.first('confirm_password')"
+        class="w-full mt-6"
+        data-vv-as="password"
+        name="confirm_password"
+        type="password"
+        v-model="confirm_password"
+        v-validate="'min:8|confirmed:password'"/>
     <span class="text-danger text-sm">{{ errors.first('confirm_password') }}</span>
 
     <vs-checkbox class="mt-6" v-model="isTermsConditionAccepted">{{ $t('message.terms_accept') }}.</vs-checkbox>
     <vs-button class="mt-6" to="/login" type="border">{{ $t('Login') }}</vs-button>
-    <vs-button :disabled="!validateForm" @click="registerUserDRF" class="float-right mt-6">{{$t('Register')}}
+    <vs-button :disabled="!validateForm" @click="registerUserDRF" class="float-right mt-6">{{ $t('Register') }}
     </vs-button>
   </div>
 </template>
@@ -128,14 +128,14 @@ export default {
       // TODO watch validation
       // return true
       return !this.errors.any() &&
-        this.first_name !== '' &&
-        this.last_name !== '' &&
-        this.email !== '' &&
-        this.birth_date !== '' &&
-        this.gender !== '' &&
-        this.password !== '' &&
-        this.confirm_password !== '' &&
-        this.isTermsConditionAccepted === true
+          this.first_name !== '' &&
+          this.last_name !== '' &&
+          this.email !== '' &&
+          this.birth_date !== '' &&
+          this.gender !== '' &&
+          this.password !== '' &&
+          this.confirm_password !== '' &&
+          this.isTermsConditionAccepted === true
     }
   },
   methods: {
@@ -207,7 +207,7 @@ export default {
 </script>
 
 <style>
-  .flatpickr-input[type="hidden"] + input {
-    color: #c2c6dc;
-  }
+.flatpickr-input[type="hidden"] + input {
+  color: #c2c6dc;
+}
 </style>

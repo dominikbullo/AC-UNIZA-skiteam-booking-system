@@ -1,7 +1,16 @@
 process.env.VUE_APP_VERSION = require('./package.json').version
 
 module.exports = {
-  transpileDependencies: ['resize-detector'],
+  transpileDependencies: [
+    'resize-detector'
+  ],
+  configureWebpack: {
+    optimization: {
+      splitChunks: {
+        chunks: 'all'
+      }
+    }
+  },
   lintOnSave: false,
   devServer: {
     hot: true,
@@ -25,6 +34,7 @@ module.exports = {
   },
   pwa: {
     name: 'AC UNIZA Ski Team',
+
     themeColor: '#10163a',
     msTileColor: '#000000',
     appleMobileWebAppCapable: 'yes',
