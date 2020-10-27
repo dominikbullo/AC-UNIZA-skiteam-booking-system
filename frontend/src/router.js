@@ -233,26 +233,6 @@ const router = new Router({
             rule: 'isParent'
           }
         },
-        {
-          path: '/apps/family/list',
-          name: 'app-family-list',
-          component: () => import('@/views/apps/family/family-list/FamilyList.vue'),
-          meta: {
-            breadcrumb: [
-              {
-                title: 'Home',
-                url: '/'
-              },
-              { title: 'Family' },
-              {
-                title: 'List',
-                active: true
-              }
-            ],
-            pageTitle: 'Family List',
-            rule: 'isParent'
-          }
-        },
 
         // Event APP
         {
