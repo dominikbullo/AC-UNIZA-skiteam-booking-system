@@ -19,7 +19,9 @@ def notify_users(sender, instance, **kwargs):
         return
 
     try:
-        old = sender.objects.select_for_update().get(pk=instance.pk)
+        # FIXME: https://stackoverflow.com/questions/25451087/django-select-for-update-cannot-be-used-outside-of-a-transaction
+        with transaction.atomic():
+            old = sender.objects.select_for_update().get(pk=instance.pk)
     except sender.DoesNotExist:
         pass  # Object is new
     else:
