@@ -47,7 +47,7 @@
         </vs-button>
 
         <vs-prompt
-            v-model:active="activePrompt"
+            :active.sync="activePrompt"
             :is-valid="validateForm"
             @accept="addChild"
             accept-text="Add Child"
@@ -265,6 +265,7 @@ export default {
     return {
       searchQuery: '',
       activePrompt: false,
+      activePrompt1: false,
 
       datePickerConfig: {
         altFormat: 'd.m.Y',
@@ -437,7 +438,8 @@ export default {
       }
     },
     validateForm () {
-      return !this.errors.any()
+      return true
+      // return !this.errors.any()
     }
   },
   methods: {

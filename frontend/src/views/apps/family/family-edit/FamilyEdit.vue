@@ -1,6 +1,6 @@
 <template>
   <div id="page-family-edit">
-    <vs-alert v-model:active="family_not_found" color="danger" title="User Not Found">
+    <vs-alert :active.sync="family_not_found" color="danger" title="User Not Found">
       <span>Family record with id: {{ $route.params.familyID }} not found. </span>
       <span>
         <span>Check </span><router-link :to="{name:'page-user-list'}"
@@ -8,7 +8,7 @@
       </span>
     </vs-alert>
 
-    <p>{{family_data}}</p>
+    <p>{{ family_data }}</p>
     <vx-card v-if="family_data">
       <div class="tabs-container px-6 pt-6" slot="no-body">
 
@@ -64,16 +64,16 @@ export default {
   methods: {
     fetchFamilyData (familyId) {
       this.$store.dispatch('family/fetchFamily', familyId)
-        .then(res => {
-          this.family_data = res.data
-        })
-        .catch(err => {
-          if (err.response.status === 404) {
-            this.family_not_found = true
-            return
-          }
-          console.error(err)
-        })
+          .then(res => {
+            this.family_data = res.data
+          })
+          .catch(err => {
+            if (err.response.status === 404) {
+              this.family_not_found = true
+              return
+            }
+            console.error(err)
+          })
     }
   },
   created () {

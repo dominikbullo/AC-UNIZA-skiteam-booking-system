@@ -7,8 +7,12 @@
         <div class="flex-grow">
           <vs-dropdown class="cursor-pointer" vs-trigger-click>
             <div
-              class="p-4 border border-solid d-theme-border-grey-light rounded-full d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium">
-              <span class="mr-2">{{ currentPage * paginationPageSize - (paginationPageSize - 1) }} - {{ familyMembers.length - currentPage * paginationPageSize > 0 ? currentPage * paginationPageSize : familyMembers.length }} of {{ familyMembers.length }}</span>
+                class="p-4 border border-solid d-theme-border-grey-light rounded-full d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium">
+              <span class="mr-2">{{
+                  currentPage * paginationPageSize - (paginationPageSize - 1)
+                }} - {{
+                  familyMembers.length - currentPage * paginationPageSize > 0 ? currentPage * paginationPageSize : familyMembers.length
+                }} of {{ familyMembers.length }}</span>
               <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4"/>
             </div>
             <!-- <vs-button class="btn-drop" type="line" color="primary" icon-pack="feather" icon="icon-chevron-down"></vs-button> -->
@@ -36,20 +40,20 @@
         <!-- <vs-button class="mb-4 md:mb-0" @click="gridApi.exportDataAsCsv()">Export as CSV</vs-button> -->
 
         <vs-button
-          @click="activePrompt = true"
-          class="sm:mr-4 mr-0 sm:w-auto w-full sm:order-normal order-2 sm:mt-0 mt-4"
-          icon="icon-plus" icon-pack="feather"
-          v-show="$acl.check('editor')">
+            @click="activePrompt = true"
+            class="sm:mr-4 mr-0 sm:w-auto w-full sm:order-normal order-2 sm:mt-0 mt-4"
+            icon="icon-plus" icon-pack="feather"
+            v-show="$acl.check('editor')">
           {{ $t('AddChild') }}
         </vs-button>
 
         <vs-prompt
-          v-model:active="activePrompt"
-          :is-valid="validateForm"
-          @accept="addChild"
-          accept-text="Add Child"
-          button-cancel="border"
-          title="Add Child">
+            :active.sync="activePrompt"
+            :is-valid="validateForm"
+            @accept="addChild"
+            accept-text="Add Child"
+            button-cancel="border"
+            title="Add Child">
           <div>
             <form>
               <div class="vx-row">
@@ -59,52 +63,52 @@
                   <div class="vx-row">
                     <div class="vx-col sm:w-1/2 w-full mb-2">
                       <vs-input
-                        :label-placeholder="$t('Name')"
-                        :placeholder="$t('Name')"
-                        class="w-full mt-6"
-                        data-vv-validate-on="blur"
-                        name="name"
-                        type="text"
-                        v-model="childData.first_name"
-                        v-validate="'required|alpha_dash|min:3'"/>
+                          :label-placeholder="$t('Name')"
+                          :placeholder="$t('Name')"
+                          class="w-full mt-6"
+                          data-vv-validate-on="blur"
+                          name="name"
+                          type="text"
+                          v-model="childData.first_name"
+                          v-validate="'required|alpha_dash|min:3'"/>
                       <span class="text-danger text-sm">{{ errors.first('name') }}</span>
                     </div>
 
                     <div class="vx-col sm:w-1/2 w-full mb-2">
                       <vs-input
-                        :label-placeholder="$t('Surname')"
-                        :placeholder="$t('Surname')"
-                        class="w-full mt-6"
-                        data-vv-validate-on="blur"
-                        name="surname"
-                        type="text"
-                        v-model="childData.last_name"
-                        v-validate="'required|alpha_dash|min:3'"/>
+                          :label-placeholder="$t('Surname')"
+                          :placeholder="$t('Surname')"
+                          class="w-full mt-6"
+                          data-vv-validate-on="blur"
+                          name="surname"
+                          type="text"
+                          v-model="childData.last_name"
+                          v-validate="'required|alpha_dash|min:3'"/>
                       <span class="text-danger text-sm">{{ errors.first('surname') }}</span>
                     </div>
                   </div>
 
                   <vs-input
-                    :label-placeholder="$t('Username')"
-                    :placeholder="$t('Username')"
-                    class="w-full mt-6"
-                    data-vv-validate-on="blur"
-                    name="username"
-                    type="text"
-                    v-model="childData.username"
-                    v-validate="'required|alpha_dash|min:3'"/>
+                      :label-placeholder="$t('Username')"
+                      :placeholder="$t('Username')"
+                      class="w-full mt-6"
+                      data-vv-validate-on="blur"
+                      name="username"
+                      type="text"
+                      v-model="childData.username"
+                      v-validate="'required|alpha_dash|min:3'"/>
                   <span class="text-danger text-sm">{{ errors.first('username') }}</span>
 
 
                   <vs-input
-                    :label-placeholder="$t('Email')"
-                    :placeholder="$t('Email')"
-                    class="w-full mt-6"
-                    data-vv-validate-on="blur"
-                    name="email"
-                    type="email"
-                    v-model="childData.email"
-                    v-validate="'email'"/>
+                      :label-placeholder="$t('Email')"
+                      :placeholder="$t('Email')"
+                      class="w-full mt-6"
+                      data-vv-validate-on="blur"
+                      name="email"
+                      type="email"
+                      v-model="childData.email"
+                      v-validate="'email'"/>
                   <span class="text-danger text-sm">{{ errors.first('email') }}</span>
 
 
@@ -127,27 +131,27 @@
                   </div>
 
                   <vs-input
-                    :label-placeholder="$t('Password')"
-                    :placeholder="$t('Password')"
-                    class="w-full mt-6"
-                    data-vv-validate-on="blur"
-                    name="password"
-                    ref="password"
-                    type="password"
-                    v-model="childData.password1"
-                    v-validate="'required|min:6'"/>
+                      :label-placeholder="$t('Password')"
+                      :placeholder="$t('Password')"
+                      class="w-full mt-6"
+                      data-vv-validate-on="blur"
+                      name="password"
+                      ref="password"
+                      type="password"
+                      v-model="childData.password1"
+                      v-validate="'required|min:6'"/>
                   <span class="text-danger text-sm">{{ errors.first('password1') }}</span>
 
                   <vs-input
-                    :label-placeholder="$t('ConfirmPassword')"
-                    :placeholder="$t('ConfirmPassword')"
-                    class="w-full mt-6"
-                    data-vv-as="password"
-                    data-vv-validate-on="blur"
-                    name="confirm_password"
-                    type="password"
-                    v-model="childData.password2"
-                    v-validate="'min:6|confirmed:password'"/>
+                      :label-placeholder="$t('ConfirmPassword')"
+                      :placeholder="$t('ConfirmPassword')"
+                      class="w-full mt-6"
+                      data-vv-as="password"
+                      data-vv-validate-on="blur"
+                      name="confirm_password"
+                      type="password"
+                      v-model="childData.password2"
+                      v-validate="'min:6|confirmed:password'"/>
                   <span class="text-danger text-sm">{{ errors.first('confirm_password') }}</span>
                 </div>
               </div>
@@ -160,7 +164,7 @@
         <vs-dropdown class="cursor-pointer" vs-trigger-click>
 
           <div
-            class="p-3 shadow-drop rounded-lg  d-theme-dark-light-bg cursor-pointer flex items-end justify-center text-lg font-medium w-32">
+              class="p-3 shadow-drop rounded-lg  d-theme-dark-light-bg cursor-pointer flex items-end justify-center text-lg font-medium w-32">
             <span class="mr-2 leading-none">Actions</span>
             <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4"/>
           </div>
@@ -202,27 +206,27 @@
       <!-- RES: Height https://www.ag-grid.com/javascript-grid-width-and-height/-->
       <!-- AgGrid Table -->
       <ag-grid-vue
-        :animateRows="true"
-        :columnDefs="columnDefs"
-        :components="components"
-        :defaultColDef="defaultColDef"
-        :enableRtl="$vs.rtl"
-        :floatingFilter="true"
-        :gridOptions="gridOptions"
-        :pagination="true"
-        :paginationPageSize="paginationPageSize"
-        :rowData="familyMembers"
-        :suppressPaginationPanel="true"
-        class="ag-theme-material w-100 my-4 ag-grid-table"
-        colResizeDefault="shift"
-        ref="agGridTable"
-        rowSelection="multiple">
+          :animateRows="true"
+          :columnDefs="columnDefs"
+          :components="components"
+          :defaultColDef="defaultColDef"
+          :enableRtl="$vs.rtl"
+          :floatingFilter="true"
+          :gridOptions="gridOptions"
+          :pagination="true"
+          :paginationPageSize="paginationPageSize"
+          :rowData="familyMembers"
+          :suppressPaginationPanel="true"
+          class="ag-theme-material w-100 my-4 ag-grid-table"
+          colResizeDefault="shift"
+          ref="agGridTable"
+          rowSelection="multiple">
       </ag-grid-vue>
 
       <vs-pagination
-        :max="7"
-        :total="totalPages"
-        v-model="currentPage"/>
+          :max="7"
+          :total="totalPages"
+          v-model="currentPage"/>
 
     </div>
   </div>
@@ -287,14 +291,14 @@ export default {
       // AgGrid
       gridApi: null,
       gridOptions:
-        {},
+          {},
 
       defaultColDef: {
         sortable: true,
         resizable:
-          true,
+            true,
         suppressMenu:
-          true
+            true
       },
 
       columnDefs: [
@@ -372,12 +376,12 @@ export default {
 
       // Cell Renderer Components
       components:
-        {
-          CellRendererLink,
-          CellRendererStatus,
-          CellRendererVerified,
-          CellRendererActions
-        }
+          {
+            CellRendererLink,
+            CellRendererStatus,
+            CellRendererVerified,
+            CellRendererActions
+          }
     }
   },
   watch: {

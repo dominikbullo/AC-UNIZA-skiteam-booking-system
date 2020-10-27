@@ -1,7 +1,7 @@
 <template>
   <div id="page-family-view">
 
-    <vs-alert color="danger" title="Family Not Found" v-model:active="family_not_found">
+    <vs-alert color="danger" title="Family Not Found" :active.sync="family_not_found">
       <span>
         <span>Check </span><router-link :to="{name:'app-family-members'}"
                                         class="text-inherit underline">Family List</router-link> or contact administrator
@@ -102,16 +102,16 @@ export default {
   methods: {
     fetchFamilyData (familyId) {
       this.$store.dispatch('family/fetchFamily', familyId)
-        .then(res => {
-          this.family_data = res.data
-        })
-        .catch(err => {
-          if (err.response.status === 404) {
-            this.family_not_found = true
-            return
-          }
-          console.error(err)
-        })
+          .then(res => {
+            this.family_data = res.data
+          })
+          .catch(err => {
+            if (err.response.status === 404) {
+              this.family_not_found = true
+              return
+            }
+            console.error(err)
+          })
     }
   },
   created () {
@@ -126,56 +126,56 @@ export default {
 </script>
 
 <style lang="scss">
-  #avatar-col {
-    width: 10rem;
-  }
+#avatar-col {
+  width: 10rem;
+}
 
-  #page-user-view {
-    table {
+#page-user-view {
+  table {
+    td {
+      vertical-align: top;
+      min-width: 140px;
+      padding-bottom: .8rem;
+      word-break: break-all;
+    }
+
+    &:not(.permissions-table) {
       td {
-        vertical-align: top;
-        min-width: 140px;
-        padding-bottom: .8rem;
-        word-break: break-all;
-      }
-
-      &:not(.permissions-table) {
-        td {
-          @media screen and (max-width: 370px) {
-            display: block;
-          }
+        @media screen and (max-width: 370px) {
+          display: block;
         }
       }
     }
   }
+}
 
-  // #account-info-col-1 {
-  //   // flex-grow: 1;
-  //   width: 30rem !important;
-  //   @media screen and (min-width:1200px) {
-  //     & {
-  //       flex-grow: unset !important;
-  //     }
+// #account-info-col-1 {
+//   // flex-grow: 1;
+//   width: 30rem !important;
+//   @media screen and (min-width:1200px) {
+//     & {
+//       flex-grow: unset !important;
+//     }
+//   }
+// }
+
+
+@media screen and (min-width: 1201px) and (max-width: 1211px),
+only screen and (min-width: 636px) and (max-width: 991px) {
+  #account-info-col-1 {
+    width: calc(100% - 12rem) !important;
+  }
+
+  // #account-manage-buttons {
+  //   width: 12rem !important;
+  //   flex-direction: column;
+
+  //   > button {
+  //     margin-right: 0 !important;
+  //     margin-bottom: 1rem;
   //   }
   // }
 
-
-  @media screen and (min-width: 1201px) and (max-width: 1211px),
-  only screen and (min-width: 636px) and (max-width: 991px) {
-    #account-info-col-1 {
-      width: calc(100% - 12rem) !important;
-    }
-
-    // #account-manage-buttons {
-    //   width: 12rem !important;
-    //   flex-direction: column;
-
-    //   > button {
-    //     margin-right: 0 !important;
-    //     margin-bottom: 1rem;
-    //   }
-    // }
-
-  }
+}
 
 </style>

@@ -3,41 +3,41 @@
     <vx-card class="mt-5 vx-card no-scroll-content">
       <div class="calendar-view  no-scroll-content">
         <FullCalendar
-          :events="calendarEvents"
-          :header="calendarConfig.header"
-          :custom-buttons="calendarConfig.customButtons"
-          :locale="calendarConfig.locale"
-          :now-indicator="true"
-          :plugins="calendarPlugins"
-          :select-mirror="true"
-          :selectable="calendarConfig.selectable"
-          :slot-label-format="calendarConfig.slot_label_format"
-          :title-format="calendarConfig.title_format"
-          :weekends="true"
-          @eventClick="handleEventClick"
-          @eventMouseEnter="handleEventMouseEnter"
-          @select="handleSelect"
-          @eventDrop="handleEventDrop"
-          @eventResize="handleEventResize"
-          :views="calendarConfig.views"
-          :default-view="calendarConfig.views.defaultView"
-          :editable="calendarConfig.editable"
-          min-time="06:00:00"
-          max-time="21:00:00"
-          :scroll-time="minEventTime"
-          height="parent"
-          class="custom-class"
+            :events="calendarEvents"
+            :header="calendarConfig.header"
+            :custom-buttons="calendarConfig.customButtons"
+            :locale="calendarConfig.locale"
+            :now-indicator="true"
+            :plugins="calendarPlugins"
+            :select-mirror="true"
+            :selectable="calendarConfig.selectable"
+            :slot-label-format="calendarConfig.slot_label_format"
+            :title-format="calendarConfig.title_format"
+            :weekends="true"
+            @eventClick="handleEventClick"
+            @eventMouseEnter="handleEventMouseEnter"
+            @select="handleSelect"
+            @eventDrop="handleEventDrop"
+            @eventResize="handleEventResize"
+            :views="calendarConfig.views"
+            :default-view="calendarConfig.views.defaultView"
+            :editable="calendarConfig.editable"
+            min-time="06:00:00"
+            max-time="21:00:00"
+            :scroll-time="minEventTime"
+            height="parent"
+            class="custom-class"
         />
       </div>
 
       <!-- Add child to EVENT -->
       <vs-prompt
-        v-model:active="childAddToEventPrompt.active"
-        :is-valid="validForm"
-        @accept="changeUserChildrenOnEvent"
-        :accept-text="$t('Save')"
-        class="my-prompt"
-        :title="$t('Event detail')">
+          :active.sync="childAddToEventPrompt.active"
+          :is-valid="validForm"
+          @accept="changeUserChildrenOnEvent"
+          :accept-text="$t('Save')"
+          class="my-prompt"
+          :title="$t('Event detail')">
 
 
         <div v-if="editedEvent" id="event-info-table">
@@ -112,9 +112,9 @@
             <vs-divider>{{ $t('Your children') }}</vs-divider>
             <li class="mb-2" :key="child.username" v-for="child in userChildren">
               <vs-checkbox
-                :vs-value="child.username"
-                color="success"
-                v-model="childAddToEventPrompt.selected">
+                  :vs-value="child.username"
+                  color="success"
+                  v-model="childAddToEventPrompt.selected">
                 {{ child.first_name }} {{ child.last_name }}
               </vs-checkbox>
             </li>
@@ -126,12 +126,12 @@
 
       <!-- ADD EVENT -->
       <vs-prompt
-        v-model:active="addEventPrompt.active"
-        :is-valid="true"
-        @accept="addEvent"
-        accept-text="Add event"
-        class="my-prompt"
-        :title="$t('Add Event')">
+          :active.sync="addEventPrompt.active"
+          :is-valid="true"
+          @accept="addEvent"
+          accept-text="Add event"
+          class="my-prompt"
+          :title="$t('Add Event')">
 
         <div class="vx-row">
           <div class="vx-col sm:w-1/2 w-full">
@@ -469,21 +469,21 @@ export default {
       }
 
       this.$store.dispatch('calendar/editEvent', { ...event, ...this.getExtraInfo() })
-        .then(res => {
-          this.$vs.notify({
-            color: 'success',
-            title: 'Event Updated',
-            text: 'The selected event was successfully updated'
+          .then(res => {
+            this.$vs.notify({
+              color: 'success',
+              title: 'Event Updated',
+              text: 'The selected event was successfully updated'
+            })
           })
-        })
-        .catch(err => {
-          this.$vs.notify({
-            color: 'danger',
-            title: 'Event Not Changed',
-            text: err.message
+          .catch(err => {
+            this.$vs.notify({
+              color: 'danger',
+              title: 'Event Not Changed',
+              text: err.message
+            })
+            console.error(err)
           })
-          console.error(err)
-        })
     },
     handleEventDrop (eventDropInfo) {
       console.log('dropped', eventDropInfo)
@@ -510,21 +510,21 @@ export default {
     },
     deleteEvent () {
       this.$store.dispatch('calendar/deleteEvent', this.editedEvent)
-        .then(res => {
-          this.$vs.notify({
-            color: 'success',
-            title: 'Event Deleted',
-            text: 'The selected event was successfully deleted'
+          .then(res => {
+            this.$vs.notify({
+              color: 'success',
+              title: 'Event Deleted',
+              text: 'The selected event was successfully deleted'
+            })
           })
-        })
-        .catch(err => {
-          this.$vs.notify({
-            color: 'danger',
-            title: 'Event Not Deleted',
-            text: 'The selected user was successfully deleted'
+          .catch(err => {
+            this.$vs.notify({
+              color: 'danger',
+              title: 'Event Not Deleted',
+              text: 'The selected user was successfully deleted'
+            })
+            console.error(err)
           })
-          console.error(err)
-        })
     },
     showDeleteSuccess () {
       this.$vs.notify({
