@@ -1,4 +1,4 @@
-import datetime
+from colorfield.fields import ColorField
 
 from django.db import models
 from django.utils.translation import gettext as _
@@ -68,10 +68,21 @@ class Location(models.Model):
         unique_together = (('name', 'ski_slope'),)
 
 
+class EventType(models.Model):
+    type = models.CharField(
+        max_length=50,
+        choices=EventTypeChoices.choices
+    )
+    # TODO: later https://github.com/fabiocaccamo/django-colorfield
+    color = ColorField(default='#FF0000')
+    need_skis = models.BooleanField(default=True)
+
+
 # RES: https://django-polymorphic.readthedocs.io/en/stable/
 class Event(PolymorphicModel):
     # RES (null vs blank): https://stackoverflow.com/questions/8609192/differentiate-null-true-blank-true-in-django
     season = models.ForeignKey(Season, on_delete=models.CASCADE)
+    type = models.ForeignKey(EventType, on_delete=models.DO_NOTHING)
 
     # IDEA: ONE training, more location (ski slope) e.g. Slovan žiaci, Leitner Predžiaci
     location = models.ForeignKey(Location, on_delete=models.DO_NOTHING)

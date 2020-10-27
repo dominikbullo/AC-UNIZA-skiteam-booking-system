@@ -227,6 +227,7 @@ import FullCalendar from '@fullcalendar/vue'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
+import rrulePlugin from '@fullcalendar/rrule'
 import listPlugin from '@fullcalendar/list'
 import skLocale from '@fullcalendar/core/locales/sk'
 import enLocale from '@fullcalendar/core/locales/en-gb'
@@ -249,7 +250,8 @@ export default {
         dayGridPlugin,
         timeGridPlugin,
         interactionPlugin,
-        listPlugin// needed for dateClick
+        listPlugin,     // needed for dateClick
+        rrulePlugin
       ],
 
       SKI_EVENTS: ['SKI_TRAINING', 'SKI_RACE', 'SKI_CAMP'],
@@ -357,7 +359,39 @@ export default {
       return '07:00:00'
     },
     calendarEvents () {
-      return this.$store.state.calendar.events
+      // return this.$store.state.calendar.events
+      return {
+        events: [
+          {
+            title: 'Event1',
+            start: '2020-10-27',
+            color: 'yellow',
+            textColor: 'black'
+          },
+          {
+            title: 'Repeating Event without sync',
+            daysOfWeek: [1, 2, 3, 4], // these recurrent events move separately
+            startTime: '11:00:00',
+            endTime: '15:30:00',
+            startRecur: '2020-10-27',
+            endRecur: '2020-11-27'
+          },
+          {
+            title: 'Event2',
+            start: '2020-10-27',
+            color: 'red',
+            textColor: 'black'
+          },
+          {
+            groupId: '999',
+            daysOfWeek: [1, 4],
+            title: 'Repeating Event',
+            startTime: '10:45:00',
+            endTime: '12:45:00',
+            color: 'green' // override!
+          }
+        ]
+      }
     },
     userChildren () {
       // const members = this.$store.state.family.members

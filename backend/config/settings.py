@@ -55,11 +55,9 @@ THIRD_PARTY_APPS = [
     'allauth.socialaccount.providers.facebook',
 
     'polymorphic',
+    'colorfield',
 
     'pwa',
-
-    'simple_mail',
-    'ckeditor',
 
     'django_filters',
     'django_rest_passwordreset',
@@ -356,7 +354,3 @@ LOGGING = {
 RAVEN_CONFIG = {
     'DSN': SENTRY_DSN
 }
-
-# enable django-ckeditor integration
-SIMPLE_MAIL_USE_CKEDITOR = True
-SIMPLE_MAIL_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'

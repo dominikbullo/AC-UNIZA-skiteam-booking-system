@@ -282,3 +282,4 @@ typings/
 /backend/staticfiles/
 /.old/
 /docker-compose.override.yml
+/scripts/
