@@ -193,7 +193,7 @@ class RaceOrganizer(models.Model):
 class SkiRace(SkiEvent):
     organizer = models.ForeignKey(RaceOrganizer, on_delete=models.DO_NOTHING)
 
-    propositionURL = models.URLField(max_length=200, blank=True, null=True)
+    propositions_URL = models.URLField(max_length=200, blank=True, null=True)
     hotel_price = models.CharField(max_length=50, blank=True, null=True)
     book_hotel_from = models.DateTimeField(blank=True, null=True)
     book_hotel_to = models.DateTimeField(blank=True, null=True)
