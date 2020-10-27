@@ -1,5 +1,6 @@
 from colorfield.fields import ColorField
 
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import gettext as _
 
@@ -52,7 +53,7 @@ class Category(models.Model):
 class Location(models.Model):
     # TODO RES: https://github.com/caioariede/django-location-field
     name = models.CharField(max_length=80)
-    ski_slope = models.CharField(max_length=50, blank=True, null=True)
+    detail = models.CharField(max_length=50, blank=True, null=True)
     additional_info = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
@@ -60,12 +61,12 @@ class Location(models.Model):
 
     @property
     def display_name(self):
-        if self.ski_slope and self.ski_slope != "":
-            return "%s - %s" % (self.name, self.ski_slope)
+        if self.detail and self.detail != "":
+            return "%s - %s" % (self.name, self.detail)
         return self.name
 
     class Meta:
-        unique_together = (('name', 'ski_slope'),)
+        unique_together = (('name', 'detail'),)
 
 
 class EventType(models.Model):
@@ -73,9 +74,19 @@ class EventType(models.Model):
         max_length=50,
         choices=EventTypeChoices.choices
     )
-    # TODO: later https://github.com/fabiocaccamo/django-colorfield
-    color = ColorField(default='#FF0000')
+
+    color = ColorField(default='#3788d8')
+    text_color = ColorField(default="white")
+
     need_skis = models.BooleanField(default=True)
+
+    def __str__(self):
+        if self.need_skis:
+            return f"Ski {self.get_type_display()}"
+        return f"{self.get_type_display()}"
+
+    class Meta:
+        unique_together = (('type', 'need_skis'),)
 
 
 # RES: https://django-polymorphic.readthedocs.io/en/stable/
@@ -90,12 +101,6 @@ class Event(PolymorphicModel):
 
     participants = models.ManyToManyField('users.Profile', through=Profile.events.through, blank=True)
 
-    # FIXME Validation -> event must have SkiTraining table if is type SKI_TRAINING, SKi_RACE and so on..
-    type = models.CharField(
-        max_length=50,
-        choices=EventTypeChoices.choices
-    )
-
     canceled = models.BooleanField(default=False)
     send_email = models.BooleanField(default=False)
 
@@ -103,17 +108,34 @@ class Event(PolymorphicModel):
     # TODO in serializers default datetime + 1h from start
     end = models.DateTimeField(blank=True)
 
+    # recurring events
+    is_recur = models.BooleanField(default=False)
+    # group_id = models.CharField(max_length=150, blank=True)
+    days_of_week = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
+
     additional_info = models.CharField(max_length=150, blank=True)
 
     def __str__(self):
-        return "{type} | {season}".format(type=self.get_type_display(), season=self.season)
+        return f"{self.type} | {self.season}"
+
+
+class SkisType(models.Model):
+    name = models.CharField(
+        max_length=3,
+        unique=True,
+        choices=SkiTypeChoices.choices,
+        default=SkiTypeChoices.GIANT_SLALOM
+    )
+
+    def __str__(self):
+        return f"{self.name}"
 
 
 class SkiEvent(Event):
-    skis_type = models.CharField(
-        max_length=3,
-        choices=SkiTypeChoices.choices,
-        default=SkiTypeChoices.ALL
+    # RES: https://stackoverflow.com/questions/22538563/django-reverse-accessors-for-foreign-keys-clashing
+    skis_type = models.ManyToManyField(
+        to=SkisType,
+        related_name='%(class)s_skis_type',  # the name for that relation from the point of view of a skill
     )
 
     # IDEA
@@ -129,13 +151,14 @@ class SkiTraining(SkiEvent):
     gates = models.CharField(max_length=50, blank=True, null=True)
     number_of_runs = models.CharField(max_length=50, blank=True, null=True)
 
-    # RES: https://stackoverflow.com/questions/4904230/django-change-default-value-for-an-extended-model-class
-    # FIXME Validation -> SkiTraining could be only type EventTypeChoices.SKI_TRAINING -> return error if try to override
     def __init__(self, *args, **kwargs):
-        self._meta.get_field('type').default = EventTypeChoices.SKI_TRAINING
+        query = {
+            "type"     : EventTypeChoices.TRAINING,
+            "need_skis": True
+        }
+
         super(SkiEvent, self).__init__(*args, **kwargs)
-        # !ATTENTION! -> This rewrite type everytime !!!
-        self.type = EventTypeChoices.SKI_TRAINING
+        self.type, created = EventType.objects.get_or_create(**query)
 
 
 class RaceOrganizer(models.Model):
@@ -169,7 +192,6 @@ class RaceOrganizer(models.Model):
 
 class SkiRace(SkiEvent):
     organizer = models.ForeignKey(RaceOrganizer, on_delete=models.DO_NOTHING)
-    # results = models.OneToOneField(Results)
 
     propositionURL = models.URLField(max_length=200, blank=True, null=True)
     hotel_price = models.CharField(max_length=50, blank=True, null=True)
@@ -177,14 +199,9 @@ class SkiRace(SkiEvent):
     book_hotel_to = models.DateTimeField(blank=True, null=True)
 
     def __init__(self, *args, **kwargs):
-        self._meta.get_field('type').default = EventTypeChoices.SKI_RACE
+        query = {
+            "type"     : EventTypeChoices.RACE,
+            "need_skis": True
+        }
         super(SkiEvent, self).__init__(*args, **kwargs)
-        self._meta.get_field('type').default = EventTypeChoices.SKI_RACE
-        self.type = EventTypeChoices.SKI_RACE
-
-# class AthleticTest(Event):
-#     data= models.OneToOneField(TestsData)
-#     results = models.OneToOneField(Results)
-#     hotel_price = models.CharField(max_length=50, blank=True, null=True)
-#     book_hotel_from = models.DateTimeField(blank=True, null=True)
-#     book_hotel_to = models.DateTimeField(blank=True, null=True)
+        self.type, created = EventType.objects.get_or_create(**query)
