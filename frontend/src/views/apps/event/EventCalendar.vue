@@ -369,12 +369,17 @@ export default {
             textColor: 'black'
           },
           {
+            title: 'Event123',
+            start: '2020-10-30T13:20:00',
+            end: '2020-10-31T18:20:00',
+            color: 'yellow',
+            textColor: 'black'
+          },
+          {
             title: 'Repeating Event without sync',
             daysOfWeek: [1, 2, 3, 4], // these recurrent events move separately
-            startTime: '11:00:00',
-            endTime: '15:30:00',
-            startRecur: '2020-10-27',
-            endRecur: '2020-11-27'
+            startTime: '09:45:00',
+            endTime: '11:00:00'
           },
           {
             title: 'Event2',
@@ -386,7 +391,7 @@ export default {
             groupId: '999',
             daysOfWeek: [1, 4],
             title: 'Repeating Event',
-            startTime: '10:45:00',
+            startTime: '11:00:00',
             endTime: '12:45:00',
             color: 'green' // override!
           }

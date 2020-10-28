@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from colorfield.fields import ColorField
 
 from django.contrib.postgres.fields import ArrayField
@@ -70,23 +72,24 @@ class Location(models.Model):
 
 
 class EventType(models.Model):
-    type = models.CharField(
+    name = models.CharField(
         max_length=50,
         choices=EventTypeChoices.choices
     )
 
     color = ColorField(default='#3788d8')
     text_color = ColorField(default="white")
+    average_time = models.DurationField(default=timedelta(hours=1))
 
     need_skis = models.BooleanField(default=True)
 
     def __str__(self):
         if self.need_skis:
-            return f"Ski {self.get_type_display()}"
-        return f"{self.get_type_display()}"
+            return f"Ski {self.get_name_display()}"
+        return f"{self.get_name_display()}"
 
     class Meta:
-        unique_together = (('type', 'need_skis'),)
+        unique_together = (('name', 'need_skis'),)
 
 
 # RES: https://django-polymorphic.readthedocs.io/en/stable/
@@ -110,7 +113,7 @@ class Event(PolymorphicModel):
 
     # recurring events
     is_recur = models.BooleanField(default=False)
-    # group_id = models.CharField(max_length=150, blank=True)
+    # group_id = models.IntegerField(max_length=150, blank=True)
     days_of_week = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
 
     additional_info = models.CharField(max_length=150, blank=True)
@@ -153,7 +156,7 @@ class SkiTraining(SkiEvent):
 
     def __init__(self, *args, **kwargs):
         query = {
-            "type"     : EventTypeChoices.TRAINING,
+            "name"     : EventTypeChoices.TRAINING,
             "need_skis": True
         }
 
@@ -200,7 +203,7 @@ class SkiRace(SkiEvent):
 
     def __init__(self, *args, **kwargs):
         query = {
-            "type"     : EventTypeChoices.RACE,
+            "name"     : EventTypeChoices.RACE,
             "need_skis": True
         }
         super(SkiEvent, self).__init__(*args, **kwargs)

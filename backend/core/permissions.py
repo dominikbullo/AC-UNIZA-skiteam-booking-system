@@ -8,9 +8,7 @@ class IsCoachOrReadOnly(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
 
-        isCoach = request.user.profile.user_role == choices.UserTypeChoices.COACH
-        isAdmin = request.user.profile.user_role == choices.UserTypeChoices.ADMIN
-        #
-        # print("Allow {user} view {view} -> {allow}".format(user=request.user, view=str(view),
-        #                                                    allow=isCoach or isAdmin))
-        return isCoach or isAdmin
+        if request.user.is_staff:
+            return True
+
+        return request.user.is_coach() or request.user.is_admin()

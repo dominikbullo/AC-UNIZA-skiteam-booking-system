@@ -3,6 +3,7 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AbstractUser, Group, PermissionsMixin
 from django.db import models
 
+from core import choices
 from core.choices import GenderChoices, UserTypeChoices
 
 
@@ -44,6 +45,18 @@ class User(AbstractUser):
     @property
     def display_name(self):
         return self.email_or_full_name
+
+    def is_child(self):
+        return self.profile.user_role == choices.UserTypeChoices.CHILD
+
+    def is_parent(self):
+        return self.profile.user_role == choices.UserTypeChoices.COACH
+
+    def is_coach(self):
+        return self.profile.user_role == choices.UserTypeChoices.COACH
+
+    def is_admin(self):
+        return self.profile.user_role == choices.UserTypeChoices.COACH
 
 
 class Profile(models.Model):
