@@ -32,7 +32,6 @@ jobs:
     name: build backend
     needs: test
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
 
     steps:
       - name: Check out the repo
@@ -45,7 +44,6 @@ jobs:
     name: build frontend
     needs: test
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
 
     steps:
       - name: Check out the repo
