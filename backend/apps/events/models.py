@@ -108,7 +108,6 @@ class Event(PolymorphicModel):
     send_email = models.BooleanField(default=False)
 
     start = models.DateTimeField()
-    # TODO in serializers default datetime + 1h from start
     end = models.DateTimeField(blank=True)
 
     # recurring events
@@ -120,6 +119,9 @@ class Event(PolymorphicModel):
 
     def __str__(self):
         return f"{self.type} | {self.season}"
+
+    def need_skis(self):
+        return self.type.need_skis
 
 
 class SkisType(models.Model):

@@ -16,10 +16,8 @@ export default {
    * @default fetching from current active season
    */
   fetchEvents ({ commit }, payload = { query: { season: {} } }) {
-    // console.log('payload fetch events', payload)
-
     return new Promise((resolve, reject) => {
-      axios.get('/event/', {
+      axios.get('/events/', {
         params: payload.query
       })
         .then((response) => {

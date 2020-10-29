@@ -359,44 +359,7 @@ export default {
       return '07:00:00'
     },
     calendarEvents () {
-      // return this.$store.state.calendar.events
-      return {
-        events: [
-          {
-            title: 'Event1',
-            start: '2020-10-27',
-            color: 'yellow',
-            textColor: 'black'
-          },
-          {
-            title: 'Event123',
-            start: '2020-10-30T13:20:00',
-            end: '2020-10-31T18:20:00',
-            color: 'yellow',
-            textColor: 'black'
-          },
-          {
-            title: 'Repeating Event without sync',
-            daysOfWeek: [1, 2, 3, 4], // these recurrent events move separately
-            startTime: '09:45:00',
-            endTime: '11:00:00'
-          },
-          {
-            title: 'Event2',
-            start: '2020-10-27',
-            color: 'red',
-            textColor: 'black'
-          },
-          {
-            groupId: '999',
-            daysOfWeek: [1, 4],
-            title: 'Repeating Event',
-            startTime: '11:00:00',
-            endTime: '12:45:00',
-            color: 'green' // override!
-          }
-        ]
-      }
+      return this.$store.getters['calendar/getEventsForCal']
     },
     userChildren () {
       // const members = this.$store.state.family.members
@@ -419,7 +382,6 @@ export default {
       Object.values(object).forEach((element) => {
         ret.push(element[displayKey])
       })
-
       return ret
     },
     getExtraInfo () {
@@ -501,6 +463,9 @@ export default {
     },
     handleEventChange (arg) {
       console.log('handling change in event', arg.event.id, arg)
+      console.log('handling change in start', arg.event.start)
+      console.log('handling change in end', arg.event.end)
+
       const event = {
         id: arg.event.id,
         start: arg.event.start,
@@ -622,9 +587,7 @@ export default {
     this.$store.dispatch('calendar/fetchEvents')
     this.$store.dispatch('family/fetchFamily', this.$store.state.AppActiveUser.profile.family_id)
 
-    if (this.$acl.check('isCoach')) {
-      this.fetchConfigData()
-    }
+    if (this.$acl.check('isCoach')) this.fetchConfigData()
   }
 }
 

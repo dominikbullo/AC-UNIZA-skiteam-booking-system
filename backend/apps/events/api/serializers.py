@@ -1,7 +1,5 @@
 from django.utils import timezone
 
-from drf_writable_nested.serializers import WritableNestedModelSerializer
-
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
@@ -44,6 +42,8 @@ class RaceOrganizerSerializer(serializers.ModelSerializer):
 
 
 class EventTypeSerializer(serializers.ModelSerializer):
+    displayName = serializers.CharField(source='get_name_display', read_only=True)
+
     class Meta:
         model = EventType
         exclude = ("id",)
@@ -66,18 +66,16 @@ class ParticipantsSerializer(serializers.ModelSerializer):
 
 
 class BaseEventSerializer(serializers.ModelSerializer):
-    title = serializers.CharField(source='get_type_display', read_only=True)
-
-    startTime = serializers.CharField(source="start", read_only=True)
-    endTime = serializers.CharField(source="end", read_only=True)
-    startRecur = serializers.CharField(source="start", read_only=True)
-    endRecur = serializers.CharField(source="end", read_only=True)
+    # startTime = serializers.CharField(source="start", read_only=True)
+    # endTime = serializers.CharField(source="end", read_only=True)
+    # startRecur = serializers.CharField(source="start", read_only=True)
+    # endRecur = serializers.CharField(source="end", read_only=True)
 
     type = EventTypeSerializer(read_only=True)
 
     class Meta:
-        # fields = ("title", "type", "start", "end", "is_recur", "daysOfWeak",)
-        exclude = ("id", "season", "location", "category", "participants")
+        fields = "__all__"
+        # exclude = ("season", "location", "category", "participants")
 
 
 class EventSerializer(BaseEventSerializer):
@@ -99,13 +97,17 @@ class EventSerializer(BaseEventSerializer):
 
 
 class SkiTrainingSerializer(BaseEventSerializer):
-
-    def validate(self, data):
-        validated_data = super(SkiTrainingSerializer, self).validate(data)
-        # event_type = data.get("type")
-        # if event_type != choices.EventTypeChoices.SKI_TRAINING:
-        #     raise ValidationError("Bad resourcetype for %s" % event_type)
-        return validated_data
+    # def validate(self, data):
+    #     # query = {
+    #     #     "name"     : EventTypeChoices.TRAINING,
+    #     #     "need_skis": True
+    #     # }
+    #     validated_data = super(SkiTrainingSerializer, self).validate(data)
+    #     # event_type = data.get("type")
+    #     # event_type = EventType.objects.exists(**query).first()
+    #     # if event_type != EventType.objects.exists(**query).first()
+    #     #     raise ValidationError("Bad resourcetype for %s" % event_type)
+    #     return validated_data
 
     class Meta(BaseEventSerializer.Meta):
         model = SkiTraining
