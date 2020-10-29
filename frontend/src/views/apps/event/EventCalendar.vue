@@ -39,89 +39,87 @@
           class="my-prompt"
           :title="$t('Event detail')">
 
+        <vs-tabs>
+          <vs-tab label="Home">
+            <div v-if="editedEvent" id="event-info-table" class="con-tab-ejemplo">
 
-        <div v-if="editedEvent" id="event-info-table">
-          <div class="vx-row">
-            <div class="vx-col flex-1" id="event-info-col-1">
-              <table>
-                <tr>
-                  <td class="font-bold">{{ $t('Start date') }}</td>
-                  <td>{{ editedEvent.start | date }}</td>
-                </tr>
-                <tr>
-                  <td class="font-bold">{{ $t('Event type') }}</td>
-                  <td>{{ $t(editedEvent.type.displayName) }}</td>
-                </tr>
-                <tr>
-                  <td class="font-bold">{{ $t('Location') }}</td>
-                  <!-- TODO: Location with slope maybe? -->
-                  <!--                  <td>{{ editedEvent.location.displayName }}</td>-->
-                </tr>
-                <tr>
-                  <td class="font-bold">{{ $t('Category') }}</td>
-                  <td>{{ displayObject(editedEvent.category).toString() }}</td>
-                </tr>
-              </table>
-            </div>
-          </div>
-          <vs-divider></vs-divider>
-          <div class="vx-row">
-            <div class="vx-col flex-1" id="event-info-col-2">
-              <table>
-                <tr>
-                  <td class="font-bold">{{ $t('Start') }}</td>
-                  <td>{{ editedEvent.start | time(true) }}</td>
-                </tr>
-                <tr v-if="SKI_EVENTS.includes(editedEvent.type)">
-                  <td class="font-bold">{{ $t('Skis') }}</td>
-                  <td>{{ editedEvent.skis_type }}</td>
-                </tr>
-              </table>
-            </div>
-            <div class="vx-col flex-1" id="event-info-col-3">
-              <table>
-                <tr>
-                  <td class="font-bold">{{ $t('End') }}</td>
-                  <td>{{ editedEvent.end | time(true) }}</td>
-                </tr>
-              </table>
-            </div>
-          </div>
-          <!-- TODO: if exist -->
-          <div v-if="editedEvent.additional_info" class="vx-row">
-            <div class="vx-col">
-              <p class="font-bold mr-5">{{ $t('Additional Information') }}:</p>
-              <p>{{ editedEvent.additional_info }}</p>
-            </div>
-          </div>
-          <div v-if="$acl.check('isCoach')">
-            <vs-divider>Coach zone</vs-divider>
-            <div class="vx-col w-full flex flex-wrap items-center justify-center">
+              <div class="vx-row">
+                <div class="vx-col flex-1" id="event-info-col-2">
+                  <table>
+                    <tr>
+                      <td class="font-bold">{{ $t('Location') }}</td>
+                      <!-- TODO: Location with slope maybe? -->
+                      <!--                  <td>{{ editedEvent.location.displayName }}</td>-->
+                    </tr>
+                    <tr>
+                      <td class="font-bold">{{ $t('Category') }}</td>
+                      <td>{{ displayObject(editedEvent.category).toString() }}</td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+              <!-- TODO: if exist -->
+              <div v-if="editedEvent.additional_info" class="vx-row">
+                <div class="vx-col">
+                  <p class="font-bold mr-5">{{ $t('Additional Information') }}:</p>
+                  <p>{{ editedEvent.additional_info }}</p>
+                </div>
+              </div>
+              <div v-if="$acl.check('isCoach')">
+                <vs-divider>Coach zone</vs-divider>
+                <div class="vx-col w-full flex flex-wrap items-center justify-center">
 
-              <vs-button icon-pack="feather" icon="icon-edit" class="mr-4"
-                         :to="{name: 'app-event-edit', params: { eventId: this.editedEvent.id }}">Edit
-              </vs-button>
+                  <vs-button icon-pack="feather" icon="icon-edit" class="mr-4"
+                             :to="{name: 'app-event-edit', params: { eventId: this.editedEvent.id }}">Edit
+                  </vs-button>
 
-              <vs-button type="border" color="danger" icon-pack="feather" icon="icon-trash"
-                         @click="confirmDeleteRecord">Delete
-              </vs-button>
+                  <vs-button type="border" color="danger" icon-pack="feather" icon="icon-trash"
+                             @click="confirmDeleteRecord">Delete
+                  </vs-button>
+                </div>
+              </div>
+
+              <ul class="centerx">
+                <vs-divider>{{ $t('Your children') }}</vs-divider>
+                <!--            <pre>{{ userChildren }}</pre>-->
+                <li class="mb-2" :key="child.user.profile.id" v-for="child in userChildren">
+                  <vs-checkbox
+                      :vs-value="child.user.profile.id"
+                      color="success"
+                      v-model="childAddToEventPrompt.selected">
+                    {{ child.user.first_name }} {{ child.user.last_name }}
+                  </vs-checkbox>
+                </li>
+              </ul>
+
             </div>
-          </div>
+          </vs-tab>
+          <vs-tab label="Info">
+            <div v-if="editedEvent" class="con-tab-ejemplo vx-row">
+              <div class="vx-col flex-1" id="event-info-col-1">
+                <table>
+                  <tr>
+                    <td class="font-bold">{{ $t('Start') }}</td>
+                    <td>{{ editedEvent.start | time(true) }}</td>
+                  </tr>
+                  <tr v-if="SKI_EVENTS.includes(editedEvent.type)">
+                    <td class="font-bold">{{ $t('Skis') }}</td>
+                    <td>{{ editedEvent.skis_type }}</td>
+                  </tr>
+                  <tr>
+                    <td class="font-bold">{{ $t('Start date') }}</td>
+                    <td>{{ editedEvent.start | date }}</td>
+                  </tr>
+                  <tr>
+                    <td class="font-bold">{{ $t('Event type') }}</td>
+                    <td>{{ $t(editedEvent.type.displayName) }}</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </vs-tab>
 
-          <ul class="centerx">
-            <vs-divider>{{ $t('Your children') }}</vs-divider>
-            <!--            <pre>{{ userChildren }}</pre>-->
-            <li class="mb-2" :key="child.user.id" v-for="child in userChildren">
-              <vs-checkbox
-                  :vs-value="child.user.id"
-                  color="success"
-                  v-model="childAddToEventPrompt.selected">
-                {{ child.user.first_name }} {{ child.user.last_name }}
-              </vs-checkbox>
-            </li>
-          </ul>
-
-        </div>
+        </vs-tabs>
       </vs-prompt>
 
 
@@ -423,11 +421,21 @@ export default {
 
           const childrenUsersID = []
           Object.values(this.$store.getters['family/familyChildren']).forEach(obj => {
-            childrenUsersID.push(obj.user.id)
+            childrenUsersID.push(obj.user.profile.id)
           })
+          console.log('childrenUsersID', childrenUsersID)
 
-          this.childAddToEventPrompt.onEvent = childrenUsersID
-          this.childAddToEventPrompt.selected = childrenUsersID
+          const eventChildren = []
+          Object.values(this.editedEvent['participants']).forEach(obj => {
+            eventChildren.push(obj.id)
+          })
+          console.log('eventChildren', eventChildren)
+
+          const userChildrenOnEvent = childrenUsersID.filter(x => eventChildren.includes(x))
+          console.log('userChildrenOnEvent', userChildrenOnEvent)
+
+          this.childAddToEventPrompt.onEvent = userChildrenOnEvent
+          this.childAddToEventPrompt.selected = userChildrenOnEvent
 
           this.childAddToEventPrompt.active = true
         })
@@ -476,7 +484,7 @@ export default {
       this.handleEventChange(eventResizeInfo)
     },
     handleEventMouseEnter (arg) {
-      console.log('handling mouse event enter', arg)
+      // console.log('handling mouse event enter', arg)
     },
 
 

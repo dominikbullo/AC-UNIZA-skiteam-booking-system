@@ -35,9 +35,6 @@ class EventViewSet(viewsets.ModelViewSet):
     def get_event(self, pk):
         return get_object_or_404(Event, pk=pk)
 
-    def get_user_profile(self, username):
-        return get_object_or_404(Profile, user__username=username)
-
     # RES: https://stackoverflow.com/questions/36365326/django-rest-framework-doesnt-serialize-serializermethodfield
     @action(detail=True, methods=['post'], url_path='change', permission_classes=[AllowAny])
     def add_users_to_event(self, request, pk=None):
@@ -50,23 +47,23 @@ class EventViewSet(viewsets.ModelViewSet):
             Response(status=status.HTTP_400_BAD_REQUEST)
 
         failed = []
-        for user in users.get("add", ""):
-            # print("add", user)
+        for profile_ID in users.get("add", ""):
             try:
-                event.participants.add(self.get_user_profile(user))
+                event.participants.add(get_object_or_404(Profile, id=profile_ID))
             except Http404:
-                failed.append(user)
-                print("User", user, "not found")
+                failed.append(profile_ID)
+                print("User with profile id", profile_ID, "not found")
                 # raise ValidationError("User %s not found" % user)
                 pass
 
-        for user in users.get("delete", ""):
+        for profile_ID in users.get("delete", ""):
             # print("delete", user)
             try:
-                event.participants.remove(self.get_user_profile(user))
+                event.participants.remove(get_object_or_404(Profile, id=profile_ID))
             except Http404:
-                failed.append(user)
-                print("User", user, "not found")
+                failed.append(profile_ID)
+                print("User with profile id", profile_ID, "not found")
+
                 # raise ValidationError("User %s not found" % user)
                 pass
 
