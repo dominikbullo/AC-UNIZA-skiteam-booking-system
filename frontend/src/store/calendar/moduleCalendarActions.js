@@ -29,11 +29,12 @@ export default {
         })
     })
   },
-  fetchEvent (context, eventId) {
+  fetchEvent ({ commit }, eventId) {
     console.log('payload fetch event', eventId)
     return new Promise((resolve, reject) => {
       axios.get(`/event/${eventId}/`)
         .then((response) => {
+          commit('UPDATE_EVENT', response.data)
           resolve(response)
         })
         .catch((error) => {

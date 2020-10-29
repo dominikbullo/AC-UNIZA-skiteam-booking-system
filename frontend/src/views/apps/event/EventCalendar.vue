@@ -43,83 +43,83 @@
         <div v-if="editedEvent" id="event-info-table">
           <div class="vx-row">
             <div class="vx-col flex-1" id="event-info-col-1">
-              <pre>{{ editedEvent }}</pre>
-              <!--              <table>-->
-              <!--                <tr>-->
-              <!--                  <td class="font-bold">{{ $t('Start date') }}</td>-->
-              <!--                  <td>{{ editedEvent.start | date }}</td>-->
-              <!--                </tr>-->
-              <!--                <tr>-->
-              <!--                  <td class="font-bold">{{ $t('Event type') }}</td>-->
-              <!--                  <td>{{ $t(editedEvent.type.displayName) }}</td>-->
-              <!--                </tr>-->
-              <!--                <tr>-->
-              <!--                  <td class="font-bold">{{ $t('Location') }}</td>-->
-              <!--                  &lt;!&ndash; TODO: Location with slope maybe? &ndash;&gt;-->
-              <!--                  &lt;!&ndash;                  <td>{{ editedEvent.location.displayName }}</td>&ndash;&gt;-->
-              <!--                </tr>-->
-              <!--                <tr>-->
-              <!--                  <td class="font-bold">{{ $t('Category') }}</td>-->
-              <!--                  <td>{{ displayObject(editedEvent.category).toString() }}</td>-->
-              <!--                </tr>-->
-              <!--              </table>-->
+              <table>
+                <tr>
+                  <td class="font-bold">{{ $t('Start date') }}</td>
+                  <td>{{ editedEvent.start | date }}</td>
+                </tr>
+                <tr>
+                  <td class="font-bold">{{ $t('Event type') }}</td>
+                  <td>{{ $t(editedEvent.type.displayName) }}</td>
+                </tr>
+                <tr>
+                  <td class="font-bold">{{ $t('Location') }}</td>
+                  <!-- TODO: Location with slope maybe? -->
+                  <!--                  <td>{{ editedEvent.location.displayName }}</td>-->
+                </tr>
+                <tr>
+                  <td class="font-bold">{{ $t('Category') }}</td>
+                  <td>{{ displayObject(editedEvent.category).toString() }}</td>
+                </tr>
+              </table>
             </div>
           </div>
           <vs-divider></vs-divider>
-          <!--          <div class="vx-row">-->
-          <!--            <div class="vx-col flex-1" id="event-info-col-2">-->
-          <!--              <table>-->
-          <!--                <tr>-->
-          <!--                  <td class="font-bold">{{ $t('Start') }}</td>-->
-          <!--                  <td>{{ editedEvent.start | time(true) }}</td>-->
-          <!--                </tr>-->
-          <!--                <tr v-if="SKI_EVENTS.includes(editedEvent.type)">-->
-          <!--                  <td class="font-bold">{{ $t('Skis') }}</td>-->
-          <!--                  <td>{{ editedEvent.skis_type }}</td>-->
-          <!--                </tr>-->
-          <!--              </table>-->
-          <!--            </div>-->
-          <!--            <div class="vx-col flex-1" id="event-info-col-3">-->
-          <!--              <table>-->
-          <!--                <tr>-->
-          <!--                  <td class="font-bold">{{ $t('End') }}</td>-->
-          <!--                  <td>{{ editedEvent.end | time(true) }}</td>-->
-          <!--                </tr>-->
-          <!--              </table>-->
-          <!--            </div>-->
-          <!--          </div>-->
-          <!--          &lt;!&ndash; TODO: if exist &ndash;&gt;-->
-          <!--          <div v-if="editedEvent.additional_info" class="vx-row">-->
-          <!--            <div class="vx-col">-->
-          <!--              <p class="font-bold mr-5">{{ $t('Additional Information') }}:</p>-->
-          <!--              <p>{{ editedEvent.additional_info }}</p>-->
-          <!--            </div>-->
-          <!--          </div>-->
-          <!--          <div v-if="$acl.check('isCoach')">-->
-          <!--            <vs-divider>Coach zone</vs-divider>-->
-          <!--            <div class="vx-col w-full flex flex-wrap items-center justify-center">-->
+          <div class="vx-row">
+            <div class="vx-col flex-1" id="event-info-col-2">
+              <table>
+                <tr>
+                  <td class="font-bold">{{ $t('Start') }}</td>
+                  <td>{{ editedEvent.start | time(true) }}</td>
+                </tr>
+                <tr v-if="SKI_EVENTS.includes(editedEvent.type)">
+                  <td class="font-bold">{{ $t('Skis') }}</td>
+                  <td>{{ editedEvent.skis_type }}</td>
+                </tr>
+              </table>
+            </div>
+            <div class="vx-col flex-1" id="event-info-col-3">
+              <table>
+                <tr>
+                  <td class="font-bold">{{ $t('End') }}</td>
+                  <td>{{ editedEvent.end | time(true) }}</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <!-- TODO: if exist -->
+          <div v-if="editedEvent.additional_info" class="vx-row">
+            <div class="vx-col">
+              <p class="font-bold mr-5">{{ $t('Additional Information') }}:</p>
+              <p>{{ editedEvent.additional_info }}</p>
+            </div>
+          </div>
+          <div v-if="$acl.check('isCoach')">
+            <vs-divider>Coach zone</vs-divider>
+            <div class="vx-col w-full flex flex-wrap items-center justify-center">
 
-          <!--              <vs-button icon-pack="feather" icon="icon-edit" class="mr-4"-->
-          <!--                         :to="{name: 'app-event-edit', params: { eventId: this.editedEvent.id }}">Edit-->
-          <!--              </vs-button>-->
+              <vs-button icon-pack="feather" icon="icon-edit" class="mr-4"
+                         :to="{name: 'app-event-edit', params: { eventId: this.editedEvent.id }}">Edit
+              </vs-button>
 
-          <!--              <vs-button type="border" color="danger" icon-pack="feather" icon="icon-trash"-->
-          <!--                         @click="confirmDeleteRecord">Delete-->
-          <!--              </vs-button>-->
-          <!--            </div>-->
-          <!--          </div>-->
+              <vs-button type="border" color="danger" icon-pack="feather" icon="icon-trash"
+                         @click="confirmDeleteRecord">Delete
+              </vs-button>
+            </div>
+          </div>
 
-          <!--          <ul class="centerx">-->
-          <!--            <vs-divider>{{ $t('Your children') }}</vs-divider>-->
-          <!--            <li class="mb-2" :key="child.username" v-for="child in userChildren">-->
-          <!--              <vs-checkbox-->
-          <!--                  :vs-value="child.username"-->
-          <!--                  color="success"-->
-          <!--                  v-model="childAddToEventPrompt.selected">-->
-          <!--                {{ child.first_name }} {{ child.last_name }}-->
-          <!--              </vs-checkbox>-->
-          <!--            </li>-->
-          <!--          </ul>-->
+          <ul class="centerx">
+            <vs-divider>{{ $t('Your children') }}</vs-divider>
+            <!--            <pre>{{ userChildren }}</pre>-->
+            <li class="mb-2" :key="child.user.id" v-for="child in userChildren">
+              <vs-checkbox
+                  :vs-value="child.user.id"
+                  color="success"
+                  v-model="childAddToEventPrompt.selected">
+                {{ child.user.first_name }} {{ child.user.last_name }}
+              </vs-checkbox>
+            </li>
+          </ul>
 
         </div>
       </vs-prompt>
@@ -363,14 +363,7 @@ export default {
       return this.$store.getters['calendar/getEventsForCal']
     },
     userChildren () {
-      // const members = this.$store.state.family.members
-      const members = this.$store.getters['family/familyChildren']
-
-      const cleanMembers = []
-      members.forEach((element) => {
-        cleanMembers.unshift(element['user'])
-      })
-      return cleanMembers
+      return this.$store.getters['family/familyChildren']
     },
     validForm () {
       // FIXME
@@ -398,6 +391,7 @@ export default {
       }
       return { resourcetype: 'Event' }
     },
+
     addEvent () {
       const eventForm = {
         category: this.addEventPrompt.category.selected,
@@ -422,24 +416,29 @@ export default {
         })
         return false
       }
-      this.editedEvent = Object.values(this.calendarEvents).find(obj => {
-        return obj.id === parseInt(arg.event.id)
-      })
 
-      // TODO: Getter
-      const myChildrenOnEvent = this.editedEvent['participants'].filter(obj => {
-        return obj.family_id === this.$store.state.AppActiveUser.profile.family_id
-      })
+      this.$store.dispatch('calendar/fetchEvent', arg.event.id)
+        .then(res => {
+          this.editedEvent = res.data
+          console.log('this.editedEvent', this.editedEvent)
+          console.log('this.editedEvent.participants', this.editedEvent.participants)
+          // TODO: Getter
+          let myChildrenOnEvent = null
+          try {
+            myChildrenOnEvent = Object.values(this.editedEvent.data['participants']).filter(obj => {
+              return obj.family_id === this.$store.state.AppActiveUser.profile.family_id
+            })
+          } catch (err) {
+            console.error(err)
+          }
 
-      // TODO not parents just children
-      const userNames = []
-      myChildrenOnEvent.forEach((element) => {
-        userNames.unshift(element['username'])
-      })
-      this.childAddToEventPrompt.onEvent = userNames
-      this.childAddToEventPrompt.selected = userNames
+          console.log('myChildrenOnEvent', myChildrenOnEvent)
 
-      this.childAddToEventPrompt.active = true
+          this.childAddToEventPrompt.onEvent = myChildrenOnEvent
+          this.childAddToEventPrompt.selected = myChildrenOnEvent
+
+          this.childAddToEventPrompt.active = true
+        })
     },
     handleSelect (arg) {
       console.log('arg', arg)
@@ -447,6 +446,7 @@ export default {
       this.newEvent.end = arg.end
       this.addEventPrompt.active = true
     },
+
     handleEventChange (arg) {
       console.log('handling change in event', arg.event.id, arg)
       console.log('handling change in start', arg.event.start)
@@ -459,7 +459,7 @@ export default {
       }
 
       this.$store.dispatch('calendar/editEvent', { ...event, ...this.getExtraInfo() })
-        .then(res => {
+        .then(() => {
           this.$vs.notify({
             color: 'success',
             title: 'Event Updated',
@@ -484,8 +484,10 @@ export default {
       this.handleEventChange(eventResizeInfo)
     },
     handleEventMouseEnter (arg) {
-      // console.log('handling mouse event enter', arg)
+      console.log('handling mouse event enter', arg)
     },
+
+
     confirmDeleteRecord () {
       console.log('event', this.editedEvent)
       this.childAddToEventPrompt.active = false
@@ -498,6 +500,7 @@ export default {
         acceptText: 'Delete'
       })
     },
+
     deleteEvent () {
       this.$store.dispatch('calendar/deleteEvent', this.editedEvent)
         .then(res => {
@@ -516,6 +519,7 @@ export default {
           console.error(err)
         })
     },
+
     showDeleteSuccess () {
       this.$vs.notify({
         color: 'success',
@@ -523,9 +527,13 @@ export default {
         text: 'The selected user was successfully deleted'
       })
     },
+
+
     clearFields () {
       console.warn('need to clean fields')
     },
+
+
     changeUserChildrenOnEvent () {
       const payload = {
         'eventID': this.editedEvent.id,
@@ -535,6 +543,8 @@ export default {
 
       this.$store.dispatch('calendar/changeEventMembers', payload)
     },
+
+
     cleanData (object, key = 'id') {
       const id = []
       Object.values(object).forEach((item) => {
@@ -542,6 +552,8 @@ export default {
       })
       return id
     },
+
+
     fetchConfigData () {
       console.log('Hello coach')
 
@@ -573,7 +585,7 @@ export default {
     this.$store.dispatch('calendar/fetchEvents')
     this.$store.dispatch('family/fetchFamily', this.$store.state.AppActiveUser.profile.family_id)
 
-    if (this.$acl.check('isCoach')) this.fetchConfigData()
+    // if (this.$acl.check('isCoach')) this.fetchConfigData()
   }
 }
 

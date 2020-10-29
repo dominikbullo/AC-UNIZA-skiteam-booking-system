@@ -3,6 +3,7 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AbstractUser, Group, PermissionsMixin
 from django.db import models
 
+from apps.family.models import Family
 from core import choices
 from core.choices import GenderChoices, UserTypeChoices
 

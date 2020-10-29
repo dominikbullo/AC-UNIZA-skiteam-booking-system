@@ -10,7 +10,9 @@
 
 export default {
   getEvent: state => (eventId) => state.events.find((event) => event.id === eventId),
-  getEventDetails: state => (eventId) => state.events.find((event) => event.id === eventId),
+  // getMyChildrenFromEvent: state => (eventId) => state.events.participants.filter(obj => {
+  //   return obj.family_id === this.store.state.AppActiveUser.profile.family_id
+  // }),
   getEventsForCal: state => {
     function getData (obj) {
       return {
