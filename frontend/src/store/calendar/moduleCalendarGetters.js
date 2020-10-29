@@ -10,16 +10,16 @@
 
 export default {
   getEvent: state => (eventId) => state.events.find((event) => event.id === eventId),
+  getEventDetails: state => (eventId) => state.events.find((event) => event.id === eventId),
   getEventsForCal: state => {
     function getData (obj) {
       return {
         id: obj.id,
         start: obj.start,
-        end: obj.start,
+        end: obj.end,
         title: obj.type.displayName,
         color: obj.type.color,
-        textColor: obj.type.text_color,
-        participants: obj.participants
+        textColor: obj.type.text_color
       }
     }
 

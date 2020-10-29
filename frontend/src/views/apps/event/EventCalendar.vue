@@ -43,82 +43,83 @@
         <div v-if="editedEvent" id="event-info-table">
           <div class="vx-row">
             <div class="vx-col flex-1" id="event-info-col-1">
-              <table>
-                <tr>
-                  <td class="font-bold">{{ $t('Start date') }}</td>
-                  <td>{{ editedEvent.start | date }}</td>
-                </tr>
-                <tr>
-                  <td class="font-bold">{{ $t('Event type') }}</td>
-                  <td>{{ $t(editedEvent.title) }}</td>
-                </tr>
-                <tr>
-                  <td class="font-bold">{{ $t('Location') }}</td>
-                  <!-- TODO: Location with slope maybe? -->
-                  <td>{{ editedEvent.location.displayName }}</td>
-                </tr>
-                <tr>
-                  <td class="font-bold">{{ $t('Category') }}</td>
-                  <td>{{ displayObject(editedEvent.category).toString() }}</td>
-                </tr>
-              </table>
+              <pre>{{ editedEvent }}</pre>
+              <!--              <table>-->
+              <!--                <tr>-->
+              <!--                  <td class="font-bold">{{ $t('Start date') }}</td>-->
+              <!--                  <td>{{ editedEvent.start | date }}</td>-->
+              <!--                </tr>-->
+              <!--                <tr>-->
+              <!--                  <td class="font-bold">{{ $t('Event type') }}</td>-->
+              <!--                  <td>{{ $t(editedEvent.type.displayName) }}</td>-->
+              <!--                </tr>-->
+              <!--                <tr>-->
+              <!--                  <td class="font-bold">{{ $t('Location') }}</td>-->
+              <!--                  &lt;!&ndash; TODO: Location with slope maybe? &ndash;&gt;-->
+              <!--                  &lt;!&ndash;                  <td>{{ editedEvent.location.displayName }}</td>&ndash;&gt;-->
+              <!--                </tr>-->
+              <!--                <tr>-->
+              <!--                  <td class="font-bold">{{ $t('Category') }}</td>-->
+              <!--                  <td>{{ displayObject(editedEvent.category).toString() }}</td>-->
+              <!--                </tr>-->
+              <!--              </table>-->
             </div>
           </div>
           <vs-divider></vs-divider>
-          <div class="vx-row">
-            <div class="vx-col flex-1" id="event-info-col-2">
-              <table>
-                <tr>
-                  <td class="font-bold">{{ $t('Start') }}</td>
-                  <td>{{ editedEvent.start | time(true) }}</td>
-                </tr>
-                <tr v-if="SKI_EVENTS.includes(editedEvent.type)">
-                  <td class="font-bold">{{ $t('Skis') }}</td>
-                  <td>{{ editedEvent.skis_type }}</td>
-                </tr>
-              </table>
-            </div>
-            <div class="vx-col flex-1" id="event-info-col-3">
-              <table>
-                <tr>
-                  <td class="font-bold">{{ $t('End') }}</td>
-                  <td>{{ editedEvent.end | time(true) }}</td>
-                </tr>
-              </table>
-            </div>
-          </div>
-          <!-- TODO: if exist -->
-          <div v-if="editedEvent.additional_info" class="vx-row">
-            <div class="vx-col">
-              <p class="font-bold mr-5">{{ $t('Additional Information') }}:</p>
-              <p>{{ editedEvent.additional_info }}</p>
-            </div>
-          </div>
-          <div v-if="$acl.check('isCoach')">
-            <vs-divider>Coach zone</vs-divider>
-            <div class="vx-col w-full flex flex-wrap items-center justify-center">
+          <!--          <div class="vx-row">-->
+          <!--            <div class="vx-col flex-1" id="event-info-col-2">-->
+          <!--              <table>-->
+          <!--                <tr>-->
+          <!--                  <td class="font-bold">{{ $t('Start') }}</td>-->
+          <!--                  <td>{{ editedEvent.start | time(true) }}</td>-->
+          <!--                </tr>-->
+          <!--                <tr v-if="SKI_EVENTS.includes(editedEvent.type)">-->
+          <!--                  <td class="font-bold">{{ $t('Skis') }}</td>-->
+          <!--                  <td>{{ editedEvent.skis_type }}</td>-->
+          <!--                </tr>-->
+          <!--              </table>-->
+          <!--            </div>-->
+          <!--            <div class="vx-col flex-1" id="event-info-col-3">-->
+          <!--              <table>-->
+          <!--                <tr>-->
+          <!--                  <td class="font-bold">{{ $t('End') }}</td>-->
+          <!--                  <td>{{ editedEvent.end | time(true) }}</td>-->
+          <!--                </tr>-->
+          <!--              </table>-->
+          <!--            </div>-->
+          <!--          </div>-->
+          <!--          &lt;!&ndash; TODO: if exist &ndash;&gt;-->
+          <!--          <div v-if="editedEvent.additional_info" class="vx-row">-->
+          <!--            <div class="vx-col">-->
+          <!--              <p class="font-bold mr-5">{{ $t('Additional Information') }}:</p>-->
+          <!--              <p>{{ editedEvent.additional_info }}</p>-->
+          <!--            </div>-->
+          <!--          </div>-->
+          <!--          <div v-if="$acl.check('isCoach')">-->
+          <!--            <vs-divider>Coach zone</vs-divider>-->
+          <!--            <div class="vx-col w-full flex flex-wrap items-center justify-center">-->
 
-              <vs-button icon-pack="feather" icon="icon-edit" class="mr-4"
-                         :to="{name: 'app-event-edit', params: { eventId: this.editedEvent.id }}">Edit
-              </vs-button>
+          <!--              <vs-button icon-pack="feather" icon="icon-edit" class="mr-4"-->
+          <!--                         :to="{name: 'app-event-edit', params: { eventId: this.editedEvent.id }}">Edit-->
+          <!--              </vs-button>-->
 
-              <vs-button type="border" color="danger" icon-pack="feather" icon="icon-trash"
-                         @click="confirmDeleteRecord">Delete
-              </vs-button>
-            </div>
-          </div>
+          <!--              <vs-button type="border" color="danger" icon-pack="feather" icon="icon-trash"-->
+          <!--                         @click="confirmDeleteRecord">Delete-->
+          <!--              </vs-button>-->
+          <!--            </div>-->
+          <!--          </div>-->
 
-          <ul class="centerx">
-            <vs-divider>{{ $t('Your children') }}</vs-divider>
-            <li class="mb-2" :key="child.username" v-for="child in userChildren">
-              <vs-checkbox
-                  :vs-value="child.username"
-                  color="success"
-                  v-model="childAddToEventPrompt.selected">
-                {{ child.first_name }} {{ child.last_name }}
-              </vs-checkbox>
-            </li>
-          </ul>
+          <!--          <ul class="centerx">-->
+          <!--            <vs-divider>{{ $t('Your children') }}</vs-divider>-->
+          <!--            <li class="mb-2" :key="child.username" v-for="child in userChildren">-->
+          <!--              <vs-checkbox-->
+          <!--                  :vs-value="child.username"-->
+          <!--                  color="success"-->
+          <!--                  v-model="childAddToEventPrompt.selected">-->
+          <!--                {{ child.first_name }} {{ child.last_name }}-->
+          <!--              </vs-checkbox>-->
+          <!--            </li>-->
+          <!--          </ul>-->
 
         </div>
       </vs-prompt>
@@ -139,7 +140,7 @@
               <label class="text-sm">{{ $t('Event type') }} </label>
               <!-- RES: https://vue-select.org/ -->
               <v-select :clearable="false"
-                        label="displayName"
+                        label="type.displayName"
                         :reduce="item => item.key"
                         v-model="addEventPrompt.type.selected"
                         :options="addEventPrompt.type.options"/>
@@ -425,25 +426,10 @@ export default {
         return obj.id === parseInt(arg.event.id)
       })
 
-      // if (this.$acl.check('isCoach')) {
-      //   const categoriesOnEvent = []
-      //   const category = this.$store.state.calendar.eventConfig.categories
-      //   Object.values(category).forEach((categoryOnEvent) => {
-      //     categoriesOnEvent.push(category.find(function (entry) {
-      //         return entry.id === categoryOnEvent.id
-      //       })
-      //     )
-      //   })
-      //   this.editedEvent.category = categoriesOnEvent
-      // }
-
-      // IDEA: Check with userChildren() array
-      // console.log('participants', this.editedEvent['participants'])
+      // TODO: Getter
       const myChildrenOnEvent = this.editedEvent['participants'].filter(obj => {
-        // console.log('obj', obj)
         return obj.family_id === this.$store.state.AppActiveUser.profile.family_id
       })
-      // console.log('myChildOnEvent', myChildOnEvent)
 
       // TODO not parents just children
       const userNames = []
