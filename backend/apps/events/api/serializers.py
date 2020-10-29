@@ -60,11 +60,9 @@ class LocationSerializer(serializers.ModelSerializer):
 class ParticipantsSerializer(serializers.ModelSerializer):
     displayName = serializers.CharField(source='user.full_name', read_only=True)
 
-    # family_id = serializers.SerializerMethodField()
-
     class Meta:
         model = Profile
-        fields = ("id", "displayName", "family_id",)
+        fields = ("id", "displayName")
 
 
 class BaseEventSerializer(serializers.ModelSerializer):

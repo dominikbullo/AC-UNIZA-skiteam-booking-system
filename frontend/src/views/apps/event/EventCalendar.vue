@@ -420,22 +420,14 @@ export default {
       this.$store.dispatch('calendar/fetchEvent', arg.event.id)
         .then(res => {
           this.editedEvent = res.data
-          console.log('this.editedEvent', this.editedEvent)
-          console.log('this.editedEvent.participants', this.editedEvent.participants)
-          // TODO: Getter
-          let myChildrenOnEvent = null
-          try {
-            myChildrenOnEvent = Object.values(this.editedEvent.data['participants']).filter(obj => {
-              return obj.family_id === this.$store.state.AppActiveUser.profile.family_id
-            })
-          } catch (err) {
-            console.error(err)
-          }
 
-          console.log('myChildrenOnEvent', myChildrenOnEvent)
+          const childrenUsersID = []
+          Object.values(this.$store.getters['family/familyChildren']).forEach(obj => {
+            childrenUsersID.push(obj.user.id)
+          })
 
-          this.childAddToEventPrompt.onEvent = myChildrenOnEvent
-          this.childAddToEventPrompt.selected = myChildrenOnEvent
+          this.childAddToEventPrompt.onEvent = childrenUsersID
+          this.childAddToEventPrompt.selected = childrenUsersID
 
           this.childAddToEventPrompt.active = true
         })

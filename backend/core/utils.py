@@ -1,7 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail, EmailMultiAlternatives
+from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 
+from apps.family.models import FamilyMember
 from config import settings
 
 
@@ -46,3 +48,14 @@ def getEmailList():
         if email:
             emails.append(email)
     return emails
+
+
+def get_family_id(self, instance):
+    try:
+        return get_object_or_404(FamilyMember, user=instance.user).family_id
+    except Exception as e:
+        # FIXME: Cannot find family ID, cannot show /api/profile/ -> list
+        #             #  probably it should be like events -> polymorphic
+        print(e)
+        print("User does not have family or is not family member!")
+        return -1
