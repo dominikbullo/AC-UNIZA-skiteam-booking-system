@@ -66,11 +66,6 @@ class ParticipantsSerializer(serializers.ModelSerializer):
 
 
 class BaseEventSerializer(serializers.ModelSerializer):
-    # startTime = serializers.CharField(source="start", read_only=True)
-    # endTime = serializers.CharField(source="end", read_only=True)
-    # startRecur = serializers.CharField(source="start", read_only=True)
-    # endRecur = serializers.CharField(source="end", read_only=True)
-
     type = EventTypeSerializer(read_only=True)
     participants = ParticipantsSerializer(many=True, read_only=True)
 

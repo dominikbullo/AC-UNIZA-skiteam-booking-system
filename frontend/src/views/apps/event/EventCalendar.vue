@@ -583,7 +583,7 @@ export default {
   },
   created () {
     this.$store.dispatch('calendar/fetchEvents')
-    this.$store.dispatch('family/fetchFamily', this.$store.state.AppActiveUser.profile.family_id)
+    this.$store.dispatch('family/fetchFamily', this.$store.getters['familyID'])
 
     // if (this.$acl.check('isCoach')) this.fetchConfigData()
   }
