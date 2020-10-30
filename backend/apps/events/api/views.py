@@ -1,5 +1,6 @@
 from django.http import Http404
 from django.shortcuts import get_object_or_404
+from django_filters import rest_framework as filters
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
@@ -25,12 +26,33 @@ class CategoryViewSet(viewsets.ModelViewSet):
         return get_object_custom_queryset(self.request, Category).order_by('year_from')
 
 
+class MyFilterBackend(filters.DjangoFilterBackend):
+    def get_filterset_kwargs(self, request, queryset, view):
+        kwargs = super().get_filterset_kwargs(request, queryset, view)
+
+        # merge filterset kwargs provided by view class
+        if hasattr(view, 'get_filterset_kwargs'):
+            kwargs.update(view.get_filterset_kwargs())
+
+        return kwargs
+
+
+# RES: https://django-filter.readthedocs.io/en/stable/guide/rest_framework.html
+class EventsFilter(filters.FilterSet):
+    def __init__(self, *args, author=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        # do something w/ author
+
+    class Meta:
+        model = Event
+        fields = ['start', 'end', 'type', "participants"]
+
+
 class EventViewSet(viewsets.ModelViewSet):
     serializer_class = EventPolymorphicSerializer
     permission_classes = [IsCoachOrReadOnly]
-
-    # filter_backends = [SearchFilter]
-    # search_fields = ["name"]
+    filter_backends = (MyFilterBackend,)
+    filterset_class = EventsFilter
 
     def get_event(self, pk):
         return get_object_or_404(Event, pk=pk)
