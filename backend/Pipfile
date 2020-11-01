@@ -62,7 +62,6 @@ django-colorfield = "*"
 django-reset-migrations = "*"
 
 [dev-packages]
-bump2version = "*"
 flake8 = "*"
 openpyxl = "*"
 

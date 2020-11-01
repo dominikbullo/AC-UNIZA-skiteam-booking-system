@@ -1,49 +1,44 @@
 <template>
   <div id="event-edit-tab-participants">
+    <!--    <pre>{{ this.data_local }}</pre>-->
     <div class="vx-row">
       <div class="vx-col w-full md:w-1/2">
-        <!--        <pre>{{data_local}}</pre>-->
-        <div class="flex items-end mb-5">
-          <span class="leading-none font-medium">Have been logged in to the event</span>
-        </div>
-        <ul class="centerx">
-          <li :key="user.id" class="mb-2" v-for="user in this.eventParticipants">
-            <vs-checkbox
-              :vs-value="user.username"
-              color="success"
-              v-model="data_local">
-              {{ user.displayName }}
-            </vs-checkbox>
-          </li>
-        </ul>
-      </div>
-      <div class="vx-col w-full md:w-1/2">
-        <div class="flex items-end mb-5">
-          <span class="leading-none font-medium">Have't been logged in to the event</span>
-        </div>
-        <ul class="centerx">
-          <li :key="user.id" class="mb-2" v-for="user in this.usersData">
-            <vs-checkbox
-              :vs-value="user.username"
-              color="success"
-              v-model="data_local">
-              {{ user.displayName }}
-            </vs-checkbox>
-          </li>
-        </ul>
+        <vs-list>
+          <vs-list-header title="People Group 2" color="primary"></vs-list-header>
 
-        <!--        <pre>{{data}}</pre>-->
+          <draggable :list="this.usersData" group="people" class="p-2 cursor-move">
+            <!-- TODO: subtitle, category or family-->
+            <vs-list-item v-for="user in this.usersData"
+                          :key="user.id"
+                          :vs-value="user.id"
+                          v-model="data_local"
+                          :title="user.displayName">
+              <vs-avatar slot="avatar" :text="user.name"/>
+            </vs-list-item>
+          </draggable>
+
+        </vs-list>
+        <pre>{{ this.usersData }}</pre>
       </div>
-    </div>
-    <div class="vx-row">
-      <div class="vx-col w-full">
-        <!--        {{data_local}}-->
-        <div class="mt-8 flex flex-wrap items-center justify-end">
-          <vs-button :disabled="!validateForm" @click="changeEventParticipants" class="ml-auto mt-2">Save Changes
-          </vs-button>
-          <vs-button @click="reset_data" class="ml-4 mt-2" color="warning" type="border">Reset</vs-button>
-        </div>
+      <div class="vx-col w-full md:w-1/2">
+        <!--        <pre>{{ this.eventParticipants }}</pre>-->
+        <vs-list>
+          <vs-list-header title="People Group 1" color="primary"></vs-list-header>
+          <draggable :list="this.eventParticipants" group="people" class="p-2 cursor-move">
+            <vs-list-item v-for="user in this.eventParticipants"
+                          :key="user.id"
+                          :vs-value="user.id"
+                          v-model="data_local"
+                          :title="user.displayName"
+                          :subtitle="user.username">
+              <vs-avatar slot="avatar" :text="user.name"/>
+            </vs-list-item>
+          </draggable>
+
+        </vs-list>
+        <pre>{{ this.eventParticipants }}</pre>
       </div>
+
     </div>
   </div>
 
@@ -54,11 +49,13 @@ import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
 import vSelect from 'vue-select'
 import moduleUserManagement from '@/store/user-management/moduleUserManagement'
+import draggable from 'vuedraggable'
 
 export default {
   components: {
     vSelect,
-    flatPickr
+    flatPickr,
+    draggable
   },
   props: {
     data: {
@@ -68,8 +65,7 @@ export default {
   },
   data () {
     return {
-      data_local: this.formatLocalData(),
-
+      data_local: this.data,
       langOptions: [
         {
           label: 'English',
@@ -96,19 +92,13 @@ export default {
   },
   methods: {
     reset_data () {
-      this.data_local = this.formatLocalData()
-    },
-    formatLocalData () {
-      const cleanData = []
-      Object.values(this.data.participants).forEach((element) => {
-        cleanData.unshift(element.username)
-      })
-      return cleanData
+      this.data_local = this.data.participants
     },
     changeEventParticipants () {
+      console.log('--------data-------------', this.data.participants)
       const userNames = []
       this.data.participants.forEach((element) => {
-        userNames.unshift(element['username'])
+        userNames.unshift(element['id'])
       })
 
       const payload = {
@@ -127,7 +117,6 @@ export default {
       moduleUserManagement.isRegistered = true
     }
     this.$store.dispatch('userManagement/fetchUsers')
-    this.changeEventParticipants()
   }
 }
 </script>
