@@ -149,7 +149,6 @@ temp/
 versions/
 *.zip
 /bin
-package-lock.json
 docs/.vuepress/dist/
 yarn.lock
 yarn-error.log

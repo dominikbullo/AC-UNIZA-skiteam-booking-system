@@ -9,6 +9,4 @@ All notable changes to this project will be documented in this file. See [standa
 
 * **versioning:** new versioning type
 
-Took 1 hour 18 minutes
-
 * **versioning:** Change versioning to conventional-changelog ([a2b1de8](https://github.com/dominikbullo/sport_club_management_system/commit/a2b1de82e88acde3f3eaffe03a598a2bb1ad0617))
