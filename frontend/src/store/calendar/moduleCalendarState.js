@@ -12,10 +12,11 @@ export default {
   events: [],
 
   eventConfig: {
-    choices: [],
+    types: [],
     categories: [],
     locations: [],
     organizers: [],
-    labels: []
+    labels: [],
+    skis: []
   }
 }

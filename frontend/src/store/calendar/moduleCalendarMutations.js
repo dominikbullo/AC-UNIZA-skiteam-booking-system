@@ -24,8 +24,11 @@ export default {
   SET_ORGANIZERS (state, locations) {
     state.eventConfig.organizers = locations
   },
-  SET_EVENT_CHOICES (state, choices) {
-    state.eventConfig.choices = choices
+  SET_SKIS_TYPES (state, skis) {
+    state.eventConfig.skis = skis
+  },
+  SET_EVENT_TYPES (state, types) {
+    state.eventConfig.types = types
   },
   UPDATE_EVENT (state, event) {
     const eventIndex = state.events.findIndex((e) => e.id === event.id)

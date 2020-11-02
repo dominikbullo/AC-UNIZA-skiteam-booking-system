@@ -42,11 +42,12 @@ export default {
         })
     })
   },
-  fetchEventChoices ({ commit }, payload) {
+  fetchSkisTypes ({ commit }, payload) {
     return new Promise((resolve, reject) => {
-      axios.get('/events/choices/')
+      // payload = { query: { season: {} } }
+      axios.get('/skis-types/')
         .then((response) => {
-          commit('SET_EVENT_CHOICES', response.data)
+          commit('SET_SKIS_TYPES', response.data.results)
           resolve(response)
         })
         .catch((error) => {
@@ -54,7 +55,20 @@ export default {
         })
     })
   },
-  fetchLocations ({ commit }, payload) {
+  fetchEventTypes ({ commit }, payload) {
+    return new Promise((resolve, reject) => {
+      // payload = { query: { season: {} } }
+      axios.get('/event-types/')
+        .then((response) => {
+          commit('SET_EVENT_TYPES', response.data.results)
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
+  },
+  fetchLocations ({ commit }) {
     return new Promise((resolve, reject) => {
       axios.get('/locations/')
         .then((response) => {
@@ -66,7 +80,7 @@ export default {
         })
     })
   },
-  fetchRaceOrganizers ({ commit }, payload) {
+  fetchRaceOrganizers ({ commit }) {
     return new Promise((resolve, reject) => {
       axios.get('/race-organizer/')
         .then((response) => {
@@ -78,7 +92,7 @@ export default {
         })
     })
   },
-  fetchCategories ({ commit }, payload) {
+  fetchCategories ({ commit }) {
     return new Promise((resolve, reject) => {
       axios.get('/categories/')
         .then((response) => {

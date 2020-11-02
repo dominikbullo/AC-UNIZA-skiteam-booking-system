@@ -6,9 +6,10 @@ from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
-from apps.events.models import Event, Season, Category, Location, RaceOrganizer
+from apps.events.models import Event, Season, Category, Location, RaceOrganizer, EventType, SkisType
 from apps.events.api.serializers import (EventPolymorphicSerializer, SeasonSerializer, CategorySerializer,
-                                         LocationSerializer, RaceOrganizerSerializer)
+                                         LocationSerializer, RaceOrganizerSerializer, EventTypeSerializer,
+                                         SkisTypeSerializer)
 
 # RES: https://github.com/LondonAppDeveloper/recipe-app-api/blob/master/app/recipe/views.py
 # RES: https://stackoverflow.com/questions/51016896/how-to-serialize-inherited-models-in-django-rest-framework
@@ -94,10 +95,6 @@ class EventViewSet(viewsets.ModelViewSet):
 
         return Response(event_serializer.data, status=status.HTTP_200_OK)
 
-    @action(detail=False, url_path='choices')
-    def get_event_choices(self, request):
-        return Response(get_all_choices(), status=status.HTTP_200_OK)
-
     def get_queryset(self):
         return get_object_custom_queryset(self.request, Event).order_by('start')
 
@@ -117,4 +114,18 @@ class LocationViewSet(viewsets.ModelViewSet):
 class RaceOrganizerViewSet(viewsets.ModelViewSet):
     queryset = RaceOrganizer.objects.all().order_by('name')
     serializer_class = RaceOrganizerSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+
+class EventTypeViewSet(viewsets.ModelViewSet):
+    queryset = EventType.objects.all()
+    serializer_class = EventTypeSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_fields = ('need_skis',)
+
+
+class SkisTypeViewSet(viewsets.ModelViewSet):
+    queryset = SkisType.objects.all()
+    serializer_class = SkisTypeSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]

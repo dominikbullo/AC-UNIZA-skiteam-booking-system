@@ -72,7 +72,7 @@ export default {
   },
   created () {
     this.fetch_event(this.$route.params.eventId)
-    this.$store.dispatch('calendar/fetchEventChoices')
+    this.$store.dispatch('calendar/fetchEventTypes')
   }
 }
 

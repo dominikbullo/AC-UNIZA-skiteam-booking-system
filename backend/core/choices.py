@@ -72,7 +72,6 @@ def get_all_classes():
 
 def get_all_choices():
     classes = {
-        EventTypeChoices,
         SkiTypeChoices
     }
     # classes = get_all_classes()

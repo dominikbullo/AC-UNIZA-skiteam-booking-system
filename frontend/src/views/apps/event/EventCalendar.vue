@@ -102,7 +102,7 @@
                     <td class="font-bold">{{ $t('Start') }}</td>
                     <td>{{ editedEvent.start | time(true) }}</td>
                   </tr>
-                  <tr v-if="SKI_EVENTS.includes(editedEvent.type)">
+                  <tr>
                     <td class="font-bold">{{ $t('Skis') }}</td>
                     <td>{{ editedEvent.skis_type }}</td>
                   </tr>
@@ -130,16 +130,17 @@
           @accept="addEvent"
           accept-text="Add event"
           class="my-prompt"
+          id="calendar-add-event-prompt"
           :title="$t('Add Event')">
 
         <div class="vx-row">
+          <!--          <p>{{ this.addEventPrompt }}</p>-->
           <div class="vx-col sm:w-1/2 w-full">
             <div class="mt-4">
               <label class="text-sm">{{ $t('Event type') }} </label>
               <!-- RES: https://vue-select.org/ -->
               <v-select :clearable="false"
-                        label="type.displayName"
-                        :reduce="item => item.key"
+                        label="displayName"
                         v-model="addEventPrompt.type.selected"
                         :options="addEventPrompt.type.options"/>
             </div>
@@ -158,24 +159,26 @@
         </div>
 
         <div class="vx-row">
-          <div class="vx-col w-1/2">
-            <div v-if="SKI_EVENTS.includes(addEventPrompt.type.selected)" class="mt-4">
+          <div v-if="this.needSkis" class="vx-col w-1/2">
+
+            <div class="mt-4">
               <label class="text-sm">{{ $t('Skis') }}</label>
-              <v-select :clearable="false"
+              <v-select multiple
+                        :clearable="false"
                         label="displayName"
-                        :reduce="item => item.key"
-                        v-model="addEventPrompt.skis.selected"
-                        :options="addEventPrompt.skis.options"/>
+                        :reduce="item => item.id"
+                        v-model="addEventPrompt.skis_type.selected"
+                        :options="addEventPrompt.skis_type.options"/>
             </div>
           </div>
 
-          <div class="vx-col w-1/2">
-            <div v-if="addEventPrompt.type.selected === 'SKI_RACE'" class="vx-col w-full">
+          <div v-if="this.isSkiRace" class="vx-col w-1/2">
+            <div class="vx-col w-full">
               <div class="mt-4">
                 <label class="text-sm">{{ $t('Organizer') }}</label>
                 <v-select :clearable="false"
                           label="displayName"
-                          :reduce="category => category.id"
+                          :reduce="item => item.id"
                           v-model="addEventPrompt.raceOrganizer.selected"
                           :options="addEventPrompt.raceOrganizer.options"/>
               </div>
@@ -253,7 +256,6 @@ export default {
         rrulePlugin
       ],
 
-      SKI_EVENTS: ['SKI_TRAINING', 'SKI_RACE', 'SKI_CAMP'],
 
       calendarConfig: {
         locale: this.$i18n.locale === 'sk' ? skLocale : enLocale,
@@ -317,11 +319,11 @@ export default {
           options: []
         },
         type: {
-          selected: 'SKI_TRAINING',
+          selected: [],
           options: []
         },
-        skis: {
-          selected: 'ALL',
+        skis_type: {
+          selected: [],
           options: []
         },
         raceOrganizer: {
@@ -363,6 +365,15 @@ export default {
     userChildren () {
       return this.$store.getters['family/familyChildren']
     },
+    needSkis () {
+      return this.addEventPrompt.type.selected.need_skis === true
+    },
+    isSkiTraining () {
+      return this.addEventPrompt.type.selected.type === 'TRAINING' && this.needSkis
+    },
+    isSkiRace () {
+      return this.addEventPrompt.type.selected.type === 'RACE' && this.needSkis
+    },
     validForm () {
       // FIXME
       return true
@@ -377,24 +388,31 @@ export default {
       return ret
     },
     getExtraInfo () {
-      // TODO: Automatic with selecting event
-      if (this.addEventPrompt.type.selected === 'SKI_TRAINING') {
+      console.log('this.addEventPrompt', this.addEventPrompt)
+      // TODO: Need skis, and resourcetype
+      console.log('TRAINING', this.addEventPrompt.type.selected.type === 'TRAINING')
+      console.log('RACE', this.addEventPrompt.type.selected.type === 'RACE')
+      console.log('this.addEventPrompt2', this.addEventPrompt.type.selected.need_skis)
+
+      if (this.isSkiTraining) {
         return { resourcetype: 'SkiTraining' }
       }
-      if (this.addEventPrompt.type.selected === 'SKI_RACE') {
+
+      if (this.isSkiRace) {
         return {
           resourcetype: 'SkiRace',
-          organizer: this.addEventPrompt.raceOrganizer.selected
+          organizer: this.addEventPrompt.raceOrganizer.selected.id
         }
       }
       return { resourcetype: 'Event' }
     },
 
     addEvent () {
+      console.log('this.addEventPrompt', this.addEventPrompt)
       const eventForm = {
         category: this.addEventPrompt.category.selected,
-        skis_type: this.addEventPrompt.skis.selected,
-        type: this.addEventPrompt.type.selected,
+        skis_type: this.addEventPrompt.skis_type.selected,
+        type: this.addEventPrompt.type.selected.id,
         location: this.addEventPrompt.location.selected
       }
       const event = { ...this.newEvent, ...eventForm, ...this.getExtraInfo() }
@@ -441,7 +459,8 @@ export default {
         })
     },
     handleSelect (arg) {
-      console.log('arg', arg)
+      if (this.$acl.check('isCoach')) this.fetchConfigData()
+
       this.newEvent.start = arg.start
       this.newEvent.end = arg.end
       this.addEventPrompt.active = true
@@ -544,40 +563,37 @@ export default {
       this.$store.dispatch('calendar/changeEventMembers', payload)
     },
 
-
     cleanData (object, key = 'id') {
-      const id = []
-      Object.values(object).forEach((item) => {
-        id.push(item[key])
-      })
-      return id
+      console.error('do not use this method anymore!')
+      return object.map(value => value[key])
     },
-
 
     fetchConfigData () {
       console.log('Hello coach')
+      // this.$vs.loading()
 
-      this.$store.dispatch('calendar/fetchRaceOrganizers').then((res) => {
-        // console.log('raceorganizers', res.data.results)
-        this.addEventPrompt.raceOrganizer.options = res.data.results
-        this.addEventPrompt.raceOrganizer.selected = this.cleanData(this.addEventPrompt.raceOrganizer.options)[0]
-      })
-
-      this.$store.dispatch('calendar/fetchLocations').then((res) => {
-        // console.log('locations', res.data.results)
-        this.addEventPrompt.location.options = res.data.results
-        this.addEventPrompt.location.selected = this.cleanData(this.addEventPrompt.location.options)[0]
-      })
 
       this.$store.dispatch('calendar/fetchCategories').then((res) => {
         this.addEventPrompt.category.options = res.data.results
-        this.addEventPrompt.category.selected = this.cleanData(this.addEventPrompt.category.options)
+        this.addEventPrompt.category.selected = this.addEventPrompt.category.options.map(x => x.id)
       })
 
+      // TODO: Location base on event type
+      this.$store.dispatch('calendar/fetchLocations').then((res) => {
+        // console.log('locations', res.data.results)
+        this.addEventPrompt.location.options = res.data.results
+        this.addEventPrompt.location.selected = this.addEventPrompt.location.options.map(x => x.id)[0]
+      })
 
-      this.$store.dispatch('calendar/fetchEventChoices').then((res) => {
-        this.addEventPrompt.type.options = res.data.EventTypeChoices
-        this.addEventPrompt.skis.options = res.data.SkiTypeChoices
+      this.$store.dispatch('calendar/fetchSkisTypes').then((res) => {
+        console.log('event types data', res.data.results)
+        this.addEventPrompt.skis_type.options = res.data.results
+        this.addEventPrompt.skis_type.selected = this.addEventPrompt.skis_type.options.map(x => x.id)
+      })
+
+      this.$store.dispatch('calendar/fetchRaceOrganizers').then((res) => {
+        this.addEventPrompt.raceOrganizer.options = res.data.results
+        this.addEventPrompt.raceOrganizer.selected = this.addEventPrompt.raceOrganizer.options[0]
       })
     }
   },
@@ -585,7 +601,10 @@ export default {
     this.$store.dispatch('calendar/fetchEvents')
     this.$store.dispatch('family/fetchFamily', this.$store.getters['familyID'])
 
-    // if (this.$acl.check('isCoach')) this.fetchConfigData()
+    this.$store.dispatch('calendar/fetchEventTypes').then((res) => {
+      this.addEventPrompt.type.options = res.data.results
+      this.addEventPrompt.type.selected = this.addEventPrompt.type.options[0]
+    })
   }
 }
 

@@ -56,6 +56,7 @@ class Location(models.Model):
     # TODO RES: https://github.com/caioariede/django-location-field
     name = models.CharField(max_length=80)
     detail = models.CharField(max_length=50, blank=True, null=True)
+    need_ski = models.BooleanField(default=True)
     additional_info = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
@@ -72,7 +73,7 @@ class Location(models.Model):
 
 
 class EventType(models.Model):
-    name = models.CharField(
+    type = models.CharField(
         max_length=50,
         choices=EventTypeChoices.choices
     )
@@ -84,12 +85,16 @@ class EventType(models.Model):
     need_skis = models.BooleanField(default=True)
 
     def __str__(self):
+        return self.display_name
+
+    @property
+    def display_name(self):
         if self.need_skis:
-            return f"Ski {self.get_name_display()}"
-        return f"{self.get_name_display()}"
+            return f"Ski {self.get_type_display()}"
+        return f"{self.get_type_display()}"
 
     class Meta:
-        unique_together = (('name', 'need_skis'),)
+        unique_together = (('type', 'need_skis'),)
 
 
 # RES: https://django-polymorphic.readthedocs.io/en/stable/
@@ -133,6 +138,10 @@ class SkisType(models.Model):
     )
 
     def __str__(self):
+        return self.display_name
+
+    @property
+    def display_name(self):
         return f"{self.name}"
 
 
@@ -158,7 +167,7 @@ class SkiTraining(SkiEvent):
 
     def __init__(self, *args, **kwargs):
         query = {
-            "name"     : EventTypeChoices.TRAINING,
+            "type"     : EventTypeChoices.TRAINING,
             "need_skis": True
         }
 
@@ -205,7 +214,7 @@ class SkiRace(SkiEvent):
 
     def __init__(self, *args, **kwargs):
         query = {
-            "name"     : EventTypeChoices.RACE,
+            "type"     : EventTypeChoices.RACE,
             "need_skis": True
         }
         super(SkiEvent, self).__init__(*args, **kwargs)
