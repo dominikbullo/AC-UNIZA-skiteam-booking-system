@@ -20,7 +20,7 @@
           </vs-tab>
           <vs-tab label="Participants" icon-pack="feather" icon="icon-info">
             <div class="tab-text">
-              <event-edit-tab-participants class="mt-4" :data="event_data"/>
+              <event-edit-tab-participants @eventname="updateparent" class="mt-4" :data="event_data"/>
             </div>
           </vs-tab>
         </vs-tabs>
@@ -53,22 +53,24 @@ export default {
     }
   },
   methods: {
+    updateparent (variable) {
+      this.event_data = variable
+    },
     fetch_event (eventId) {
       this.$store.dispatch('calendar/fetchEvent', eventId)
-          .then(res => {
-            this.event_data = res.data
-          })
-          .catch(err => {
-            if (err.response.status === 404) {
-              this.event_not_found = true
-              return
-            }
-            console.error(err)
-          })
+        .then(res => {
+          this.event_data = res.data
+        })
+        .catch(err => {
+          if (err.response.status === 404) {
+            this.event_not_found = true
+            return
+          }
+          console.error(err)
+        })
     }
   },
   created () {
-    console.log('route', this.$route.params.eventId)
     this.fetch_event(this.$route.params.eventId)
     this.$store.dispatch('calendar/fetchEventChoices')
   }
