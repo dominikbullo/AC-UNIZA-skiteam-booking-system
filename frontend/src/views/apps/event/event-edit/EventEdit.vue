@@ -41,6 +41,7 @@
 
 import EventEditTabGeneral from './EventEditTabGeneral'
 import EventEditTabParticipants from './EvetntEditTabParticipiants'
+import EventEditTabAccommodation from './EvetntEditTabAccommodation'
 
 export default {
   components: {
