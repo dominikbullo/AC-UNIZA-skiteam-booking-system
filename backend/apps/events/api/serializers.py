@@ -77,7 +77,12 @@ class ParticipantsSerializer(serializers.ModelSerializer):
 
 class BaseEventSerializer(serializers.ModelSerializer):
     participants = ParticipantsSerializer(many=True, read_only=True)
-    season = serializers.PrimaryKeyRelatedField(queryset=Season.objects.all(), default=Season.objects.get(current=True))
+
+    def create(self, validated_data):
+        validated_data["season"], created = Season.objects.get_or_create(current=True)
+        if created:
+            print("Season created")
+        return super(BaseEventSerializer, self).create(validated_data)
 
     class Meta:
         fields = "__all__"
