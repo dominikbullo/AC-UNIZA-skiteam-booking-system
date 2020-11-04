@@ -9,7 +9,7 @@ from rest_polymorphic.serializers import PolymorphicSerializer
 from core import choices
 
 from apps.events.models import (Event, SkiTraining, SkiRace, Season, Category, Location, RaceOrganizer, EventType,
-                                SkisType)
+                                SkisType, Accommodation)
 from apps.family.models import Child
 from apps.users.models import Profile
 
@@ -59,6 +59,12 @@ class EventTypeSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class AccommodationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Accommodation
+        fields = "__all__"
+
+
 class LocationSerializer(serializers.ModelSerializer):
     displayName = serializers.CharField(source='display_name', read_only=True)
 
@@ -84,6 +90,12 @@ class BaseEventSerializer(serializers.ModelSerializer):
             print("Season created")
         return super(BaseEventSerializer, self).create(validated_data)
 
+    def to_representation(self, instance):
+        self.fields["type"] = EventTypeSerializer(instance.type, many=False, read_only=True)
+        self.fields["accommodation"] = AccommodationSerializer(instance.type, many=True, read_only=True)
+        to_representation = super(BaseEventSerializer, self).to_representation(instance)
+        return to_representation
+
     class Meta:
         fields = "__all__"
         read_only_fields = ("season",)
@@ -104,11 +116,6 @@ class EventSerializer(BaseEventSerializer):
     #     #     raise ValidationError("Bad resourcetype for %s" % event_type)
     #
     #     return validated_data
-
-    def to_representation(self, instance):
-        self.fields["type"] = EventTypeSerializer(instance.type, many=False, read_only=True)
-        to_representation = super(EventSerializer, self).to_representation(instance)
-        return to_representation
 
     class Meta(BaseEventSerializer.Meta):
         model = Event

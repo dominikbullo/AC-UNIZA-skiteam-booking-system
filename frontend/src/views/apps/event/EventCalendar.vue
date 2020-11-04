@@ -3,6 +3,7 @@
     <vx-card class="mt-5 vx-card no-scroll-content">
       <div class="calendar-view  no-scroll-content">
         <FullCalendar
+            id="calendar"
             :events="calendarEvents"
             :header="calendarConfig.header"
             :custom-buttons="calendarConfig.customButtons"
@@ -14,6 +15,8 @@
             :slot-label-format="calendarConfig.slot_label_format"
             :title-format="calendarConfig.title_format"
             :weekends="true"
+            @eventRender="myRender"
+            @contextmenu.prevent="$refs.menu.open($event, editedEvent)"
             @eventClick="handleEventClick"
             @eventMouseEnter="handleEventMouseEnter"
             @select="handleSelect"
@@ -21,8 +24,6 @@
             @eventResize="handleEventResize"
             :views="calendarConfig.views"
             :default-view="calendarConfig.views.defaultView"
-            :editable="calendarConfig.editable"
-            min-time="06:00:00"
             max-time="21:00:00"
             :scroll-time="minEventTime"
             height="parent"
@@ -70,7 +71,12 @@
                 <div class="vx-col w-full flex flex-wrap items-center justify-center">
 
                   <vs-button icon-pack="feather" icon="icon-edit" class="mr-4"
-                             :to="{name: 'app-event-edit', params: { eventId: this.editedEvent.id }}">Edit
+                             :to="{name: 'app-event-edit', params: { eventId: this.editedEvent.id }}">Edit event
+                  </vs-button>
+
+                  <vs-button type="border" icon="group" class="mr-4"
+                             :to="{name: 'app-event-edit', hash:'#participants',
+                           params: { eventId: this.editedEvent.id }}"> Edit participants
                   </vs-button>
 
                   <vs-button type="border" color="danger" icon-pack="feather" icon="icon-trash"
@@ -97,6 +103,10 @@
           <vs-tab label="Info">
             <div v-if="editedEvent" class="con-tab-ejemplo vx-row">
               <div class="vx-col flex-1" id="event-info-col-1">
+                <vs-button icon-pack="feather" icon="icon-edit" class="mr-4"
+                           :to="{name: 'app-event-edit', hash:'#accommodation',
+                           params: { eventId: this.editedEvent.id }}"> Edit
+                </vs-button>
                 <table>
                   <tr>
                     <td class="font-bold">{{ $t('Start') }}</td>
@@ -240,12 +250,15 @@ import 'vue-select/dist/vue-select.css'
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
 import { Slovak } from 'flatpickr/dist/l10n/sk.js'
+import { VueContext } from 'vue-context'
 
 export default {
   components: {
+
     FullCalendar,
     flatPickr,
-    'v-select': vSelect
+    'v-select': vSelect,
+    VueContext
   },
   data () {
     return {
@@ -381,6 +394,21 @@ export default {
     }
   },
   methods: {
+    handler (e) {
+      console.log('e', e)
+      this.$refs.menu.open(e, { foo: 'bar' })
+      e.preventDefault()
+    },
+    optionClicked (text, data) {
+      console.log(data)
+      this.$vs.notify({
+        title: 'Action Clicked',
+        text,
+        icon: 'feather',
+        iconPack: 'icon-alert-circle',
+        color: 'primary'
+      })
+    },
     displayObject (object, displayKey = 'displayName') {
       const ret = []
       Object.values(object).forEach((element) => {
@@ -419,6 +447,11 @@ export default {
       const event = { ...this.newEvent, ...eventForm, ...this.getExtraInfo() }
 
       this.$store.dispatch('calendar/addEvent', event)
+    },
+    myRender (event, element) {
+      console.log('event', event)
+      console.log('element', element)
+
     },
     handleDateClick (arg) {
       console.log('handling date click', arg)
@@ -504,7 +537,7 @@ export default {
       this.handleEventChange(eventResizeInfo)
     },
     handleEventMouseEnter (arg) {
-      // console.log('handling mouse event enter', arg)
+      console.log('handling mouse event enter', arg)
     },
 
 
@@ -709,4 +742,7 @@ only screen and (min-width: 636px) and (max-width: 991px) {
   }
 }
 
+.v-context {
+  position: fixed !important;
+}
 </style>
