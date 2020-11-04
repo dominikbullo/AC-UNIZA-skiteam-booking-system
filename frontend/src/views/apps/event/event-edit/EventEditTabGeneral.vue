@@ -65,7 +65,7 @@
               </ul>
             </div>
           </div>
-          <div class="vx-col w-1/2">
+          <div v-if="this.isSkiRace" class="vx-col w-1/2">
             <label class="text-sm">Race Organizer</label>
             <v-select :clearable="false"
                       label="displayName"
@@ -80,9 +80,6 @@
         <div class="mt-4">
           <div class="vx-col w-full">
             <div class="mt-8 flex flex-wrap items-center">
-              <!--                <vs-button class="mt-2" icon-pack="feather" icon="icon-x" type="border" color="warning"-->
-              <!--                           @click="reset_data">Cancel event-->
-              <!--                </vs-button>-->
               <vs-button class="mt-2" icon-pack="feather" icon="icon-trash-2" type="border" color="danger"
                          @click="deleteEvent">Delete event
               </vs-button>
@@ -197,6 +194,11 @@ export default {
     },
     choices () {
       return this.$store.state.calendar.eventConfig.choices
+    },
+    isSkiRace () {
+      // console.log('this.data_local', this.data_local)
+      // console.log('isSkiRace', this.data_local.type.type === 'RACE' && this.data_local.type.need_skis === true)
+      return this.data_local.type.type === 'RACE' && this.data_local.type.need_skis === true
     }
 
   },

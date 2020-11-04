@@ -160,28 +160,29 @@
 
         <div class="vx-row">
           <div v-if="this.needSkis" class="vx-col w-1/2">
-
             <div class="mt-4">
               <label class="text-sm">{{ $t('Skis') }}</label>
-              <v-select multiple
-                        :clearable="false"
-                        label="displayName"
-                        :reduce="item => item.id"
-                        v-model="addEventPrompt.skis_type.selected"
-                        :options="addEventPrompt.skis_type.options"/>
+              <ul class="centerx demo-alignment">
+                <li :key="item.id" v-for="item in this.addEventPrompt.skis_type.options">
+                  <vs-checkbox
+                      :vs-value="item.id"
+                      color="success"
+                      v-model="addEventPrompt.skis_type.selected">
+                    {{ item.displayName }}
+                  </vs-checkbox>
+                </li>
+              </ul>
             </div>
           </div>
 
           <div v-if="this.isSkiRace" class="vx-col w-1/2">
-            <div class="vx-col w-full">
-              <div class="mt-4">
-                <label class="text-sm">{{ $t('Organizer') }}</label>
-                <v-select :clearable="false"
-                          label="displayName"
-                          :reduce="item => item.id"
-                          v-model="addEventPrompt.raceOrganizer.selected"
-                          :options="addEventPrompt.raceOrganizer.options"/>
-              </div>
+            <div class="mt-4">
+              <label class="text-sm">{{ $t('Organizer') }}</label>
+              <v-select :clearable="false"
+                        label="displayName"
+                        :reduce="item => item.id"
+                        v-model="addEventPrompt.raceOrganizer.selected"
+                        :options="addEventPrompt.raceOrganizer.options"/>
             </div>
           </div>
         </div>
@@ -699,6 +700,13 @@ only screen and (min-width: 636px) and (max-width: 991px) {
 
 .fc-toolbar h2 {
   font-size: 1.5em;
+}
+
+.demo-alignment {
+  & > * {
+    margin-right: .5rem;
+    margin-top: .4rem;
+  }
 }
 
 </style>

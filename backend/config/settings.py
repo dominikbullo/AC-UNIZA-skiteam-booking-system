@@ -291,7 +291,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS'      : 'rest_framework.pagination.PageNumberPagination',
 
     # FIXME on front
-    'PAGE_SIZE'                     : 100
+    'PAGE_SIZE'                     : 200
 }
 
 # raven sentry client
