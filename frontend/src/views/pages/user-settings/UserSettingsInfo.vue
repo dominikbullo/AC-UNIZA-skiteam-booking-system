@@ -4,7 +4,7 @@
     <!-- Bio -->
     <!--    <vs-textarea label="Bio" v-model="bio" placeholder="Your bio..."/>-->
     <div>
-      <label style="font-size: 10px">{{ $t('BirthDate') }}</label>
+      <label style="font-size: .85rem">{{ $t('BirthDate') }}</label>
       <flat-pickr :config="datePickerConfig" class="w-full"
                   v-model="birth_date"/>
       <span class="text-danger text-sm">{{ errors.first('birth_date') }}</span>
@@ -24,8 +24,8 @@
 
     <!-- Save & Reset Button -->
     <div class="flex flex-wrap items-center justify-end">
-      <vs-button class="ml-auto mt-2" @click="save_changes">{{$t('Save Changes')}}</vs-button>
-      <vs-button class="ml-4 mt-2" type="border" color="warning" @click="reset_data">{{$t('Reset')}}</vs-button>
+      <vs-button class="ml-auto mt-2" @click="save_changes">{{ $t('Save Changes') }}</vs-button>
+      <vs-button class="ml-4 mt-2" type="border" color="warning" @click="reset_data">{{ $t('Reset') }}</vs-button>
     </div>
   </vx-card>
 </template>
@@ -84,19 +84,19 @@ export default {
       }
 
       this.$store.dispatch('userManagement/editUser', payload)
-        .then(res => {
-          this.$vs.notify({
-            color: 'success',
-            title: 'User details changed'
+          .then(res => {
+            this.$vs.notify({
+              color: 'success',
+              title: 'User details changed'
+            })
           })
-        })
-        .catch(err => {
-          this.$vs.notify({
-            color: 'danger',
-            title: 'Something went wrong',
-            text: err.message
+          .catch(err => {
+            this.$vs.notify({
+              color: 'danger',
+              title: 'Something went wrong',
+              text: err.message
+            })
           })
-        })
     }
   }
 }
