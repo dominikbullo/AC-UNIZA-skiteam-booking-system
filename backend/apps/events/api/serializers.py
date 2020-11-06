@@ -77,7 +77,21 @@ class ParticipantsSerializer(serializers.ModelSerializer):
 
 class BaseEventSerializer(serializers.ModelSerializer):
     participants = ParticipantsSerializer(many=True, read_only=True)
-    season = serializers.PrimaryKeyRelatedField(queryset=Season.objects.all(), default=Season.objects.get(current=True))
+
+    def create(self, validated_data):
+        validated_data["season"], created = Season.objects.get_or_create(current=True)
+        if created:
+            print("Season created")
+        return super(BaseEventSerializer, self).create(validated_data)
+
+    def to_representation(self, instance):
+        # self.fields["accommodation"] = AccommodationSerializer(many=True, read_only=True)
+        self.fields["category"] = CategorySerializer(many=True, read_only=True)
+        self.fields["skis_type"] = SkisTypeSerializer(many=True, read_only=True)
+        self.fields["type"] = EventTypeSerializer(instance.type, many=False, read_only=True)
+
+        to_representation = super(BaseEventSerializer, self).to_representation(instance)
+        return to_representation
 
     class Meta:
         fields = "__all__"
@@ -99,11 +113,6 @@ class EventSerializer(BaseEventSerializer):
     #     #     raise ValidationError("Bad resourcetype for %s" % event_type)
     #
     #     return validated_data
-
-    def to_representation(self, instance):
-        self.fields["type"] = EventTypeSerializer(instance.type, many=False, read_only=True)
-        to_representation = super(EventSerializer, self).to_representation(instance)
-        return to_representation
 
     class Meta(BaseEventSerializer.Meta):
         model = Event
