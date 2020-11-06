@@ -3,7 +3,6 @@
     <vx-card class="mt-5 vx-card no-scroll-content">
       <div class="calendar-view  no-scroll-content">
         <FullCalendar
-            id="calendar"
             :events="calendarEvents"
             :header="calendarConfig.header"
             :custom-buttons="calendarConfig.customButtons"
@@ -15,8 +14,6 @@
             :slot-label-format="calendarConfig.slot_label_format"
             :title-format="calendarConfig.title_format"
             :weekends="true"
-            @eventRender="myRender"
-            @contextmenu.prevent="$refs.menu.open($event, editedEvent)"
             @eventClick="handleEventClick"
             @eventMouseEnter="handleEventMouseEnter"
             @select="handleSelect"
@@ -71,12 +68,7 @@
                 <div class="vx-col w-full flex flex-wrap items-center justify-center">
 
                   <vs-button icon-pack="feather" icon="icon-edit" class="mr-4"
-                             :to="{name: 'app-event-edit', params: { eventId: this.editedEvent.id }}">Edit event
-                  </vs-button>
-
-                  <vs-button type="border" icon="group" class="mr-4"
-                             :to="{name: 'app-event-edit', hash:'#participants',
-                           params: { eventId: this.editedEvent.id }}"> Edit participants
+                             :to="{name: 'app-event-edit', params: { eventId: this.editedEvent.id }}">Edit
                   </vs-button>
 
                   <vs-button type="border" color="danger" icon-pack="feather" icon="icon-trash"
@@ -103,10 +95,6 @@
           <vs-tab label="Info">
             <div v-if="editedEvent" class="con-tab-ejemplo vx-row">
               <div class="vx-col flex-1" id="event-info-col-1">
-                <vs-button icon-pack="feather" icon="icon-edit" class="mr-4"
-                           :to="{name: 'app-event-edit', hash:'#accommodation',
-                           params: { eventId: this.editedEvent.id }}"> Edit
-                </vs-button>
                 <table>
                   <tr>
                     <td class="font-bold">{{ $t('Start') }}</td>
@@ -250,15 +238,12 @@ import 'vue-select/dist/vue-select.css'
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
 import { Slovak } from 'flatpickr/dist/l10n/sk.js'
-import { VueContext } from 'vue-context'
 
 export default {
   components: {
-
     FullCalendar,
     flatPickr,
-    'v-select': vSelect,
-    VueContext
+    'v-select': vSelect
   },
   data () {
     return {
@@ -394,21 +379,6 @@ export default {
     }
   },
   methods: {
-    handler (e) {
-      console.log('e', e)
-      this.$refs.menu.open(e, { foo: 'bar' })
-      e.preventDefault()
-    },
-    optionClicked (text, data) {
-      console.log(data)
-      this.$vs.notify({
-        title: 'Action Clicked',
-        text,
-        icon: 'feather',
-        iconPack: 'icon-alert-circle',
-        color: 'primary'
-      })
-    },
     displayObject (object, displayKey = 'displayName') {
       const ret = []
       Object.values(object).forEach((element) => {
@@ -448,11 +418,6 @@ export default {
 
       this.$store.dispatch('calendar/addEvent', event)
     },
-    myRender (event, element) {
-      console.log('event', event)
-      console.log('element', element)
-
-    },
     handleDateClick (arg) {
       console.log('handling date click', arg)
     },
@@ -468,29 +433,29 @@ export default {
       }
 
       this.$store.dispatch('calendar/fetchEvent', arg.event.id)
-        .then(res => {
-          this.editedEvent = res.data
+          .then(res => {
+            this.editedEvent = res.data
 
-          const childrenUsersID = []
-          Object.values(this.$store.getters['family/familyChildren']).forEach(obj => {
-            childrenUsersID.push(obj.user.profile.id)
+            const childrenUsersID = []
+            Object.values(this.$store.getters['family/familyChildren']).forEach(obj => {
+              childrenUsersID.push(obj.user.profile.id)
+            })
+            console.log('childrenUsersID', childrenUsersID)
+
+            const eventChildren = []
+            Object.values(this.editedEvent['participants']).forEach(obj => {
+              eventChildren.push(obj.id)
+            })
+            console.log('eventChildren', eventChildren)
+
+            const userChildrenOnEvent = childrenUsersID.filter(x => eventChildren.includes(x))
+            console.log('userChildrenOnEvent', userChildrenOnEvent)
+
+            this.childAddToEventPrompt.onEvent = userChildrenOnEvent
+            this.childAddToEventPrompt.selected = userChildrenOnEvent
+
+            this.childAddToEventPrompt.active = true
           })
-          console.log('childrenUsersID', childrenUsersID)
-
-          const eventChildren = []
-          Object.values(this.editedEvent['participants']).forEach(obj => {
-            eventChildren.push(obj.id)
-          })
-          console.log('eventChildren', eventChildren)
-
-          const userChildrenOnEvent = childrenUsersID.filter(x => eventChildren.includes(x))
-          console.log('userChildrenOnEvent', userChildrenOnEvent)
-
-          this.childAddToEventPrompt.onEvent = userChildrenOnEvent
-          this.childAddToEventPrompt.selected = userChildrenOnEvent
-
-          this.childAddToEventPrompt.active = true
-        })
     },
     handleSelect (arg) {
       if (this.$acl.check('isCoach')) this.fetchConfigData()
@@ -512,21 +477,21 @@ export default {
       }
 
       this.$store.dispatch('calendar/editEvent', { ...event, ...this.getExtraInfo() })
-        .then(() => {
-          this.$vs.notify({
-            color: 'success',
-            title: 'Event Updated',
-            text: 'The selected event was successfully updated'
+          .then(() => {
+            this.$vs.notify({
+              color: 'success',
+              title: 'Event Updated',
+              text: 'The selected event was successfully updated'
+            })
           })
-        })
-        .catch(err => {
-          this.$vs.notify({
-            color: 'danger',
-            title: 'Event Not Changed',
-            text: err.message
+          .catch(err => {
+            this.$vs.notify({
+              color: 'danger',
+              title: 'Event Not Changed',
+              text: err.message
+            })
+            console.error(err)
           })
-          console.error(err)
-        })
     },
     handleEventDrop (eventDropInfo) {
       console.log('dropped', eventDropInfo)
@@ -537,7 +502,7 @@ export default {
       this.handleEventChange(eventResizeInfo)
     },
     handleEventMouseEnter (arg) {
-      console.log('handling mouse event enter', arg)
+      // console.log('handling mouse event enter', arg)
     },
 
 
@@ -556,21 +521,21 @@ export default {
 
     deleteEvent () {
       this.$store.dispatch('calendar/deleteEvent', this.editedEvent)
-        .then(res => {
-          this.$vs.notify({
-            color: 'success',
-            title: 'Event Deleted',
-            text: 'The selected event was successfully deleted'
+          .then(res => {
+            this.$vs.notify({
+              color: 'success',
+              title: 'Event Deleted',
+              text: 'The selected event was successfully deleted'
+            })
           })
-        })
-        .catch(err => {
-          this.$vs.notify({
-            color: 'danger',
-            title: 'Event Not Deleted',
-            text: 'The selected user was successfully deleted'
+          .catch(err => {
+            this.$vs.notify({
+              color: 'danger',
+              title: 'Event Not Deleted',
+              text: 'The selected user was successfully deleted'
+            })
+            console.error(err)
           })
-          console.error(err)
-        })
     },
 
     showDeleteSuccess () {
@@ -742,7 +707,4 @@ only screen and (min-width: 636px) and (max-width: 991px) {
   }
 }
 
-.v-context {
-  position: fixed !important;
-}
 </style>
