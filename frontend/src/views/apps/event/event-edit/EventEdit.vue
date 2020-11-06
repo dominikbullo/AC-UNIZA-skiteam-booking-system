@@ -13,14 +13,21 @@
       <div slot="no-body" class="tabs-container px-6 pt-6">
 
         <vs-tabs v-model="activeTab" class="tab-action-btn-fill-conatiner">
-          <vs-tab label="General" icon-pack="feather" icon="icon-user">
+          <vs-tab v-if="this.$acl.check('isCoach')" label="General" href="#general" icon-pack="feather"
+                  icon="icon-info">
             <div class="tab-text">
               <event-edit-tab-general class="mt-4" :data="event_data"/>
             </div>
           </vs-tab>
-          <vs-tab label="Participants" icon-pack="feather" icon="icon-info">
+          <vs-tab v-if="this.$acl.check('isCoach')" label="Participants" href="#participants" icon="group">
             <div class="tab-text">
               <event-edit-tab-participants @eventname="updateparent" class="mt-4" :data="event_data"/>
+            </div>
+          </vs-tab>
+          <vs-tab v-if="this.$acl.check('isParent')" label="Accommodation" href="#accommodation"
+                  icon-pack="material-icons" icon="hotel">
+            <div class="tab-text">
+              <event-edit-tab-accommodation class="mt-4" :data="event_data.accommodation"/>
             </div>
           </vs-tab>
         </vs-tabs>
@@ -34,17 +41,20 @@
 
 import EventEditTabGeneral from './EventEditTabGeneral'
 import EventEditTabParticipants from './EvetntEditTabParticipiants'
+import EventEditTabAccommodation from './EvetntEditTabAccommodation'
 
 export default {
   components: {
     EventEditTabGeneral,
-    EventEditTabParticipants
+    EventEditTabParticipants,
+    EventEditTabAccommodation
   },
   data () {
     return {
       event_data: null,
       event_not_found: false,
-      activeTab: 0
+      activeTab: 0,
+      tabs: ['#general', '#participants', '#accommodation']
     }
   },
   watch: {
@@ -73,6 +83,10 @@ export default {
   created () {
     this.fetch_event(this.$route.params.eventId)
     this.$store.dispatch('calendar/fetchEventTypes')
+  },
+  mounted () {
+    // RES:https://stackoverflow.com/questions/52090371/how-to-navigate-to-specific-tab-in-bootstrap-vue-tabs-in-vue-routes
+    this.activeTab = this.tabs.findIndex(tab => tab === this.$route.hash)
   }
 }
 

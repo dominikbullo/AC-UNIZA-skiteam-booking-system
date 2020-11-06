@@ -30,6 +30,7 @@ class Season(models.Model):
 
 class Category(models.Model):
     season = models.ForeignKey(Season, on_delete=models.CASCADE)
+
     # RES (Many to many birectional): https://stackoverflow.com/questions/4881578/django-bi-directional-manytomany-how-to-prevent-table-creation-on-second-model
     members = models.ManyToManyField('family.Child', through=Child.categories.through, blank=True)
 
@@ -97,11 +98,38 @@ class EventType(models.Model):
         unique_together = (('type', 'need_skis'),)
 
 
+class Accommodation(models.Model):
+    interest = models.BooleanField(default=False)
+
+    start = models.DateField()
+    end = models.DateField()
+
+    adults = models.IntegerField(null=True, blank=True)
+    children = models.IntegerField(null=True, blank=True)
+
+    price = models.FloatField(null=True, blank=True)
+    hotel = models.CharField(max_length=150)
+    website = models.URLField(max_length=200, blank=True, null=True)
+
+    # TODO: status with choices
+    # status = models.CharField(max_length=150)
+
+    def __str__(self):
+        return self.display_name
+
+    @property
+    def display_name(self):
+        # {self.start.strftime('%d.%m.%Y')} - {self.end.strftime('%d.%m.%Y')} |
+        return f"{self.hotel}"
+
+
 # RES: https://django-polymorphic.readthedocs.io/en/stable/
+# RES (null vs blank): https://stackoverflow.com/questions/8609192/differentiate-null-true-blank-true-in-django
 class Event(PolymorphicModel):
-    # RES (null vs blank): https://stackoverflow.com/questions/8609192/differentiate-null-true-blank-true-in-django
     season = models.ForeignKey(Season, on_delete=models.CASCADE)
     type = models.ForeignKey(EventType, on_delete=models.DO_NOTHING)
+
+    accommodation = models.ManyToManyField(Accommodation, blank=True, null=True)
 
     # IDEA: ONE training, more location (ski slope) e.g. Slovan žiaci, Leitner Predžiaci
     location = models.ForeignKey(Location, on_delete=models.DO_NOTHING)
@@ -127,6 +155,9 @@ class Event(PolymorphicModel):
 
     def need_skis(self):
         return self.type.need_skis
+
+    def has_accommodation(self):
+        return self.accommodation is not None
 
 
 class SkisType(models.Model):

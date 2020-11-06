@@ -9,7 +9,7 @@ from rest_polymorphic.serializers import PolymorphicSerializer
 from core import choices
 
 from apps.events.models import (Event, SkiTraining, SkiRace, Season, Category, Location, RaceOrganizer, EventType,
-                                SkisType)
+                                SkisType, Accommodation)
 from apps.family.models import Child
 from apps.users.models import Profile
 
@@ -56,6 +56,12 @@ class EventTypeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EventType
+        fields = "__all__"
+
+
+class AccommodationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Accommodation
         fields = "__all__"
 
 
