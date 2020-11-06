@@ -91,8 +91,11 @@ class BaseEventSerializer(serializers.ModelSerializer):
         return super(BaseEventSerializer, self).create(validated_data)
 
     def to_representation(self, instance):
+        self.fields["accommodation"] = AccommodationSerializer(many=True, read_only=True)
+        self.fields["category"] = CategorySerializer(many=True, read_only=True)
+        self.fields["skis_type"] = SkisTypeSerializer(many=True, read_only=True)
         self.fields["type"] = EventTypeSerializer(instance.type, many=False, read_only=True)
-        self.fields["accommodation"] = AccommodationSerializer(instance.type, many=True, read_only=True)
+
         to_representation = super(BaseEventSerializer, self).to_representation(instance)
         return to_representation
 
