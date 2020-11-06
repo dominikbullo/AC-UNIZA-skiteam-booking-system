@@ -21,6 +21,8 @@
             @eventResize="handleEventResize"
             :views="calendarConfig.views"
             :default-view="calendarConfig.views.defaultView"
+            :editable="calendarConfig.editable"
+            min-time="06:00:00"
             max-time="21:00:00"
             :scroll-time="minEventTime"
             height="parent"
