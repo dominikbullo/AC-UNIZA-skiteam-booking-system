@@ -20,33 +20,33 @@
         <div slot="header" class="flex flex-wrap-reverse items-center flex-grow justify-between">
 
           <div class="flex flex-wrap-reverse items-center data-list-btn-container">
-            <!-- ACTION - DROPDOWN -->
-            <vs-dropdown vs-trigger-click class="dd-actions cursor-pointer mr-4 mb-4">
+            <!--            &lt;!&ndash; ACTION - DROPDOWN &ndash;&gt;-->
+            <!--            <vs-dropdown vs-trigger-click class="dd-actions cursor-pointer mr-4 mb-4">-->
 
-              <div
-                  class="p-4 shadow-drop rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-center text-lg font-medium w-32 w-full">
-                <span class="mr-2">Actions</span>
-                <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4"/>
-              </div>
+            <!--              <div-->
+            <!--                  class="p-4 shadow-drop rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-center text-lg font-medium w-32 w-full">-->
+            <!--                <span class="mr-2">Actions</span>-->
+            <!--                <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4"/>-->
+            <!--              </div>-->
 
-              <vs-dropdown-menu>
+            <!--              <vs-dropdown-menu>-->
 
-                <vs-dropdown-item>
-                <span class="flex items-center">
-                  <feather-icon icon="TrashIcon" svgClasses="h-4 w-4" class="mr-2"/>
-                  <span>Delete</span>
-                </span>
-                </vs-dropdown-item>
+            <!--                <vs-dropdown-item>-->
+            <!--                <span class="flex items-center">-->
+            <!--                  <feather-icon icon="TrashIcon" svgClasses="h-4 w-4" class="mr-2"/>-->
+            <!--                  <span>Delete</span>-->
+            <!--                </span>-->
+            <!--                </vs-dropdown-item>-->
 
-                <vs-dropdown-item>
-                <span class="flex items-center">
-                  <feather-icon icon="ArchiveIcon" svgClasses="h-4 w-4" class="mr-2"/>
-                  <span>Archive</span>
-                </span>
-                </vs-dropdown-item>
+            <!--                <vs-dropdown-item>-->
+            <!--                <span class="flex items-center">-->
+            <!--                  <feather-icon icon="ArchiveIcon" svgClasses="h-4 w-4" class="mr-2"/>-->
+            <!--                  <span>Archive</span>-->
+            <!--                </span>-->
+            <!--                </vs-dropdown-item>-->
 
-              </vs-dropdown-menu>
-            </vs-dropdown>
+            <!--              </vs-dropdown-menu>-->
+            <!--            </vs-dropdown>-->
 
             <!-- ADD NEW -->
             <div
@@ -90,7 +90,7 @@
         </div>
 
         <template slot="thead">
-          <vs-th sort-key="name">Name / URL</vs-th>
+          <vs-th sort-key="name">Name</vs-th>
           <vs-th sort-key="url">URL</vs-th>
           <!--          <vs-th sort-key="popularity">Popularity</vs-th>-->
           <vs-th sort-key="from">From</vs-th>
@@ -140,7 +140,9 @@
             </vs-td>
 
             <vs-td class="whitespace-no-wrap">
-              <feather-icon icon="EditIcon" svgClasses="w-5 h-5 hover:text-primary stroke-current"
+              <feather-icon icon="LinkIcon" svgClasses="w-5 h-5 hover:text-primary stroke-current"
+                            @click.stop="alert('Not implemented yet')"/>
+              <feather-icon icon="EditIcon" svgClasses="w-5 h-5 hover:text-primary stroke-current" class="ml-2"
                             @click.stop="editData(tr)"/>
               <feather-icon icon="TrashIcon" svgClasses="w-5 h-5 hover:text-danger stroke-current" class="ml-2"
                             @click.stop="deleteData(tr.id)"/>

@@ -58,6 +58,10 @@
                       <td class="font-bold">{{ $t('Category') }}</td>
                       <td>{{ displayObject(editedEvent.category).toString() }}</td>
                     </tr>
+                    <tr v-if="editedEvent.type.need_skis">
+                      <td class="font-bold">{{ $t('Skis') }}</td>
+                      <td>{{ displayObject(editedEvent.skis_type).toString() }}</td>
+                    </tr>
                   </table>
                 </div>
               </div>
@@ -101,21 +105,18 @@
 
             </div>
           </vs-tab>
-          <vs-tab label="Info">
+
+          <vs-tab label="Detail">
             <div v-if="editedEvent" class="con-tab-ejemplo vx-row">
               <div class="vx-col flex-1" id="event-info-col-1">
-                <vs-button icon-pack="feather" icon="icon-edit" class="mr-4"
-                           :to="{name: 'app-event-edit', hash:'#accommodation',
-                           params: { eventId: this.editedEvent.id }}"> Edit
-                </vs-button>
                 <table>
                   <tr>
                     <td class="font-bold">{{ $t('Start') }}</td>
                     <td>{{ editedEvent.start | time(true) }}</td>
                   </tr>
-                  <tr>
+                  <tr v-if="editedEvent.type.need_skis">
                     <td class="font-bold">{{ $t('Skis') }}</td>
-                    <td>{{ editedEvent.skis_type }}</td>
+                    <td>{{ displayObject(editedEvent.skis_type).toString() }}</td>
                   </tr>
                   <tr>
                     <td class="font-bold">{{ $t('Start date') }}</td>
@@ -126,8 +127,68 @@
                     <td>{{ $t(editedEvent.type.displayName) }}</td>
                   </tr>
                 </table>
+                <vs-button v-if="editedEvent.accommodation.length <= 0"
+                           icon-pack="feather" icon="icon-edit"
+                           type="border" color="warning" class="mt-4"
+                           :to="{name: 'app-event-edit', hash:'#accommodation',
+                           params: { eventId: this.editedEvent.id }}">Add accommodation
+                </vs-button>
               </div>
             </div>
+          </vs-tab>
+
+          <vs-tab label="Accommodation" v-if="editedEvent && editedEvent.accommodation.length > 0">
+            <vs-table ref="table" :data="editedEvent.accommodation">
+              <template slot="thead">
+                <vs-th sort-key="name">Name</vs-th>
+                <vs-th sort-key="from">From</vs-th>
+                <vs-th sort-key="to">To</vs-th>
+                <vs-th sort-key="price">Price adult</vs-th>
+                <vs-th sort-key="price-child">Price child</vs-th>
+                <vs-th>Action</vs-th>
+              </template>
+
+              <template slot-scope="{data}">
+                <tbody>
+                <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
+
+                  <vs-td>
+                    <p class="hotel-name font-medium truncate">{{ tr.name }}</p>
+                  </vs-td>
+
+
+                  <vs-td>
+                    <p class="hotel-name font-medium truncate">{{ tr.start | date }}</p>
+                  </vs-td>
+
+                  <vs-td>
+                    <p class="hotel-name font-medium truncate">{{ tr.end | date }}</p>
+                  </vs-td>
+
+                  <vs-td>
+                    <p class="product-price">{{ tr.price }}€</p>
+                  </vs-td>
+
+                  <vs-td>
+                    <p class="product-price">{{ tr.price }}€</p>
+                  </vs-td>
+
+                  <vs-td class="whitespace-no-wrap">
+                    <feather-icon icon="LinkIcon" svgClasses="w-5 h-5 hover:text-primary stroke-current"
+                                  @click.stop="alert('Not implemented yet')"/>
+                    <!--                    <feather-icon icon="ThumbsUpIcon" svgClasses="w-5 h-5 hover:text-success stroke-current"-->
+                    <!--                                  class="ml-2"-->
+                    <!--                                  @click.stop="alert('Not implemented yet')"/>-->
+                  </vs-td>
+
+                </vs-tr>
+                </tbody>
+              </template>
+            </vs-table>
+            <vs-button icon-pack="feather" icon="icon-edit" type="border" color="warning" class="mt-4"
+                       :to="{name: 'app-event-edit', hash:'#accommodation',
+                           params: { eventId: this.editedEvent.id }}">Edit accommodation
+            </vs-button>
           </vs-tab>
 
         </vs-tabs>
