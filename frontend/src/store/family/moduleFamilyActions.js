@@ -24,9 +24,6 @@ export default {
       axios.get(`/family/${familyId}/`)
         .then((response) => {
           commit('UPDATE_FAMILY', response.data)
-          // TODO IDEA: set only children
-          // TODO FIXME: UPDATE_FAMILY_INFO
-          // commit('UPDATE_FAMILY_INFO', response.data)
           resolve(response)
         })
         .catch((error) => {

@@ -9,11 +9,7 @@
 
 
 export default {
-  // eslint-disable-next-line eqeqeq
-  getEvent: state => (eventId) => state.events.find((event) => event.id == eventId),
-  // getMyChildrenFromEvent: state => (eventId) => state.events.participants.filter(obj => {
-  //   return obj.family_id === this.store.state.AppActiveUser.profile.family_id
-  // }),
+  getEvent: state => (eventId) => state.events.find((event) => event.id === eventId),
   getEventsForCal: state => {
     function getData (obj) {
       return {

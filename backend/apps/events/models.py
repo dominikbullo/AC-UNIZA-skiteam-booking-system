@@ -4,9 +4,11 @@ from colorfield.fields import ColorField
 
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import gettext as _
 
 from polymorphic.models import PolymorphicModel
+from rest_framework.exceptions import ValidationError
 
 from core.choices import CategoryNameChoices, EventTypeChoices, SkiTypeChoices, year_choices, current_year
 from apps.family.models import Child
@@ -48,13 +50,12 @@ class Category(models.Model):
     class Meta:
         verbose_name_plural = "Categories"
         ordering = ['id']
-        # TODO -> cannot set unique_together with category members and season -> signals
         # One child, One category, One Season -> many categories in different seasons
         unique_together = (('season', 'name'),)
 
 
 class Location(models.Model):
-    # TODO RES: https://github.com/caioariede/django-location-field
+    # RES: https://github.com/caioariede/django-location-field
     name = models.CharField(max_length=80)
     detail = models.CharField(max_length=50, blank=True, null=True)
     need_ski = models.BooleanField(default=True)
@@ -108,8 +109,8 @@ class Accommodation(models.Model):
     children = models.IntegerField(null=True, blank=True)
 
     price = models.FloatField(null=True, blank=True)
-    hotel = models.CharField(max_length=150)
-    website = models.URLField(max_length=200, blank=True, null=True)
+    name = models.CharField(max_length=150, null=True)
+    website = models.URLField(max_length=200, null=True)
 
     # TODO: status with choices
     # status = models.CharField(max_length=150)
@@ -119,8 +120,17 @@ class Accommodation(models.Model):
 
     @property
     def display_name(self):
-        # {self.start.strftime('%d.%m.%Y')} - {self.end.strftime('%d.%m.%Y')} |
-        return f"{self.hotel}"
+        if self.name:
+            return self.name
+        return self.website
+
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                check=Q(name__isnull=False) | Q(website__isnull=False),
+                name='not_both_null'
+            )
+        ]
 
 
 # RES: https://django-polymorphic.readthedocs.io/en/stable/

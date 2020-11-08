@@ -9,10 +9,11 @@
 
 
 <template>
-  <vs-sidebar click-not-close position-right parent="body" default-index="1" color="primary" class="add-new-data-sidebar items-no-padding" spacer v-model="isSidebarActiveLocal">
+  <vs-sidebar click-not-close position-right parent="body" default-index="1" color="primary"
+              class="add-new-data-sidebar items-no-padding" spacer v-model="isSidebarActiveLocal">
     <div class="mt-6 flex items-center justify-between px-6">
-        <h4>{{ Object.entries(this.data).length === 0 ? "ADD NEW" : "UPDATE" }} ITEM</h4>
-        <feather-icon icon="XIcon" @click.stop="isSidebarActiveLocal = false" class="cursor-pointer"></feather-icon>
+      <h4>{{ Object.entries(this.data).length === 0 ? 'ADD NEW' : 'UPDATE' }} {{ 'accommodation' | uppercase }}</h4>
+      <feather-icon icon="XIcon" @click.stop="isSidebarActiveLocal = false" class="cursor-pointer"></feather-icon>
     </div>
     <vs-divider class="mb-0"></vs-divider>
 
@@ -20,54 +21,59 @@
 
       <div class="p-6">
 
-        <!-- Product Image -->
-        <template v-if="dataImg">
+        <!-- FROM -->
+        <div class="mt-4">
+          <label class="text-sm">{{ $t('From') }}</label>
+          <flat-pickr v-model="dataStart"
+                      :config="datePickerConfig"
+                      class="w-full"
+                      v-validate="'required'"
+                      name="start"/>
+          <span class="text-danger text-sm" v-show="errors.has('start')">{{ errors.first('start') }}</span>
+        </div>
 
-          <!-- Image Container -->
-          <div class="img-container w-64 mx-auto flex items-center justify-center">
-            <img :src="dataImg" alt="img" class="responsive">
-          </div>
+        <!-- TO -->
+        <div class="mt-4">
+          <label class="text-sm">{{ $t('To') }}</label>
+          <flat-pickr v-model="dataEnd"
+                      :config="datePickerConfig"
+                      class="w-full"
+                      v-validate="'required'"
+                      name="start"/>
+          <span class="text-danger text-sm" v-show="errors.has('start')">{{ errors.first('start') }}</span>
+        </div>
 
-          <!-- Image upload Buttons -->
-          <div class="modify-img flex justify-between mt-5">
-            <input type="file" class="hidden" ref="updateImgInput" @change="updateCurrImg" accept="image/*">
-            <vs-button class="mr-4" type="flat" @click="$refs.updateImgInput.click()">Update Image</vs-button>
-            <vs-button type="flat" color="#999" @click="dataImg = null">Remove Image</vs-button>
-          </div>
-        </template>
-
-        <!-- NAME -->
-        <vs-input label="Name" v-model="dataName" class="mt-5 w-full" name="item-name" v-validate="'required'" />
+        <!-- Name -->
+        <vs-input label="Name" v-model="dataName" class="mt-5 w-full" name="item-name" v-validate="'required'"/>
         <span class="text-danger text-sm" v-show="errors.has('item-name')">{{ errors.first('item-name') }}</span>
 
-        <!-- CATEGORY -->
-        <vs-select v-model="dataCategory" label="Category" class="mt-5 w-full" name="item-category" v-validate="'required'">
-          <vs-select-item :key="item.value" :value="item.value" :text="item.text" v-for="item in category_choices" />
-        </vs-select>
-        <span class="text-danger text-sm" v-show="errors.has('item-category')">{{ errors.first('item-category') }}</span>
+        <!-- URL -->
+        <vs-input label="URL" v-model="dataURL" class="mt-5 w-full" name="item-name" v-validate="'required'"/>
+        <span class="text-danger text-sm" v-show="errors.has('item-name')">{{ errors.first('item-name') }}</span>
 
         <!-- ORDER STATUS -->
-        <vs-select v-model="dataOrder_status" label="Order Status" class="mt-5 w-full">
-          <vs-select-item :key="item.value" :value="item.value" :text="item.text" v-for="item in order_status_choices" />
+        <vs-select v-model="dataOrder_status" label="Status" class="mt-5 w-full">
+          <vs-select-item :key="item.value" :value="item.value" :text="item.text" v-for="item in order_status_choices"/>
         </vs-select>
 
         <!-- PRICE -->
-        <vs-input
-          icon-pack="feather"
-          icon="icon-dollar-sign"
-          label="Price"
-          v-model="dataPrice"
-          class="mt-5 w-full"
-          v-validate="{ required: true, regex: /\d+(\.\d+)?$/ }"
-          name="item-price" />
+        <div class="mt-5 w-full vx-row">
+          <vs-input
+              icon="euro"
+              icon-after
+              label="Price"
+              v-model="dataPrice"
+              class="vx-col w-3/4"
+              v-validate="{ required: true, regex: /\d+(\.\d+)?$/ }"
+              name="item-price"/>
+          <p class="vx-col w-1/4 pl-5 mt-8">/ night</p>
+        </div>
         <span class="text-danger text-sm" v-show="errors.has('item-price')">{{ errors.first('item-price') }}</span>
 
-        <!-- Upload -->
-        <!-- <vs-upload text="Upload Image" class="img-upload" ref="fileUpload" /> -->
-
-        <div class="upload-img mt-5" v-if="!dataImg">
-          <input type="file" class="hidden" ref="uploadImgInput" @change="updateCurrImg" accept="image/*">
-          <vs-button @click="$refs.uploadImgInput.click()">Upload Image</vs-button>
+        <div class="mt-5 w-full">
+          <label style="font-size: .85rem;">{{ $t('AditionalInfo') }}</label>
+          <vs-textarea v-model="dataAdditionalInfo"/>
+          <span class="text-danger text-sm" v-show="errors.has('item-price')">{{ errors.first('item-price') }}</span>
         </div>
       </div>
     </component>
@@ -82,6 +88,10 @@
 <script>
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 
+import flatPickr from 'vue-flatpickr-component'
+import 'flatpickr/dist/flatpickr.css'
+import { Slovak } from 'flatpickr/dist/l10n/sk.js'
+
 export default {
   props: {
     isSidebarActive: {
@@ -91,33 +101,67 @@ export default {
     data: {
       type: Object,
       default: () => {}
+    },
+    event_data: {
+      type: Object,
+      default: () => {}
     }
+
   },
   components: {
-    VuePerfectScrollbar
+    VuePerfectScrollbar,
+    flatPickr
   },
   data () {
     return {
-
       dataId: null,
-      dataName: '',
-      dataCategory: null,
-      dataImg: null,
+      dataStart: this.moment(this.event_data.start).subtract(1, 'day').format('YYYY-MM-DD'),
+      dataEnd: this.moment(this.event_data.start).add(1, 'day').format('YYYY-MM-DD'),
+      dataURL: null,
       dataOrder_status: 'pending',
+      dataAdditionalInfo: '',
+      dataName: null,
       dataPrice: 0,
 
+      datePickerConfig: {
+        altFormat: 'd.m.Y',
+        altInput: true,
+        dateFormat: 'Y-m-d',
+        locale: Slovak
+      },
+
       category_choices: [
-        {text:'Audio', value:'audio'},
-        {text:'Computers', value:'computers'},
-        {text:'Fitness', value:'fitness'},
-        {text:'Appliance', value:'appliance'}
+        {
+          text: 'Audio',
+          value: 'audio'
+        },
+        {
+          text: 'Computers',
+          value: 'computers'
+        },
+        {
+          text: 'Fitness',
+          value: 'fitness'
+        },
+        {
+          text: 'Appliance',
+          value: 'appliance'
+        }
       ],
 
       order_status_choices: [
-        {text:'Pending', value:'pending'},
-        {text:'Canceled', value:'canceled'},
-        {text:'Delivered', value:'delivered'},
-        {text:'On Hold', value:'on_hold'}
+        {
+          text: 'Called',
+          value: 'pending'
+        },
+        {
+          text: 'Reserved',
+          value: 'reserved'
+        },
+        {
+          text: 'Paid',
+          value: 'paied'
+        }
       ],
       settings: { // perfectscrollbar settings
         maxScrollbarLength: 60,
@@ -132,7 +176,14 @@ export default {
         this.initValues()
         this.$validator.reset()
       } else {
-        const { category, id, img, name, order_status, price } = JSON.parse(JSON.stringify(this.data))
+        const {
+          category,
+          id,
+          img,
+          name,
+          order_status,
+          price
+        } = JSON.parse(JSON.stringify(this.data))
         this.dataId = id
         this.dataCategory = category
         this.dataImg = img
@@ -141,70 +192,82 @@ export default {
         this.dataPrice = price
         this.initValues()
       }
-      // Object.entries(this.data).length === 0 ? this.initValues() : { this.dataId, this.dataName, this.dataCategory, this.dataOrder_status, this.dataPrice } = JSON.parse(JSON.stringify(this.data))
     }
   },
   computed: {
     isSidebarActiveLocal: {
       get () {
+        // TODO: fixed values but not sure
+        // this.initValues()
         return this.isSidebarActive
       },
       set (val) {
         if (!val) {
           this.$emit('closeSidebar')
-          // this.$validator.reset()
-          // this.initValues()
+          this.$validator.reset()
+          this.initValues()
         }
       }
     },
     isFormValid () {
-      return !this.errors.any() && this.dataName && this.dataCategory && this.dataPrice > 0
+      if (process.env.NODE_ENV === 'production') { return !this.errors.any() && this.dataName && this.dataCategory && this.dataPrice > 0 }
+      // FIXME: validate test
+      return true
     },
     scrollbarTag () { return this.$store.getters.scrollbarTag }
   },
   methods: {
     initValues () {
+      console.log('this.data', this.data)
       if (this.data.id) return
       this.dataId = null
-      this.dataName = ''
-      this.dataCategory = null
-      this.dataOrder_status = 'pending'
+
+      this.dataStart = this.moment(this.event_data.start).subtract(1, 'day').format('YYYY-MM-DD')
+      this.dataEnd = this.moment(this.event_data.start).add(1, 'day').format('YYYY-MM-DD')
+
+      this.dataName = null
+      this.dataURL = null
       this.dataPrice = 0
-      this.dataImg = null
     },
     submitData () {
-      this.$validator.validateAll().then(result => {
-        if (result) {
-          const obj = {
-            id: this.dataId,
-            name: this.dataName,
-            img: this.dataImg,
-            category: this.dataCategory,
-            order_status: this.dataOrder_status,
-            price: this.dataPrice
-          }
-
-          if (this.dataId !== null && this.dataId >= 0) {
-            this.$store.dispatch('dataList/updateItem', obj).catch(err => { console.error(err) })
-          } else {
-            delete obj.id
-            obj.popularity = 0
-            this.$store.dispatch('dataList/addItem', obj).catch(err => { console.error(err) })
-          }
-
-          this.$emit('closeSidebar')
-          this.initValues()
-        }
-      })
-    },
-    updateCurrImg (input) {
-      if (input.target.files && input.target.files[0]) {
-        const reader = new FileReader()
-        reader.onload = e => {
-          this.dataImg = e.target.result
-        }
-        reader.readAsDataURL(input.target.files[0])
+      // FIXME: validate
+      // this.$validator.validateAll().then(result => {
+      // if (result) {
+      const obj = {
+        eventID: this.$route.params.eventId,
+        id: this.dataId,
+        start: this.moment(this.dataStart).format('YYYY-MM-DD'),
+        end: this.moment(this.dataEnd).format('YYYY-MM-DD'),
+        price: this.dataPrice,
+        website: this.dataURL,
+        name: this.dataName
       }
+
+      if (this.dataId !== null && this.dataId >= 0) {
+        console.log('updating with', obj)
+        // TODO notify
+        this.$store.dispatch('calendar/updateAccommodation', obj).catch(err => { console.error(err) })
+      } else {
+        console.log('creating with', obj)
+        delete obj.id
+        // TODO notify
+        this.$store.dispatch('calendar/createAccommodation', obj).then(() => {
+          this.$vs.notify({
+            color: 'success',
+            title: 'Accommodation created'
+          })
+        }).catch(err => {
+          this.$vs.notify({
+            color: 'danger',
+            title: 'Accommodation creation failed',
+            text: err.message
+          })
+          console.error(err)
+        })
+      }
+
+      this.$emit('closeSidebar')
+      this.initValues()
     }
   }
 }
@@ -237,11 +300,11 @@ export default {
 }
 
 .scroll-area--data-list-add-new {
-    // height: calc(var(--vh, 1vh) * 100 - 4.3rem);
-    height: calc(var(--vh, 1vh) * 100 - 16px - 45px - 82px);
+  // height: calc(var(--vh, 1vh) * 100 - 4.3rem);
+  height: calc(var(--vh, 1vh) * 100 - 16px - 45px - 82px);
 
-    &:not(.ps) {
-      overflow-y: auto;
-    }
+  &:not(.ps) {
+    overflow-y: auto;
+  }
 }
 </style>

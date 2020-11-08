@@ -121,14 +121,14 @@
 
                   <!-- RES: https://flatpickr.js.org/formatting/ -->
                   <div>
-                    <label style="font-size: 10px">{{ $t('BirthDate') }}</label>
+                    <label style="font-size: .85rem">{{ $t('BirthDate') }}</label>
                     <flat-pickr :config="datePickerConfig" class="w-full"
                                 v-model="childData.profile.birth_date"/>
                     <span class="text-danger text-sm">{{ errors.first('birth_date') }}</span>
                   </div>
 
                   <div>
-                    <label style="font-size: 10px">{{ $t('Gender') }}</label>
+                    <label style="font-size: .85rem">{{ $t('Gender') }}</label>
                     <div class="demo-alignment mb-base">
                       <vs-radio class="mt-2" v-model=" childData.profile.gender" vs-value="M">{{ $t('Male') }}
                       </vs-radio>

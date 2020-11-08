@@ -1,9 +1,10 @@
 <template>
   <div id="event-calendar-app">
-    <vx-card class="mt-5 vx-card no-scroll-content">
+    <vx-card class="mt-5 vx-card">
       <div class="calendar-view  no-scroll-content">
         <FullCalendar
             :events="calendarEvents"
+            :slotDuration="calendarConfig.slotDuration"
             :header="calendarConfig.header"
             :custom-buttons="calendarConfig.customButtons"
             :locale="calendarConfig.locale"
@@ -14,6 +15,8 @@
             :slot-label-format="calendarConfig.slot_label_format"
             :title-format="calendarConfig.title_format"
             :weekends="true"
+            :scrollTime="calendarConfig.scrollTime"
+            @eventRender="eventRender"
             @eventClick="handleEventClick"
             @eventMouseEnter="handleEventMouseEnter"
             @select="handleSelect"
@@ -30,6 +33,7 @@
         />
       </div>
 
+      <!-- TODO: separate component-->
       <!-- Add child to EVENT -->
       <vs-prompt
           :active.sync="childAddToEventPrompt.active"
@@ -48,8 +52,7 @@
                   <table>
                     <tr>
                       <td class="font-bold">{{ $t('Location') }}</td>
-                      <!-- TODO: Location with slope maybe? -->
-                      <!--                  <td>{{ editedEvent.location.displayName }}</td>-->
+                      <td>{{ editedEvent.location.displayName }}</td>
                     </tr>
                     <tr>
                       <td class="font-bold">{{ $t('Category') }}</td>
@@ -58,7 +61,6 @@
                   </table>
                 </div>
               </div>
-              <!-- TODO: if exist -->
               <div v-if="editedEvent.additional_info" class="vx-row">
                 <div class="vx-col">
                   <p class="font-bold mr-5">{{ $t('Additional Information') }}:</p>
@@ -70,7 +72,12 @@
                 <div class="vx-col w-full flex flex-wrap items-center justify-center">
 
                   <vs-button icon-pack="feather" icon="icon-edit" class="mr-4"
-                             :to="{name: 'app-event-edit', params: { eventId: this.editedEvent.id }}">Edit
+                             :to="{name: 'app-event-edit', params: { eventId: this.editedEvent.id }}">Edit event
+                  </vs-button>
+
+                  <vs-button type="border" icon="group" class="mr-4"
+                             :to="{name: 'app-event-edit', hash:'#participants',
+                           params: { eventId: this.editedEvent.id }}"> Edit participants
                   </vs-button>
 
                   <vs-button type="border" color="danger" icon-pack="feather" icon="icon-trash"
@@ -97,6 +104,10 @@
           <vs-tab label="Info">
             <div v-if="editedEvent" class="con-tab-ejemplo vx-row">
               <div class="vx-col flex-1" id="event-info-col-1">
+                <vs-button icon-pack="feather" icon="icon-edit" class="mr-4"
+                           :to="{name: 'app-event-edit', hash:'#accommodation',
+                           params: { eventId: this.editedEvent.id }}"> Edit
+                </vs-button>
                 <table>
                   <tr>
                     <td class="font-bold">{{ $t('Start') }}</td>
@@ -257,24 +268,62 @@ export default {
         rrulePlugin
       ],
 
-
       calendarConfig: {
+        scrollTime: `${this.moment().format('HH')}:00:00`,
         locale: this.$i18n.locale === 'sk' ? skLocale : enLocale,
         selectable: this.$acl.check('isCoach'),
         editable: this.$acl.check('isCoach'),
         header: {
           // left: 'prev,next today addEvent',
-          left: 'timeGridThreeDay,timeGridWeek,dayGridMonth,listWeek', // this will place the button on the right hand side
+          left: 'timeGridThreeDay,myCustomWeek,timeGridWeek,dayGridMonth,mylistWeek', // this will place the button on the right hand side
           center: 'title',
           right: 'today prev,next'
         },
         views: {
+          mylistWeek: {
+            visibleRange (currentDate) {
+              // Generate a new date for manipulating in the next step
+              const startDate = new Date(currentDate.valueOf())
+              const endDate = new Date(currentDate.valueOf())
+
+              // Adjust the start & end dates, respectively
+              startDate.setDate(startDate.getDate())
+              endDate.setDate(endDate.getDate() + 13)
+
+              return {
+                start: startDate,
+                end: endDate
+              }
+            },
+            type: 'listWeek',
+            duration: { days: 14 },
+            buttonText: 'list'
+          },
+          myCustomWeek: {
+            visibleRange (currentDate) {
+              // Generate a new date for manipulating in the next step
+              const startDate = new Date(currentDate.valueOf())
+              const endDate = new Date(currentDate.valueOf())
+
+              // Adjust the start & end dates, respectively
+              startDate.setDate(startDate.getDate()) // One day in the past
+              endDate.setDate(endDate.getDate() + 6) // Two days into the future
+
+              return {
+                start: startDate,
+                end: endDate
+              }
+            },
+            type: 'timeGrid',
+            duration: { days: 7 },
+            buttonText: 'my week'
+          },
           timeGridThreeDay: {
             type: 'timeGrid',
             duration: { days: 3 },
             buttonText: `3 ${this.$t('day')}`
           },
-          defaultView: screen.width <= 670 ? 'timeGridThreeDay' : 'timeGridWeek'
+          defaultView: screen.width <= 670 ? 'timeGridThreeDay' : 'myCustomWeek'
         },
         customButtons: {
           addEvent: {
@@ -357,7 +406,7 @@ export default {
   },
   computed: {
     minEventTime () {
-      // TODO min time for view
+      // TODO scroll to first event or current time
       return '07:00:00'
     },
     calendarEvents () {
@@ -376,11 +425,17 @@ export default {
       return this.addEventPrompt.type.selected.type === 'RACE' && this.needSkis
     },
     validForm () {
-      // FIXME
+      // FIXME validate
       return true
     }
   },
   methods: {
+    eventRender (item) {
+      // Adding class to old events for css
+      if (item.event.start < new Date().getTime()) {
+        item.el.classList.add('past-event')
+      }
+    },
     displayObject (object, displayKey = 'displayName') {
       const ret = []
       Object.values(object).forEach((element) => {
@@ -389,11 +444,11 @@ export default {
       return ret
     },
     getExtraInfo () {
-      console.log('this.addEventPrompt', this.addEventPrompt)
-      // TODO: Need skis, and resourcetype
-      console.log('TRAINING', this.addEventPrompt.type.selected.type === 'TRAINING')
-      console.log('RACE', this.addEventPrompt.type.selected.type === 'RACE')
-      console.log('this.addEventPrompt2', this.addEventPrompt.type.selected.need_skis)
+      // TODO: separate method called from whole app
+      // console.log('this.addEventPrompt', this.addEventPrompt)
+      // console.log('TRAINING', this.addEventPrompt.type.selected.type === 'TRAINING')
+      // console.log('RACE', this.addEventPrompt.type.selected.type === 'RACE')
+      // console.log('this.addEventPrompt2', this.addEventPrompt.type.selected.need_skis)
 
       if (this.isSkiTraining) {
         return { resourcetype: 'SkiTraining' }
@@ -424,6 +479,7 @@ export default {
       console.log('handling date click', arg)
     },
     handleEventClick (arg) {
+      // TODO: allow click for example 14 days to view Accommodation
       console.log('event click', arg)
       if (this.$acl.not.check('isCoach') && new Date(arg.event.start).valueOf() < new Date().valueOf()) {
         this.$vs.notify({
@@ -435,29 +491,29 @@ export default {
       }
 
       this.$store.dispatch('calendar/fetchEvent', arg.event.id)
-          .then(res => {
-            this.editedEvent = res.data
+        .then(res => {
+          this.editedEvent = res.data
 
-            const childrenUsersID = []
-            Object.values(this.$store.getters['family/familyChildren']).forEach(obj => {
-              childrenUsersID.push(obj.user.profile.id)
-            })
-            console.log('childrenUsersID', childrenUsersID)
-
-            const eventChildren = []
-            Object.values(this.editedEvent['participants']).forEach(obj => {
-              eventChildren.push(obj.id)
-            })
-            console.log('eventChildren', eventChildren)
-
-            const userChildrenOnEvent = childrenUsersID.filter(x => eventChildren.includes(x))
-            console.log('userChildrenOnEvent', userChildrenOnEvent)
-
-            this.childAddToEventPrompt.onEvent = userChildrenOnEvent
-            this.childAddToEventPrompt.selected = userChildrenOnEvent
-
-            this.childAddToEventPrompt.active = true
+          const childrenUsersID = []
+          Object.values(this.$store.getters['family/familyChildren']).forEach(obj => {
+            childrenUsersID.push(obj.user.profile.id)
           })
+          console.log('childrenUsersID', childrenUsersID)
+
+          const eventChildren = []
+          Object.values(this.editedEvent['participants']).forEach(obj => {
+            eventChildren.push(obj.id)
+          })
+          console.log('eventChildren', eventChildren)
+
+          const userChildrenOnEvent = childrenUsersID.filter(x => eventChildren.includes(x))
+          console.log('userChildrenOnEvent', userChildrenOnEvent)
+
+          this.childAddToEventPrompt.onEvent = userChildrenOnEvent
+          this.childAddToEventPrompt.selected = userChildrenOnEvent
+
+          this.childAddToEventPrompt.active = true
+        })
     },
     handleSelect (arg) {
       if (this.$acl.check('isCoach')) this.fetchConfigData()
@@ -479,21 +535,21 @@ export default {
       }
 
       this.$store.dispatch('calendar/editEvent', { ...event, ...this.getExtraInfo() })
-          .then(() => {
-            this.$vs.notify({
-              color: 'success',
-              title: 'Event Updated',
-              text: 'The selected event was successfully updated'
-            })
+        .then(() => {
+          this.$vs.notify({
+            color: 'success',
+            title: 'Event Updated',
+            text: 'The selected event was successfully updated'
           })
-          .catch(err => {
-            this.$vs.notify({
-              color: 'danger',
-              title: 'Event Not Changed',
-              text: err.message
-            })
-            console.error(err)
+        })
+        .catch(err => {
+          this.$vs.notify({
+            color: 'danger',
+            title: 'Event Not Changed',
+            text: err.message
           })
+          console.error(err)
+        })
     },
     handleEventDrop (eventDropInfo) {
       console.log('dropped', eventDropInfo)
@@ -523,21 +579,21 @@ export default {
 
     deleteEvent () {
       this.$store.dispatch('calendar/deleteEvent', this.editedEvent)
-          .then(res => {
-            this.$vs.notify({
-              color: 'success',
-              title: 'Event Deleted',
-              text: 'The selected event was successfully deleted'
-            })
+        .then(res => {
+          this.$vs.notify({
+            color: 'success',
+            title: 'Event Deleted',
+            text: 'The selected event was successfully deleted'
           })
-          .catch(err => {
-            this.$vs.notify({
-              color: 'danger',
-              title: 'Event Not Deleted',
-              text: 'The selected user was successfully deleted'
-            })
-            console.error(err)
+        })
+        .catch(err => {
+          this.$vs.notify({
+            color: 'danger',
+            title: 'Event Not Deleted',
+            text: 'The selected user was successfully deleted'
           })
+          console.error(err)
+        })
     },
 
     showDeleteSuccess () {
@@ -625,16 +681,19 @@ export default {
 
 .calendar-view {
   margin: 0 auto;
-  max-height: calc(var(--vh, 1vh) * 100 - 16.2rem);
+  max-height: calc(var(--vh, 1vh) * 100 - 15rem);
 }
 
-.fc-unthemed td.fc-today {
-  background: #0C112E;
-}
+.fc-list-heading {
+  td {
+    background-color: black !important;;
+    color: white;
 
-.fc-list-heading td {
-  background: #00b0d3;
-  color: white;
+    :hover {
+      background-color: #3c3c3c !important;;
+    }
+  }
+
 }
 
 #event-info-table {
@@ -709,4 +768,37 @@ only screen and (min-width: 636px) and (max-width: 991px) {
   }
 }
 
+//RES: https://stackoverflow.com/questions/12632229/change-color-of-past-events-in-fullcalendar
+.fc-past {
+  background-color: #262b4573;
+}
+
+
+.past-event.fc-event, .past-event .fc-event-dot {
+  //opacity: 0.8 !important;
+  filter: grayscale(60%);
+
+  // RES: https://css-tricks.com/stripes-css/
+  background: repeating-linear-gradient(
+          -45deg,
+          transparent,
+          transparent 5px,
+          transparentize(#1f1f1f, .5) 8px,
+          transparentize(#1f1f1f, .5) 10px
+  ),
+}
+
+.fc-today {
+  background-color: #0C112E !important;
+}
+
+.fc-slats td {
+  height: 1.15em !important; // Change This to your required height
+  font-size: .9em;
+  border-bottom: 0;
+}
+
+.fc-body .fc-row {
+  min-height: 450px;
+}
 </style>
