@@ -96,6 +96,7 @@ class BaseEventSerializer(serializers.ModelSerializer):
         self.fields["accommodation"] = AccommodationSerializer(many=True, read_only=True)
         self.fields["category"] = CategorySerializer(many=True, read_only=True)
         self.fields["skis_type"] = SkisTypeSerializer(many=True, read_only=True)
+        self.fields["location"] = LocationSerializer(instance.location, many=False, read_only=True)
         self.fields["type"] = EventTypeSerializer(instance.type, many=False, read_only=True)
 
         to_representation = super(BaseEventSerializer, self).to_representation(instance)
@@ -140,6 +141,11 @@ class SkiTrainingSerializer(BaseEventSerializer):
 
 class SkiRaceSerializer(BaseEventSerializer):
     type = EventTypeSerializer(read_only=True)
+
+    def to_representation(self, instance):
+        self.fields["organizer"] = RaceOrganizerSerializer(instance.organizer, many=False, read_only=True)
+        to_representation = super(SkiRaceSerializer, self).to_representation(instance)
+        return to_representation
 
     # def validate(self, data):
     #     validated_data = super(SkiRaceSerializer, self).validate(data)

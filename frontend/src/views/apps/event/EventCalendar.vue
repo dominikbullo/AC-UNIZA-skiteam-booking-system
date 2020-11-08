@@ -223,7 +223,6 @@
               <label class="text-sm">{{ $t('Location') }}</label>
               <v-select :clearable="false"
                         label="displayName"
-                        :reduce="item => item.id"
                         v-model="addEventPrompt.location.selected"
                         :options="addEventPrompt.location.options"/>
             </div>
@@ -252,7 +251,6 @@
               <label class="text-sm">{{ $t('Organizer') }}</label>
               <v-select :clearable="false"
                         label="displayName"
-                        :reduce="item => item.id"
                         v-model="addEventPrompt.raceOrganizer.selected"
                         :options="addEventPrompt.raceOrganizer.options"/>
             </div>
