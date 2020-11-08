@@ -13,6 +13,10 @@ Vue.filter('capitalize', function (value) {
   return capitalized_array.join(' ')
 })
 
+Vue.filter('uppercase', function (value) {
+  return value.toUpperCase()
+})
+
 Vue.filter('title', function (value, replacer = '_') {
   if (!value) return ''
   value = value.toString()

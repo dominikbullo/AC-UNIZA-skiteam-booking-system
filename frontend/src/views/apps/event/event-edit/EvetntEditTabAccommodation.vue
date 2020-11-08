@@ -9,11 +9,13 @@
 
 <template>
   <div id="event-edit-tab-accommodation">
-    <div v-if="this.allowed" id="data-list-list-view" class="data-list-container">
+    <div v-if="allowed" id="data-list-list-view" class="data-list-container">
+      <data-view-sidebar :isSidebarActive="addNewDataSidebar"
+                         @closeSidebar="toggleDataSidebar"
+                         :data="sidebarData"
+                         :event_data="data"/>
 
-      <data-view-sidebar :isSidebarActive="addNewDataSidebar" @closeSidebar="toggleDataSidebar" :data="sidebarData"/>
-
-      <vs-table ref="table" multiple v-model="selected" pagination :max-items="itemsPerPage" search :data="data_local">
+      <vs-table ref="table" :max-items="itemsPerPage" :data="accommodation">
 
         <div slot="header" class="flex flex-wrap-reverse items-center flex-grow justify-between">
 
@@ -45,6 +47,7 @@
 
               </vs-dropdown-menu>
             </vs-dropdown>
+
             <!-- ADD NEW -->
             <div
                 class="btn-add-new p-3 mb-4 mr-4 rounded-lg cursor-pointer flex items-center justify-center text-lg font-medium text-base text-primary border border-solid border-primary"
@@ -55,44 +58,46 @@
           </div>
 
           <!-- ITEMS PER PAGE -->
-          <vs-dropdown vs-trigger-click class="cursor-pointer mb-4 mr-4 items-per-page-handler">
-            <div
-                class="p-4 border border-solid d-theme-border-grey-light rounded-full d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium">
-                                      <span class="mr-2">{{
-                                          currentPage * itemsPerPage - (itemsPerPage - 1)
-                                        }} - {{
-                                          data_local.length - currentPage * itemsPerPage > 0 ? currentPage * itemsPerPage : data_local.length
-                                        }} of {{
-                                          queriedItems
-                                        }}</span>
-              <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4"/>
-            </div>
-            <!-- <vs-button class="btn-drop" type="line" color="primary" icon-pack="feather" icon="icon-chevron-down"></vs-button> -->
-            <vs-dropdown-menu>
+          <!--          <vs-dropdown vs-trigger-click class="cursor-pointer mb-4 mr-4 items-per-page-handler">-->
+          <!--            <div-->
+          <!--                class="p-4 border border-solid d-theme-border-grey-light rounded-full d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium">-->
+          <!--                                                    <span class="mr-2">{{-->
+          <!--                                                        currentPage * itemsPerPage - (itemsPerPage - 1)-->
+          <!--                                                      }} - {{-->
+          <!--                                                        accommodation.length - currentPage * itemsPerPage > 0 ? currentPage * itemsPerPage : accommodation.length-->
+          <!--                                                      }} of {{-->
+          <!--                                                        queriedItems-->
+          <!--                                                      }}</span>-->
+          <!--              <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4"/>-->
+          <!--            </div>-->
+          <!--            &lt;!&ndash; <vs-button class="btn-drop" type="line" color="primary" icon-pack="feather" icon="icon-chevron-down"></vs-button> &ndash;&gt;-->
+          <!--            <vs-dropdown-menu>-->
 
-              <vs-dropdown-item @click="itemsPerPage=4">
-                <span>4</span>
-              </vs-dropdown-item>
-              <vs-dropdown-item @click="itemsPerPage=10">
-                <span>10</span>
-              </vs-dropdown-item>
-              <vs-dropdown-item @click="itemsPerPage=15">
-                <span>15</span>
-              </vs-dropdown-item>
-              <vs-dropdown-item @click="itemsPerPage=20">
-                <span>20</span>
-              </vs-dropdown-item>
-            </vs-dropdown-menu>
-          </vs-dropdown>
+          <!--              <vs-dropdown-item @click="itemsPerPage=4">-->
+          <!--                <span>4</span>-->
+          <!--              </vs-dropdown-item>-->
+          <!--              <vs-dropdown-item @click="itemsPerPage=10">-->
+          <!--                <span>10</span>-->
+          <!--              </vs-dropdown-item>-->
+          <!--              <vs-dropdown-item @click="itemsPerPage=15">-->
+          <!--                <span>15</span>-->
+          <!--              </vs-dropdown-item>-->
+          <!--              <vs-dropdown-item @click="itemsPerPage=20">-->
+          <!--                <span>20</span>-->
+          <!--              </vs-dropdown-item>-->
+          <!--            </vs-dropdown-menu>-->
+          <!--          </vs-dropdown>-->
         </div>
 
         <template slot="thead">
-          <vs-th sort-key="name">Name</vs-th>
-          <vs-th sort-key="popularity">Popularity</vs-th>
-          <vs-th sort-key="popularity">From</vs-th>
-          <vs-th sort-key="popularity">To</vs-th>
-          <vs-th sort-key="order_status">Status</vs-th>
-          <vs-th sort-key="price">Price</vs-th>
+          <vs-th sort-key="name">Name / URL</vs-th>
+          <vs-th sort-key="url">URL</vs-th>
+          <!--          <vs-th sort-key="popularity">Popularity</vs-th>-->
+          <vs-th sort-key="from">From</vs-th>
+          <vs-th sort-key="to">To</vs-th>
+          <!--          <vs-th sort-key="status">Status</vs-th>-->
+          <vs-th sort-key="price">Price adult</vs-th>
+          <vs-th sort-key="price">Price child</vs-th>
           <vs-th>Action</vs-th>
         </template>
 
@@ -101,33 +106,37 @@
           <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
 
             <vs-td>
-              <p class="hotel-name font-medium truncate">{{ tr.hotel }}</p>
-            </vs-td>
-
-            <!--          <vs-td>-->
-            <!--            <p class="product-category">{{ tr.category | title }}</p>-->
-            <!--          </vs-td>-->
-
-            <vs-td>
-              <vs-progress :percent="Number(tr.popularity)" :color="getPopularityColor(Number(tr.popularity))"
-                           class="shadow-md"/>
+              <p class="hotel-name font-medium truncate">{{ tr.name }}</p>
             </vs-td>
 
             <vs-td>
-              <p class="hotel-name font-medium truncate">{{ tr.start }}</p>
+              <p class="hotel-name font-medium truncate">{{ tr.website }}</p>
+            </vs-td>
+
+            <!--            <vs-td>-->
+            <!--              <vs-progress :percent="Number(tr.popularity)" :color="getPopularityColor(Number(tr.popularity))"-->
+            <!--                           class="shadow-md"/>-->
+            <!--            </vs-td>-->
+
+            <vs-td>
+              <p class="hotel-name font-medium truncate">{{ tr.start | date }}</p>
             </vs-td>
             <vs-td>
-              <p class="hotel-name font-medium truncate">{{ tr.end }}</p>
+              <p class="hotel-name font-medium truncate">{{ tr.end | date }}</p>
+            </vs-td>
+
+            <!--            <vs-td>-->
+            <!--              <vs-chip :color="getOrderStatusColor(tr.order_status)" class="product-order-status">-->
+            <!--                {{ tr.order_status | title }}-->
+            <!--              </vs-chip>-->
+            <!--            </vs-td>-->
+
+            <vs-td>
+              <p class="product-price">{{ tr.price }}€</p>
             </vs-td>
 
             <vs-td>
-              <vs-chip :color="getOrderStatusColor(tr.order_status)" class="product-order-status">
-                {{ tr.order_status | title }}
-              </vs-chip>
-            </vs-td>
-
-            <vs-td>
-              <p class="product-price">${{ tr.price }}</p>
+              <p class="product-price">{{ tr.price }}€</p>
             </vs-td>
 
             <vs-td class="whitespace-no-wrap">
@@ -141,13 +150,12 @@
           </tbody>
         </template>
       </vs-table>
-      <!--      <pre>{{ data_local }}</pre>-->
-
+      <!--      <pre>{{ accommodation }}</pre>-->
     </div>
-    <div v-if="!this.allowed" class="vx-col w-full">
+    <div v-else>
       <h2>Accommodation disabled</h2>
       <p>Do you want to allow accommodation?</p>
-      <vs-button class="mt-4" color="success" @click="allowed = true">Allow</vs-button>
+      <vs-button class="mt-4" color="success" @click="allowEditAndOpenSide">Allow</vs-button>
     </div>
   </div>
 </template>
@@ -162,14 +170,14 @@ export default {
   },
   props: {
     data: {
-      type: Array,
-      required: true
+      // TODO: send this data to sidebar
+      type: Object,
+      default: () => {}
     }
   },
   data () {
     return {
-      data_local: this.data,
-      allowed: Array.isArray(this.data) && this.data.length,
+      overrideAllowed: false,
       selected: [],
       // products: [],
       itemsPerPage: 5,
@@ -181,6 +189,9 @@ export default {
     }
   },
   computed: {
+    allowed () {
+      return this.overrideAllowed || (Array.isArray(this.accommodation) && this.accommodation.length)
+    },
     currentPage () {
       let ret = 0
       if (this.isMounted && !this.allowed) {
@@ -189,20 +200,32 @@ export default {
       if (this.isMounted && this.allowed) {
         return ret
       }
-
       return 0
     },
+    accommodation () {
+      // console.log(this.$store.getters['calendar/getEvent'](parseInt(this.$route.params.eventId)).accommodation)
+      return this.$store.getters['calendar/getEvent'](parseInt(this.$route.params.eventId)).accommodation
+    },
     queriedItems () {
-      return this.$refs.table ? this.$refs.table.queriedResults.length : this.data_local.length
+      return this.$refs.table ? this.$refs.table.queriedResults.length : this.accommodation.length
     }
   },
   methods: {
+    allowEditAndOpenSide () {
+      this.overrideAllowed = true
+      this.addNewData()
+    },
     addNewData () {
       this.sidebarData = {}
       this.toggleDataSidebar(true)
     },
     deleteData (id) {
-      this.$store.dispatch('dataList/removeItem', id).catch(err => { console.error(err) })
+      this.overrideAllowed = false
+      this.$store.dispatch('calendar/deleteAccommodation', id)
+        .then(() => {
+          this.$store.dispatch('calendar/fetchEvent', this.$route.params.eventId)
+        })
+        .catch(err => { console.error(err) })
     },
     editData (data) {
       // this.sidebarData = JSON.parse(JSON.stringify(this.blankData))

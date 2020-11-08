@@ -60,6 +60,8 @@ class EventTypeSerializer(serializers.ModelSerializer):
 
 
 class AccommodationSerializer(serializers.ModelSerializer):
+    displayName = serializers.CharField(source='display_name', read_only=True)
+
     class Meta:
         model = Accommodation
         fields = "__all__"
@@ -91,7 +93,7 @@ class BaseEventSerializer(serializers.ModelSerializer):
         return super(BaseEventSerializer, self).create(validated_data)
 
     def to_representation(self, instance):
-        # self.fields["accommodation"] = AccommodationSerializer(many=True, read_only=True)
+        self.fields["accommodation"] = AccommodationSerializer(many=True, read_only=True)
         self.fields["category"] = CategorySerializer(many=True, read_only=True)
         self.fields["skis_type"] = SkisTypeSerializer(many=True, read_only=True)
         self.fields["type"] = EventTypeSerializer(instance.type, many=False, read_only=True)
@@ -159,6 +161,7 @@ class EventPolymorphicSerializer(PolymorphicSerializer):
     }
 
 
+# FIXME: Rewrite this
 class ProfileStatSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
@@ -168,8 +171,7 @@ class ProfileStatSerializer(serializers.ModelSerializer):
         user = instance["user"]
         seasons = instance["seasons"]
 
-        # TODO
-        #  Check if is kid
+        # TODO: Check if is kid
         kid = Child.objects.get(user__profile=user)
         ret = {
             "user": BaseProfileSerializer(instance=user).data,

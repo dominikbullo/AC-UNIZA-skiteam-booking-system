@@ -27,7 +27,7 @@
           <vs-tab v-if="this.$acl.check('isParent')" label="Accommodation" href="#accommodation"
                   icon-pack="material-icons" icon="hotel">
             <div class="tab-text">
-              <event-edit-tab-accommodation class="mt-4" :data="event_data.accommodation"/>
+              <event-edit-tab-accommodation class="mt-4" :data="event_data"/>
             </div>
           </vs-tab>
         </vs-tabs>
