@@ -1,8 +1,5 @@
 version: "3"
 
-volumes:
-  sportagenda_data: {}
-
 services:
   backend:
     build:
@@ -41,6 +38,15 @@ services:
     env_file: .env.dev
     ports:
       - "5050:5050"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+    logging:
+      driver: none
 
   nginx:
     image: nginx:alpine
@@ -54,3 +60,7 @@ services:
       - ./nginx/dev.conf:/etc/nginx/nginx.conf:ro
     logging:
       driver: none
+
+volumes:
+  sportagenda_data: {}
+  pgadmin_data: {}

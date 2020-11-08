@@ -1,7 +1,7 @@
 <template>
   <div id="page-user-edit">
 
-    <vs-alert color="danger" title="User Not Found" v-model:active="user_not_found">
+    <vs-alert color="danger" title="User Not Found" :active.sync="user_not_found">
       <span>User record with id: {{ $route.params.userId }} not found. </span>
       <span>
         <span>Check </span><router-link :to="{name:'page-user-list'}"
@@ -77,16 +77,16 @@ export default {
   methods: {
     fetch_user_data (userId) {
       this.$store.dispatch('userManagement/fetchDefaultUser', userId)
-        .then(res => {
-          this.user_data = res.data
-        })
-        .catch(err => {
-          if (err.response.status === 404) {
-            this.user_not_found = true
-            return
-          }
-          console.error(err)
-        })
+          .then(res => {
+            this.user_data = res.data
+          })
+          .catch(err => {
+            if (err.response.status === 404) {
+              this.user_not_found = true
+              return
+            }
+            console.error(err)
+          })
     }
   },
   created () {

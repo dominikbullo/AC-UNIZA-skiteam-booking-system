@@ -1,32 +1,32 @@
 <template>
   <div>
     <vs-input
-      v-validate="'required|min:3'"
-      name="email"
-      icon-no-border
-      icon="icon icon-user"
-      icon-pack="feather"
-      :label-placeholder="$t('placeholders.email/username')"
-      v-model="email"
-      class="w-full"/>
+        v-validate="'required|min:3'"
+        name="email"
+        icon-no-border
+        icon="icon icon-user"
+        icon-pack="feather"
+        :label-placeholder="$t('placeholders.email/username')"
+        v-model="email"
+        class="w-full"/>
     <span class="text-danger text-sm">{{ errors.first('email') }}</span>
 
     <vs-input
-      v-validate="'required|min:6'"
-      type="password"
-      name="password"
-      icon-no-border
-      icon="icon icon-lock"
-      icon-pack="feather"
-      :label-placeholder="$t('Password')"
-      v-model="password"
-      class="w-full mt-6"/>
+        v-validate="'required|min:6'"
+        type="password"
+        name="password"
+        icon-no-border
+        icon="icon icon-lock"
+        icon-pack="feather"
+        :label-placeholder="$t('Password')"
+        v-model="password"
+        class="w-full mt-6"/>
     <span class="text-danger text-sm">{{ errors.first('Password') }}</span>
 
-    <div class="flex flex-wrap justify-between my-5">
-      <!--      <vs-checkbox v-model="checkbox_remember_me" class="mb-3">{{ $t('RememberMe') }}</vs-checkbox>-->
-      <!--      <router-link to="/forgot-password">{{ $t('ForgotPassword') }}?</router-link>-->
-    </div>
+    <!--    <div class="flex flex-wrap justify-between my-5">-->
+    <!--      <vs-checkbox v-model="checkbox_remember_me" class="mb-3">{{ $t('RememberMe') }}</vs-checkbox>-->
+    <!--      <router-link to="/forgot-password">{{ $t('ForgotPassword') }}?</router-link>-->
+    <!--    </div>-->
     <div class="flex flex-wrap justify-between mb-3">
       <vs-button type="border" @click="registerUser">{{ $t('Register') }}</vs-button>
       <vs-button :disabled="!validateForm" @click="loginDRF">{{ $t('Login') }}</vs-button>
@@ -51,8 +51,8 @@ export default {
   computed: {
     validateForm () {
       return !this.errors.any()
-        && this.email !== ''
-        && this.password !== ''
+          && this.email !== ''
+          && this.password !== ''
     }
   },
   methods: {
@@ -96,7 +96,6 @@ export default {
           aclChangeRole: this.$acl.change,
           userRole: response.data.user.profile.userRole
         })
-        //FIXME not working
         this.$router.push(this.$router.currentRoute.query.to || '/')
 
         this.$vs.loading.close()

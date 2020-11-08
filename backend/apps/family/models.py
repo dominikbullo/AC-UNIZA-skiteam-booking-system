@@ -21,6 +21,7 @@ class Family(models.Model):
         ordering = ['id']
 
 
+# TODO: This is not necessary -> try with profile
 class FamilyMember(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     family = models.ForeignKey(Family, on_delete=models.CASCADE, related_name="members")

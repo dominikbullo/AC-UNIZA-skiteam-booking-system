@@ -1,8 +1,8 @@
 <template>
   <div id="event-edit-tab-general">
-    <!--    <p>{{data}}</p>-->
+    <!--    <p>{{ data }}</p>-->
     <!--    <br>-->
-    <!--    <p>{{data_local}}</p>-->
+    <!--    <p>{{ data_local }}</p>-->
     <!--    <br>-->
 
     <div class="vx-row">
@@ -38,17 +38,6 @@
         </div>
 
         <div class="vx-row mt-4">
-          <!--          TODO: Cannot change type, because of aplication logic, but maybe they will want to-->
-          <!--          <div class="vx-col w-1/2">-->
-          <!--            <label class="text-sm">Event type</label>-->
-          <!--            <v-select :clearable="false"-->
-          <!--                      label="displayName"-->
-          <!--                      :reduce="item => item.id"-->
-          <!--                      v-model="data_local.type"-->
-          <!--                      :options="choices.EventTypeChoices"/>-->
-          <!--            <span class="text-danger text-sm" v-show="errors.has('start')">{{ errors.first('start') }}</span>-->
-          <!--          </div>-->
-
           <div class="vx-col w-1/2">
             <label class="text-sm">Location</label>
             <v-select :clearable="false"
@@ -64,16 +53,19 @@
             <span slot="off">Skis type</span>
 
             <div class="mt-2">
-              <vs-radio :key="item.key" v-for="item in this.choices.SkiTypeChoices"
-                        v-model="data_local.skis_type"
-                        :vs-value="item.key"
-                        vs-w="6"
-                        class="mr-4">
-                <span class="sm:inline hidden">{{item.displayName}}</span>
-              </vs-radio>
+              <ul class="centerx">
+                <li class="mb-2" :key="item.id" v-for="item in this.skis">
+                  <vs-checkbox
+                      :vs-value="item.id"
+                      color="success"
+                      v-model="data_local.skis_type">
+                    {{ item.displayName }}
+                  </vs-checkbox>
+                </li>
+              </ul>
             </div>
           </div>
-          <div v-if="data_local.type === 'SKI_RACE'" class="vx-col w-1/2">
+          <div v-if="this.isSkiRace" class="vx-col w-1/2">
             <label class="text-sm">Race Organizer</label>
             <v-select :clearable="false"
                       label="displayName"
@@ -88,9 +80,6 @@
         <div class="mt-4">
           <div class="vx-col w-full">
             <div class="mt-8 flex flex-wrap items-center">
-              <!--                <vs-button class="mt-2" icon-pack="feather" icon="icon-x" type="border" color="warning"-->
-              <!--                           @click="reset_data">Cancel event-->
-              <!--                </vs-button>-->
               <vs-button class="mt-2" icon-pack="feather" icon="icon-trash-2" type="border" color="danger"
                          @click="deleteEvent">Delete event
               </vs-button>
@@ -165,7 +154,7 @@ export default {
   data () {
     return {
 
-      data_local: JSON.parse(JSON.stringify(this.data)),
+      data_local: Object.assign({}, this.data),
 
       datePickerConfig: {
         locale: Slovak,
@@ -194,6 +183,9 @@ export default {
     categories () {
       return this.$store.state.calendar.eventConfig.categories
     },
+    skis () {
+      return this.$store.state.calendar.eventConfig.skis
+    },
     locations () {
       return this.$store.state.calendar.eventConfig.locations
     },
@@ -202,15 +194,20 @@ export default {
     },
     choices () {
       return this.$store.state.calendar.eventConfig.choices
+    },
+    isSkiRace () {
+      // console.log('this.data_local', this.data_local)
+      // console.log('isSkiRace', this.data_local.type.type === 'RACE' && this.data_local.type.need_skis === true)
+      return this.data_local.type.type === 'RACE' && this.data_local.type.need_skis === true
     }
 
   },
   created () {
+    this.$store.dispatch('calendar/fetchEventTypes')
+    this.$store.dispatch('calendar/fetchSkisTypes')
     this.$store.dispatch('calendar/fetchCategories')
     this.$store.dispatch('calendar/fetchLocations')
     this.$store.dispatch('calendar/fetchRaceOrganizers')
-    this.$store.dispatch('calendar/fetchEventChoices')
-    this.reset_data()
   },
   methods: {
     save_changes () {
@@ -218,72 +215,52 @@ export default {
       if (!this.validateForm) return
       console.log('Save changes with data', this.data_local)
 
-      // FIXME
-      const event = Object.assign({}, this.data_local)
-      delete event['season']
-
-      this.$store.dispatch('calendar/editEvent', event)
-        .then(res => {
-          this.$vs.notify({
-            color: 'success',
-            title: 'Event Deleted',
-            text: 'The selected event was successfully edited'
+      this.$store.dispatch('calendar/editEvent', this.data_local)
+          .then(res => {
+            this.$vs.notify({
+              color: 'success',
+              title: 'Event Edited',
+              text: 'The selected event was successfully edited'
+            })
           })
-        })
-        .catch(err => {
-          this.$vs.notify({
-            color: 'danger',
-            title: 'Event Not Changed',
-            text: err.message
+          .catch(err => {
+            this.$vs.notify({
+              color: 'danger',
+              title: 'Event Not Changed',
+              text: err.message
+            })
+            console.error(err)
           })
-          console.error(err)
-        })
-    },
-    cleanData (data, key = 'id') {
-      const cleanData = []
-      Object.values(data).forEach((element) => {
-        cleanData.unshift(element[key])
-      })
-      return cleanData
     },
     reset_data () {
-      // TODO: Maybe not neet to include some stuf -> later cleanup
       this.data_local = Object.assign({}, this.data)
-
-
-      this.data_local.category = this.cleanData(this.data.category)
-      this.data_local.location = this.data_local.location.id
-
-      if (this.data.hasOwnProperty('organizer')) {
-        this.data_local.organizer = this.data_local.organizer.id
-      }
     },
     deleteEvent () {
       this.$store.dispatch('calendar/deleteEvent', this.data)
-        .then(res => {
-          this.$router.push({ name: 'app-event-calendar' }).catch(() => {
+          .then(res => {
+            this.$router.push({ name: 'app-event-calendar' }).catch(() => {
+            })
+            this.$vs.notify({
+              color: 'success',
+              title: 'Event Deleted',
+              text: 'The selected event was successfully deleted'
+            })
           })
-          this.$vs.notify({
-            color: 'success',
-            title: 'Event Deleted',
-            text: 'The selected event was successfully deleted'
+          .catch(err => {
+            this.$vs.notify({
+              color: 'danger',
+              title: 'Event Not Deleted',
+              text: 'The selected user wasn\'t  deleted'
+            })
+            console.error(err)
           })
-        })
-        .catch(err => {
-          this.$vs.notify({
-            color: 'danger',
-            title: 'Event Not Deleted',
-            text: 'The selected user wasn\'t  deleted'
-          })
-          console.error(err)
-        })
     }
   }
 }
 </script>
 
 <style>
-  #text-area-edit-event {
-    min-height: 110px
-  }
+#text-area-edit-event {
+  min-height: 110px
+}
 </style>

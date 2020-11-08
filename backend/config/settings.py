@@ -55,11 +55,9 @@ THIRD_PARTY_APPS = [
     'allauth.socialaccount.providers.facebook',
 
     'polymorphic',
+    'colorfield',
 
     'pwa',
-
-    'simple_mail',
-    'ckeditor',
 
     'django_filters',
     'django_rest_passwordreset',
@@ -284,7 +282,7 @@ DATE_FORMAT = "%d.%m.%Y"
 REST_FRAMEWORK = {
     "DATETIME_INPUT_FORMATS"        : [(DATETIME_FORMAT), ('iso-8601')],
     "DATE_INPUT_FORMATS"            : [('iso-8601'), ],
-    'DEFAULT_FILTER_BACKENDS'       : ['django_filters.rest_framework.DjangoFilterBackend'],
+    'DEFAULT_FILTER_BACKENDS'       : ('django_filters.rest_framework.DjangoFilterBackend',),
     'DEFAULT_PERMISSION_CLASSES'    : ('rest_framework.permissions.IsAuthenticated',),
     'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework.authentication.TokenAuthentication',
                                        # RELEASE Delete SessionAuthentication
@@ -293,7 +291,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS'      : 'rest_framework.pagination.PageNumberPagination',
 
     # FIXME on front
-    'PAGE_SIZE'                     : 100
+    'PAGE_SIZE'                     : 200
 }
 
 # raven sentry client
@@ -356,7 +354,3 @@ LOGGING = {
 RAVEN_CONFIG = {
     'DSN': SENTRY_DSN
 }
-
-# enable django-ckeditor integration
-SIMPLE_MAIL_USE_CKEDITOR = True
-SIMPLE_MAIL_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'

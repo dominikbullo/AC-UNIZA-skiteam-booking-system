@@ -1,6 +1,6 @@
 <template>
   <div id="page-user-view">
-    <vs-alert color="danger" title="User Not Found" v-model:active="user_not_found">
+    <vs-alert color="danger" title="User Not Found" :active.sync="user_not_found">
       <span>User record with id: {{ $route.params.userId }} not found. </span>
       <span>
         <span>Check </span><router-link :to="{name:'app-user-list'}"
@@ -35,7 +35,7 @@
               </tr>
               <tr>
                 <td class="font-semibold">Gender</td>
-                <td>{{ user_data.gender}}</td>
+                <td>{{ user_data.gender }}</td>
               </tr>
             </table>
           </div>
@@ -85,7 +85,7 @@
           </vx-card>
           <vs-button v-if="user_data.userRole === 'child'" icon-pack="feather" icon="icon-bar-chart" class="mr-4"
                      :to="{name: 'app-user-stats',  params: { userId: this.$route.params.userId }}">
-            {{$t('Show Statistics')}}
+            {{ $t('Show Statistics') }}
           </vs-button>
         </div>
 
@@ -192,18 +192,18 @@ export default {
     const userId = this.$route.params.userId
     console.log('userId', userId)
     this.$store.dispatch('userManagement/fetchUser', userId)
-      .then(res => {
-        this.user_data = res.data
-        console.log('res.data', res.data)
-        console.log('this.user_data', this.user_data)
-      })
-      .catch(err => {
-        if (err.response.status === 404) {
-          this.user_not_found = true
-          return
-        }
-        console.error(err)
-      })
+        .then(res => {
+          this.user_data = res.data
+          console.log('res.data', res.data)
+          console.log('this.user_data', this.user_data)
+        })
+        .catch(err => {
+          if (err.response.status === 404) {
+            this.user_not_found = true
+            return
+          }
+          console.error(err)
+        })
   }
 }
 

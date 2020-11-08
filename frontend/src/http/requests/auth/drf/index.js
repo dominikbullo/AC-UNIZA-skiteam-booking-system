@@ -24,7 +24,6 @@ export default {
     })
   },
   registerUserEmail (first_name, last_name, user_role, birth_date, email, gender, password) {
-    console.log()
     return axios.post('/rest-auth/register/', {
       email,
       first_name,

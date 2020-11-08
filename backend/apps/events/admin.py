@@ -22,7 +22,7 @@ class ModelAChildAdmin(PolymorphicChildModelAdmin):
 class SkiRaceAdmin(ModelAChildAdmin):
     base_model = SkiTraining  # Explicitly set here!
     show_in_index = True  # makes child model admin visible in main admin site
-
+    exclude = ('type',)
     # define custom features here
 
 
@@ -31,6 +31,7 @@ class SkiTrainingAdmin(ModelAChildAdmin):
     base_model = SkiRace  # Explicitly set here!
     show_in_index = True  # makes child model admin visible in main admin site
     # define custom features here
+    exclude = ('type',)
 
 
 @admin.register(Event)
@@ -64,7 +65,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Location)
 class LocationAdmin(admin.ModelAdmin):
-    __fields = ("name", "ski_slope")
+    __fields = ("name", "detail")
     list_filter = __fields
     list_display = admin.ModelAdmin.list_display + __fields
 

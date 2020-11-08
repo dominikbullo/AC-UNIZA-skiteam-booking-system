@@ -10,5 +10,22 @@
 
 export default {
   getEvent: state => (eventId) => state.events.find((event) => event.id === eventId),
-  getEvents: state => state.events
+  getEventsForCal: state => {
+    function getData (obj) {
+      return {
+        id: obj.id,
+        start: obj.start,
+        end: obj.end,
+        title: obj.type.displayName,
+        color: obj.type.color,
+        textColor: obj.type.text_color
+      }
+    }
+
+    const ret = []
+    state.events.forEach((element) => {
+      ret.push(getData(element))
+    })
+    return ret
+  }
 }

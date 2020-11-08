@@ -149,7 +149,6 @@ temp/
 versions/
 *.zip
 /bin
-package-lock.json
 docs/.vuepress/dist/
 yarn.lock
 yarn-error.log
@@ -282,3 +281,4 @@ typings/
 /backend/staticfiles/
 /.old/
 /docker-compose.override.yml
+/scripts/

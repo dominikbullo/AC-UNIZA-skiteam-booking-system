@@ -1,0 +1,53 @@
+name: Test & Build
+
+on:
+  push:
+    branches-ignore:
+      - master
+      - develop
+
+  # Run tests for any PRs.
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: Run tests
+        run: |
+          if [ -f docker-compose.test.yml ]; then
+            docker-compose -f docker-compose.test.yml build
+            docker-compose -f docker-compose.test.yml run --rm backend flake8 --exit-zero  --statistics
+            docker-compose -f docker-compose.test.yml run --rm backend python manage.py test
+          else
+            docker build ./backend --file backend/Dockerfile
+            docker build . --file nginx/Dockerfile
+          fi
+
+  build_backend:
+    name: build backend
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: Build backend image
+        run: docker build ./backend --file backend/Dockerfile
+
+  build_nginx:
+    name: build frontend
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: build nginx image
+        run: docker build . --file nginx/Dockerfile

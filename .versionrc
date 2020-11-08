@@ -1,0 +1,13 @@
+{
+  "bumpFiles": [
+    {
+      "filename": "frontend/package.json",
+      "type": "json"
+    },
+    {
+      "filename": "frontend/package-lock.json",
+      "type": "json"
+    }
+  ]
+}
+

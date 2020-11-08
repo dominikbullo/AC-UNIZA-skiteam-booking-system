@@ -16,11 +16,9 @@ import themeConfig, { colors } from '@/../themeConfig.js'
 
 // *From Auth - Data will be received from auth provider
 const userDefaults = {
-  displayName: 'John Doe', // From Auth
-  about: 'default',
+  displayName: 'Default User', // From Auth
   photoURL: require('@/assets/images/portrait/small/avatar-s-11.jpg'), // From Auth
-  status: 'online',
-  userRole: 'public'
+  userRole: 'public' // From Auth
 }
 
 const userInfoLocalStorage = JSON.parse(localStorage.getItem('userInfo')) || {}

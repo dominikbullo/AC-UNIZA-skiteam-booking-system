@@ -104,12 +104,11 @@ const mutations = {
   // /////////////////////////////////////////////
 
   // Updates user info in state and localstorage
-  // TODO update all infos
   UPDATE_USER_INFO (state, payload) {
     console.log('[STORE] updating user info', payload)
     // Get Data localStorage
     const userInfo = JSON.parse(localStorage.getItem('userInfo')) || state.AppActiveUser
-    
+
     for (const property of Object.keys(payload)) {
       state.AppActiveUser[property] = payload[property]
       userInfo[property] = payload[property]

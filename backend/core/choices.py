@@ -37,19 +37,17 @@ class CategoryNameChoices(models.TextChoices):
 
 
 class EventTypeChoices(models.TextChoices):
-    SKI_TRAINING = 'SKI_TRAINING', _('Ski Training')
-    ATHLETIC_TRAINING = 'ATHLETIC_TRAINING', _('Athletic Training')
-    SKI_RACE = 'SKI_RACE', _('Ski Race')
-    SKI_CAMP = 'SKI_CAMP', _('Ski Camp')
+    TRAINING = 'TRAINING', _('Training')
+    RACE = 'RACE', _('Race')
+    CAMP = 'CAMP', _('Camp')
     VIDEO_ANALYZE = 'VIDEO_ANALYZE', _('Video Analyze')
     MEETING = 'MEETING', _('Meeting')
 
 
 class SkiTypeChoices(models.TextChoices):
-    # SUPER_GIANT_SLALOM = 'SG', _('Super Giant Slalom')
-    ALL = 'ALL', _('All')
     SLALOM = 'SL', _('Slalom')
     GIANT_SLALOM = 'GS', _('Giant Slalom')
+    SUPER_GIANT_SLALOM = 'SG', _('Super Giant Slalom')
 
 
 class GenderChoices(models.TextChoices):
@@ -74,7 +72,6 @@ def get_all_classes():
 
 def get_all_choices():
     classes = {
-        EventTypeChoices,
         SkiTypeChoices
     }
     # classes = get_all_classes()

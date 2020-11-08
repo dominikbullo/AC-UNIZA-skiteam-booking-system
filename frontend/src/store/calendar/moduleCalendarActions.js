@@ -16,10 +16,8 @@ export default {
    * @default fetching from current active season
    */
   fetchEvents ({ commit }, payload = { query: { season: {} } }) {
-    // console.log('payload fetch events', payload)
-
     return new Promise((resolve, reject) => {
-      axios.get('/event/', {
+      axios.get('/events/', {
         params: payload.query
       })
         .then((response) => {
@@ -31,11 +29,12 @@ export default {
         })
     })
   },
-  fetchEvent (context, eventId) {
+  fetchEvent ({ commit }, eventId) {
     console.log('payload fetch event', eventId)
     return new Promise((resolve, reject) => {
       axios.get(`/event/${eventId}/`)
         .then((response) => {
+          commit('UPDATE_EVENT', response.data)
           resolve(response)
         })
         .catch((error) => {
@@ -43,11 +42,12 @@ export default {
         })
     })
   },
-  fetchEventChoices ({ commit }, payload) {
+  fetchSkisTypes ({ commit }, payload) {
     return new Promise((resolve, reject) => {
-      axios.get('/events/choices/')
+      // payload = { query: { season: {} } }
+      axios.get('/skis-types/')
         .then((response) => {
-          commit('SET_EVENT_CHOICES', response.data)
+          commit('SET_SKIS_TYPES', response.data.results)
           resolve(response)
         })
         .catch((error) => {
@@ -55,7 +55,20 @@ export default {
         })
     })
   },
-  fetchLocations ({ commit }, payload) {
+  fetchEventTypes ({ commit }, payload) {
+    return new Promise((resolve, reject) => {
+      // payload = { query: { season: {} } }
+      axios.get('/event-types/')
+        .then((response) => {
+          commit('SET_EVENT_TYPES', response.data.results)
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
+  },
+  fetchLocations ({ commit }) {
     return new Promise((resolve, reject) => {
       axios.get('/locations/')
         .then((response) => {
@@ -67,7 +80,7 @@ export default {
         })
     })
   },
-  fetchRaceOrganizers ({ commit }, payload) {
+  fetchRaceOrganizers ({ commit }) {
     return new Promise((resolve, reject) => {
       axios.get('/race-organizer/')
         .then((response) => {
@@ -79,7 +92,7 @@ export default {
         })
     })
   },
-  fetchCategories ({ commit }, payload) {
+  fetchCategories ({ commit }) {
     return new Promise((resolve, reject) => {
       axios.get('/categories/')
         .then((response) => {
@@ -92,12 +105,12 @@ export default {
     })
   },
   changeEventMembers ({ commit }, payload) {
-    console.log('payload 1s', payload)
+    // console.log('payload 1s', payload)
     const apiPayload = {
       'add': payload.eventAdd.filter(x => !payload.eventDelete.includes(x)),
       'delete': payload.eventDelete.filter(x => !payload.eventAdd.includes(x))
     }
-    console.log('apiPayload', apiPayload)
+    // console.log('apiPayload', apiPayload)
 
     return new Promise((resolve, reject) => {
       axios.post(`event/${payload.eventID}/change/`, { users: apiPayload })
@@ -149,8 +162,77 @@ export default {
           reject(error)
         })
     })
+  },
+  createAccommodation ({
+    commit,
+    dispatch
+  }, obj) {
+    console.log('creating acco', obj)
+    const eventID = obj.eventID
+    delete obj.eventID
+
+    return new Promise((resolve, reject) => {
+      axios.post('/accommodation/', obj)
+        .then((response) => {
+          dispatch('addAccommodationToEvent', {
+            eventID,
+            accommodation: response.data
+          })
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
+  },
+  updateAccommodation ({ commit }, obj) {
+    console.log('updateAccommodation', obj)
+    const eventID = obj.eventID
+    delete obj.eventID
+
+    return new Promise((resolve, reject) => {
+      axios.patch(`/accommodation/${obj.id}`, obj)
+        .then((response) => {
+          console.log('res update', response)
+          commit('UPDATE_EVENT_ACCOMMODATION', {
+            eventID: parseInt(eventID),
+            acc: response.data
+          })
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
+  },
+  deleteAccommodation ({ commit }, id) {
+    return new Promise((resolve, reject) => {
+      axios.delete(`/accommodation/${id}/`)
+        .then((response) => {
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
+  },
+  addAccommodationToEvent ({ commit }, obj) {
+    console.log('addAccommodationToEvent obj', obj)
+
+    return new Promise((resolve, reject) => {
+      axios.post(`/event/${obj.eventID}/accommodation`, {
+        accommodation: [obj.accommodation.id]
+      })
+        .then((response) => {
+          commit('UPDATE_EVENT', response.data)
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
   }
-  // updateOrAddEvent ({ commit }, event) {
-  //   commit('UPDATE_EVENT', event.data)
-  // }
+// updateOrAddEvent ({ commit }, event) {
+//   commit('UPDATE_EVENT', event.data)
+// }
 }

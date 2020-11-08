@@ -1,6 +1,6 @@
 <template>
   <div id="page-user-stats-view">
-    <vs-alert color="danger" title="User Not Found" v-model:active="user_not_found">
+    <vs-alert color="danger" title="User Not Found" :active.sync="user_not_found">
       <span>Statistic for this user not found. </span>
     </vs-alert>
 
@@ -18,10 +18,10 @@
         <div class="vx-col w-full md:w-1/2 mb-base">
           <vx-card :title="$t('Season Selection')" no-shadow card-border>
             <v-select
-              v-model="seasons.selected"
-              :options="seasons.options"
-              @input="seasonStats"
-              :clearable="false"
+                v-model="seasons.selected"
+                :options="seasons.options"
+                @input="seasonStats"
+                :clearable="false"
             />
           </vx-card>
         </div>
@@ -187,7 +187,7 @@ export default {
           series[season][key][dataKey][stats.total].push(value.total)
           // FIXME or 0
           series[season][key][dataKey][stats.percentage].push(
-            (value.count / value.total * 100).toFixed(2)
+              (value.count / value.total * 100).toFixed(2)
           )
         })
 
@@ -246,21 +246,21 @@ export default {
       moduleUserManagement.isRegistered = true
     }
     this.$store.dispatch('family/fetchUserStats',
-      {
-        username: this.$route.params.userId
-      })
-      .then(res => {
-        // this.$vs.loading.close()
-        this.user_stats = res.data.data
-        this.processData()
-      })
-      .catch(err => {
-        this.$vs.loading.close()
-        console.error(err)
-        if (err.response.status === 400) {
-          this.user_not_found = true
-        }
-      })
+        {
+          username: this.$route.params.userId
+        })
+        .then(res => {
+          // this.$vs.loading.close()
+          this.user_stats = res.data.data
+          this.processData()
+        })
+        .catch(err => {
+          this.$vs.loading.close()
+          console.error(err)
+          if (err.response.status === 400) {
+            this.user_not_found = true
+          }
+        })
   }
 }
 

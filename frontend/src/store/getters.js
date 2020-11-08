@@ -37,6 +37,10 @@ const getters = {
 
   appVersion: (state) => {
     return state.packageVersion
+  },
+
+  familyID: (state) => {
+    return state.AppActiveUser.profile.family_id
   }
 }
 

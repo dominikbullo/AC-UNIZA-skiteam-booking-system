@@ -30,7 +30,7 @@ const actions = {
       .catch(e => { console.log(e) })
   },
   getUser (context, userId) {
-    return axios.get(`/api/users/${  userId}`)
+    return axios.get(`/api/users/${userId}`)
       .then(response => { context.commit('setUser', response.data) })
       .catch(e => { console.log(e) })
   },
@@ -44,7 +44,7 @@ const actions = {
         if (typeof avatar === 'object') {
           const data = new FormData()
           data.append('avatar', avatar)
-          return axios.patch(`/api/users/${  response.data.id}`, data)
+          return axios.patch(`/api/users/${response.data.id}`, data)
         }
       })
       .catch(e => { console.log(e) })
@@ -53,21 +53,21 @@ const actions = {
     const avatar = payload.avatar
     delete payload.avatar
 
-    return axios.patch(`/api/users/${  payload.id}`, payload)
+    return axios.patch(`/api/users/${payload.id}`, payload)
       .then(response => {
         // Image upload
         if (typeof avatar === 'object') {
           const data = new FormData()
           data.append('avatar', avatar)
-          return axios.patch(`/api/users/${  payload.id}`, data)
+          return axios.patch(`/api/users/${payload.id}`, data)
         }
       })
-      .catch(e => { console.log(e) })
+      .catch(e => { console.error(e) })
   },
   deleteUser (context, userId) {
-    return axios.delete(`/api/users/${  userId}`)
+    return axios.delete(`/api/users/${userId}`)
       .then(response => {})
-      .catch(e => { console.log(e) })
+      .catch(e => { console.error(e) })
   },
   passwordReset (context, user) {
     return axios.post('/api/users/password_reset/', user)
