@@ -27,6 +27,14 @@ services:
       LETSENCRYPT_HOST: ${DOMAIN}
       LETSENCRYPT_EMAIL: ${ADMIN_EMAIL}
 
+  backups:
+    image: prodrigestivill/postgres-backup-local
+    restart: on-failure
+    depends_on:
+      - postgres
+    volumes:
+      - /tmp/backups/:/backups/
+
 volumes:
     postgres_data: {}
 
