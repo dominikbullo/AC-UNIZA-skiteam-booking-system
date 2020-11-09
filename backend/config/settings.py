@@ -104,6 +104,9 @@ EMAIL_PORT = env.int('EMAIL_PORT', default='1025')
 EMAIL_HOST = env.str('EMAIL_HOST', default='mailhog')
 EMAIL_HOST_USER = env.str('EMAIL_HOST_USER', default='noreply@sportagenda.local')
 EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD', default='')
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# It need to be TSL = False , SSL True on prod
 EMAIL_USE_TSL = env.bool('EMAIL_USE_TSL', default=True)
 EMAIL_USE_SSL = env.bool('EMAIL_USE_SSL', default=False)
 
