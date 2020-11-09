@@ -1,7 +1,7 @@
 <template>
   <div id="event-calendar-app">
     <vx-card class="mt-5 vx-card">
-      <div class="calendar-view  no-scroll-content">
+      <div class="calendar-view no-scroll-content">
         <FullCalendar
             :events="calendarEvents"
             :slotDuration="calendarConfig.slotDuration"
@@ -43,7 +43,7 @@
           class="my-prompt"
           :title="$t('Event detail')">
 
-        <vs-tabs>
+        <vs-tabs style="overflow: auto">
           <vs-tab label="Home">
             <div v-if="editedEvent" id="event-info-table" class="con-tab-ejemplo">
 
@@ -223,6 +223,7 @@
               <label class="text-sm">{{ $t('Location') }}</label>
               <v-select :clearable="false"
                         label="displayName"
+                        :reduce="item => item.id"
                         v-model="addEventPrompt.location.selected"
                         :options="addEventPrompt.location.options"/>
             </div>
@@ -319,6 +320,7 @@ export default {
   },
   data () {
     return {
+      dialog: true,
       calendarPlugins: [ // plugins must be defined in the JS
         dayGridPlugin,
         timeGridPlugin,
@@ -773,15 +775,6 @@ export default {
   }
 }
 
-.my-column {
-  table {
-    td {
-      padding-right: .5rem;
-      padding-bottom: .8rem;
-      word-break: break-all;
-    }
-  }
-}
 
 @media screen and (min-width: 1201px) and (max-width: 1211px),
 only screen and (min-width: 636px) and (max-width: 991px) {
@@ -790,6 +783,11 @@ only screen and (min-width: 636px) and (max-width: 991px) {
   }
 }
 
+/* TODO: some calc variable */
+/* TODO: mobile */
+.vs-tabs {
+  min-height: 350px;
+}
 
 .my-prompt {
   .vs-dialog {
@@ -827,7 +825,7 @@ only screen and (min-width: 636px) and (max-width: 991px) {
   }
 }
 
-//RES: https://stackoverflow.com/questions/12632229/change-color-of-past-events-in-fullcalendar
+/* RES: https://stackoverflow.com/questions/12632229/change-color-of-past-events-in-fullcalendar */
 .fc-past {
   background-color: #262b4573;
 }

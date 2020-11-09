@@ -2,10 +2,10 @@
   <footer class="the-footer flex-wrap justify-between" :class="classes">
     <span class="md:flex hidden items-center">
             <span>
-              <a href="http://sportagenda.sk/" target="_blank" rel="nofollow">Sport Agenda</a>
-              |
               <a href="http://acuniza.skiteam.sk/" target="_blank" rel="nofollow">AC UNIZA Ski Team</a>
-              - v: {{parent.$store.getters.appVersion}} </span>
+              |
+              <a href="http://sportagenda.sk/" target="_blank" rel="nofollow">Sport Agenda</a>
+              - v{{ parent.$store.getters.appVersion }} </span>
             <feather-icon icon="HeartIcon" svgClasses="stroke-current text-danger w-6 h-6" class="ml-2"/>
         </span>
     <p>
