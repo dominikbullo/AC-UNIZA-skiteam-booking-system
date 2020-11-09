@@ -1,66 +1,23 @@
+# Base file for docker-compose
+# If you run this file without docker-compose.override.yml file, nothing happened, you need to it with some another file
+# If you run this file with docker-compose.override.yml file, it will be automatically accepted as another file
+# RES: https://docs.docker.com/compose/extends/
 version: "3"
 
 services:
   backend:
-    build:
-      context: ./backend
+    image: "ghcr.io/dominikbullo/sportagenda_backend:${IMAGE_VERSION}"
     depends_on:
       - postgres
-    volumes:
-      - ./backend:/app
-    command: /start.sh
-    entrypoint: /entrypoint.sh
     restart: on-failure
-    env_file: .env.dev
+    env_file: .env
 
-  frontend:
-    image: node:lts-alpine
-    command: npm run serve
-    volumes:
-      - ./.env:/app/.env:ro
-      - ./frontend:/app
-    working_dir: /app
-    restart: on-failure
-
-  # postgres database
   postgres:
     image: postgres
-    volumes:
-      - sportagenda_data:/var/lib/postgresql/data/ # persist data even if container shuts down
-    ports:
-      - "5432:5432"
-    env_file: .env.dev
-
-  # pgadmin for managing postgis db (runs at localhost:5050)
-  # To add the above postgres server to pgadmin, use hostname as defined by docker: 'postgres'
-  pgadmin:
-    image: dpage/pgadmin4
-    env_file: .env.dev
-    ports:
-      - "5050:5050"
-    volumes:
-      - pgadmin_data:/var/lib/pgadmin
-
-  mailhog:
-    image: mailhog/mailhog
-    ports:
-      - "8025:8025"
-    logging:
-      driver: none
+    env_file: .env
 
   nginx:
-    image: nginx:alpine
-    ports:
-      - "8000:80"
+    image: "ghcr.io/dominikbullo/sportagenda_nginx:${IMAGE_VERSION}"
     depends_on:
       - backend
-    volumes:
-      - ./backend/media/:/media/
-      - ./backend/staticfiles/:/staticfiles/
-      - ./nginx/dev.conf:/etc/nginx/nginx.conf:ro
-    logging:
-      driver: none
-
-volumes:
-  sportagenda_data: {}
-  pgadmin_data: {}
+    env_file: .env

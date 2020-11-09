@@ -19,8 +19,9 @@ jobs:
             cd ${{ secrets.PROJECT_DIR }}&&\
             git reset --hard HEAD &&\
             git pull &&\
-            docker-compose -f production.yml pull &&\
-            docker-compose -f production.yml up -d --build --no-deps
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull &&\
+            docker-compose down &&\
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
           host: ${{ secrets.HOST }}
           username: ${{ secrets.HOST_USERNAME }}
           passphrase: ${{ secrets.PASSPHRASE }}
