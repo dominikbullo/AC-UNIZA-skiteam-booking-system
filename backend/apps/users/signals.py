@@ -2,10 +2,13 @@ from allauth.account.models import EmailAddress
 from allauth.account.signals import email_confirmed
 
 from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
 from django.db import transaction
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
+from django.template.loader import render_to_string
 
+from django_rest_passwordreset.signals import reset_password_token_created
 from rest_framework.authtoken.models import Token
 
 from core.utils import send_custom_mail
@@ -78,15 +81,6 @@ def generate_token(sender, instance, created, **kwargs):
     if created:
         Token.objects.create(user=instance)
 
-
-from django.core.mail import EmailMultiAlternatives
-from django.dispatch import receiver
-from django.template.loader import render_to_string
-from django.urls import reverse
-
-from django_rest_passwordreset.signals import reset_password_token_created
-
-
 @receiver(reset_password_token_created)
 def password_reset_token_created(sender, instance, reset_password_token, *args, **kwargs):
     """
@@ -104,22 +98,24 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
         'current_user'      : reset_password_token.user,
         'username'          : reset_password_token.user.username,
         'email'             : reset_password_token.user.email,
-        'token'             : reset_password_token.key,
-        'reset_password_url': "{}?token={}".format(reverse('password_reset:reset-password-request'),
-                                                   reset_password_token.key)
+        'domain'            : instance.request.get_host(),
+        'reset_password_url': "{}/reset-password/{}".format(
+            # TODO: Test this url on production
+            instance.request.get_host(),
+            reset_password_token.key)
     }
 
     # render email text
-    email_html_message = render_to_string('email/user_reset_password.html', context)
-    email_plaintext_message = render_to_string('email/user_reset_password.txt', context)
+    email_html_message = render_to_string('email/user/user_reset_password.html', context)
+    email_plaintext_message = render_to_string('email/user/user_reset_password.txt', context)
 
     msg = EmailMultiAlternatives(
         # title:
-        "Password Reset for {title}".format(title="Some website title"),
+        "Password Reset for {title}".format(title="SportAgenda"),
         # message:
         email_plaintext_message,
         # from:
-        "noreply@somehost.local",
+        settings.DEFAULT_FROM_EMAIL,
         # to:
         [reset_password_token.user.email]
     )

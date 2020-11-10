@@ -14,9 +14,23 @@
                   <p>Please enter your email address and we'll send you instructions on how to reset your password.</p>
                 </div>
 
-                <vs-input class="w-full mb-8" label-placeholder="Email" type="email" v-model="value1"/>
+                <div class="w-full mb-8">
+                  <vs-input
+                      :label-placeholder="$t('Email')"
+                      data-vv-validate-on="blur"
+                      :placeholder="$t('Email')"
+                      :danger="errors.first('Email')"
+                      class="w-full mt-6"
+                      name="Email"
+                      type="email"
+                      v-model="email"
+                      v-validate="'required|email'"/>
+                  <span class="text-danger text-sm">{{ errors.first('Email') }}</span>
+                </div>
+
                 <vs-button class="px-4 w-full md:w-auto" to="/login" type="border">Back To Login</vs-button>
-                <vs-button class="float-right px-4 w-full md:w-auto mt-3 mb-8 md:mt-0 md:mb-0">Recover Password
+                <vs-button class="float-right px-4 w-full md:w-auto mt-3 mb-8 md:mt-0 md:mb-0" @click="recoverPassword">
+                  Recover Password
                 </vs-button>
               </div>
             </div>
@@ -31,14 +45,36 @@
 export default {
   data () {
     return {
-      value1: ''
+      email: ''
     }
   },
   methods: {
-    registerUser () {
-      if (!this.checkLogin()) return
-      this.$router.push('/register').catch(() => {
-      })
+    recoverPassword () {
+      this.$store.dispatch('auth/forgotPassword', this.email).then(response => {
+        console.log('response', response)
+        if (response.status === 200) {
+          this.$vs.notify({
+            title: 'Email send!',
+            text: 'Check your email to reset password',
+            iconPack: 'feather',
+            icon: 'icon-alert-circle',
+            color: 'success'
+          })
+          setTimeout(() => {
+            this.$router.push({ name: 'page-login' }).catch(() => {})
+          }, 3000)
+        }
+      }).catch(err => {
+        console.error(err)
+        this.$vs.notify({
+          title: 'Error when reseting password',
+          text: err.message,
+          iconPack: 'feather',
+          icon: 'icon-alert-circle',
+          color: 'danger'
+        })
+      }
+      )
     }
   }
 }

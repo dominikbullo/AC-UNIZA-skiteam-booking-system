@@ -59,6 +59,7 @@ THIRD_PARTY_APPS = [
 
     'pwa',
 
+    'django_excel_fixture',
     'django_filters',
     'django_rest_passwordreset',
 ]

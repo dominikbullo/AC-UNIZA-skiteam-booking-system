@@ -9,6 +9,9 @@ urlpatterns = [
 
     path("", include('rest_auth.urls')),
 
+    # The django-rest-passwordreset urls to request a token and confirm pw-reset
+    path('reset-password/', include('django_rest_passwordreset.urls', namespace='password_reset')),
+
     # overrides register with custom view
     # must be in the front of rest_auth.registration.urls
     # RES: https://github.com/Tivix/django-rest-auth/issues/292
@@ -16,9 +19,6 @@ urlpatterns = [
     url(r'^register/account-confirm-email/(?P<key>[-:\w]+)/$', CustomConfirmEmailView.as_view(),
         name='account_confirm_email'),
     path("register/", include('rest_auth.registration.urls')),
-    
-    # NEW: The django-rest-passwordreset urls to request a token and confirm pw-reset
-    path('reset-password/', include('django_rest_passwordreset.urls', namespace='password_reset')),
 
     # RES PASSWROD RESET : https://stackoverflow.com/questions/53945056/django-rest-auth-password-reset
     # url(r'^', include('django.contrib.auth.urls')),

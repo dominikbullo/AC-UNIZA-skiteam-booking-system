@@ -43,6 +43,7 @@ const router = new Router({
         // =============================================================================
         {
           path: '/',
+          name: 'home',
           redirect: '/dashboard'
         },
         {
@@ -345,7 +346,7 @@ const router = new Router({
               }
             ],
             pageTitle: 'FAQ',
-            rule: 'isPublic'
+            rule: 'isLogged'
           }
         },
 
@@ -503,22 +504,20 @@ router.afterEach(() => {
     appLoading.style.display = 'none'
   }
 })
-// RELEASE: redirect
+
 router.beforeEach((to, from, next) => {
   // redirect to login page if not logged in and trying to access a restricted page
   const publicPages = [
     '/login',
-    '/forgot-password',
-    '/reset-password',
     '/register',
-    '/pages/error-404',
-    '/pages/error-500',
+    '/forgot-password',
+    '/reset-password*',
+    '/pages/error-*',
     '/pages/not-authorized',
     '/pages/comingsoon',
-    '/admin*',
-    '/api*'
+    '/pages/maintenance'
   ]
-  const authRequired = !publicPages.includes(to.path)
+  const authRequired = !publicPages.reduce((a, b) => a || RegExp(b).test(to.path), false)
   const loggedIn = localStorage.getItem('userInfo')
 
   if (authRequired && !loggedIn) {

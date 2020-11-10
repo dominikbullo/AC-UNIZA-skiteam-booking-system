@@ -8,6 +8,7 @@
 ========================================================================================== */
 
 import drf from '../../http/requests/auth/drf'
+import axios from '@/axios.js'
 
 export default {
   loginDRF ({ commit }, payload) {
@@ -52,15 +53,15 @@ export default {
     //   }
     // }
     const {
-            first_name,
-            last_name,
-            user_role,
-            birth_date,
-            email,
-            gender,
-            password,
-            confirmPassword
-          } = payload.userDetails
+      first_name,
+      last_name,
+      user_role,
+      birth_date,
+      email,
+      gender,
+      password,
+      confirmPassword
+    } = payload.userDetails
 
     console.log('payload', payload.userDetails)
 
@@ -86,8 +87,48 @@ export default {
         // TODO send error messages
         // How to display serializers validation error in vue
         // https://github.com/axios/axios/issues/960
-        reject(error)
+          reject(error)
+        })
+    })
+  },
+  forgotPassword (context, email) {
+    return new Promise((resolve, reject) => {
+      axios.post('/rest-auth/reset-password/', { email })
+        .then(response => {
+          resolve(response)
+        })
+        .catch(error => {
+          if (error.response.data.email && Array.isArray(error.response.data.email)) {
+            reject({ message: error.response.data.email.join() })
+          }
+          reject({ message: 'Some unknown think happened. Please contact administrator.' })
+        })
+    })
+  },
+  resetPassword (context, payload) {
+    return new Promise((resolve, reject) => {
+      axios.post('/rest-auth/reset-password/confirm/', {
+        password: payload.password,
+        token: payload.token
       })
+        .then((response) => {
+          resolve(response)
+        })
+        .catch((error) => {
+          const error_data = error.response.data
+          if (error_data.password) {
+            reject({
+              title: 'Something wrong with password',
+              message: error_data.password.join()
+            })
+          }
+          if (error_data.status) {
+            reject({
+              title: 'Token already used',
+              message: 'Token was already used for resetting password'
+            })
+          }
+        })
     })
   }
 }
