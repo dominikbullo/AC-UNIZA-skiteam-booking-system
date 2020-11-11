@@ -66,9 +66,9 @@ class BaseProfileSerializer(serializers.ModelSerializer):
 class RegisterProfileSerializer(serializers.ModelSerializer):
     user_role = serializers.ChoiceField(choices=UserTypeChoices.choices, required=True)
 
-    def to_representation(self, instance):
-        self.fields["gender"] = serializers.CharField(source='get_gender_display')
-        return super(RegisterProfileSerializer, self).to_representation(instance)
+    # def to_representation(self, instance):
+    #     self.fields["gender"] = serializers.CharField(source='get_gender_display')
+    #     return super(RegisterProfileSerializer, self).to_representation(instance)
 
     class Meta:
         model = Profile
@@ -120,7 +120,6 @@ class CustomRegisterSerializer(RegisterSerializer):
         }
 
     def custom_signup(self, request, user):
-        print("custom signup")
         profile_data = request.data.pop('profile')
         Profile.objects.get_or_create(user=user, **profile_data)
         user.profile.save()
