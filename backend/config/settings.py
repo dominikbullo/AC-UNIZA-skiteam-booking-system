@@ -46,14 +46,14 @@ THIRD_PARTY_APPS = [
     'allauth.account',
     'rest_auth.registration',
 
-    # https://github.com/adamchainz/django-cors-headers#cors_allow_headers
-    'corsheaders',
-
     # https://django-rest-auth.readthedocs.io/en/latest/installation.html
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.facebook',
 
+    # https://github.com/adamchainz/django-cors-headers#cors_allow_headers
+    'corsheaders',
+    
     'polymorphic',
     'colorfield',
 

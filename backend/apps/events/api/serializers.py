@@ -144,8 +144,7 @@ class SkiRaceSerializer(BaseEventSerializer):
 
     def to_representation(self, instance):
         self.fields["organizer"] = RaceOrganizerSerializer(instance.organizer, many=False, read_only=True)
-        to_representation = super(SkiRaceSerializer, self).to_representation(instance)
-        return to_representation
+        return super(SkiRaceSerializer, self).to_representation(instance)
 
     # def validate(self, data):
     #     validated_data = super(SkiRaceSerializer, self).validate(data)

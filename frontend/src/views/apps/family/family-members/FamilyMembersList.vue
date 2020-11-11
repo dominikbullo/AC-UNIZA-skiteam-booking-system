@@ -31,14 +31,6 @@
                 <span>100</span>
               </vs-dropdown-item>
             </vs-dropdown-menu>
-            <!--             <vs-button class="btn-drop" type="line" color="primary" icon-pack="feather" icon="icon-chevron-down"></vs-button> -->
-            <div
-                class="p-4 border border-solid d-theme-border-grey-light rounded-full d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium">
-              <span class="mr-2">{{ currentPage * paginationPageSize - (paginationPageSize - 1) }} - {{
-                  familyMembers.length - currentPage * paginationPageSize > 0 ? currentPage * paginationPageSize : familyMembers.length
-                }} of {{ familyMembers.length }}</span>
-              <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4"/>
-            </div>
           </vs-dropdown>
         </div>
 
@@ -94,18 +86,6 @@
                       <span class="text-danger text-sm">{{ errors.first('surname') }}</span>
                     </div>
                   </div>
-
-                  <vs-input
-                      :label-placeholder="$t('Username')"
-                      :placeholder="$t('Username')"
-                      class="w-full mt-6"
-                      data-vv-validate-on="blur"
-                      name="username"
-                      type="text"
-                      v-model="childData.username"
-                      v-validate="'required|alpha_dash|min:3'"/>
-                  <span class="text-danger text-sm">{{ errors.first('username') }}</span>
-
 
                   <vs-input
                       :label-placeholder="$t('Email')"
@@ -167,11 +147,11 @@
           </div>
         </vs-prompt>
 
-        <!-- ACTION - DROPDOWN -->
+        <!--        &lt;!&ndash;         ACTION - DROPDOWN &ndash;&gt;-->
         <!--        <vs-dropdown class="cursor-pointer" vs-trigger-click>-->
 
         <!--          <div-->
-        <!--            class="p-3 shadow-drop rounded-lg  d-theme-dark-light-bg cursor-pointer flex items-end justify-center text-lg font-medium w-32">-->
+        <!--              class="p-3 shadow-drop rounded-lg  d-theme-dark-light-bg cursor-pointer flex items-end justify-center text-lg font-medium w-32">-->
         <!--            <span class="mr-2 leading-none">Actions</span>-->
         <!--            <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4"/>-->
         <!--          </div>-->
@@ -179,31 +159,31 @@
         <!--          <vs-dropdown-menu>-->
 
         <!--            <vs-dropdown-item>-->
-        <!--                <span class="flex items-center">-->
-        <!--                  <feather-icon class="mr-2" icon="TrashIcon" svgClasses="h-4 w-4"/>-->
-        <!--                  <span>Delete</span>-->
-        <!--                </span>-->
+        <!--                        <span class="flex items-center">-->
+        <!--                          <feather-icon class="mr-2" icon="TrashIcon" svgClasses="h-4 w-4"/>-->
+        <!--                          <span>Delete</span>-->
+        <!--                        </span>-->
         <!--            </vs-dropdown-item>-->
 
         <!--            <vs-dropdown-item>-->
-        <!--                <span class="flex items-center">-->
-        <!--                  <feather-icon class="mr-2" icon="ArchiveIcon" svgClasses="h-4 w-4"/>-->
-        <!--                  <span>Archive</span>-->
-        <!--                </span>-->
+        <!--                        <span class="flex items-center">-->
+        <!--                          <feather-icon class="mr-2" icon="ArchiveIcon" svgClasses="h-4 w-4"/>-->
+        <!--                          <span>Archive</span>-->
+        <!--                        </span>-->
         <!--            </vs-dropdown-item>-->
 
         <!--            <vs-dropdown-item>-->
-        <!--                <span class="flex items-center">-->
-        <!--                  <feather-icon class="mr-2" icon="FileIcon" svgClasses="h-4 w-4"/>-->
-        <!--                  <span>Print</span>-->
-        <!--                </span>-->
+        <!--                        <span class="flex items-center">-->
+        <!--                          <feather-icon class="mr-2" icon="FileIcon" svgClasses="h-4 w-4"/>-->
+        <!--                          <span>Print</span>-->
+        <!--                        </span>-->
         <!--            </vs-dropdown-item>-->
 
         <!--            <vs-dropdown-item>-->
-        <!--                <span class="flex items-center">-->
-        <!--                  <feather-icon class="mr-2" icon="SaveIcon" svgClasses="h-4 w-4"/>-->
-        <!--                  <span>CSV</span>-->
-        <!--                </span>-->
+        <!--                        <span class="flex items-center">-->
+        <!--                          <feather-icon class="mr-2" icon="SaveIcon" svgClasses="h-4 w-4"/>-->
+        <!--                          <span>CSV</span>-->
+        <!--                        </span>-->
         <!--            </vs-dropdown-item>-->
 
         <!--          </vs-dropdown-menu>-->
@@ -283,7 +263,6 @@ export default {
       },
       childData: {
         id: null,
-        username: 'testsets',
         email: 'tes@tes.sk',
         password1: 'testing321',
         password2: 'testing321',
@@ -313,8 +292,8 @@ export default {
       columnDefs: [
 
         {
-          headerName: 'Username',
-          field: 'username',
+          headerName: 'Email',
+          field: 'email',
           filter: true,
           width: 210,
           cellRendererFramework: 'CellRendererLink',
@@ -322,12 +301,18 @@ export default {
           headerCheckboxSelectionFilteredOnly: true,
           headerCheckboxSelection: true
         },
-        {
-          headerName: 'Email',
-          field: 'email',
-          filter: true,
-          width: 210
-        },
+        //  TODO: displayName
+        //  TODO: avatar
+        // {
+        //   headerName: 'Display Name',
+        //   field: 'display_name',
+        //   filter: true,
+        //   width: 200,
+        //   cellRendererFramework: 'CellRendererLink',
+        //   checkboxSelection: true,
+        //   headerCheckboxSelectionFilteredOnly: true,
+        //   headerCheckboxSelection: true
+        // },
         {
           headerName: 'First Name',
           field: 'first_name',
@@ -441,13 +426,11 @@ export default {
         }
       },
       set (val) {
-        console.log('val', val)
         this.gridApi.paginationGoToPage(val - 1)
       }
     },
     validateForm () {
-      return true
-      // return !this.errors.any()
+      return !this.errors.any()
     }
   },
   methods: {
@@ -491,7 +474,6 @@ export default {
     },
     clearFields () {
       Object.assign(this.childData, {
-        username: '',
         email: '',
         password1: '',
         password2: '',
@@ -511,46 +493,34 @@ export default {
       })
     },
     addChild () {
-      // if (!this.this.$validator.validateAll() || this.checkLogin())
-      this.$validator.validateAll().then(result => {
-
-        if (result) {
-          this.$store.dispatch('family/addChild', Object.assign({}, this.childData)).then(() => {
-            this.clearFields()
-            this.$vs.notify({
-              color: 'success',
-              title: 'Child Added',
-              text: 'The child was successfully added'
-            })
-            this.clearFields()
-          }).catch(error => {
-            this.$vs.loading.close()
-            console.error(error)
-            this.$vs.notify({
-              color: 'danger',
-              title: 'Child Not added',
-              text: error.message
-            })
-            // this.multipleNotify(error.response.data)
-          })
-        } else {
+      // TODO: implement vee-validate
+      // TODO: not include pass -> generate some -> send to child email
+      this.$validator.validateAll().then(() => {
+        this.$store.dispatch('family/addChild', Object.assign({}, this.childData)).then(() => {
+          this.clearFields()
           this.$vs.notify({
-            color: 'danger',
-            title: 'Child Not added',
-            text: 'Form is not valid'
+            color: 'success',
+            title: 'Child Added',
+            text: 'The child was successfully added'
           })
-        }
+          this.clearFields()
+        }).catch(err => {
+          this.activePrompt = true
+          console.error(err.response.data)
+          this.$vs.loading.close()
+          this.multipleNotify(err.response.data)
+        })
       })
     },
     // RES: https://stackoverflow.com/questions/29516136/how-to-print-all-values-of-a-nested-object
     multipleNotify (obj) {
-      for (const key in obj) {
-        if (typeof obj[key] === 'object') {
-          this.multipleNotify(obj[key])
+      for (const [key, value] of Object.entries(obj)) {
+        if (typeof value === 'object' && !(value instanceof Array)) {
+          this.multipleNotify(value)
         } else {
           this.$vs.notify({
-            title: 'Error',
-            text: obj[key],
+            title: `Child NOT created. Error in ${key}`,
+            text: value.join(),
             iconPack: 'feather',
             icon: 'icon-alert-circle',
             color: 'danger'
