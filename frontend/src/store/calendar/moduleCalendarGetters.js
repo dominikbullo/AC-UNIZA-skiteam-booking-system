@@ -1,13 +1,3 @@
-/*=========================================================================================
-  File Name: moduleCalendarGetters.js
-  Description: Calendar Module Getters
-  ----------------------------------------------------------------------------------------
-  Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
-  Author: Pixinvent
-  Author URL: http://www.themeforest.net/user/pixinvent
-==========================================================================================*/
-
-
 export default {
   getEvent: state => (id) => state.events.find((event) => event.id === id),
   getType: state => (id) => state.eventConfig.types.find((e) => e.id === id),

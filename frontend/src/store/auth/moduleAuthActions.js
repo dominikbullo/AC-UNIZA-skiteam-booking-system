@@ -1,12 +1,3 @@
-/* =========================================================================================
-  File Name: moduleAuthActions.js
-  Description: Auth Module Actions
-  ----------------------------------------------------------------------------------------
-  Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
-  Author: Pixinvent
-  Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== */
-
 import drf from '../../http/requests/auth/drf'
 import axios from '@/axios.js'
 
