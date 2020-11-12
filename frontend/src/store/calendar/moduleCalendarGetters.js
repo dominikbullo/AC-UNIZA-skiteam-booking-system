@@ -9,7 +9,23 @@
 
 
 export default {
-  getEvent: state => (eventId) => state.events.find((event) => event.id === eventId),
+  getEvent: state => (id) => state.events.find((event) => event.id === id),
+  getType: state => (id) => state.eventConfig.types.find((e) => e.id === id),
+  needSkis: (state, getters) => (id) => getters.getType(id)['need_skis'],
+  isSkiTraining: (state, getters) => (id) => {
+    const type = getters.getType(id)
+    return type['need_skis'] && type['type'] === 'TRAINING'
+  },
+  isSkiRace: (state, getters) => (id) => {
+    const type = getters.getType(id)
+    return type['need_skis'] && type['type'] === 'RACE'
+  },
+  getResourceType: (state, getters) => (id) => {
+    console.log('getting gesourcetype')
+    if (getters.isSkiTraining(id)) return 'SkiTraining'
+    if (getters.isSkiRace(id)) return 'SkiRace'
+    return 'Event'
+  },
   getEventsForCal: state => {
     function getData (obj) {
       return {

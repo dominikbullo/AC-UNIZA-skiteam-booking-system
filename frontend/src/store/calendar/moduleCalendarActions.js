@@ -151,7 +151,6 @@ export default {
     })
   },
   addEvent ({ commit }, event) {
-    console.log('add event in actions', event)
     return new Promise((resolve, reject) => {
       axios.post('/events/', event)
         .then((response) => {

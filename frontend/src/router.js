@@ -279,7 +279,7 @@ const router = new Router({
         {
           path: '/apps/event/calendar',
           name: 'app-event-calendar',
-          component: () => import('@/views/apps/event/EventCalendar.vue'),
+          component: () => import('@/views/apps/event/calendar/EventCalendar.vue'),
           meta: {
             rule: 'isChild',
             no_scroll: true
