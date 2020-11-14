@@ -180,7 +180,6 @@ export default {
         item.el.classList.add('past-event')
       }
     },
-
     toggleAddEventPrompt (val = false) {
       this.addEvent.active = val
     },

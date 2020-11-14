@@ -39,155 +39,16 @@
                   placeholder="Search..." v-model="searchQuery"/>
 
         <vs-button
-            @click="activePrompt = true"
+            @click="toggleAddChildPrompt(true)"
             class="sm:mr-4 mr-0 sm:w-auto w-full sm:order-normal order-2 sm:mt-0 mt-4"
             icon="icon-plus" icon-pack="feather"
             v-show="$acl.check('isParent')">
           {{ $t('AddChild') }}
         </vs-button>
 
-        <vs-prompt
-            :active.sync="activePrompt"
-            :is-valid="validateForm"
-            @accept="addChild"
-            accept-text="Add Child"
-            button-cancel="border"
-            title="Add Child">
-          <div>
-            <form>
-              <div class="vx-row">
-                <div class="vx-col w-full">
+        <add-child-component :isPromptActive="addChildPromptActive"
+                             @closePrompt="toggleAddChildPrompt"/>
 
-                  <!-- Name & Surname in one row -->
-                  <div class="vx-row">
-                    <div class="vx-col sm:w-1/2 w-full mb-2">
-                      <vs-input
-                          :label-placeholder="$t('Name')"
-                          :placeholder="$t('Name')"
-                          class="w-full mt-6"
-                          data-vv-validate-on="blur"
-                          name="name"
-                          type="text"
-                          v-model="childData.first_name"
-                          v-validate="'required|alpha_dash|min:3'"/>
-                      <span class="text-danger text-sm">{{ errors.first('name') }}</span>
-                    </div>
-
-                    <div class="vx-col sm:w-1/2 w-full mb-2">
-                      <vs-input
-                          :label-placeholder="$t('Surname')"
-                          :placeholder="$t('Surname')"
-                          class="w-full mt-6"
-                          data-vv-validate-on="blur"
-                          name="surname"
-                          type="text"
-                          v-model="childData.last_name"
-                          v-validate="'required|alpha_dash|min:3'"/>
-                      <span class="text-danger text-sm">{{ errors.first('surname') }}</span>
-                    </div>
-                  </div>
-
-                  <vs-input
-                      :label-placeholder="$t('Email')"
-                      :placeholder="$t('Email')"
-                      class="w-full mt-6"
-                      data-vv-validate-on="blur"
-                      name="email"
-                      type="email"
-                      v-model="childData.email"
-                      v-validate="'email'"/>
-                  <span class="text-danger text-sm">{{ errors.first('email') }}</span>
-
-
-                  <!-- RES: https://flatpickr.js.org/formatting/ -->
-                  <div>
-                    <label style="font-size: .85rem">{{ $t('BirthDate') }}</label>
-                    <flat-pickr :config="datePickerConfig" class="w-full"
-                                v-model="childData.profile.birth_date"/>
-                    <span class="text-danger text-sm">{{ errors.first('birth_date') }}</span>
-                  </div>
-
-                  <div>
-                    <label style="font-size: .85rem">{{ $t('Gender') }}</label>
-                    <div class="demo-alignment mb-base">
-                      <vs-radio class="mt-2" v-model=" childData.profile.gender" vs-value="M">{{ $t('Male') }}
-                      </vs-radio>
-                      <vs-radio class="mt-2" v-model="childData.profile.gender" vs-value="F">{{ $t('Female') }}
-                      </vs-radio>
-                    </div>
-                  </div>
-
-                  <vs-input
-                      :label-placeholder="$t('Password')"
-                      :placeholder="$t('Password')"
-                      class="w-full mt-6"
-                      data-vv-validate-on="blur"
-                      name="password"
-                      ref="password"
-                      type="password"
-                      v-model="childData.password1"
-                      v-validate="'required|min:6'"/>
-                  <span class="text-danger text-sm">{{ errors.first('password1') }}</span>
-
-                  <vs-input
-                      :label-placeholder="$t('ConfirmPassword')"
-                      :placeholder="$t('ConfirmPassword')"
-                      class="w-full mt-6"
-                      data-vv-as="password"
-                      data-vv-validate-on="blur"
-                      name="confirm_password"
-                      type="password"
-                      v-model="childData.password2"
-                      v-validate="'min:6|confirmed:password'"/>
-                  <span class="text-danger text-sm">{{ errors.first('confirm_password') }}</span>
-                </div>
-              </div>
-
-            </form>
-          </div>
-        </vs-prompt>
-
-        <!--        &lt;!&ndash;         ACTION - DROPDOWN &ndash;&gt;-->
-        <!--        <vs-dropdown class="cursor-pointer" vs-trigger-click>-->
-
-        <!--          <div-->
-        <!--              class="p-3 shadow-drop rounded-lg  d-theme-dark-light-bg cursor-pointer flex items-end justify-center text-lg font-medium w-32">-->
-        <!--            <span class="mr-2 leading-none">Actions</span>-->
-        <!--            <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4"/>-->
-        <!--          </div>-->
-
-        <!--          <vs-dropdown-menu>-->
-
-        <!--            <vs-dropdown-item>-->
-        <!--                        <span class="flex items-center">-->
-        <!--                          <feather-icon class="mr-2" icon="TrashIcon" svgClasses="h-4 w-4"/>-->
-        <!--                          <span>Delete</span>-->
-        <!--                        </span>-->
-        <!--            </vs-dropdown-item>-->
-
-        <!--            <vs-dropdown-item>-->
-        <!--                        <span class="flex items-center">-->
-        <!--                          <feather-icon class="mr-2" icon="ArchiveIcon" svgClasses="h-4 w-4"/>-->
-        <!--                          <span>Archive</span>-->
-        <!--                        </span>-->
-        <!--            </vs-dropdown-item>-->
-
-        <!--            <vs-dropdown-item>-->
-        <!--                        <span class="flex items-center">-->
-        <!--                          <feather-icon class="mr-2" icon="FileIcon" svgClasses="h-4 w-4"/>-->
-        <!--                          <span>Print</span>-->
-        <!--                        </span>-->
-        <!--            </vs-dropdown-item>-->
-
-        <!--            <vs-dropdown-item>-->
-        <!--                        <span class="flex items-center">-->
-        <!--                          <feather-icon class="mr-2" icon="SaveIcon" svgClasses="h-4 w-4"/>-->
-        <!--                          <span>CSV</span>-->
-        <!--                        </span>-->
-        <!--            </vs-dropdown-item>-->
-
-        <!--          </vs-dropdown-menu>-->
-        <!--        </vs-dropdown>-->
       </div>
 
       <!-- RES: Height https://www.ag-grid.com/javascript-grid-width-and-height/-->
@@ -217,7 +78,6 @@
 
     </div>
   </div>
-
 </template>
 
 <script>
@@ -235,12 +95,12 @@ import CellRendererStatus from './cell-renderer/CellRendererStatus.vue'
 import CellRendererVerified from './cell-renderer/CellRendererVerified.vue'
 import CellRendererActions from './cell-renderer/CellRendererActions.vue'
 
+import AddChildComponent from '@/components/family/AddChildComponent'
 
 export default {
   components: {
     AgGridVue,
-    flatPickr,
-    vSelect,
+    AddChildComponent,
 
     // Cell Renderer
     /* eslint-disable vue/no-unused-components */
@@ -252,29 +112,7 @@ export default {
   data () {
     return {
       searchQuery: '',
-      activePrompt: false,
-      activePrompt1: false,
-
-      datePickerConfig: {
-        altFormat: 'd.m.Y',
-        altInput: true,
-        dateFormat: 'Y-m-d',
-        locale: Slovak
-      },
-      childData: {
-        id: null,
-        email: 'tes@tes.sk',
-        password1: 'testing321',
-        password2: 'testing321',
-        first_name: 'testing321',
-        last_name: 'testing321',
-        profile: {
-          birth_date: this.moment().format('YYYY-MM-DD'),
-          phone_number: '',
-          location: '',
-          gender: 'M'
-        }
-      },
+      addChildPromptActive: false,
 
       // AgGrid
       gridApi: null,
@@ -434,14 +272,6 @@ export default {
     }
   },
   methods: {
-    openConfirm () {
-      this.$vs.dialog({
-        type: 'confirm',
-        color: 'danger',
-        title: 'Confirm',
-        text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-      })
-    },
     setColumnFilter (column, val) {
       const filter = this.gridApi.getFilterInstance(column)
       let modelObj = null
@@ -452,7 +282,6 @@ export default {
           filter: val
         }
       }
-
       filter.setModel(modelObj)
       this.gridApi.onFilterChanged()
     },
@@ -492,45 +321,14 @@ export default {
         text: 'You close a dialog!'
       })
     },
-    addChild () {
-      // TODO: implement vee-validate
-      // TODO: not include pass -> generate some -> send to child email
-      this.$validator.validateAll().then(() => {
-        this.$store.dispatch('family/addChild', Object.assign({}, this.childData)).then(() => {
-          this.clearFields()
-          this.$vs.notify({
-            color: 'success',
-            title: 'Child Added',
-            text: 'The child was successfully added'
-          })
-          this.clearFields()
-        }).catch(err => {
-          this.activePrompt = true
-          console.error(err.response.data)
-          this.$vs.loading.close()
-          this.multipleNotify(err.response.data)
-        })
-      })
-    },
-    // RES: https://stackoverflow.com/questions/29516136/how-to-print-all-values-of-a-nested-object
-    multipleNotify (obj) {
-      for (const [key, value] of Object.entries(obj)) {
-        if (typeof value === 'object' && !(value instanceof Array)) {
-          this.multipleNotify(value)
-        } else {
-          this.$vs.notify({
-            title: `Child NOT created. Error in ${key}`,
-            text: value.join(),
-            iconPack: 'feather',
-            icon: 'icon-alert-circle',
-            color: 'danger'
-          })
-        }
-      }
+    toggleAddChildPrompt (val = false) {
+      this.addChildPromptActive = val
     }
   },
   mounted () {
     this.gridApi = this.gridOptions.api
+    // TODO: open on link
+    this.activePrompt = true
   },
   created () {
     this.$store.dispatch('family/fetchFamily', this.$store.state.AppActiveUser.profile.family_id)

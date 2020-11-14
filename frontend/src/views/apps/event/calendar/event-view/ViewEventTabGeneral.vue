@@ -138,17 +138,10 @@ export default {
   created () {
     this.$store.dispatch('family/fetchFamily', this.$store.getters['familyID']).then(() => {
 
-      console.log(this.$store.getters['family/familyChildren'])
       const childrenUsersID = this.$store.getters['family/familyChildren'].map(e => e.user.profile.id)
-      console.log('childrenUsersID', childrenUsersID)
-
       const eventChildren = Object.values(this.event.participants).map(e => e.id)
-      console.log('eventChildren', eventChildren)
 
-      const userChildrenOnEvent = childrenUsersID.filter(x => eventChildren.includes(x))
-      console.log('userChildrenOnEvent', userChildrenOnEvent)
-
-      this.selectedChildren = userChildrenOnEvent
+      this.selectedChildren = childrenUsersID.filter(x => eventChildren.includes(x))
     })
   }
 }
