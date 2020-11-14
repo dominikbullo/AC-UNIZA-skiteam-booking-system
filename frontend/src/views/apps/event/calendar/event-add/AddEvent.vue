@@ -193,6 +193,7 @@ export default {
         skis_type: this.skisType,
         organizer: this.raceOrganizer,
         type: this.eventType,
+        // TODO: auto resourcetype in axios
         resourcetype: this.$store.getters['calendar/getResourceType'](this.eventType)
       }
 

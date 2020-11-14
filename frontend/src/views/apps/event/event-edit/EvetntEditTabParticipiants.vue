@@ -49,8 +49,6 @@ export default {
       return !this.errors.any()
     },
     usersData () {
-      // TODO PERF: Called 3x times
-      // Filter only child which was not on the event, but in future could delete this filter
       return this.$store.state.userManagement.users.filter(member => member.userRole === 'child')
     }
   },
@@ -59,18 +57,15 @@ export default {
       this.data_local = this.data.participants
     },
     onChangeList () {
+      console.log('change')
       this.changeEventParticipants()
     },
     changeEventParticipants () {
       const payload = {
-        'eventID': this.data.id,
-        'eventAdd': this.data_local.map(value => value.id),
-        'eventDelete': this.usersData.map(value => value.id).filter(x => !this.data_local.map(value => value.id).includes(x))
+        'id': this.data.id,
+        'data': this.data_local.map(value => value.id)
       }
-      // console.log('payload', payload)
-      this.$store.dispatch('calendar/changeEventMembers', payload).then(res => {
-        this.$emit('updateparent', res.data)
-      })
+      this.$store.dispatch('calendar/changeEventMembersDirect', payload)
     }
   },
   created () {

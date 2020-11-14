@@ -30,7 +30,7 @@ const router = new Router({
         {
           path: '/',
           name: 'home',
-          redirect: '/dashboard'
+          redirect: '/apps/event/calendar'
         },
         {
           path: '/dashboard',
@@ -475,7 +475,6 @@ const router = new Router({
       ]
     },
     // Redirect to 404 page, if no match found
-    // RELEASE TODO
     {
       path: '*',
       redirect: '/pages/error-404'

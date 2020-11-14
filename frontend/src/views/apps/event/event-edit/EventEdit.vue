@@ -21,7 +21,7 @@
           </vs-tab>
           <vs-tab v-if="this.$acl.check('isCoach')" label="Participants" href="#participants" icon="group">
             <div class="tab-text">
-              <event-edit-tab-participants @eventname="updateparent" class="mt-4" :data="event_data"/>
+              <event-edit-tab-participants class="mt-4" :data="event_data"/>
             </div>
           </vs-tab>
           <vs-tab v-if="this.$acl.check('isParent')" label="Accommodation" href="#accommodation"
@@ -63,9 +63,6 @@ export default {
     }
   },
   methods: {
-    updateparent (variable) {
-      this.event_data = variable
-    },
     fetch_event (eventId) {
       this.$store.dispatch('calendar/fetchEvent', eventId)
         .then(res => {

@@ -197,8 +197,6 @@ export default {
   computed: {
     isSidebarActiveLocal: {
       get () {
-        // TODO: fixed values but not sure
-        // this.initValues()
         return this.isSidebarActive
       },
       set (val) {

@@ -223,10 +223,15 @@ export default {
       delete tmp.accommodation
       tmp.participants = this.data_local.participants.map(x => x.id)
       tmp.category = this.data_local.category.map(x => x.id)
-      tmp.skis_type = this.data_local.skis_type.map(x => x.id)
-      tmp.organizer = this.data_local.organizer.id
       tmp.location = this.data_local.location.id
       tmp.type = this.data_local.type.id
+
+      if (this.data_local.skis_type) {
+        tmp.skis_type = this.data_local.skis_type.map(x => x.id)
+      }
+      if (this.data_local.organizer) {
+        tmp.organizer = this.data_local.organizer.id
+      }
 
       console.log('tmp', tmp)
       this.$store.dispatch('calendar/editEvent', tmp)

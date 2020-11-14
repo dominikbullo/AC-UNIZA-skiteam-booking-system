@@ -1,4 +1,4 @@
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django_filters import rest_framework as filters
@@ -14,8 +14,9 @@ from apps.events.api.serializers import (EventPolymorphicSerializer, SeasonSeria
 
 # RES: https://github.com/LondonAppDeveloper/recipe-app-api/blob/master/app/recipe/views.py
 # RES: https://stackoverflow.com/questions/51016896/how-to-serialize-inherited-models-in-django-rest-framework
+from apps.family.models import Child, FamilyMember
 from apps.users.models import Profile
-from core.choices import get_all_choices
+from core.choices import get_all_choices, UserTypeChoices
 from core.permissions import IsCoachOrReadOnly
 from core.views import get_object_custom_queryset
 
@@ -61,33 +62,37 @@ class EventViewSet(viewsets.ModelViewSet):
     # RES: https://stackoverflow.com/questions/36365326/django-rest-framework-doesnt-serialize-serializermethodfield
     @action(detail=True, methods=['post'], url_path='change', permission_classes=[IsAuthenticatedOrReadOnly])
     def add_users_to_event(self, request, pk=None):
+        participants = request.data.get("participants", None)
+        if not participants:
+            Response(status=status.HTTP_400_BAD_REQUEST)
+
+        failed = []
         event_id = pk
         event = self.get_event(event_id)
         event_serializer = EventPolymorphicSerializer(event)
 
-        users = request.data.get("users", None)
-        if not users:
-            Response(status=status.HTTP_400_BAD_REQUEST)
+        user_family_id = request.user.familymember.family_id
+        print(f"Request from family {user_family_id}")
 
-        failed = []
-        for profile_ID in users.get("add", ""):
+        children = FamilyMember.objects.filter(family__id=user_family_id).values_list('user__profile__id', flat=True)
+        print(f"Children from family {user_family_id}: {children}")
+
+        do_not_touch_these = event.participants.exclude(id__in=children)
+        print("do_not_touch_these", do_not_touch_these)
+
+        interested_in = event.participants.filter(id__in=children)
+        print("interested_in", interested_in)
+
+        event_without_user_children = event.participants.remove(*interested_in)
+        print("event_without", event_without_user_children)
+
+        for profile_ID in participants:
             try:
                 event.participants.add(get_object_or_404(Profile, id=profile_ID))
             except Http404:
                 failed.append(profile_ID)
                 print("User with profile id", profile_ID, "not found")
-                # raise ValidationError("User %s not found" % user)
-                pass
-
-        for profile_ID in users.get("delete", ""):
-            # print("delete", user)
-            try:
-                event.participants.remove(get_object_or_404(Profile, id=profile_ID))
-            except Http404:
-                failed.append(profile_ID)
-                print("User with profile id", profile_ID, "not found")
-
-                # raise ValidationError("User %s not found" % user)
+                # raise ValidationError("Profile %s not found" % profile_ID)
                 pass
 
         if len(failed) > 0:

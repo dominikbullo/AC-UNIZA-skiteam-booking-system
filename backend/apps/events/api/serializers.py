@@ -84,7 +84,6 @@ class ParticipantsSerializer(serializers.ModelSerializer):
 
 
 class BaseEventSerializer(serializers.ModelSerializer):
-    participants = ParticipantsSerializer(many=True, read_only=True)
 
     def create(self, validated_data):
         validated_data["season"], created = Season.objects.get_or_create(current=True)
@@ -94,6 +93,7 @@ class BaseEventSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         self.fields["accommodation"] = AccommodationSerializer(many=True, read_only=True)
+        self.fields["participants"] = ParticipantsSerializer(many=True, read_only=True)
         self.fields["category"] = CategorySerializer(many=True, read_only=True)
         self.fields["skis_type"] = SkisTypeSerializer(many=True, read_only=True)
         self.fields["location"] = LocationSerializer(instance.location, many=False, read_only=True)

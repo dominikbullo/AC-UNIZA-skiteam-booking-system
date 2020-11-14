@@ -95,16 +95,26 @@ export default {
         })
     })
   },
-  changeEventMembers ({ commit }, payload) {
-    // console.log('payload 1s', payload)
-    const apiPayload = {
-      'add': payload.eventAdd.filter(x => !payload.eventDelete.includes(x)),
-      'delete': payload.eventDelete.filter(x => !payload.eventAdd.includes(x))
-    }
-    // console.log('apiPayload', apiPayload)
-
+  changeEventMembersDirect ({ commit }, payload) {
+    console.log('payload changeEventMembers', payload)
     return new Promise((resolve, reject) => {
-      axios.post(`event/${payload.eventID}/change/`, { users: apiPayload })
+      axios.patch(`event/${payload.id}/`, {
+        participants: payload.data,
+        resourcetype: 'Event'
+      })
+        .then((response) => {
+          commit('UPDATE_EVENT', response.data)
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
+  },
+  changeEventMembers ({ commit }, payload) {
+    console.log('payload changeEventMembers', payload)
+    return new Promise((resolve, reject) => {
+      axios.post(`event/${payload.id}/change/`, { participants: payload.data })
         .then((response) => {
           commit('UPDATE_EVENT', response.data)
           resolve(response)

@@ -36,10 +36,10 @@
                  @closePrompt="toggleAddEventPrompt"
                  :data="addEvent.data"/>
 
-      <!--      <view-event :isSidebarActive="addNewDataSidebar"-->
-      <!--                  @closeSidebar="toggleDataSidebar"-->
-      <!--                  :data="sidebarData"-->
-      <!--                  :event_data="sidebarData"/>-->
+      <view-event :isSidebarActive="viewEvent.active"
+                  @closePrompt="toggleViewEventPrompt"
+                  :data="viewEvent.data"/>
+
     </vx-card>
   </div>
 </template>
@@ -57,13 +57,13 @@ import skLocale from '@fullcalendar/core/locales/sk'
 import enLocale from '@fullcalendar/core/locales/en-gb'
 
 import AddEvent from './event-add/AddEvent'
-// import ViewEvent from './event-view/ViewEvent'
+import ViewEvent from './event-view/ViewEvent'
 
 export default {
   components: {
     FullCalendar,
-    AddEvent
-    // ViewEvent
+    AddEvent,
+    ViewEvent
   },
   data () {
     return {
@@ -167,7 +167,6 @@ export default {
   },
   computed: {
     minEventTime () {
-      // TODO scroll to first event or current time
       return '07:00:00'
     },
     calendarEvents () {
@@ -181,12 +180,17 @@ export default {
         item.el.classList.add('past-event')
       }
     },
+
     toggleAddEventPrompt (val = false) {
       this.addEvent.active = val
+    },
+    toggleViewEventPrompt (val = false) {
+      this.viewEvent.active = val
     },
 
     handleEventClick (arg) {
       console.log('event click', arg)
+      // TODO: Read only for 30days + warning
       if (this.$acl.not.check('isCoach') && new Date(arg.event.start).valueOf() < new Date().valueOf()) {
         this.$vs.notify({
           color: 'danger',
@@ -196,30 +200,11 @@ export default {
         return false
       }
 
-      // this.$store.dispatch('calendar/fetchEvent', arg.event.id)
-      //   .then(res => {
-      //     this.editedEvent = res.data
-      //
-      //     const childrenUsersID = []
-      //     Object.values(this.$store.getters['family/familyChildren']).forEach(obj => {
-      //       childrenUsersID.push(obj.user.profile.id)
-      //     })
-      //     console.log('childrenUsersID', childrenUsersID)
-      //
-      //     const eventChildren = []
-      //     Object.values(this.editedEvent['participants']).forEach(obj => {
-      //       eventChildren.push(obj.id)
-      //     })
-      //     console.log('eventChildren', eventChildren)
-      //
-      //     const userChildrenOnEvent = childrenUsersID.filter(x => eventChildren.includes(x))
-      //     console.log('userChildrenOnEvent', userChildrenOnEvent)
-      //
-      //     this.childAddToEventPrompt.onEvent = userChildrenOnEvent
-      //     this.childAddToEventPrompt.selected = userChildrenOnEvent
-      //
-      //     this.childAddToEventPrompt.active = true
-      //   })
+      this.$store.dispatch('calendar/fetchEvent', arg.event.id)
+        .then((res) => {
+          this.viewEvent.data = res.data
+          this.toggleViewEventPrompt(true)
+        })
     },
     handleSelect (arg) {
       this.addEvent.data = {
@@ -229,33 +214,30 @@ export default {
       this.toggleAddEventPrompt(true)
     },
     handleEventChange (arg) {
-      console.log('handlerEventChange', arg)
-      // console.log('handling change in event', arg.event.id, arg)
-      // console.log('handling change in start', arg.event.start)
-      // console.log('handling change in end', arg.event.end)
-      //
-      // const event = {
-      //   id: arg.event.id,
-      //   start: arg.event.start,
-      //   end: arg.event.end
-      // }
+      const event = {
+        id: arg.event.id,
+        start: arg.event.start,
+        end: arg.event.end,
+        // TODO: auto resourcetype in axios
+        resourcetype: 'Event'
+      }
 
-      // this.$store.dispatch('calendar/editEvent', { ...event, ...this.getExtraInfo() })
-      //   .then(() => {
-      //     this.$vs.notify({
-      //       color: 'success',
-      //       title: 'Event Updated',
-      //       text: 'The selected event was successfully updated'
-      //     })
-      //   })
-      //   .catch(err => {
-      //     this.$vs.notify({
-      //       color: 'danger',
-      //       title: 'Event Not Changed',
-      //       text: err.message
-      //     })
-      //     console.error(err)
-      //   })
+      this.$store.dispatch('calendar/editEvent', event)
+        .then(() => {
+          this.$vs.notify({
+            color: 'success',
+            title: 'Event Updated',
+            text: 'The selected event was successfully updated'
+          })
+        })
+        .catch(err => {
+          this.$vs.notify({
+            color: 'danger',
+            title: 'Event Not Changed',
+            text: err.message
+          })
+          console.error(err)
+        })
     },
     fetchConfigData () {
       if (!this.$acl.check('isCoach')) return
