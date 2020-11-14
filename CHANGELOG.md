@@ -2,6 +2,74 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.2.0](https://github.com/dominikbullo/sport_club_management_system/compare/v0.1.0...v0.2.0) (2020-11-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* **event_detail:** `event/change` has changed to accept array `"participants":[]` and filter only request user children
+* remove unused boiler template
+* **child:** Child username generate automatically (firs+last name + number) #sportagenda-45 fixed
+* **authentication:** Users can now reset their forgotten password via email #sportagenda-43 fixed
+* Using [Multiple Compose files](https://docs.docker.com/compose/extends/) to share components and extending services
+
+### Features
+
+* **authentication:** Users can now reset their forgotten password via email #[sportagenda-43](https://sportagenda.myjetbrains.com/youtrack/issue/sportagenda-43) fixed ([c8062c2](https://github.com/dominikbullo/sport_club_management_system/commit/c8062c2f4ae8629fc621417244668851ec4bd7a6))
+* **child:** Child username generate automatically (firs+last name + number) #[sportagenda-45](https://sportagenda.myjetbrains.com/youtrack/issue/sportagenda-45) fixed ([1b7aa6c](https://github.com/dominikbullo/sport_club_management_system/commit/1b7aa6ce670b511f2809e69a918b6ffacafc7e52))
+* **database:** Added database backups to production docker-compose file ([281f850](https://github.com/dominikbullo/sport_club_management_system/commit/281f850da8b9036eb1771a008276a802cc72cfe1))
+* Event tab showing in calendar promp ([79bcde6](https://github.com/dominikbullo/sport_club_management_system/commit/79bcde6614a09a928d2642579ba5257789efac27))
+
+
+### Bug Fixes
+
+* .env file on prod server was badly configured,that caused not sending emails from prod version ([14c58f6](https://github.com/dominikbullo/sport_club_management_system/commit/14c58f69ee11b68b482e55f8ddb82c20f54157e3)), closes [sportagenda-21](https://sportagenda.myjetbrains.com/youtrack/issue/sportagenda-21)
+* **event_edit:** Fixed event edit by filtering IDs from items, but it will need to be reopen according to [sportagenda-34](https://sportagenda.myjetbrains.com/youtrack/issue/sportagenda-34) ([d20048a](https://github.com/dominikbullo/sport_club_management_system/commit/d20048a468ee6b0d4c86853ca12f1448da74415d)), closes [sportagenda-32](https://sportagenda.myjetbrains.com/youtrack/issue/sportagenda-32)
+* validation for sidebar ([b5cb43a](https://github.com/dominikbullo/sport_club_management_system/commit/b5cb43adbd915229b5992e3772837d4587542c29))
+
+
+### ci
+
+* Using [Multiple Compose files](https://docs.docker.com/compose/extends/) to share components and extending services ([23bf054](https://github.com/dominikbullo/sport_club_management_system/commit/23bf054a92d21236d44bbe0c6927ad88b42fc207))
+
+
+* **event_detail:** Event detail prompt and tabs as separate components ([bbea561](https://github.com/dominikbullo/sport_club_management_system/commit/bbea5615eb8e591548e0f7425f319807a6563dfa))
+* remove unused boiler template ([787bc34](https://github.com/dominikbullo/sport_club_management_system/commit/787bc34200b01c2c4cad4e546848be4a8169f4d8))
+
+## [0.2.0](https://github.com/dominikbullo/sport_club_management_system/compare/v0.1.0...v0.2.0) (2020-11-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* **event_detail:** `event/change` has changed to accept array `"participants":[]` and filter only request user children
+* remove unused boiler template
+* **child:** Child username generate automatically (firs+last name + number) #sportagenda-45 fixed
+* **authentication:** Users can now reset their forgotten password via email #sportagenda-43 fixed
+* Using [Multiple Compose files](https://docs.docker.com/compose/extends/) to share components and extending services
+
+### Features
+
+* **authentication:** Users can now reset their forgotten password via email #[sportagenda-43](https://sportagenda.myjetbrains.com/youtrack/issue/sportagenda-43) fixed ([c8062c2](https://github.com/dominikbullo/sport_club_management_system/commit/c8062c2f4ae8629fc621417244668851ec4bd7a6))
+* **child:** Child username generate automatically (firs+last name + number) #[sportagenda-45](https://sportagenda.myjetbrains.com/youtrack/issue/sportagenda-45) fixed ([1b7aa6c](https://github.com/dominikbullo/sport_club_management_system/commit/1b7aa6ce670b511f2809e69a918b6ffacafc7e52))
+* **database:** Added database backups to production docker-compose file ([281f850](https://github.com/dominikbullo/sport_club_management_system/commit/281f850da8b9036eb1771a008276a802cc72cfe1))
+* Event tab showing in calendar promp ([79bcde6](https://github.com/dominikbullo/sport_club_management_system/commit/79bcde6614a09a928d2642579ba5257789efac27))
+
+
+### Bug Fixes
+
+* .env file on prod server was badly configured,that caused not sending emails from prod version ([14c58f6](https://github.com/dominikbullo/sport_club_management_system/commit/14c58f69ee11b68b482e55f8ddb82c20f54157e3)), closes [sportagenda-21](https://sportagenda.myjetbrains.com/youtrack/issue/sportagenda-21)
+* **event_edit:** Fixed event edit by filtering IDs from items, but it will need to be reopen according to [sportagenda-34](https://sportagenda.myjetbrains.com/youtrack/issue/sportagenda-34) ([d20048a](https://github.com/dominikbullo/sport_club_management_system/commit/d20048a468ee6b0d4c86853ca12f1448da74415d)), closes [sportagenda-32](https://sportagenda.myjetbrains.com/youtrack/issue/sportagenda-32)
+* validation for sidebar ([b5cb43a](https://github.com/dominikbullo/sport_club_management_system/commit/b5cb43adbd915229b5992e3772837d4587542c29))
+
+
+### ci
+
+* Using [Multiple Compose files](https://docs.docker.com/compose/extends/) to share components and extending services ([23bf054](https://github.com/dominikbullo/sport_club_management_system/commit/23bf054a92d21236d44bbe0c6927ad88b42fc207))
+
+
+* **event_detail:** Event detail prompt and tabs as separate components ([bbea561](https://github.com/dominikbullo/sport_club_management_system/commit/bbea5615eb8e591548e0f7425f319807a6563dfa))
+* remove unused boiler template ([787bc34](https://github.com/dominikbullo/sport_club_management_system/commit/787bc34200b01c2c4cad4e546848be4a8169f4d8))
+
 ## [0.1.0](https://github.com/dominikbullo/sport_club_management_system/compare/v1.0.1-alpha.1...v0.1.0) (2020-11-08)
 
 

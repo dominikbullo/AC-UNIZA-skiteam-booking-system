@@ -1,12 +1,11 @@
 from allauth.account.models import EmailAddress
 
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, password_validation
 from django.utils.translation import gettext_lazy as _
 
 from rest_auth.models import TokenModel
 from rest_auth.registration.serializers import RegisterSerializer
 from rest_framework import serializers
-from rest_framework.generics import get_object_or_404
 
 from core import utils
 from core.choices import UserTypeChoices
@@ -67,6 +66,10 @@ class BaseProfileSerializer(serializers.ModelSerializer):
 class RegisterProfileSerializer(serializers.ModelSerializer):
     user_role = serializers.ChoiceField(choices=UserTypeChoices.choices, required=True)
 
+    # def to_representation(self, instance):
+    #     self.fields["gender"] = serializers.CharField(source='get_gender_display')
+    #     return super(RegisterProfileSerializer, self).to_representation(instance)
+
     class Meta:
         model = Profile
         fields = ("id", "birth_date", "gender", "user_role")
@@ -101,22 +104,20 @@ class BaseUserSerializer(serializers.ModelSerializer):
 
 
 class CustomRegisterSerializer(RegisterSerializer):
-    username = serializers.CharField(read_only=True, required=False)
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
 
     # Fixed KeyError events with custom serializer without this field
     profile = RegisterProfileSerializer(required=True)
 
-    # FIXME get cleaned data -> normalize_email(email)
     def get_cleaned_data(self):
-        default = super(CustomRegisterSerializer, self).get_cleaned_data()
-        mine = {
+        return {
+            'username'  : self.validated_data.get('username', ''),
+            'password1' : self.validated_data.get('password1', ''),
+            'email'     : self.validated_data.get('email', ''),
             'first_name': self.validated_data.get('first_name', ''),
             'last_name' : self.validated_data.get('last_name', ''),
         }
-
-        return {**default, **mine}
 
     def custom_signup(self, request, user):
         profile_data = request.data.pop('profile')
@@ -149,10 +150,6 @@ class TokenSerializer(serializers.ModelSerializer):
     class Meta:
         model = TokenModel
         fields = ('key', 'user')
-
-
-from django.contrib.auth import password_validation
-from rest_framework import serializers
 
 
 class ChangePasswordSerializer(serializers.Serializer):

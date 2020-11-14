@@ -1,0 +1,44 @@
+# You have to fill up .env file
+# Used on stage/prod versions with command docker-compose -f docker-compose.yml -f docker-compose.prod.yml up
+# Or you rename this file to docker-compose.override.yml and then just run docker-compose up
+# RES: https://docs.docker.com/compose/extends/
+version: "3"
+
+services:
+  backend:
+    volumes:
+      - ./backend:/app
+    entrypoint: /entrypoint.sh
+    command: /gunicorn.sh
+
+  postgres:
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # persist data even if container shuts down
+
+  nginx:
+    expose:
+      - 80
+    volumes:
+      - ./backend/media/:/media/
+      - ./backend/staticfiles/:/staticfiles/
+      - ./nginx/prod.conf:/etc/nginx/nginx.conf:ro
+    environment:
+      VIRTUAL_HOST: ${DOMAIN}
+      LETSENCRYPT_HOST: ${DOMAIN}
+      LETSENCRYPT_EMAIL: ${ADMIN_EMAIL}
+
+  backups:
+    image: prodrigestivill/postgres-backup-local
+    restart: on-failure
+    depends_on:
+      - postgres
+    volumes:
+      - /tmp/backups/:/backups/
+
+volumes:
+    postgres_data: {}
+
+networks:
+  default:
+    external:
+      name: nginx-proxy

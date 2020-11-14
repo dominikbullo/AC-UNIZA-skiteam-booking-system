@@ -46,19 +46,20 @@ THIRD_PARTY_APPS = [
     'allauth.account',
     'rest_auth.registration',
 
-    # https://github.com/adamchainz/django-cors-headers#cors_allow_headers
-    'corsheaders',
-
     # https://django-rest-auth.readthedocs.io/en/latest/installation.html
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.facebook',
 
+    # https://github.com/adamchainz/django-cors-headers#cors_allow_headers
+    'corsheaders',
+    
     'polymorphic',
     'colorfield',
 
     'pwa',
 
+    'django_excel_fixture',
     'django_filters',
     'django_rest_passwordreset',
 ]
@@ -104,6 +105,9 @@ EMAIL_PORT = env.int('EMAIL_PORT', default='1025')
 EMAIL_HOST = env.str('EMAIL_HOST', default='mailhog')
 EMAIL_HOST_USER = env.str('EMAIL_HOST_USER', default='noreply@sportagenda.local')
 EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD', default='')
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# It need to be TSL = False , SSL True on prod
 EMAIL_USE_TSL = env.bool('EMAIL_USE_TSL', default=True)
 EMAIL_USE_SSL = env.bool('EMAIL_USE_SSL', default=False)
 

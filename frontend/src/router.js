@@ -1,17 +1,3 @@
-/* =========================================================================================
-  File Name: router.js
-  Description: Routes for vue-router. Lazy loading is enabled.
-  Object Strucutre:
-                    path => router path
-                    name => router name
-                    component(lazy loading) => component to load
-                    meta : {
-                      rule => which user can have access (ACL)
-                      breadcrumb => Add breadcrumb to specific page
-                      pageTitle => Display title besides breadcrumb
-                    }
-========================================================================================== */
-
 import Vue from 'vue'
 import Router from 'vue-router'
 
@@ -43,7 +29,8 @@ const router = new Router({
         // =============================================================================
         {
           path: '/',
-          redirect: '/dashboard'
+          name: 'home',
+          redirect: '/apps/event/calendar'
         },
         {
           path: '/dashboard',
@@ -278,7 +265,7 @@ const router = new Router({
         {
           path: '/apps/event/calendar',
           name: 'app-event-calendar',
-          component: () => import('@/views/apps/event/EventCalendar.vue'),
+          component: () => import('@/views/apps/event/calendar/EventCalendar.vue'),
           meta: {
             rule: 'isChild',
             no_scroll: true
@@ -345,7 +332,7 @@ const router = new Router({
               }
             ],
             pageTitle: 'FAQ',
-            rule: 'isPublic'
+            rule: 'isLogged'
           }
         },
 
@@ -488,7 +475,6 @@ const router = new Router({
       ]
     },
     // Redirect to 404 page, if no match found
-    // RELEASE TODO
     {
       path: '*',
       redirect: '/pages/error-404'
@@ -503,22 +489,20 @@ router.afterEach(() => {
     appLoading.style.display = 'none'
   }
 })
-// RELEASE: redirect
+
 router.beforeEach((to, from, next) => {
   // redirect to login page if not logged in and trying to access a restricted page
   const publicPages = [
     '/login',
-    '/forgot-password',
-    '/reset-password',
     '/register',
-    '/pages/error-404',
-    '/pages/error-500',
+    '/forgot-password',
+    '/reset-password*',
+    '/pages/error-*',
     '/pages/not-authorized',
     '/pages/comingsoon',
-    '/admin*',
-    '/api*'
+    '/pages/maintenance'
   ]
-  const authRequired = !publicPages.includes(to.path)
+  const authRequired = !publicPages.reduce((a, b) => a || RegExp(b).test(to.path), false)
   const loggedIn = localStorage.getItem('userInfo')
 
   if (authRequired && !loggedIn) {

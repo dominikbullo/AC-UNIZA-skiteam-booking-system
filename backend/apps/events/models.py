@@ -139,7 +139,7 @@ class Event(PolymorphicModel):
     season = models.ForeignKey(Season, on_delete=models.CASCADE)
     type = models.ForeignKey(EventType, on_delete=models.DO_NOTHING)
 
-    accommodation = models.ManyToManyField(Accommodation, blank=True, null=True)
+    accommodation = models.ManyToManyField(Accommodation, blank=True)
 
     # IDEA: ONE training, more location (ski slope) e.g. Slovan žiaci, Leitner Predžiaci
     location = models.ForeignKey(Location, on_delete=models.DO_NOTHING)

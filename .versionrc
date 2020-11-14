@@ -8,6 +8,11 @@
       "filename": "frontend/package-lock.json",
       "type": "json"
     }
-  ]
+  ],
+  "issuePrefixes": [
+    "SA-",
+    "sportagenda-"
+  ],
+  "issueUrlFormat": "https://sportagenda.myjetbrains.com/youtrack/issue/{{prefix}}{{id}}"
 }
 

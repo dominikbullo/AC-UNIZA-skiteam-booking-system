@@ -197,8 +197,6 @@ export default {
   computed: {
     isSidebarActiveLocal: {
       get () {
-        // TODO: fixed values but not sure
-        // this.initValues()
         return this.isSidebarActive
       },
       set (val) {
@@ -210,9 +208,8 @@ export default {
       }
     },
     isFormValid () {
-      if (process.env.NODE_ENV === 'production') { return !this.errors.any() && this.dataName && this.dataCategory && this.dataPrice > 0 }
       // FIXME: validate test
-      return true
+      return !this.errors.any() && this.dataName && this.dataPrice > 0
     },
     scrollbarTag () { return this.$store.getters.scrollbarTag }
   },

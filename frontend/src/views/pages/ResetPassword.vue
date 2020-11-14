@@ -13,16 +13,42 @@
                   <h4 class="mb-4">Reset Password</h4>
                   <p>Please enter your new password.</p>
                 </div>
-                <vs-input type="email" label-placeholder="Email" v-model="value1" class="w-full mb-6"/>
-                <vs-input type="password" label-placeholder="Password" v-model="value2" class="w-full mb-6"/>
-                <vs-input type="password" label-placeholder="Confirm Password" v-model="value3" class="w-full mb-8"/>
+
+                <div class="w-full mb-6">
+                  <vs-input
+                      :label-placeholder="$t('Password')"
+                      :placeholder="$t('Password')"
+                      :danger="errors.first('confirm_password')"
+                      class="w-full mt-6"
+                      name="password"
+                      ref="password"
+                      type="password"
+                      v-model="pass1"
+                      v-validate="'required|min:8'"/>
+                  <span class="text-danger text-sm">{{ errors.first('password') }}</span>
+                </div>
+
+                <div class="w-full mb-6">
+                  <vs-input
+                      :label-placeholder="$t('Confirm Password')"
+                      :placeholder="$t('Confirm Password')"
+                      :danger="errors.first('confirm_password')"
+                      class="w-full mt-6"
+                      data-vv-as="password"
+                      name="confirm_password"
+                      type="password"
+                      v-model="pass2"
+                      v-validate="'required|min:8|confirmed:password'"/>
+                  <span class="text-danger text-sm">{{ errors.first('confirm_password') }}</span>
+                </div>
+
 
                 <div class="flex flex-wrap justify-between flex-col-reverse sm:flex-row">
                   <vs-button type="border" to="/login" class="w-full sm:w-auto mb-8 sm:mb-auto mt-3 sm:mt-auto">Go
                     Back To Login
                   </vs-button>
 
-                  <vs-button class="w-full sm:w-auto">Reset</vs-button>
+                  <vs-button class="w-full sm:w-auto" @click="resetPassword">Reset</vs-button>
                 </div>
 
               </div>
@@ -38,15 +64,41 @@
 export default {
   methods: {
     resetPassword () {
-      // TODO 1. reset pass -> update info (token)
-      this.$router.push('/login').catch(() => {})
+      this.$store.dispatch('auth/resetPassword', {
+        password: this.pass1,
+        token: this.$route.params.token
+      }).then(response => {
+        console.log('response', response)
+        if (response.status === 200) {
+          this.$vs.notify({
+            title: 'Password reset success',
+            text: 'Now you can login with the new password',
+            iconPack: 'feather',
+            icon: 'icon-alert-circle',
+            color: 'success'
+          })
+          // TODO "You will be redirected to homepage"
+          setTimeout(() => {
+            this.$router.push({ name: 'page-login' }).catch(() => {})
+          }, 3000)
+        }
+      }).catch(err => {
+        console.error(err)
+        this.$vs.notify({
+          title: err.title,
+          text: err.message,
+          iconPack: 'feather',
+          icon: 'icon-alert-circle',
+          color: 'danger'
+        })
+      })
     }
   },
   data () {
     return {
-      value1: '',
-      value2: '',
-      value3: ''
+      pass1: '',
+      pass2: '',
+      token: this.$route.params.token
     }
   }
 

@@ -6,7 +6,7 @@ export default {
     // console.log(' [FAMILY STORE ACT] Add child payload', payload)
 
     return new Promise((resolve, reject) => {
-      axios.post('/child/', { user: payload })
+      axios.post('/children/', { user: payload })
         .then((response) => {
           console.log('response after child added ', response)
           commit('ADD_MEMBER', Object.assign(payload, { user: response.data }))

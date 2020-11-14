@@ -32,7 +32,6 @@
           <v-select multiple
                     :closeOnSelect="false"
                     label="displayName"
-                    :reduce="item => item.id"
                     v-model="data_local.category"
                     :options="categories"/>
         </div>
@@ -42,34 +41,28 @@
             <label class="text-sm">Location</label>
             <v-select :clearable="false"
                       label="displayName"
-                      :reduce="item => item.id"
                       v-model="data_local.location"
                       :options="locations"/>
             <span class="text-danger text-sm" v-show="errors.has('end')">{{ errors.first('end') }}</span>
           </div>
 
 
-          <div v-if="data_local.skis_type" class="vx-col w-1/2 mt-4">
-            <span slot="off">Skis type</span>
-
-            <div class="mt-2">
-              <ul class="centerx">
-                <li class="mb-2" :key="item.id" v-for="item in this.skis">
-                  <vs-checkbox
-                      :vs-value="item.id"
-                      color="success"
-                      v-model="data_local.skis_type">
-                    {{ item.displayName }}
-                  </vs-checkbox>
-                </li>
-              </ul>
-            </div>
+          <div v-if="data_local.skis_type" class="vx-col w-1/2">
+            <label class="text-sm">Skis type</label>
+            <ul class="centerx">
+              <v-select multiple
+                        :closeOnSelect="false"
+                        :clearable="false"
+                        label="displayName"
+                        v-model="data_local.skis_type"
+                        :options="skis"/>
+            </ul>
           </div>
-          <div v-if="this.isSkiRace" class="vx-col w-1/2">
+
+          <div v-if="this.isSkiRace" class="vx-col w-1/2 mt-2">
             <label class="text-sm">Race Organizer</label>
             <v-select :clearable="false"
                       label="displayName"
-                      :reduce="item => item.id"
                       v-model="data_local.organizer"
                       :options="organizers"/>
             <span class="text-danger text-sm" v-show="errors.has('end')">{{ errors.first('end') }}</span>
@@ -198,7 +191,7 @@ export default {
     isSkiRace () {
       // console.log('this.data_local', this.data_local)
       // console.log('isSkiRace', this.data_local.type.type === 'RACE' && this.data_local.type.need_skis === true)
-      return this.data_local.type.type === 'RACE' && this.data_local.type.need_skis === true
+      return this.data.type.type === 'RACE' && this.data.type.need_skis === true
     }
 
   },
@@ -213,9 +206,35 @@ export default {
     save_changes () {
       /* eslint-disable */
       if (!this.validateForm) return
-      console.log('Save changes with data', this.data_local)
+      // console.log(this.data_local)
+      // const tmp = this.data_local
+      // for (const [key, value] of Object.entries(this.data_local)) {
+      //   console.log(`${key}: ${value}`)
+      //   if (typeof value === 'object' && value !== null) {
+      //     console.log(`foun not null object: ${value}`)
+      //     if (Array.isArray(this.accommodation) && this.accommodation.length) {
+      //       console.log(`foun not array: ${value}`)
+      //
+      //     }
+      //   }
+      // }
 
-      this.$store.dispatch('calendar/editEvent', this.data_local)
+      const tmp = Object.assign({}, this.data_local)
+      delete tmp.accommodation
+      tmp.participants = this.data_local.participants.map(x => x.id)
+      tmp.category = this.data_local.category.map(x => x.id)
+      tmp.location = this.data_local.location.id
+      tmp.type = this.data_local.type.id
+
+      if (this.data_local.skis_type) {
+        tmp.skis_type = this.data_local.skis_type.map(x => x.id)
+      }
+      if (this.data_local.organizer) {
+        tmp.organizer = this.data_local.organizer.id
+      }
+
+      console.log('tmp', tmp)
+      this.$store.dispatch('calendar/editEvent', tmp)
           .then(res => {
             this.$vs.notify({
               color: 'success',
