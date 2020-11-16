@@ -53,7 +53,7 @@ THIRD_PARTY_APPS = [
 
     # https://github.com/adamchainz/django-cors-headers#cors_allow_headers
     'corsheaders',
-    
+
     'polymorphic',
     'colorfield',
 
@@ -134,8 +134,8 @@ DATABASES = {
         'NAME'    : env.str('POSTGRES_DB'),
         'USER'    : env.str('POSTGRES_USER'),
         'PASSWORD': env.str('POSTGRES_PASSWORD'),
-        'HOST'    : 'postgres',
-        'PORT'    : 5432,
+        'PORT'    : env.str('DB_PORT'),
+        'HOST'    : env.str('DB_HOST'),
     },
 }
 
@@ -305,7 +305,7 @@ RAVEN_MIDDLEWARE = ['raven.contrib.django.raven_compat.middleware.SentryResponse
 MIDDLEWARE = RAVEN_MIDDLEWARE + MIDDLEWARE
 
 # Sentry Configuration
-SENTRY_DSN = env.str('SENTRY_DSN')
+SENTRY_DSN = env.str('SENTRY_DSN', default="")
 SENTRY_CLIENT = 'raven.contrib.django.raven_compat.DjangoClient'
 LOGGING = {
     'version'                 : 1,

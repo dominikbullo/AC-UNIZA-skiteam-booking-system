@@ -15,7 +15,9 @@ try:
     dbname = env.str('POSTGRES_DB')
     user = env.str('POSTGRES_USER')
     password = env.str('POSTGRES_PASSWORD')
-    conn = psycopg2.connect(dbname=dbname, user=user, password=password, host='postgres', port=5432)
+    host = env.str('DB_HOST')
+    port = env.str('DB_PORT')
+    conn = psycopg2.connect(dbname=dbname, user=user, password=password, host=host, port=port)
 except psycopg2.OperationalError:
     sys.exit(-1)
 sys.exit(0)

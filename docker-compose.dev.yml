@@ -15,7 +15,6 @@ services:
     command: /start.sh
     entrypoint: /entrypoint.sh
     restart: on-failure
-    env_file: .env.dev
 
   frontend:
     image: node:lts-alpine
@@ -32,14 +31,12 @@ services:
     volumes:
       - sportagenda_data:/var/lib/postgresql/data/ # persist data even if container shuts down
     ports:
-      - "5432:5432"
-    env_file: .env.dev
+      - ${DB_PORT}:${DB_PORT}
 
   # pgadmin for managing postgis db (runs at localhost:5050)
   # To add the above postgres server to pgadmin, use hostname as defined by docker: 'postgres'
   pgadmin:
     image: dpage/pgadmin4
-    env_file: .env.dev
     ports:
       - "5050:5050"
     volumes:

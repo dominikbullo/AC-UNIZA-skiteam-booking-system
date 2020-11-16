@@ -4,7 +4,6 @@ services:
   backend:
     build:
       context: ./backend
-      dockerfile: Dockerfile.dev
     volumes:
       - ./backend:/app
     depends_on:
@@ -12,10 +11,12 @@ services:
     command: /start.sh
     entrypoint: /entrypoint.sh
     restart: on-failure
-    env_file: .env.dev
+    env_file: .env.ci
 
   # postgres database
   postgres:
     image: postgres
-    env_file: .env.dev
-
+    expose:
+      - ${DB_PORT} # Publishes port to other containers but NOT to host machine
+    command: -p ${DB_PORT}
+    env_file: .env.ci

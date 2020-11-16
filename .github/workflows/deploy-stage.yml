@@ -20,7 +20,7 @@ jobs:
             git reset --hard HEAD &&\
             git pull origin develop &&\
             docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull &&\
-            docker-compose down &&\
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml down &&\
             docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
           host: ${{ secrets.HOST }}
           username: ${{ secrets.HOST_USERNAME }}
