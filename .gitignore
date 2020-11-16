@@ -282,3 +282,4 @@ typings/
 /.old/
 /docker-compose.override.yml
 /scripts/
+/logs/

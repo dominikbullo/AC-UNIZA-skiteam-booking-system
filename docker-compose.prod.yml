@@ -27,13 +27,18 @@ services:
       LETSENCRYPT_HOST: ${DOMAIN}
       LETSENCRYPT_EMAIL: ${ADMIN_EMAIL}
 
+# TODO: Which folder to backup in volumes
   backups:
     image: prodrigestivill/postgres-backup-local
     restart: on-failure
+    environment:
+      - POSTGRES_PORT=${DB_PORT}
     depends_on:
       - postgres
     volumes:
       - /tmp/backups/:/backups/
+      - /var/lib/postgresql/data:/backups/
+      - postgres_data:/backups/postgres_data
 
 volumes:
     postgres_data: {}
