@@ -1,11 +1,8 @@
 <template>
   <div id="page-family-list">
     <!-- TODO: isPromptActiveLocal because mutating prompt-->
-    <vs-prompt
+    <vs-popup
         :active.sync="isPromptActiveLocal"
-        @accept="addChild"
-        accept-text="Add Child"
-        button-cancel="border"
         title="Add Child">
       <div>
         <form>
@@ -96,11 +93,21 @@
               <span class="text-danger text-sm">{{ errors.first('confirm_password') }}</span>
             </div>
           </div>
-
         </form>
       </div>
-    </vs-prompt>
 
+      <!-- Save & Reset Button -->
+      <div class="vx-row">
+        <div class="vx-col w-full">
+          <div class="mt-8 flex flex-wrap items-center justify-end">
+            <vs-button class="ml-auto mt-2" @click="addChild">{{ $t('AddChild') }}</vs-button>
+            <vs-button class="ml-4 mt-2" type="border" @click="close"
+                       color="warning">Cancel
+            </vs-button>
+          </div>
+        </div>
+      </div>
+    </vs-popup>
   </div>
 </template>
 
@@ -111,7 +118,6 @@ import vSelect from 'vue-select'
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
 import { Slovak } from 'flatpickr/dist/l10n/sk.js'
-
 
 export default {
   props: {
@@ -129,7 +135,7 @@ export default {
       childData: {
         first_name: '',
         last_name: '',
-        email: '.',
+        email: '',
         password1: '',
         password2: '',
         profile: {
@@ -189,11 +195,11 @@ export default {
             title: 'Child Added',
             text: 'The child was successfully added'
           })
-          this.initValues()
+          this.close()
         })
         .catch(err => {
           // close and open again
-          this.$emit('closePrompt', true)
+          // this.$emit('closePrompt', true)
           this.multipleNotify(err.response.data)
         })
     },
@@ -214,6 +220,14 @@ export default {
           })
         }
       }
+    },
+    close () {
+      this.isPromptActiveLocal = false
+      // this.$vs.notify({
+      //   color: 'warning',
+      //   title: 'Closed',
+      //   text: 'You close a dialog!'
+      // })
     }
   },
   created () {
