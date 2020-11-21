@@ -8,14 +8,14 @@
             :header="calendarConfig.header"
             :custom-buttons="calendarConfig.customButtons"
             :locale="calendarConfig.locale"
-            :now-indicator="true"
             :plugins="calendarPlugins"
-            :select-mirror="true"
             :selectable="calendarConfig.selectable"
             :slot-label-format="calendarConfig.slot_label_format"
             :title-format="calendarConfig.title_format"
-            :weekends="true"
             :scrollTime="calendarConfig.scrollTime"
+            :now-indicator="true"
+            :select-mirror="true"
+            :weekends="true"
             @eventRender="eventRender"
             @eventClick="handleEventClick"
             @select="handleSelect"
@@ -32,11 +32,11 @@
         />
       </div>
 
-      <add-event :isSidebarActive="addEvent.active"
+      <add-event :isPopupActive="addEvent.active"
                  @closePrompt="toggleAddEventPrompt"
                  :data="addEvent.data"/>
 
-      <view-event :isSidebarActive="viewEvent.active"
+      <view-event :isPromptActive="viewEvent.active"
                   @closePrompt="toggleViewEventPrompt"
                   :data="viewEvent.data"/>
 
@@ -170,6 +170,15 @@ export default {
       return '07:00:00'
     },
     calendarEvents () {
+      // const testEvents = [
+      //   {
+      //     title: 'testEvent_1_JUST_DISPLAY',
+      //     start: '2020-11-20T12:30:00',
+      //     end: '2020-11-24T18:30:00',
+      //     allDay: true // will make the time show
+      //   }
+      // ]
+      // return this.$store.getters['calendar/getEventsForCal'].concat(testEvents)
       return this.$store.getters['calendar/getEventsForCal']
     }
   },
@@ -186,9 +195,8 @@ export default {
     toggleViewEventPrompt (val = false) {
       this.viewEvent.active = val
     },
-
     handleEventClick (arg) {
-      console.log('event click', arg)
+      // console.log('event click', arg)
       // TODO: Read only for 30days + warning
       if (this.$acl.not.check('isCoach') && new Date(arg.event.start).valueOf() < new Date().valueOf()) {
         this.$vs.notify({
@@ -208,15 +216,24 @@ export default {
     handleSelect (arg) {
       this.addEvent.data = {
         start: arg.start,
-        end: arg.end
+        end: arg.end,
+        allDay: arg.allDay
       }
       this.toggleAddEventPrompt(true)
+    },
+    handleAllDay (arg) {
+      if (arg.hasOwnProperty('oldEvent') && arg.oldEvent.allDay === true && arg.event.allDay === false) {
+        // TODO: add time by default event type average type
+        return this.moment(arg.event.start).add(1, 'h').toDate()
+      }
+      return arg.event.end
     },
     handleEventChange (arg) {
       const event = {
         id: arg.event.id,
         start: arg.event.start,
-        end: arg.event.end,
+        all_day: arg.event.allDay,
+        end: this.handleAllDay(arg),
         // TODO: auto resourcetype in axios
         resourcetype: 'Event'
       }

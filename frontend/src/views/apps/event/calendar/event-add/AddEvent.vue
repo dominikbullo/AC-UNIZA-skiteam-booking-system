@@ -1,11 +1,10 @@
 <template>
   <div id="event-calendar-add-event">
-    <vs-prompt
-        :active.sync="isSidebarActiveLocal"
-        @accept="submitData"
-        :accept-text="$t('Save')"
+    <vs-popup
+        :active.sync="isPopupActiveLocal"
         class="my-prompt"
         :title="$t('Event detail')">
+
       <div class="vx-row">
         <div class="vx-col sm:w-1/2 w-full">
           <div class="mt-4">
@@ -18,7 +17,6 @@
                       :options="this.$store.state.calendar.eventConfig.types"/>
           </div>
         </div>
-
         <div class="vx-col sm:w-1/2 w-full">
           <div class="mt-4">
             <label class="text-sm">{{ $t('Location') }}</label>
@@ -70,45 +68,71 @@
                   :options="this.$store.state.calendar.eventConfig.categories"/>
       </div>
 
-      <div class="vx-row">
-        <div class="vx-col sm:w-1/2 w-full">
-          <div class="mt-4">
-            <label class="text-sm">{{ $t('Start') }}</label>
-            <flat-pickr v-model="data.start"
-                        :config="datePickerConfig"
-                        class="w-full"
-                        v-validate="'required'"
-                        name="start"/>
-            <span class="text-danger text-sm" v-show="errors.has('start')">{{ errors.first('start') }}</span>
+      <!-- Datepicker all day / with time -->
+      <div class="mt-4">
+
+        <div class="vx-row">
+          <div class="vx-col w-full">
+            <vs-checkbox
+                color="success"
+                @change="changeAllDay"
+                v-model="data.allDay">
+              {{ $t('All day') }}
+            </vs-checkbox>
           </div>
         </div>
-        <div class="vx-col sm:w-1/2 w-full">
-          <div class="mt-4">
-            <label class="text-sm">{{ $t('End') }}</label>
-            <flat-pickr v-model="data.end"
-                        :config="datePickerConfig"
-                        class="w-full"
-                        v-validate="'required'"
-                        name="end"/>
-            <span class="text-danger text-sm" v-show="errors.has('end')">{{ errors.first('end') }}</span>
+
+        <div class="vx-row" v-if="render">
+          <div class="vx-col sm:w-1/2 w-full">
+            <div class="mt-4">
+              <label class="text-sm">{{ $t('Start') }}</label>
+              <flat-pickr v-model="data.start"
+                          :config="datePickerConfig"
+                          class="w-full"
+                          v-validate="'required'"
+                          name="start"/>
+              <span class="text-danger text-sm" v-show="errors.has('start')">{{ errors.first('start') }}</span>
+            </div>
+          </div>
+          <div class="vx-col sm:w-1/2 w-full">
+            <div class="mt-4">
+              <label class="text-sm">{{ $t('End') }}</label>
+              <flat-pickr v-model="data.end"
+                          :config="datePickerConfig"
+                          class="w-full"
+                          name="end"/>
+              <span class="text-danger text-sm" v-show="errors.has('end')">{{ errors.first('end') }}</span>
+            </div>
           </div>
         </div>
       </div>
-    </vs-prompt>
+
+      <!-- Save & Reset Button -->
+      <div class="vx-row">
+        <div class="vx-col w-full">
+          <div class="mt-8 flex flex-wrap items-center justify-end">
+            <vs-button class="ml-auto mt-2" @click="submitData">{{ $t('Create') }}</vs-button>
+            <vs-button class="ml-4 mt-2" type="border" @click="close"
+                       color="warning">Cancel
+            </vs-button>
+          </div>
+        </div>
+      </div>
+    </vs-popup>
   </div>
 </template>
 
 <script>
 import vSelect from 'vue-select'
-// import 'vue-select/dist/vue-select.css'
+import 'vue-select/dist/vue-select.css'
 
 import flatPickr from 'vue-flatpickr-component'
-// import 'flatpickr/dist/flatpickr.css'
+import 'flatpickr/dist/flatpickr.css'
 import { Slovak } from 'flatpickr/dist/l10n/sk.js'
 
 export default {
   props: {
-    isSidebarActive: {
+    isPopupActive: {
       type: Boolean,
       required: true
     },
@@ -123,6 +147,8 @@ export default {
   },
   data () {
     return {
+      render: true,
+
       category: [],
       location: [],
       skisType: [],
@@ -133,20 +159,24 @@ export default {
         locale: Slovak,
         enableTime: true,
         altInput: true,
+        allowInput: true,
         altFormat: 'd.m.Y H:i'
       }
     }
   },
   watch: {
-    isSidebarActive (val) {
+    isPopupActive (val) {
       if (!val) return
       this.initValues()
     }
   },
   computed: {
-    isSidebarActiveLocal: {
+    start () {
+      return this.data.start
+    },
+    isPopupActiveLocal: {
       get () {
-        return this.isSidebarActive
+        return this.isPopupActive
       },
       set (val) {
         if (!val) {
@@ -156,25 +186,45 @@ export default {
         }
       }
     },
-    isFormValid () {
-      // FIXME: validate test
-      return !this.errors.any() && this.dataName && this.dataPrice > 0
-    },
     needSkis () {
-      if (this.eventType.length <= 0) {
-        return false
-      }
-      return this.$store.getters['calendar/needSkis'](this.eventType)
+      return this.eventType.length <= 0 ? false : this.$store.getters['calendar/needSkis'](this.eventType)
     },
     isSkiRace () {
-      if (this.eventType.length <= 0) {
-        return false
-      }
-      return this.$store.getters['calendar/isSkiRace'](this.eventType)
+      return this.eventType.length <= 0 ? false : this.$store.getters['calendar/isSkiRace'](this.eventType)
     }
   },
   methods: {
+    // RES: https://medium.com/javascript-in-plain-english/many-ways-to-rerender-a-vue-component-660376d94cc1
+    // RES: https://github.com/logaretm/vee-validate/issues/2109#issuecomment-589514549
+    reloadDatepicker () {
+      this.$validator.pause()
+      this.render = false
+      this.$nextTick(() => {
+        this.$validator.errors.clear()
+        this.$validator.fields.items.forEach(field => field.reset())
+        this.$validator.fields.items.forEach(field => this.errors.remove(field))
+        this.$validator.resume()
+        this.render = true
+      })
+    },
+    changeAllDay () {
+      if (this.data.allDay) {
+        this.data.end = this.moment(this.data.end).add(-1, 'second').toDate()
+        // console.log('this.data.allDay', this.data.end)
+      }
+      if (!this.datePickerConfig.enableTime && !this.data.allDay) {
+        this.data.end = this.moment(this.data.end).add(1, 'second').toDate()
+        // console.log('this.data.else', this.data.end)
+      }
+      this.datePickerConfig.enableTime = !this.data.allDay
+      this.datePickerConfig.altFormat = this.data.allDay ? 'd.m.Y' : 'd.m.Y H:i'
+      // RES: https://github.com/fullcalendar/fullcalendar/issues/3679
+      console.log('this.data.end', this.data.end)
+
+      this.reloadDatepicker()
+    },
     initValues (force = false) {
+      this.changeAllDay()
       if (!force && this.category.length > 0) return
       console.log('init values force', !force)
       console.log('init values category', this.category)
@@ -187,7 +237,8 @@ export default {
     submitData () {
       const payload = {
         start: this.data.start,
-        end: this.data.end,
+        end: this.data.allDay ? this.moment(this.data.end).add(1, 'day').toDate() : this.data.end,
+        all_day: this.data.allDay,
         category: this.category,
         location: this.location,
         skis_type: this.skisType,
@@ -196,7 +247,6 @@ export default {
         // TODO: auto resourcetype in axios
         resourcetype: this.$store.getters['calendar/getResourceType'](this.eventType)
       }
-
       this.$store.dispatch('calendar/addEvent', payload).then(() => {
         this.$vs.notify({
           color: 'success',
@@ -215,6 +265,14 @@ export default {
         // PREVENT PROMT FFROM CLOSING
         this.$emit('closePrompt', true)
       })
+    },
+    close () {
+      this.isPopupActiveLocal = false
+      // this.$vs.notify({
+      //   color: 'warning',
+      //   title: 'Closed',
+      //   text: 'You close a dialog!'
+      // })
     }
   }
 }

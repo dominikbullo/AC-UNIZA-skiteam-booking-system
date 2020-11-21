@@ -1,14 +1,21 @@
 <template>
   <div id="event-edit-tab-general">
-    <!--    <p>{{ data }}</p>-->
-    <!--    <br>-->
-    <!--    <p>{{ data_local }}</p>-->
-    <!--    <br>-->
-
     <div class="vx-row">
       <div class="vx-col w-full md:w-1/2">
-
-        <div class="vx-row mt-4">
+        <!-- Datepicker all day / with time -->
+        <div class="vx-col w-full">
+          <vs-checkbox
+              color="success"
+              @change="changeAllDay"
+              v-model="data_local.all_day">
+            {{ $t('All day') }}
+          </vs-checkbox>
+        </div>
+      </div>
+    </div>
+    <div class="vx-row">
+      <div class="vx-col w-full md:w-1/2">
+        <div class="vx-row mt-4" v-if="render">
           <div class="vx-col w-1/2">
             <label class="text-sm">Start</label>
             <flat-pickr v-model="data_local.start"
@@ -146,16 +153,16 @@ export default {
   },
   data () {
     return {
-
+      render: true,
       data_local: Object.assign({}, this.data),
 
       datePickerConfig: {
         locale: Slovak,
         enableTime: true,
+        allowInput: true,
         altInput: true,
         altFormat: 'd.m.Y H:i'
       },
-      email: this.data.canceled,
 
       langOptions: [
         {
@@ -189,11 +196,9 @@ export default {
       return this.$store.state.calendar.eventConfig.choices
     },
     isSkiRace () {
-      // console.log('this.data_local', this.data_local)
-      // console.log('isSkiRace', this.data_local.type.type === 'RACE' && this.data_local.type.need_skis === true)
+      // FIXME: via store
       return this.data.type.type === 'RACE' && this.data.type.need_skis === true
     }
-
   },
   created () {
     this.$store.dispatch('calendar/fetchEventTypes')
@@ -201,23 +206,39 @@ export default {
     this.$store.dispatch('calendar/fetchCategories')
     this.$store.dispatch('calendar/fetchLocations')
     this.$store.dispatch('calendar/fetchRaceOrganizers')
+    this.changeAllDay()
   },
   methods: {
+    // RES: https://medium.com/javascript-in-plain-english/many-ways-to-rerender-a-vue-component-660376d94cc1
+    // RES: https://github.com/logaretm/vee-validate/issues/2109#issuecomment-589514549
+    reloadDatepicker () {
+      this.$validator.pause()
+      this.render = false
+      this.$nextTick(() => {
+        this.$validator.errors.clear()
+        this.$validator.fields.items.forEach(field => field.reset())
+        this.$validator.fields.items.forEach(field => this.errors.remove(field))
+        this.$validator.resume()
+        this.render = true
+      })
+    },
+    changeAllDay () {
+      if (this.data_local.all_day) {
+        this.data_local.end = this.moment(this.data_local.end).add(-1, 'second').toDate()
+        console.log('this.data.end format****', this.data.end)
+      }
+      if (!this.datePickerConfig.enableTime && !this.data_local.all_day) {
+        this.data_local.end = this.moment(this.data_local.end).add(1, 'second').toDate()
+        console.log('this.data.end format****', this.data.end)
+      }
+      this.datePickerConfig.enableTime = !this.data_local.all_day
+      this.datePickerConfig.altFormat = this.data_local.all_day ? 'd.m.Y' : 'd.m.Y H:i'
+
+      this.reloadDatepicker()
+    },
     save_changes () {
       /* eslint-disable */
       if (!this.validateForm) return
-      // console.log(this.data_local)
-      // const tmp = this.data_local
-      // for (const [key, value] of Object.entries(this.data_local)) {
-      //   console.log(`${key}: ${value}`)
-      //   if (typeof value === 'object' && value !== null) {
-      //     console.log(`foun not null object: ${value}`)
-      //     if (Array.isArray(this.accommodation) && this.accommodation.length) {
-      //       console.log(`foun not array: ${value}`)
-      //
-      //     }
-      //   }
-      // }
 
       const tmp = Object.assign({}, this.data_local)
       delete tmp.accommodation
@@ -232,8 +253,10 @@ export default {
       if (this.data_local.organizer) {
         tmp.organizer = this.data_local.organizer.id
       }
+      if (tmp.all_day) {
+        tmp.end = this.moment(this.data.end).add(1, 'day')
+      }
 
-      console.log('tmp', tmp)
       this.$store.dispatch('calendar/editEvent', tmp)
           .then(res => {
             this.$vs.notify({
@@ -253,6 +276,7 @@ export default {
     },
     reset_data () {
       this.data_local = Object.assign({}, this.data)
+      this.changeAllDay()
     },
     deleteEvent () {
       this.$store.dispatch('calendar/deleteEvent', this.data)

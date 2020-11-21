@@ -2,13 +2,13 @@
   <div id="event-calendar-add-event">
     <vs-prompt
         buttons-hidden
-        :active.sync="isSidebarActiveLocal"
+        :active.sync="isPromptActiveLocal"
         :accept-text="$t('Ok')"
         class="my-prompt"
         :title="$t('Event detail')">
       <vs-tabs style="overflow: auto">
         <vs-tab label="General">
-          <view-event-tab-general @closeDeleted="isSidebarActiveLocal=false" :data="data"/>
+          <view-event-tab-general @closeDeleted="isPromptActiveLocal=false" :data="data"/>
         </vs-tab>
         <vs-tab label="Detail">
           <view-event-tab-detail :data="data"/>
@@ -28,7 +28,7 @@ import ViewEventTabAccommodation from './ViewEventTabAccommodation'
 
 export default {
   props: {
-    isSidebarActive: {
+    isPromptActive: {
       type: Boolean,
       required: true
     },
@@ -48,15 +48,15 @@ export default {
     }
   },
   watch: {
-    isSidebarActive (val) {
+    isPromptActive (val) {
       if (!val) return
       this.initValues()
     }
   },
   computed: {
-    isSidebarActiveLocal: {
+    isPromptActiveLocal: {
       get () {
-        return this.isSidebarActive
+        return this.isPromptActive
       },
       set (val) {
         if (!val) {

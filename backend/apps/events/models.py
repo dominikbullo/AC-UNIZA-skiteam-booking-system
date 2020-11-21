@@ -147,16 +147,17 @@ class Event(PolymorphicModel):
 
     participants = models.ManyToManyField('users.Profile', through=Profile.events.through, blank=True)
 
-    canceled = models.BooleanField(default=False)
-    send_email = models.BooleanField(default=False)
-
+    all_day = models.BooleanField(default=False)
     start = models.DateTimeField()
-    end = models.DateTimeField(blank=True)
+    end = models.DateTimeField(blank=True, null=True)
 
     # recurring events
     is_recur = models.BooleanField(default=False)
     # group_id = models.IntegerField(max_length=150, blank=True)
     days_of_week = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
+
+    canceled = models.BooleanField(default=False)
+    send_email = models.BooleanField(default=False)
 
     additional_info = models.CharField(max_length=150, blank=True)
 

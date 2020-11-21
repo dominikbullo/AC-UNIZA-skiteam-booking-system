@@ -1,4 +1,5 @@
 import axios from '@/axios.js'
+import moment from 'moment'
 
 export default {
   /**
@@ -141,6 +142,11 @@ export default {
     console.log('edit event in actions', event)
     return new Promise((resolve, reject) => {
       delete event['participants']
+      // FIXME: Better formatting
+      console.log(moment(event.start, 'YYYY-DD-MM', true).isValid())
+      //true
+      event.start = moment(event.start).toISOString()
+      event.end = moment(event.end).toISOString()
       axios.patch(`/event/${event.id}/`, event)
         .then((response) => {
           commit('UPDATE_EVENT', response.data)
@@ -153,6 +159,8 @@ export default {
   },
   addEvent ({ commit }, event) {
     return new Promise((resolve, reject) => {
+      event.start = moment(event.start).toISOString()
+      event.end = moment(event.end).toISOString()
       axios.post('/events/', event)
         .then((response) => {
           commit('ADD_EVENT', response.data)

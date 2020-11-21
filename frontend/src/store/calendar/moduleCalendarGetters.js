@@ -21,6 +21,7 @@ export default {
       return {
         id: obj.id,
         start: obj.start,
+        allDay: obj.all_day,
         end: obj.end,
         title: obj.type.displayName,
         color: obj.type.color,
