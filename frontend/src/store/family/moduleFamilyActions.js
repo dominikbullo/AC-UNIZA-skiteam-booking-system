@@ -37,13 +37,13 @@ export default {
     let localId = this.state.AppActiveUser.profile.id
     // console.log('fetchUserStats', localId)
 
-    if ('username' in payload && payload.username !== undefined) {
-      localId = payload.username
+    if ('id' in payload && payload.id !== undefined) {
+      localId = payload.id
     }
     // console.log('fetchUserStats', localId)
 
     return new Promise((resolve, reject) => {
-      axios.get(`/profile/${localId}/stats/`, { params: payload.query })
+      axios.get(`/profile-stats/${localId}`, { params: payload.query })
         .then((response) => {
           // commit('UPDATE_FAMILY_MEMBER_STATS', response.data)
           resolve(response)

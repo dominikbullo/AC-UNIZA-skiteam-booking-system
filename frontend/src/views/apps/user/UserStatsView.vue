@@ -187,7 +187,7 @@ export default {
           series[season][key][dataKey][stats.total].push(value.total)
           // FIXME or 0
           series[season][key][dataKey][stats.percentage].push(
-              (value.count / value.total * 100).toFixed(2)
+            (value.count / value.total * 100).toFixed(2)
           )
         })
 
@@ -220,7 +220,7 @@ export default {
       const names = []
 
       Object.values(this.myStatData[this.seasons.selected]).forEach(item => {
-        names.push(item.name)
+        names.push(item.type.displayName)
         this.series2.push(item.count)
         this.radialChartSeries.push((item.count / item.total * 100).toFixed(2))
       })
@@ -246,21 +246,22 @@ export default {
       moduleUserManagement.isRegistered = true
     }
     this.$store.dispatch('family/fetchUserStats',
-        {
-          username: this.$route.params.userId
-        })
-        .then(res => {
-          // this.$vs.loading.close()
-          this.user_stats = res.data.data
-          this.processData()
-        })
-        .catch(err => {
-          this.$vs.loading.close()
-          console.error(err)
-          if (err.response.status === 400) {
-            this.user_not_found = true
-          }
-        })
+      {
+        id: this.$route.params.userId
+      })
+      .then(res => {
+        // this.$vs.loading.close()
+        // TODO: event_stats
+        this.user_stats = res.data.event_stats
+        this.processData()
+      })
+      .catch(err => {
+        this.$vs.loading.close()
+        console.error(err)
+        if (err.response.status === 400) {
+          this.user_not_found = true
+        }
+      })
   }
 }
 

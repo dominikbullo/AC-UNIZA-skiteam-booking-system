@@ -33,7 +33,7 @@
       <div class="vx-col w-full w-1/2 sm:w-1/2 lg:w-1/3"
            v-for="(item, key) in stats"
            :key="key">
-        <vx-card :title="$t(`${item.name}`)" class="mb-10">
+        <vx-card :title="$t(`${item.type.displayName}`)" class="mb-10">
           <template v-slot:actions>
             <feather-icon icon="HelpCircleIcon" svgClasses="w-6 h-6 text-grey"></feather-icon>
           </template>
@@ -42,10 +42,10 @@
           <template slot="no-body">
             <div class="mt-10">
               <vue-apex-charts
-                :options="goalOverviewRadialBar.chartOptions"
-                :series=" [getDisplayStats(item).percent.toFixed(0)]"
-                height="240"
-                type="radialBar"/>
+                  :options="goalOverviewRadialBar.chartOptions"
+                  :series=" [getDisplayStats(item).percent.toFixed(0)]"
+                  height="240"
+                  type="radialBar"/>
             </div>
           </template>
           <!-- DATA -->
@@ -161,6 +161,7 @@ export default {
         }
       },
 
+      // NOT USED
       timelineData: [
         {
           color: 'primary',
@@ -216,12 +217,12 @@ export default {
       if (this.childSelection.selected !== undefined) {
         this.$store.dispatch('family/fetchUserStats',
           {
-            username: this.childSelection.selected.user.profile.id
+            id: this.childSelection.selected.user.profile.id
           })
           .then((res) => {
-            this.seasonSelection.options = Object.keys(res.data.data)
+            this.seasonSelection.options = Object.keys(res.data.event_stats)
             this.seasonSelection.selected = this.seasonSelection.options[0]
-            this.stats = Object.values(res.data.data[this.seasonSelection.selected])
+            this.stats = Object.values(res.data.event_stats[this.seasonSelection.selected])
           })
       }
     },

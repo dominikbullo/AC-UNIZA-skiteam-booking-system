@@ -12,7 +12,7 @@ from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 
 from apps.events.models import Season
-from apps.events.api.serializers import ProfileStatSerializer
+from apps.stats.api.views import ProfileStatsViewSet
 from apps.users.api.permissions import IsOwnProfileOrReadOnly, IsOwnerOrReadOnly
 
 from apps.users.models import Profile
@@ -61,20 +61,10 @@ class ProfileViewSet(mixins.UpdateModelMixin,
     filter_fields = __basic_fields
     search_fields = __basic_fields
 
-    # RES: https://stackoverflow.com/questions/36365326/django-rest-framework-doesnt-serialize-serializermethodfield
-    # RES(filtering): https://stackoverflow.com/questions/26595906/django-rest-framework-with-viewset-router-queryset-filtering
-    @action(detail=True, methods=['get'], url_path='stats')
-    def get_stats(self, request, *args, **kwargs):
-        profile = get_object_or_404(Profile, pk=kwargs["pk"])
-
-        # TODO refactor
-        seasons = get_season_by_query(self.request, Season.objects.all())
-
-        serializer = ProfileStatSerializer(instance={
-            'user'   : profile,
-            'seasons': seasons,
-        })
-        return Response(serializer.data)
+    # RES: https://stackoverflow.com/questions/51149599/call-viewset-method-from-another-view
+    # @action(detail=True, methods=['get'], url_path='stats')
+    # def get_stats(self, request, *args, **kwargs):
+    #     return Response(ProfileStatsViewSet.as_view({'get': 'list'})(request._request).data)
 
 
 # RES: https://stackoverflow.com/questions/53305849/django-rest-auth-key-error-on-email-confirmation

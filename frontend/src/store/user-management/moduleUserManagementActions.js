@@ -14,10 +14,22 @@ export default {
         })
     })
   },
-  fetchChildrenStatistics ({ commit }) {
+  fetchProfileStatistics ({ commit }) {
     console.log('[STORE] fetchUsers')
     return new Promise((resolve, reject) => {
-      axios.get('/children/stats/')
+      axios.get('/profile-stats')
+        .then((response) => {
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
+  },
+  fetchStatistics ({ commit }) {
+    console.log('[STORE] fetchUsers')
+    return new Promise((resolve, reject) => {
+      axios.get('/stats')
         .then((response) => {
           resolve(response)
         })

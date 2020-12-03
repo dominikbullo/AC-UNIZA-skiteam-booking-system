@@ -21,6 +21,3 @@ router.register(r"accommodations?", AccommodationViewSet, basename="accommodatio
 
 router.register(r"categories", CategoryViewSet, basename="categories")
 router.register(r"category", CategoryViewSet, basename="category")
-
-urlpatterns = [
-]

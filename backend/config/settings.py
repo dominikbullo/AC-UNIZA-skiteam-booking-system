@@ -68,6 +68,7 @@ LOCAL_APPS = [
     'apps.users',
     'apps.family',
     'apps.events',
+    'apps.stats',
 ]
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -130,7 +131,7 @@ SITE_ID = 1
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
     'default': {
-        'ENGINE'  : 'django.db.backends.postgresql_psycopg2',
+        'ENGINE'  : 'django.db.backends.postgresql',
         'NAME'    : env.str('POSTGRES_DB'),
         'USER'    : env.str('POSTGRES_USER'),
         'PASSWORD': env.str('POSTGRES_PASSWORD'),

@@ -41,6 +41,7 @@ services:
       - "5050:5050"
     volumes:
       - pgadmin_data:/var/lib/pgadmin
+    env_file: .env
 
   mailhog:
     image: mailhog/mailhog

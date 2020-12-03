@@ -21,7 +21,6 @@ class ModelAChildAdmin(PolymorphicChildModelAdmin):
 @admin.register(SkiTraining)
 class SkiRaceAdmin(ModelAChildAdmin):
     base_model = SkiTraining  # Explicitly set here!
-    show_in_index = True  # makes child model admin visible in main admin site
     exclude = ('type',)
     # define custom features here
 
@@ -29,13 +28,12 @@ class SkiRaceAdmin(ModelAChildAdmin):
 @admin.register(SkiRace)
 class SkiTrainingAdmin(ModelAChildAdmin):
     base_model = SkiRace  # Explicitly set here!
-    show_in_index = True  # makes child model admin visible in main admin site
     # define custom features here
     exclude = ('type',)
 
 
 @admin.register(Event)
-class ModelAParentAdmin(PolymorphicParentModelAdmin):
+class EventAdmin(PolymorphicParentModelAdmin):
     """ The parent model admin """
     base_model = Event  # Optional, explicitly set here.
     child_models = (Event, SkiTraining, SkiRace)

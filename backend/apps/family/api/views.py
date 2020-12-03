@@ -3,7 +3,6 @@ from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.response import Response
 
-from apps.events.api.serializers import ProfileStatSerializer
 from apps.events.models import Season
 from apps.family.models import Family, Child
 from apps.family.api.serializers import FamilySerializer, ChildSerializer
@@ -28,29 +27,3 @@ class ChildViewSet(viewsets.ModelViewSet):
     # Sending parent of child (user which created him)
     def perform_create(self, serializer):
         serializer.save(parent=self.request.user)
-
-    @action(detail=False, methods=['get'], url_path='stats')
-    def get_stats(self, request, *args, **kwargs):
-        ret = []
-
-        # TODO refactor
-        seasons = get_season_by_query(self.request, Season.objects.all())
-
-        for child in Child.objects.all():
-            serializer = ProfileStatSerializer(instance={
-                'user'   : child.user.profile,
-                'seasons': seasons,
-            })
-
-            ret.append(serializer.data)
-
-        return Response(ret)
-
-    @staticmethod
-    def get_season_by_query(query, seasons):
-        if query:
-            if query == "current":
-                seasons = seasons.filter(current=True)
-            else:
-                seasons = seasons.filter(year=query)
-        return seasons
