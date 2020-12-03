@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://github.com/dominikbullo/sport_club_management_system/compare/v0.2.0...v0.3.0) (2020-12-03)
+
+
+### ⚠ BREAKING CHANGES
+
+* **calendar:** Events now can handle all day events, even with datepicker in popups.
+* **database:** Database now could be on port from .env file
+
+### Features
+
+* **calendar:** Events now can handle all day events, even with datepicker in popups. ([86fbf29](https://github.com/dominikbullo/sport_club_management_system/commit/86fbf29d48d571d5c02d44cf70e441c840dfd25f)), closes [SA-33](https://sportagenda.myjetbrains.com/youtrack/issue/SA-33)
+
+
+### Bug Fixes
+
+* **child:** Adding child should now work without problems ([801bddb](https://github.com/dominikbullo/sport_club_management_system/commit/801bddb5c7020c3f53688fbc5d33b480111a3318))
+* **database:** Database now could be on port from .env file ([f4f4e5d](https://github.com/dominikbullo/sport_club_management_system/commit/f4f4e5d94f40f1441b824db0f629b75eed23e325)), closes [SA-24](https://sportagenda.myjetbrains.com/youtrack/issue/SA-24) [SA-7](https://sportagenda.myjetbrains.com/youtrack/issue/SA-7)
+* **statistics:** Fixed stats working with new APIs ([4b3f637](https://github.com/dominikbullo/sport_club_management_system/commit/4b3f63728d88917226801e97c3064ae2b9aa411d)), closes [SA-31](https://sportagenda.myjetbrains.com/youtrack/issue/SA-31) [SA-28](https://sportagenda.myjetbrains.com/youtrack/issue/SA-28)
+
 ## [0.2.0](https://github.com/dominikbullo/sport_club_management_system/compare/v0.1.0...v0.2.0) (2020-11-14)
 
 
