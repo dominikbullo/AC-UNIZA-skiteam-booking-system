@@ -1,6 +1,18 @@
 <!--TODO Add gender picker-->
 <template>
   <div class="clearfix">
+
+    <vs-popup :active.sync="redirect" title="Redirect">
+      <vs-progress indeterminate color="primary"></vs-progress>
+      <div class="mt-4">
+        <h4>You will be redirected to login page in <b>{{ countDown }}</b> second</h4>
+
+        <p class="mt-4">If not you can to it manually
+          <router-link tag="a" :to="{ name: 'page-login' }">here</router-link>
+        </p>
+      </div>
+    </vs-popup>
+
     <div class="vx-row">
       <div class="vx-col sm:w-1/2 w-full mb-2">
         <vs-input
@@ -105,6 +117,9 @@ export default {
   },
   data () {
     return {
+      redirect: false,
+      countDown: 7,
+
       first_name: process.env.VUE_APP_NAME || '',
       last_name: process.env.VUE_APP_SURNAME || '',
       birth_date: this.moment().format('YYYY-MM-DD'),
@@ -118,6 +133,7 @@ export default {
       datePickerConfig: {
         altFormat: 'd.m.Y',
         altInput: true,
+        allowInput: true,
         dateFormat: 'Y-m-d',
         locale: Slovak
       }
@@ -139,15 +155,16 @@ export default {
     }
   },
   methods: {
-    datepickerClosedFunction () {
-      // need to validate
-      this.$vs.notify({
-        title: 'Datepicker',
-        text: this.birth_date,
-        iconPack: 'feather',
-        icon: 'icon-alert-circle',
-        color: 'success'
-      })
+    countDownTimer () {
+      this.redirect = true
+      if (this.countDown > 0) {
+        setTimeout(() => {
+          this.countDown -= 1
+          this.countDownTimer()
+        }, 1000)
+      } else {
+        this.$router.push({ name: 'page-login' }).catch(() => {})
+      }
     },
     checkLogin () {
       // If user is already logged in notify
@@ -171,6 +188,7 @@ export default {
     registerUserDRF () {
       // If form is not validated or user is already login return
       if (!this.validateForm || !this.checkLogin()) return
+      this.$vs.loading()
       const payload = {
         userDetails: {
           first_name: this.first_name,
@@ -184,22 +202,22 @@ export default {
         },
         notify: this.$vs.notify
       }
-
       this.$store.dispatch('auth/registerUserDRF', payload).then((response) => {
-        this.$store.dispatch('updateUserRole', {
-          aclChangeRole: this.$acl.change,
-          userRole: response.data.user.profile.userRole
-        })
-        this.$router.push(this.$router.currentRoute.query.to || '/')
         this.$vs.loading.close()
         this.$vs.notify({
           color: 'success',
-          title: 'User Created'
+          title: 'Your account was created',
+          text: 'Please verify your email before login'
         })
+        this.countDownTimer()
       }).catch(error => {
         this.$vs.loading.close()
-        //https://stackoverflow.com/questions/29626729/how-to-function-call-using-this-inside-foreach-loop/29626762
-        // TODO -> into formu not as notifier
+        this.$vs.notify({
+          color: 'danger',
+          title: 'Something went wrong',
+          text: 'Cannot create your account. Check the fields and try again'
+        })
+        console.error(error)
       })
     }
   }

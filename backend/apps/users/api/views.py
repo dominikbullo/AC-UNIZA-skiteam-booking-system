@@ -69,14 +69,13 @@ class ProfileViewSet(mixins.UpdateModelMixin,
 
 # RES: https://stackoverflow.com/questions/53305849/django-rest-auth-key-error-on-email-confirmation
 class CustomConfirmEmailView(APIView):
-    # TODO handle success and failure
     permission_classes = [AllowAny]
 
     def get(self, *args, **kwargs):
         self.object = confirmation = self.get_object()
         confirmation.confirm(self.request)
         # A React Router Route will handle the failure scenario
-        return HttpResponseRedirect('/login')
+        return HttpResponseRedirect('/login/success')
 
     def get_object(self, queryset=None):
         key = self.kwargs['key']
@@ -87,7 +86,6 @@ class CustomConfirmEmailView(APIView):
             try:
                 email_confirmation = queryset.get(key=key.lower())
             except EmailConfirmation.DoesNotExist:
-                # TODO: some page on FE to react to this
                 return HttpResponseRedirect('/login/failure/')
         return email_confirmation
 
