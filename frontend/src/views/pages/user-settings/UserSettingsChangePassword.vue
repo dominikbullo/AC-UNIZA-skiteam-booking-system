@@ -55,7 +55,6 @@
 </template>
 
 <script>
-import moduleUserManagement from '@/store/user-management/moduleUserManagement'
 
 export default {
   data () {
@@ -72,12 +71,6 @@ export default {
     },
     validateForm () {
       return !this.errors.any()
-    }
-  },
-  created () {
-    if (!moduleUserManagement.isRegistered) {
-      this.$store.registerModule('userManagement', moduleUserManagement)
-      moduleUserManagement.isRegistered = true
     }
   },
   methods: {

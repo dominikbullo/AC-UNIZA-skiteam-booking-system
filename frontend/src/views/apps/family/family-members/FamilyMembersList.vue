@@ -331,7 +331,8 @@ export default {
     this.activePrompt = true
   },
   created () {
-    this.$store.dispatch('family/fetchFamily', this.$store.state.AppActiveUser.profile.family_id)
+    console.log(' this.$store.getters[\'familyID\']', this.$store.getters['familyID'])
+    this.$store.dispatch('family/fetchFamily', this.$store.getters['familyID'])
   }
 }
 </script>

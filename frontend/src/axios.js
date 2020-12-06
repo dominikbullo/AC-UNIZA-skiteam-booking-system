@@ -1,5 +1,6 @@
 // axios
 import axios from 'axios'
+import router from './router'
 
 // RES
 // https://stackoverflow.com/questions/51374367/axios-is-not-defined-in-vue-js-cli
@@ -27,20 +28,33 @@ instance.interceptors.request.use(function (config) {
 instance.interceptors.response.use(function (response) {
   console.log('[AXIOS] Response Interceptors', response)
   return response
-}, function (error) {
-  console.error('[AXIOS] Response Interceptors Error', error)
+}, function (err) {
+  console.error('[AXIOS] Response Interceptors Error', err)
 
-  // FIXME: If you ever get an unauthorized, logout the user
   // RES: https://blog.sqreen.com/authentication-best-practices-vue/
-  // return new Promise(function (resolve, reject) {
-  //   if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
-  //     // if you ever get an unauthorized, logout the user
-  //     this.$store.dispatch(AUTH_LOGOUT)
-  //     // you can also redirect to /login if needed !
-  //   }
-  //   throw err
-  // })
-  return Promise.reject(error)
+  return new Promise(function (resolve, reject) {
+    // TODO: refactor to action f.e (AUTH_LOGOUT)
+    if (err.response.status === 401) {
+      axios.post('/rest-auth/logout/').then(() => {
+        delete axios.defaults.headers.common['Authorization']
+      })
+
+      // CRSF token
+      // https://laracasts.com/discuss/channels/laravel/how-to-refresh-xcsrf-token-after-logout-in-spa
+      if (localStorage.getItem('accessToken')) {
+        localStorage.removeItem('accessToken')
+      }
+
+      // Change role on logout. Same value as initialRole of acj.js
+      localStorage.removeItem('userInfo')
+
+      // This is just for demo Purpose. If user clicks on logout -> redirect
+      router.push({ name: 'page-login' }).catch(() => {})
+      // you can also redirect to /login if needed !
+      return
+    }
+    throw err
+  })
 })
 
 //https://stackoverflow.com/questions/54836387/getting-django-vue-cors-and-csrf-working-with-a-real-world-example

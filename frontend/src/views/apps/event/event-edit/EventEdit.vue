@@ -13,7 +13,7 @@
       <div slot="no-body" class="tabs-container px-6 pt-6">
 
         <vs-tabs v-model="activeTab" class="tab-action-btn-fill-conatiner">
-          <vs-tab v-if="this.$acl.check('isCoach')" label="General" href="###general" icon-pack="feather"
+          <vs-tab v-if="this.$acl.check('isCoach')" label="General" href="#general" icon-pack="feather"
                   icon="icon-info">
             <div class="tab-text">
               <event-edit-tab-general class="mt-4" :data="event_data"/>

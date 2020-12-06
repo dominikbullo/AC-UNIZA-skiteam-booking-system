@@ -9,7 +9,8 @@ import themeConfig, { colors } from '@/../themeConfig.js'
 const userDefaults = {
   displayName: 'Default User', // From Auth
   photoURL: require('@/assets/images/portrait/small/avatar-s-11.jpg'), // From Auth
-  userRole: 'public' // From Auth
+  userRole: 'public', // From Auth
+  family_id: null
 }
 
 const userInfoLocalStorage = JSON.parse(localStorage.getItem('userInfo')) || {}

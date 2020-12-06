@@ -231,7 +231,7 @@ export default {
     }
   },
   created () {
-    this.$store.dispatch('family/fetchFamily', this.$store.state.AppActiveUser.profile.family_id)
+    this.$store.dispatch('family/fetchFamily', this.$store.getters['familyID'])
   }
 }
 </script>

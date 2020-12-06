@@ -252,7 +252,7 @@ export default {
     // console.log('user', this.$store.state.AppActiveUser)
     // console.log('user family_id', this.$store.state.AppActiveUser.profile.family_id)
 
-    this.$store.dispatch('family/fetchFamily', this.$store.state.AppActiveUser.profile.family_id)
+    this.$store.dispatch('family/fetchFamily', this.$store.getters['familyID'])
       .then(() => {
         this.childSelection.options = this.familyChildren
         this.childSelection.selected = this.childSelection.options[0]

@@ -17,17 +17,10 @@
         <ul style="min-width: 9rem">
 
           <li
-            class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
-            @click="$router.push('/pages/user-settings').catch(() => {})">
-            <feather-icon icon="UserIcon" svgClasses="w-4 h-4"/>
-            <span class="ml-2">{{ $t('Account') }}</span>
-          </li>
-
-          <li
-            class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
-            @click="$router.push('/apps/family/members').catch(() => {})">
-            <feather-icon icon="UsersIcon" svgClasses="w-4 h-4"/>
-            <span class="ml-2">{{ $t('Family') }}</span>
+              class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
+              @click="$router.push('/pages/user-settings').catch(() => {})">
+            <feather-icon icon="SettingsIcon" svgClasses="w-4 h-4"/>
+            <span class="ml-2">{{ $t('Settings') }}</span>
           </li>
 
           <li v-if="this.$store.state.AppActiveUser.userRole === 'child'"

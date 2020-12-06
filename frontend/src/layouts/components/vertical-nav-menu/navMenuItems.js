@@ -36,12 +36,6 @@ export default [
             slug: 'app-family-view',
             i18n: 'View'
           }
-          // ,{
-          //   url: '/apps/family/list',
-          //   name: 'List',
-          //   slug: 'app-family-list',
-          //   i18n: 'List'
-          // }
         ]
       }
     ]
