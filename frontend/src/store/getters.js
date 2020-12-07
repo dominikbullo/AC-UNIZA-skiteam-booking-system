@@ -31,7 +31,8 @@ const getters = {
   },
 
   familyID: (state) => {
-    return state.AppActiveUser.profile.family_id
+    console.log('fetching family id', state.AppActiveUser.family_id)
+    return state.AppActiveUser.family_id
   }
 }
 

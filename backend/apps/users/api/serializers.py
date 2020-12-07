@@ -124,8 +124,8 @@ class CustomRegisterSerializer(RegisterSerializer):
         Profile.objects.get_or_create(user=user, **profile_data)
         user.profile.save()
 
-        # TODO family_creator only if parent
-        family = Family.objects.create(name=user.email)
+        # skloňovanie rodiny
+        family = Family.objects.create(name=user.last_name)
         family.save()
 
         parent = FamilyMember.objects.create(user=user, family=family)

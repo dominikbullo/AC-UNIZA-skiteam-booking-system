@@ -8,19 +8,12 @@
               <img alt="register" class="mx-auto" src="@/assets/images/logo/logo1_medium.png">
             </div>
             <div class="vx-col sm:w-full md:w-full lg:w-1/2 mx-auto self-center  d-theme-dark-bg">
-              <div class="px-8 pt-8 register-tabs-container">
+              <div class="px-8 pt-8 pb-8 register-tabs-container">
                 <div class="vx-card__title mb-4">
                   <h4 class="mb-4">{{ $t('Create Account') }}</h4>
                   <p>{{ $t('message.register') }}.</p>
                 </div>
-                <vs-tabs>
-                  <vs-tab label="Django">
-                    <register-django></register-django>
-                  </vs-tab>
-                  <vs-tab label="Social">
-                    <h1>Not implemented yet</h1>
-                  </vs-tab>
-                </vs-tabs>
+                <register-django></register-django>
               </div>
             </div>
           </div>

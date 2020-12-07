@@ -96,6 +96,7 @@ export default {
           aclChangeRole: this.$acl.change,
           userRole: response.data.user.profile.userRole
         })
+        // TODO: send parameter to enable prompt or send to another url to add family
         this.$router.push(this.$router.currentRoute.query.to || '/')
 
         this.$vs.loading.close()

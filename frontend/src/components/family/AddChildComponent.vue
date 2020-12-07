@@ -17,30 +17,37 @@
                       :placeholder="$t('Name')"
                       class="w-full mt-6"
                       data-vv-validate-on="blur"
-                      name="name"
+                      :success="!errors.has('first_name') && this.childData.last_name !==''"
+                      :danger="errors.has('first_name')"
+                      name="first_name"
                       type="text"
                       v-model="childData.first_name"
                       v-validate="'required|alpha_dash|min:3'"/>
-                  <span class="text-danger text-sm">{{ errors.first('name') }}</span>
+                  <span class="text-danger text-sm">{{ errors.first('first_name') }}</span>
                 </div>
 
                 <div class="vx-col sm:w-1/2 w-full mb-2">
                   <vs-input
                       :label-placeholder="$t('Surname')"
                       :placeholder="$t('Surname')"
+                      :success="!errors.has('last_name') && this.childData.last_name !==''"
+                      :danger="errors.has('last_name')"
                       class="w-full mt-6"
                       data-vv-validate-on="blur"
-                      name="surname"
+                      name="last_name"
                       type="text"
                       v-model="childData.last_name"
                       v-validate="'required|alpha_dash|min:3'"/>
-                  <span class="text-danger text-sm">{{ errors.first('surname') }}</span>
+                  <span class="text-danger text-sm">{{ errors.first('last_name') }}</span>
                 </div>
               </div>
 
+              <!-- TODO: strings -->
               <vs-input
-                  :label-placeholder="$t('Email')"
-                  :placeholder="$t('Email')"
+                  :label-placeholder="$t('Email (optional)')"
+                  :placeholder="$t('Email (optional)')"
+                  :success="!errors.has('email') && childData.email!==''"
+                  :danger="errors.has('email')"
                   class="w-full mt-6"
                   data-vv-validate-on="blur"
                   name="email"
@@ -71,6 +78,8 @@
               <vs-input
                   :label-placeholder="$t('Password')"
                   :placeholder="$t('Password')"
+                  :success="!(errors.has('password') || errors.has('confirm_password')) && this.childData.password1 !==''"
+                  :danger="errors.has('password') || errors.has('confirm_password')"
                   class="w-full mt-6"
                   data-vv-validate-on="blur"
                   name="password"
@@ -78,11 +87,13 @@
                   type="password"
                   v-model="childData.password1"
                   v-validate="'required|min:6'"/>
-              <span class="text-danger text-sm">{{ errors.first('password1') }}</span>
+              <span class="text-danger text-sm">{{ errors.first('password') }}</span>
 
               <vs-input
-                  :label-placeholder="$t('ConfirmPassword')"
-                  :placeholder="$t('ConfirmPassword')"
+                  :label-placeholder="$t('Confirm Password')"
+                  :placeholder="$t('Confirm Password')"
+                  :success="!(errors.has('password') || errors.has('confirm_password'))  && this.childData.password2 !==''"
+                  :danger="errors.has('confirm_password') || errors.has('password')"
                   class="w-full mt-6"
                   data-vv-as="password"
                   data-vv-validate-on="blur"
@@ -101,9 +112,7 @@
         <div class="vx-col w-full">
           <div class="mt-8 flex flex-wrap items-center justify-end">
             <vs-button class="ml-auto mt-2" @click="addChild">{{ $t('AddChild') }}</vs-button>
-            <vs-button class="ml-4 mt-2" type="border" @click="close"
-                       color="warning">Cancel
-            </vs-button>
+            <vs-button class="ml-4 mt-2" type="border" @click="close" color="warning">Cancel</vs-button>
           </div>
         </div>
       </div>
@@ -147,6 +156,7 @@ export default {
       datePickerConfig: {
         altFormat: 'd.m.Y',
         altInput: true,
+        allowInput: true,
         dateFormat: 'Y-m-d',
         locale: Slovak
       }
@@ -203,14 +213,20 @@ export default {
           this.multipleNotify(err.response.data)
         })
     },
-    // RES: https://stackoverflow.com/questions/29516136/how-to-print-all-values-of-a-nested-object
     // TODO: Global component!
     // TODO: Match error with field
+    addError (field, msg) {
+      this.errors.add({
+        field,
+        msg
+      })
+    },
     multipleNotify (obj) {
       for (const [key, value] of Object.entries(obj)) {
         if (typeof value === 'object' && !(value instanceof Array)) {
           this.multipleNotify(value)
         } else {
+          this.addError(key, value[0])
           this.$vs.notify({
             title: `Child NOT created. Error in ${key}`,
             text: value.join(),
@@ -231,7 +247,7 @@ export default {
     }
   },
   created () {
-    this.$store.dispatch('family/fetchFamily', this.$store.state.AppActiveUser.profile.family_id)
+    this.$store.dispatch('family/fetchFamily', this.$store.getters['familyID'])
   }
 }
 </script>

@@ -35,7 +35,6 @@ import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
 import { Slovak } from 'flatpickr/dist/l10n/sk.js'
 
-import moduleUserManagement from '@/store/user-management/moduleUserManagement'
 
 export default {
   components: {
@@ -54,10 +53,6 @@ export default {
     }
   },
   created () {
-    if (!moduleUserManagement.isRegistered) {
-      this.$store.registerModule('userManagement', moduleUserManagement)
-      moduleUserManagement.isRegistered = true
-    }
     this.reset_data()
   },
   computed: {
@@ -84,19 +79,19 @@ export default {
       }
 
       this.$store.dispatch('userManagement/editUser', payload)
-          .then(res => {
-            this.$vs.notify({
-              color: 'success',
-              title: 'User details changed'
-            })
+        .then(res => {
+          this.$vs.notify({
+            color: 'success',
+            title: 'User details changed'
           })
-          .catch(err => {
-            this.$vs.notify({
-              color: 'danger',
-              title: 'Something went wrong',
-              text: err.message
-            })
+        })
+        .catch(err => {
+          this.$vs.notify({
+            color: 'danger',
+            title: 'Something went wrong',
+            text: err.message
           })
+        })
     }
   }
 }

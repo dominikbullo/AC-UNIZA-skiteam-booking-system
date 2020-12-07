@@ -1,15 +1,19 @@
 <template>
   <vx-card no-shadow>
-    <!-- Img Row -->
-    <!--    <div class="flex flex-wrap items-center mb-base">-->
-    <!--      <vs-avatar :src="activeUserInfo.photoURL" size="70px" class="mr-4 mb-4"/>-->
-    <!--      &lt;!&ndash;TODO change photo&ndash;&gt;-->
-    <!--      <div>-->
-    <!--        <vs-button class="mr-4 sm:mb-0 mb-2">Upload photo</vs-button>-->
-    <!--        <vs-button type="border" color="danger">Remove</vs-button>-->
-    <!--        <p class="text-sm mt-2">Allowed JPG, GIF or PNG. Max size of 800kB</p>-->
-    <!--      </div>-->
-    <!--    </div>-->
+    <!--    Img Row-->
+    <div class="flex flex-wrap items-center mb-base">
+      <vs-avatar :src="activeUserInfo.photoURL" size="70px" class="mr-4 mb-4"/>
+      <!--TODO change photo-->
+      <div>
+        <!-- RES: https://stackoverflow.com/questions/572768/styling-an-input-type-file-button -->
+        <input id="user-settings-general-input-upload-photo"
+               type="file" accept="image/jpeg"
+               style="display:none;"/>
+        <vs-button id="user-settings-general-upload-photo-button" class="mr-4 sm:mb-0 mb-2">Upload photo</vs-button>
+        <vs-button type="border" color="danger">Remove</vs-button>
+        <p class="text-sm mt-2">Allowed JPG, GIF or PNG. Max size of 800kB</p>
+      </div>
+    </div>
 
     <!-- Info -->
     <div class="vx-row">
@@ -23,21 +27,22 @@
       </div>
     </div>
 
-    <!--    <div class="vx-col sm:w-1/2 w-full mb-2">-->
-    <!--      <vs-input class="w-full mb-base" icon-pack="feather" icon="icon-mail" label-placeholder="Email"-->
-    <!--                v-model="email"></vs-input>-->
-    <!--    </div>-->
+    <!-- Email -->
+    <vs-input class="w-full" label-placeholder="Email" v-model="email"></vs-input>
+
+    <vs-alert icon-pack="feather" icon="icon-info" class="h-full my-4" color="warning">
+      <span>Your account is not verified. <a href="#" class="hover:underline">Resend Confirmation</a></span>
+    </vs-alert>
 
     <!-- Save & Reset Button -->
     <div class="flex flex-wrap items-center justify-end">
-      <vs-button class="ml-auto mt-2" @click="save_changes">{{$t('Save Changes')}}</vs-button>
-      <vs-button class="ml-4 mt-2" type="border" color="warning" @click="reset_data">{{$t('Reset')}}</vs-button>
+      <vs-button class="ml-auto mt-2" @click="save_changes">{{ $t('Save Changes') }}</vs-button>
+      <vs-button class="ml-4 mt-2" type="border" color="warning" @click="reset_data">{{ $t('Reset') }}</vs-button>
     </div>
   </vx-card>
 </template>
 
 <script>
-import moduleUserManagement from '@/store/user-management/moduleUserManagement'
 
 export default {
   data () {
@@ -48,11 +53,12 @@ export default {
     }
   },
   created () {
-    if (!moduleUserManagement.isRegistered) {
-      this.$store.registerModule('userManagement', moduleUserManagement)
-      moduleUserManagement.isRegistered = true
-    }
     this.reset_data()
+  },
+  mounted () {
+    document.getElementById('user-settings-general-upload-photo-button').addEventListener('click', () => {
+      document.getElementById('user-settings-general-input-upload-photo').click()
+    })
   },
   computed: {
     activeUserInfo () {

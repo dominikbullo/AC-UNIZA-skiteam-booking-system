@@ -18,7 +18,7 @@ export default {
 
           // Update user details
           commit('UPDATE_USER_INFO', response.data.user, { root: true })
-          // TODO or Test FIXME id missmatch Profile/User
+          // TODO or Test FIXME id mismatch Profile/User
           commit('UPDATE_USER_INFO', response.data.user.profile, { root: true })
 
           // Set bearer token in axios
@@ -35,14 +35,6 @@ export default {
     })
   },
   registerUserDRF ({ commit }, payload) {
-    // TODO cleaner
-    // for (const property of Object.keys(payload)) {
-    //
-    //   if (payload[property] !== null) {
-    //     // Update key in localStorage
-    //     userInfo[property] = payload[property]
-    //   }
-    // }
     const {
       first_name,
       last_name,
@@ -64,20 +56,8 @@ export default {
 
       drf.registerUserEmail(first_name, last_name, user_role, birth_date, email, gender, password)
         .then(response => {
-          localStorage.setItem('accessToken', response.data.key)
-
-          // Update user details
-          commit('UPDATE_USER_INFO', response.data.user, { root: true })
-          commit('UPDATE_USER_INFO', response.data.user.profile, { root: true })
-
-          // Set bearer token in axios
-          commit('SET_BEARER', response.data.key)
-
           resolve(response)
         }).catch(error => {
-        // TODO send error messages
-        // How to display serializers validation error in vue
-        // https://github.com/axios/axios/issues/960
           reject(error)
         })
     })

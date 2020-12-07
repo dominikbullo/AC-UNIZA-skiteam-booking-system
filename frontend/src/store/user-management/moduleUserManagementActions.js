@@ -38,11 +38,12 @@ export default {
         })
     })
   },
-  fetchUser (context, userId) {
+  fetchUser ({ commit }, userId = this.state.AppActiveUser.id) {
     console.log('[STORE] fetchUser', userId)
     return new Promise((resolve, reject) => {
       axios.get(`/profile/${userId}/`)
         .then((response) => {
+          commit('UPDATE_USER_INFO', response.data, { root: true })
           resolve(response)
         })
         .catch((error) => {

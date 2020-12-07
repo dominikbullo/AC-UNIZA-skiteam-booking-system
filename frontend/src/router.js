@@ -393,7 +393,7 @@ const router = new Router({
         // PAGES
         // ====================test=========================================================
         {
-          path: '/login',
+          path: '/login/:info?',
           name: 'page-login',
           component: () => import('@/views/pages/login/Login.vue'),
           meta: {

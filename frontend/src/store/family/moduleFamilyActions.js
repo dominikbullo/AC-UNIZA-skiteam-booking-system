@@ -52,5 +52,40 @@ export default {
           reject(error)
         })
     })
+  },
+  generateToken ({ commit }, familyId) {
+    return new Promise((resolve, reject) => {
+      axios.get(`/family/${familyId}/token`)
+        .then((response) => {
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
+  },
+  getInfoChangeFamily (context, token) {
+    return new Promise((resolve, reject) => {
+      axios.get(`/family/add/${token}`)
+        .then((response) => {
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
+  },
+  changeFamily ({ commit }, token) {
+    return new Promise((resolve, reject) => {
+      axios.post(`/family/add/${token}`)
+        .then((response) => {
+          console.log('response', response)
+          commit('UPDATE_FAMILY', response.data)
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
   }
 }

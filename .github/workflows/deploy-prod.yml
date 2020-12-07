@@ -18,7 +18,8 @@ jobs:
           command: |
             cd ${{ secrets.PROJECT_DIR }}&&\
             git reset --hard HEAD &&\
-            git pull &&\echo "${{ secrets.CR_PAT }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin &&\
+            git pull &&\
+            echo "${{ secrets.CR_PAT }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin &&\
             docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull &&\
             docker-compose -f docker-compose.yml -f docker-compose.prod.yml build &&\
             docker-compose -f docker-compose.yml -f docker-compose.prod.yml down &&\

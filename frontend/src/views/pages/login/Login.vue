@@ -10,24 +10,13 @@
               <img src="@/assets/images/logo/logo1_medium.png" alt="login" class="mx-auto">
             </div>
 
-
-            <div class="vx-col sm:w-full md:w-full lg:w-1/2 d-theme-dark-bg">
-              <div class="px-8 pt-8 login-tabs-container">
-
-                <div class="vx-card__title mb-4">
+            <div class="vx-col sm:w-full md:w-full lg:w-1/2 d-theme-dark-bg ">
+              <div class="p-8 items-center">
+                <div class="vx-card__title mb-8">
                   <h4 class="mb-4">{{ $t('Login') }}</h4>
                   <p>{{ $t('message.login') }}.</p>
                 </div>
-
-                <vs-tabs>
-                  <vs-tab label="DRF">
-                    <login-d-r-f></login-d-r-f>
-                  </vs-tab>
-                  <vs-tab :label="$t('Social')">
-                    <h1>Not implemented yet</h1>
-                  </vs-tab>
-                </vs-tabs>
-
+                <login-d-r-f></login-d-r-f>
               </div>
             </div>
           </div>
@@ -44,6 +33,30 @@ import LoginDRF from './LoginDRF.vue'
 export default {
   components: {
     LoginDRF
+  },
+  props: {
+    info: {
+      type: String,
+      default: ''
+    }
+  },
+  created () {
+    if (this.$route.params.info) {
+      if (this.$route.params.info === 'success') {
+        this.$vs.notify({
+          color: 'success',
+          title: 'Email verified',
+          text: 'Your email was successfully verified! Now you can log in.'
+        })
+      } else {
+        this.$vs.notify({
+          color: 'danger',
+          title: 'Cannot verify your email',
+          text: 'We are sorry. Something went wrong when verifying your email. Please try again or contact administrator.'
+        })
+      }
+      this.$router.push({ name: 'page-login' }).catch(() => {})
+    }
   }
 }
 </script>

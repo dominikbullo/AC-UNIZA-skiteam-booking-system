@@ -1,46 +1,57 @@
-<!--TODO Add gender picker-->
 <template>
   <div class="clearfix">
+
+    <vs-popup :active.sync="redirect" title="Redirect">
+      <vs-progress indeterminate color="primary"></vs-progress>
+      <div class="mt-4">
+        <h4>You will be redirected to login page in <b>{{ countDown }}</b> second</h4>
+
+        <p class="mt-4">If not you can to it manually
+          <router-link tag="a" :to="{ name: 'page-login' }">here</router-link>
+        </p>
+      </div>
+    </vs-popup>
+
     <div class="vx-row">
       <div class="vx-col sm:w-1/2 w-full mb-2">
         <vs-input
             :label-placeholder="$t('First Name')"
             :placeholder="$t('First Name')"
-            :success="!errors.first('Name') && this.first_name !==''"
-            :danger="errors.first('Name')"
+            :success="!errors.has('first_name') && this.first_name !==''"
+            :danger="errors.has('first_name')"
             class="w-full mt-6"
             data-vv-validate-on="blur"
-            name="Name"
+            name="first_name"
             v-model="first_name"
             v-validate="'required|alpha_dash|min:3'"/>
-        <span class="text-danger text-sm">{{ errors.first('Name') }}</span>
+        <span class="text-danger text-sm">{{ errors.first('first_name') }}</span>
       </div>
       <div class="vx-col sm:w-1/2 w-full mb-2">
         <vs-input
             :label-placeholder="$t('Surname')"
             :placeholder="$t('Surname')"
-            :success="!errors.first('Surname') && this.last_name !==''"
-            :danger="errors.first('Surname')"
+            :success="!errors.has('last_name') && this.last_name !==''"
+            :danger="errors.has('last_name')"
             class="w-full mt-6"
             data-vv-validate-on="blur"
-            name="Surname"
+            name="last_name"
             v-model="last_name"
             v-validate="'required|alpha_dash|min:3'"/>
-        <span class="text-danger text-sm">{{ errors.first('Surname') }}</span>
+        <span class="text-danger text-sm">{{ errors.first('last_name') }}</span>
       </div>
     </div>
 
     <vs-input
         :label-placeholder="$t('Email')"
         :placeholder="$t('Email')"
-        :success="!errors.first('Email') && this.email !==''"
-        :danger="errors.first('Email')"
+        :success="!errors.has('email') && this.email !==''"
+        :danger="errors.has('email')"
         class="w-full mt-6"
-        name="Email"
+        name="email"
         type="email"
         v-model="email"
         v-validate="'required|email'"/>
-    <span class="text-danger text-sm">{{ errors.first('Email') }}</span>
+    <span class="text-danger text-sm">{{ errors.first('email') }}</span>
 
     <!-- RES: https://flatpickr.js.org/formatting/ -->
     <div>
@@ -61,8 +72,8 @@
     <vs-input
         :label-placeholder="$t('Password')"
         :placeholder="$t('Password')"
-        :success="!errors.first('confirm_password') && this.password !=='' && this.confirm_password !==''"
-        :danger="errors.first('confirm_password')"
+        :success="!errors.has('confirm_password') && this.password !=='' && this.confirm_password !==''"
+        :danger="errors.has('confirm_password')"
         class="w-full mt-6"
         name="password"
         ref="password"
@@ -74,8 +85,8 @@
     <vs-input
         :label-placeholder="$t('Confirm Password')"
         :placeholder="$t('Confirm Password')"
-        :success="!errors.first('confirm_password') && this.confirm_password !==''"
-        :danger="errors.first('confirm_password')"
+        :success="!errors.has('confirm_password') && this.confirm_password !==''"
+        :danger="errors.has('confirm_password')"
         class="w-full mt-6"
         data-vv-as="password"
         name="confirm_password"
@@ -86,7 +97,9 @@
 
     <vs-checkbox class="mt-6" v-model="isTermsConditionAccepted">{{ $t('message.terms_accept') }}.</vs-checkbox>
     <vs-button class="mt-6" to="/login" type="border">{{ $t('Login') }}</vs-button>
-    <vs-button :disabled="!validateForm" @click="registerUserDRF" class="float-right mt-6">{{ $t('Register') }}
+    <vs-button :disabled="!validateForm" @click="registerUserDRF" class="float-right mt-6">{{
+        $t('Register')
+      }}
     </vs-button>
   </div>
 </template>
@@ -105,6 +118,9 @@ export default {
   },
   data () {
     return {
+      redirect: false,
+      countDown: 7,
+
       first_name: process.env.VUE_APP_NAME || '',
       last_name: process.env.VUE_APP_SURNAME || '',
       birth_date: this.moment().format('YYYY-MM-DD'),
@@ -118,6 +134,7 @@ export default {
       datePickerConfig: {
         altFormat: 'd.m.Y',
         altInput: true,
+        allowInput: true,
         dateFormat: 'Y-m-d',
         locale: Slovak
       }
@@ -125,8 +142,6 @@ export default {
   },
   computed: {
     validateForm () {
-      // TODO watch validation
-      // return true
       return !this.errors.any() &&
           this.first_name !== '' &&
           this.last_name !== '' &&
@@ -134,20 +149,26 @@ export default {
           this.birth_date !== '' &&
           this.gender !== '' &&
           this.password !== '' &&
-          this.confirm_password !== '' &&
-          this.isTermsConditionAccepted === true
+          this.confirm_password !== ''
     }
   },
   methods: {
-    datepickerClosedFunction () {
-      // need to validate
-      this.$vs.notify({
-        title: 'Datepicker',
-        text: this.birth_date,
-        iconPack: 'feather',
-        icon: 'icon-alert-circle',
-        color: 'success'
+    addError (field, msg) {
+      this.errors.add({
+        field,
+        msg
       })
+    },
+    countDownTimer () {
+      this.redirect = true
+      if (this.countDown > 0) {
+        setTimeout(() => {
+          this.countDown -= 1
+          this.countDownTimer()
+        }, 1000)
+      } else {
+        this.$router.push({ name: 'page-login' }).catch(() => {})
+      }
     },
     checkLogin () {
       // If user is already logged in notify
@@ -171,6 +192,7 @@ export default {
     registerUserDRF () {
       // If form is not validated or user is already login return
       if (!this.validateForm || !this.checkLogin()) return
+      this.$vs.loading()
       const payload = {
         userDetails: {
           first_name: this.first_name,
@@ -184,22 +206,28 @@ export default {
         },
         notify: this.$vs.notify
       }
-
       this.$store.dispatch('auth/registerUserDRF', payload).then((response) => {
-        this.$store.dispatch('updateUserRole', {
-          aclChangeRole: this.$acl.change,
-          userRole: response.data.user.profile.userRole
-        })
-        this.$router.push(this.$router.currentRoute.query.to || '/')
         this.$vs.loading.close()
         this.$vs.notify({
           color: 'success',
-          title: 'User Created'
+          title: 'Your account was created',
+          text: 'Please verify your email before login'
         })
+        this.countDownTimer()
       }).catch(error => {
         this.$vs.loading.close()
-        //https://stackoverflow.com/questions/29626729/how-to-function-call-using-this-inside-foreach-loop/29626762
-        // TODO -> into formu not as notifier
+        console.log(error.response.data)
+        // this.errors.add('Email', 'test', 'server')
+        for (const [key, value] of Object.entries(error.response.data)) {
+          console.log(key, value)
+          this.addError(key, value[0])
+        }
+        this.$vs.notify({
+          color: 'danger',
+          title: 'Something went wrong',
+          text: 'Cannot create your account. Check the fields and try again'
+        })
+        console.error(error)
       })
     }
   }
