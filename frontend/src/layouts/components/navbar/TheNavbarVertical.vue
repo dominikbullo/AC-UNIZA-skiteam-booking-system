@@ -8,7 +8,10 @@
         <!-- SM - OPEN SIDEBAR BUTTON -->
         <feather-icon class="sm:inline-flex xl:hidden cursor-pointer p-2" icon="MenuIcon" @click.stop="showSidebar"/>
 
+        <bookmarks :navbarColor="navbarColor"/>
+
         <vs-spacer/>
+
 
         <i18n/>
 
@@ -54,7 +57,7 @@ export default {
     }
   },
   components: {
-    // Bookmarks,
+    Bookmarks,
     I18n,
     SearchBar,
     NotificationDropDown,

@@ -1,6 +1,6 @@
 <template>
   <div id="page-user-settings-change-family">
-    <vx-card class="mt-5 vx-card" collapse-action
+    <vx-card class="mt-5 vx-card"
              title="Generate family token"
              subtitle="You can generate token and sent it to someone. They can then join your family and manage children.">
       <div class="vx-col w-full">
@@ -13,7 +13,7 @@
         </div>
       </div>
     </vx-card>
-    <vx-card class="mt-5 vx-card" collapse-action
+    <vx-card class="mt-5 vx-card"
              title="Add to family"
              subtitle-color="danger"
              subtitle="Insert token from family which you want to join. This action cannot be reverted!">
@@ -84,13 +84,13 @@ export default {
         type: 'confirm',
         color: 'danger',
         title: 'Confirm',
-        text: 'This action cannot be reverted!\n',
+        text: 'This action cannot be reverted!',
         accept: this.changeFamily
       })
     },
     changeFamily () {
       this.$store.dispatch('family/changeFamily', this.token).then(() => {
-        this.$store.dispatch('userManagement/fetchUser').then(res => {
+        this.$store.dispatch('userManagement/fetchActiveUser').then(res => {
           console.log('response', res)
           console.log('updated', this.$store.state.AppActiveUser)
           this.$vs.notify({

@@ -46,9 +46,7 @@
           {{ $t('AddChild') }}
         </vs-button>
 
-        <add-child-component :isPromptActive="addChildPromptActive"
-                             @closePrompt="toggleAddChildPrompt"/>
-
+        <add-child-component :isPromptActive="addChildPromptActive" @closePrompt="toggleAddChildPrompt"/>
       </div>
 
       <!-- RES: Height https://www.ag-grid.com/javascript-grid-width-and-height/-->
@@ -105,8 +103,8 @@ export default {
     // Cell Renderer
     /* eslint-disable vue/no-unused-components */
     CellRendererLink,
-    CellRendererVerified,
-    CellRendererActions
+    CellRendererVerified
+    // CellRendererActions
     /* eslint-enable vue/no-unused-components */
   },
   data () {
@@ -128,29 +126,22 @@ export default {
       },
 
       columnDefs: [
-
         {
           headerName: 'Email',
           field: 'email',
           filter: true,
-          width: 210,
+          width: 300,
           cellRendererFramework: 'CellRendererLink',
           checkboxSelection: true,
           headerCheckboxSelectionFilteredOnly: true,
           headerCheckboxSelection: true
         },
-        //  TODO: displayName
-        //  TODO: avatar
-        // {
-        //   headerName: 'Display Name',
-        //   field: 'display_name',
-        //   filter: true,
-        //   width: 200,
-        //   cellRendererFramework: 'CellRendererLink',
-        //   checkboxSelection: true,
-        //   headerCheckboxSelectionFilteredOnly: true,
-        //   headerCheckboxSelection: true
-        // },
+        {
+          headerName: 'Display Name',
+          field: 'profile.displayName',
+          filter: true,
+          width: 250
+        },
         {
           headerName: 'First Name',
           field: 'first_name',
@@ -196,14 +187,14 @@ export default {
           width: 110,
           cellRendererFramework: 'CellRendererVerified',
           cellClass: 'text-center'
-        },
-        // TODO actions
-        {
-          headerName: 'Actions',
-          field: 'transactions',
-          width: 150,
-          cellRendererFramework: 'CellRendererActions'
         }
+        // TODO actions
+        // {
+        //   headerName: 'Actions',
+        //   field: 'transactions',
+        //   width: 150,
+        //   cellRendererFramework: 'CellRendererActions'
+        // }
       ],
 
       // Cell Renderer Components
@@ -328,10 +319,11 @@ export default {
   mounted () {
     this.gridApi = this.gridOptions.api
     // TODO: open on link
-    this.activePrompt = true
+    console.log('this.$route.hash.toLowerCase()', this.$route.hash.toLowerCase())
+    this.addChildPromptActive = this.$route.hash.toLowerCase() === '#addchild'
+
   },
   created () {
-    console.log(' this.$store.getters[\'familyID\']', this.$store.getters['familyID'])
     this.$store.dispatch('family/fetchFamily', this.$store.getters['familyID'])
   }
 }
