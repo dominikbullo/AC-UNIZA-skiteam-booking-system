@@ -124,7 +124,6 @@ class CustomRegisterSerializer(RegisterSerializer):
         Profile.objects.get_or_create(user=user, **profile_data)
         user.profile.save()
 
-        # skloňovanie rodiny
         family = Family.objects.create(name=user.last_name)
         family.save()
 

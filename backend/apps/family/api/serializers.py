@@ -1,3 +1,6 @@
+from allauth.account.models import EmailAddress
+from allauth.account.utils import send_email_confirmation
+
 from apps.events.models import Category, Season
 from apps.family.models import Child, FamilyMember, Family
 from apps.users.api.serializers import CustomRegisterSerializer, BaseUserSerializer
@@ -42,9 +45,15 @@ class ChildSerializer(serializers.ModelSerializer):
         # RES: https://stackoverflow.com/questions/16664874/how-to-add-an-element-to-the-beginning-of-an-ordereddict
         user_data.update({'username': username})
 
-        user = get_user_model().objects.create(**user_data)
+        # RES: https://stackoverflow.com/questions/30085996/djangorestframework-registering-a-user-difference-between-userserializer-save
+        user = get_user_model().objects.create_user(**user_data)
         user.set_password(password)
         user.save()
+
+        # RES: https://stackoverflow.com/questions/29147550/how-do-i-create-a-proper-user-with-django-allauth
+        if user_data.get('email', ''):
+            EmailAddress.objects.create(user=user, email=user_data.get('email', ''), primary=True, verified=False)
+            send_email_confirmation(self.context.get("request"), user)
 
         Profile.objects.get_or_create(user=user, **profile_data)
         user.profile.save()
