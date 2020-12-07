@@ -38,7 +38,19 @@ export default {
         })
     })
   },
-  fetchUser ({ commit }, userId = this.state.AppActiveUser.id) {
+  fetchUser ({ commit }, userId) {
+    console.log('[STORE] fetchUser', userId)
+    return new Promise((resolve, reject) => {
+      axios.get(`/profile/${userId}/`)
+        .then((response) => {
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
+  },
+  fetchActiveUser ({ commit }, userId = this.state.AppActiveUser.id) {
     console.log('[STORE] fetchUser', userId)
     return new Promise((resolve, reject) => {
       axios.get(`/profile/${userId}/`)
