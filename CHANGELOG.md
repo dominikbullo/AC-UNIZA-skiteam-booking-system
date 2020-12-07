@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.1](https://github.com/dominikbullo/SportAgenda/compare/v0.3.0...v0.3.1) (2020-12-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* **family:** Merging family from one to another family with all members by token
+
+### Features
+
+* **child_form:** Add child form active color on fields and added backend errors ([3cbe45f](https://github.com/dominikbullo/SportAgenda/commit/3cbe45fc078a2e5b3902e4d1fd1e6d2ee12d1665))
+* **children:** Sending verification email if they have one ([9836e81](https://github.com/dominikbullo/SportAgenda/commit/9836e81b01e58b97f52c820601151503bf050c24)), closes [SA-59](https://sportagenda.myjetbrains.com/youtrack/issue/SA-59)
+* **family:** Merging family from one to another family with all members by token ([7c3e167](https://github.com/dominikbullo/SportAgenda/commit/7c3e167cb3c38d50ce10d3a3e43707277c146387)), closes [SA-57](https://sportagenda.myjetbrains.com/youtrack/issue/SA-57)
+* **registration:** Added email templates, handler success/failed verify email and redirect after registration. ([82de272](https://github.com/dominikbullo/SportAgenda/commit/82de2723c54eab139307f771ec65054ed611cd02))
+
+
+### Bug Fixes
+
+* User changed to another user (wrong store call from family change) ([66e6d2e](https://github.com/dominikbullo/SportAgenda/commit/66e6d2eb54a96c9831bede9cd0782063f0a3be58))
+
 ## [0.3.0](https://github.com/dominikbullo/sport_club_management_system/compare/v0.2.0...v0.3.0) (2020-12-03)
 
 
