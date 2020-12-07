@@ -44,7 +44,7 @@ class EventAdmin(PolymorphicParentModelAdmin):
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     filter_horizontal = ('members',)
-    __fields = ("name", "season")
+    __fields = ("name", "season", "year_from", "year_until",)
     list_filter = __fields
     list_display = admin.ModelAdmin.list_display + __fields
 

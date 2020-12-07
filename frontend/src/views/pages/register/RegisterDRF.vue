@@ -1,4 +1,3 @@
-<!--TODO Add gender picker-->
 <template>
   <div class="clearfix">
 
@@ -18,41 +17,41 @@
         <vs-input
             :label-placeholder="$t('First Name')"
             :placeholder="$t('First Name')"
-            :success="!errors.first('Name') && this.first_name !==''"
-            :danger="errors.first('Name')"
+            :success="!errors.has('first_name') && this.first_name !==''"
+            :danger="errors.has('first_name')"
             class="w-full mt-6"
             data-vv-validate-on="blur"
-            name="Name"
+            name="first_name"
             v-model="first_name"
             v-validate="'required|alpha_dash|min:3'"/>
-        <span class="text-danger text-sm">{{ errors.first('Name') }}</span>
+        <span class="text-danger text-sm">{{ errors.first('first_name') }}</span>
       </div>
       <div class="vx-col sm:w-1/2 w-full mb-2">
         <vs-input
             :label-placeholder="$t('Surname')"
             :placeholder="$t('Surname')"
-            :success="!errors.first('Surname') && this.last_name !==''"
-            :danger="errors.first('Surname')"
+            :success="!errors.has('last_name') && this.last_name !==''"
+            :danger="errors.has('last_name')"
             class="w-full mt-6"
             data-vv-validate-on="blur"
-            name="Surname"
+            name="last_name"
             v-model="last_name"
             v-validate="'required|alpha_dash|min:3'"/>
-        <span class="text-danger text-sm">{{ errors.first('Surname') }}</span>
+        <span class="text-danger text-sm">{{ errors.first('last_name') }}</span>
       </div>
     </div>
 
     <vs-input
         :label-placeholder="$t('Email')"
         :placeholder="$t('Email')"
-        :success="!errors.first('Email') && this.email !==''"
-        :danger="errors.first('Email')"
+        :success="!errors.has('email') && this.email !==''"
+        :danger="errors.has('email')"
         class="w-full mt-6"
-        name="Email"
+        name="email"
         type="email"
         v-model="email"
         v-validate="'required|email'"/>
-    <span class="text-danger text-sm">{{ errors.first('Email') }}</span>
+    <span class="text-danger text-sm">{{ errors.first('email') }}</span>
 
     <!-- RES: https://flatpickr.js.org/formatting/ -->
     <div>
@@ -73,8 +72,8 @@
     <vs-input
         :label-placeholder="$t('Password')"
         :placeholder="$t('Password')"
-        :success="!errors.first('confirm_password') && this.password !=='' && this.confirm_password !==''"
-        :danger="errors.first('confirm_password')"
+        :success="!errors.has('confirm_password') && this.password !=='' && this.confirm_password !==''"
+        :danger="errors.has('confirm_password')"
         class="w-full mt-6"
         name="password"
         ref="password"
@@ -86,8 +85,8 @@
     <vs-input
         :label-placeholder="$t('Confirm Password')"
         :placeholder="$t('Confirm Password')"
-        :success="!errors.first('confirm_password') && this.confirm_password !==''"
-        :danger="errors.first('confirm_password')"
+        :success="!errors.has('confirm_password') && this.confirm_password !==''"
+        :danger="errors.has('confirm_password')"
         class="w-full mt-6"
         data-vv-as="password"
         name="confirm_password"
@@ -98,7 +97,9 @@
 
     <vs-checkbox class="mt-6" v-model="isTermsConditionAccepted">{{ $t('message.terms_accept') }}.</vs-checkbox>
     <vs-button class="mt-6" to="/login" type="border">{{ $t('Login') }}</vs-button>
-    <vs-button :disabled="!validateForm" @click="registerUserDRF" class="float-right mt-6">{{ $t('Register') }}
+    <vs-button :disabled="!validateForm" @click="registerUserDRF" class="float-right mt-6">{{
+        $t('Register')
+      }}
     </vs-button>
   </div>
 </template>
@@ -141,8 +142,6 @@ export default {
   },
   computed: {
     validateForm () {
-      // TODO watch validation
-      // return true
       return !this.errors.any() &&
           this.first_name !== '' &&
           this.last_name !== '' &&
@@ -150,11 +149,16 @@ export default {
           this.birth_date !== '' &&
           this.gender !== '' &&
           this.password !== '' &&
-          this.confirm_password !== '' &&
-          this.isTermsConditionAccepted === true
+          this.confirm_password !== ''
     }
   },
   methods: {
+    addError (field, msg) {
+      this.errors.add({
+        field,
+        msg
+      })
+    },
     countDownTimer () {
       this.redirect = true
       if (this.countDown > 0) {
@@ -212,6 +216,12 @@ export default {
         this.countDownTimer()
       }).catch(error => {
         this.$vs.loading.close()
+        console.log(error.response.data)
+        // this.errors.add('Email', 'test', 'server')
+        for (const [key, value] of Object.entries(error.response.data)) {
+          console.log(key, value)
+          this.addError(key, value[0])
+        }
         this.$vs.notify({
           color: 'danger',
           title: 'Something went wrong',
