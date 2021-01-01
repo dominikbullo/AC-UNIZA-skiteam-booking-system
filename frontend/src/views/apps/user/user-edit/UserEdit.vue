@@ -77,16 +77,16 @@ export default {
   methods: {
     fetch_user_data (userId) {
       this.$store.dispatch('userManagement/fetchDefaultUser', userId)
-          .then(res => {
-            this.user_data = res.data
-          })
-          .catch(err => {
-            if (err.response.status === 404) {
-              this.user_not_found = true
-              return
-            }
-            console.error(err)
-          })
+        .then(res => {
+          this.user_data = res.data
+        })
+        .catch(err => {
+          if (err.response.status === 404) {
+            this.user_not_found = true
+            return
+          }
+          console.error(err)
+        })
     }
   },
   created () {

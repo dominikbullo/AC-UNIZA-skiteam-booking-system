@@ -37,7 +37,7 @@ class ChildViewSet(viewsets.ModelViewSet):
     queryset = Child.objects.all()
     serializer_class = ChildSerializer
 
-    # Sending parent of child (user which created him)
+    # Sending parent of child (user which created_at him)
     def perform_create(self, serializer):
         serializer.save(parent=self.request.user)
 

@@ -192,18 +192,18 @@ export default {
     const userId = this.$route.params.userId
     console.log('userId', userId)
     this.$store.dispatch('userManagement/fetchUser', userId)
-        .then(res => {
-          this.user_data = res.data
-          console.log('res.data', res.data)
-          console.log('this.user_data', this.user_data)
-        })
-        .catch(err => {
-          if (err.response.status === 404) {
-            this.user_not_found = true
-            return
-          }
-          console.error(err)
-        })
+      .then(res => {
+        this.user_data = res.data
+        // console.log('res.data', res.data)
+        // console.log('this.user_data', this.user_data)
+      })
+      .catch(err => {
+        if (err.response.status === 404) {
+          this.user_not_found = true
+          return
+        }
+        console.error(err)
+      })
   }
 }
 

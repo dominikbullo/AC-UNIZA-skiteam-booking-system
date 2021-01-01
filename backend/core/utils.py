@@ -1,9 +1,12 @@
+import unicodedata
+
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 
 from apps.family.models import FamilyMember
+from apps.users.models import User
 from config import settings
 
 
@@ -59,3 +62,20 @@ def get_family_id(self, instance):
         print(e)
         print("User does not have family or is not family member!")
         return -1
+
+
+def generate_custom_unique_username(user_data):
+    username = str(user_data.get('first_name', '') + user_data.get('last_name', '')).lower()
+    # RES: https://www.py.cz/Cestina3X
+    username_candidate_normalized = ''
+    for c in username:
+        if not unicodedata.combining(c):
+            username_candidate_normalized += c
+
+    print(username_candidate_normalized)
+    counter = 1
+    while User.objects.filter(username=username):
+        username = username + str(counter)
+        counter += 1
+    # RES: https://stackoverflow.com/questions/16664874/how-to-add-an-element-to-the-beginning-of-an-ordereddict
+    user_data.update({'username': username})

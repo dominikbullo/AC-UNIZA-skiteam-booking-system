@@ -112,12 +112,15 @@ export default {
         })
     })
   },
-  changeEventMembers ({ commit }, payload) {
+  addEventResponse ({ commit }, payload) {
     console.log('payload changeEventMembers', payload)
     return new Promise((resolve, reject) => {
-      axios.post(`event/${payload.id}/change/`, { participants: payload.data })
+      axios.post(`event/${payload.eventID}/response/`, payload.data)
         .then((response) => {
-          commit('UPDATE_EVENT', response.data)
+          commit('UPDATE_EVENT_RESPONSE', {
+            eventID: payload.eventID,
+            data: response.data
+          })
           resolve(response)
         })
         .catch((error) => {
@@ -239,8 +242,55 @@ export default {
           reject(error)
         })
     })
+  },
+  createMergedArrayFromResponsesAndUsers ({ commit }, eventID) {
+    /*
+     Creating merged array from responses and users to display if user fill
+     response, if fill yes or no, or display blank
+     1. Get all users (children)
+     2. Get responses from event
+     3. Add users which does not have response with going=null
+     */
+
+    const merged = []
+    const eventResponses = this.getters['calendar/getEventResponses'](eventID)
+    // console.log('eventResponses', eventResponses)
+    const eventParticipants = this.getters['calendar/getEventParticipants'](eventID)
+    // console.log('eventResponses', eventParticipants)
+
+    this.dispatch('userManagement/fetchUsers').then(() => {
+      const users = this.getters['userManagement/getAppUsers']
+
+      for (const user of Object.values(users)) {
+        const foundResponse = Object.values(eventResponses).find(x => x.user_to_event.id === user.id)
+        const foundParticipants = Object.values(eventParticipants).find(x => x.id === user.id)
+        // TODO: maybe iterate only responses but, if you want to add user as admin, create response object, not direct rewrite
+
+        let going = null
+        // if foundResponse
+        if (foundResponse && foundResponse.hasOwnProperty('going')) {
+          going = foundResponse.going
+        }
+        // FIXME: Pozor na to, že user môže byť pridaný napríklad aj adminom napriamo, to znamená, že tiež by mal mať going true
+        // if (foundParticipants) {
+        //   going = true
+        // }
+
+        const tmp = {
+          going,
+          'user_to_event':
+            {
+              'id': user.id,
+              'displayName': user.displayName
+            }
+        }
+        merged.push(tmp)
+      }
+      // console.log('***********merged**********', merged)
+      commit('UPDATE_EVENT_RESPONSES', {
+        eventID,
+        merged
+      })
+    })
   }
-// updateOrAddEvent ({ commit }, event) {
-//   commit('UPDATE_EVENT', event.data)
-// }
 }

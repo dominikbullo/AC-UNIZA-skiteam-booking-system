@@ -1,5 +1,3 @@
-from django.utils import timezone
-
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.generics import get_object_or_404
@@ -9,11 +7,12 @@ from rest_polymorphic.serializers import PolymorphicSerializer
 from core import choices
 
 from apps.events.models import (Event, SkiTraining, SkiRace, Season, Category, Location, RaceOrganizer, EventType,
-                                SkisType, Accommodation)
+                                SkisType, Accommodation, EventResponse)
 from apps.family.models import Child
 from apps.users.models import Profile
 
-from apps.users.api.serializers import BaseProfileSerializer
+from apps.users.api.serializers import BaseProfileSerializer, BaseUserSerializer
+
 
 class SeasonSerializer(serializers.ModelSerializer):
     displayName = serializers.CharField(source='get_name_display', read_only=True)
@@ -79,18 +78,51 @@ class ParticipantsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ("id", "displayName")
+        fields = ("id", "displayName",)
+
+
+class EventResponseSerializer(serializers.ModelSerializer):
+
+    def create(self, validated_data):
+        # for x in validated_data:;
+        #     print(f"{x} -> {validated_data[x]}")
+        response, created = EventResponse.objects.update_or_create(
+            user_to_event=validated_data.get('user_to_event', None),
+            event=validated_data.get('event', None))
+
+        response.going = validated_data.get('going', None)
+        response.save()
+        return response
+
+    def to_representation(self, instance):
+        self.fields["user_to_event"] = ParticipantsSerializer(read_only=True)
+        to_representation = super(EventResponseSerializer, self).to_representation(instance)
+        return to_representation
+
+    class Meta:
+        model = EventResponse
+        exclude = ("id", "event")
 
 
 class BaseEventSerializer(serializers.ModelSerializer):
+    responses = serializers.SerializerMethodField()
+
+    def get_responses(self, item):
+        # get unique newest instance for each child child
+        qs = EventResponse.objects.order_by("user_to_event__user_id", "-created_at") \
+            .filter(event=item).distinct("user_to_event__user_id")
+        serializer = EventResponseSerializer(instance=qs, many=True)
+        return serializer.data
 
     def create(self, validated_data):
         validated_data["season"], created = Season.objects.get_or_create(current=True)
         if created:
-            print("Season created")
+            print("Season created_at")
         return super(BaseEventSerializer, self).create(validated_data)
 
     def to_representation(self, instance):
+        # TODO: order category by year from
+        # TODO: order location by recent used, or used count
         self.fields["accommodation"] = AccommodationSerializer(many=True, read_only=True)
         self.fields["participants"] = ParticipantsSerializer(many=True, read_only=True)
         self.fields["category"] = CategorySerializer(many=True, read_only=True)

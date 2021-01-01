@@ -1,16 +1,18 @@
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.db import transaction
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django_filters import rest_framework as filters
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, generics, mixins
 from rest_framework.decorators import action
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
-from apps.events.models import Event, Season, Category, Location, RaceOrganizer, EventType, SkisType, Accommodation
+from apps.events.models import (Event, Season, Category, Location, RaceOrganizer, EventType, SkisType, Accommodation,
+                                EventResponse)
 from apps.events.api.serializers import (EventPolymorphicSerializer, SeasonSerializer, CategorySerializer,
                                          LocationSerializer, RaceOrganizerSerializer, EventTypeSerializer,
-                                         SkisTypeSerializer, AccommodationSerializer)
+                                         SkisTypeSerializer, AccommodationSerializer, EventResponseSerializer)
 
 # RES: https://github.com/LondonAppDeveloper/recipe-app-api/blob/master/app/recipe/views.py
 # RES: https://stackoverflow.com/questions/51016896/how-to-serialize-inherited-models-in-django-rest-framework
@@ -25,7 +27,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = CategorySerializer
 
     def get_queryset(self):
-        return get_object_custom_queryset(self.request, Category).order_by('year_from')
+        return get_object_custom_queryset(self.request, Category)
 
 
 class MyFilterBackend(filters.DjangoFilterBackend):
@@ -59,48 +61,6 @@ class EventViewSet(viewsets.ModelViewSet):
     def get_event(self, pk):
         return get_object_or_404(Event, pk=pk)
 
-    # RES: https://stackoverflow.com/questions/36365326/django-rest-framework-doesnt-serialize-serializermethodfield
-    @action(detail=True, methods=['post'], url_path='change', permission_classes=[IsAuthenticatedOrReadOnly])
-    def add_users_to_event(self, request, pk=None):
-        participants = request.data.get("participants", None)
-        if not participants:
-            Response(status=status.HTTP_400_BAD_REQUEST)
-
-        failed = []
-        event_id = pk
-        event = self.get_event(event_id)
-        event_serializer = EventPolymorphicSerializer(event)
-
-        user_family_id = request.user.familymember.family_id
-        print(f"Request from family {user_family_id}")
-
-        children = FamilyMember.objects.filter(family__id=user_family_id).values_list('user__profile__id', flat=True)
-        print(f"Children from family {user_family_id}: {children}")
-
-        do_not_touch_these = event.participants.exclude(id__in=children)
-        print("do_not_touch_these", do_not_touch_these)
-
-        interested_in = event.participants.filter(id__in=children)
-        print("interested_in", interested_in)
-
-        event_without_user_children = event.participants.remove(*interested_in)
-        print("event_without", event_without_user_children)
-
-        for profile_ID in participants:
-            try:
-                event.participants.add(get_object_or_404(Profile, id=profile_ID))
-            except Http404:
-                failed.append(profile_ID)
-                print("User with profile id", profile_ID, "not found")
-                # raise ValidationError("Profile %s not found" % profile_ID)
-                pass
-
-        if len(failed) > 0:
-            return Response({"failed": failed}, status=status.HTTP_404_NOT_FOUND)
-
-        return Response(event_serializer.data, status=status.HTTP_200_OK)
-
-    # TODO: view to add/delete accommodation of event
     @action(detail=True, methods=['post'], url_path='accommodation', permission_classes=[IsAuthenticatedOrReadOnly])
     def add_accommodation(self, request, pk=None):
         # raise Exception('Not Implemented yet!')
@@ -156,3 +116,47 @@ class SkisTypeViewSet(viewsets.ModelViewSet):
 class AccommodationViewSet(viewsets.ModelViewSet):
     queryset = Accommodation.objects.all()
     serializer_class = AccommodationSerializer
+
+
+# RES: https://stackoverflow.com/a/61490489/10523982
+class EventResponseCreateAPIView(generics.CreateAPIView):
+    queryset = EventResponse.objects.all().order_by('created_at')
+    serializer_class = EventResponseSerializer
+
+    # filter_backends = (filters.DjangoFilterBackend,)
+    # filterset_fields = ('event', "answerer", "user_to_event",)
+
+    def perform_create(self, serializer):
+        answerer = self.request.user.profile
+
+        kwarg_pk = self.kwargs.get("pk")
+        event = get_object_or_404(Event, id=kwarg_pk)
+
+        going = self.request.data.get("going", None)
+        user_to_event = self.request.data.get("user_to_event", None)
+
+        # Do not create response if you already have same answer as newest entry in DB
+        # FIXME : do not check only responses but also participants on event -> maybe thats event better solution
+        # if event.responses.filter(user_to_event=user_to_event).exists() and \
+        #         event.responses.filter(user_to_event=user_to_event).order_by("-created_at").first().going == going:
+        #     raise ValidationError("User is already up to date with your answer")
+
+        # Save the response first (in case of failure)
+        self.manage_user_on_event(get_object_or_404(Profile, id=user_to_event), event, going)
+        serializer.save(event=event)
+
+    def manage_user_on_event(self, profile, event, going):
+        req_user_family_id = self.request.user.familymember.family_id
+        # print("user_family_id", user_family_id)
+
+        add_to_event_user_family_id = profile.user.familymember.family_id
+        # print("user_family_id", user_to_add_family_id)
+
+        if req_user_family_id != add_to_event_user_family_id:
+            # TODO: create some log about this error
+            raise ValidationError("You cannot add user from another family to event")
+
+        if going:
+            event.participants.add(profile)
+        else:
+            event.participants.remove(profile)

@@ -21,5 +21,6 @@ urlpatterns = [
     # Used for avatar
     path("", include(router.urls)),
     path("", include("apps.users.api.urls")),
+    path("", include("apps.events.api.urls")),
     path("", include("apps.family.api.urls")),
 ]

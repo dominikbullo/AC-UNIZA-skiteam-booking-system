@@ -1,10 +1,11 @@
 from django.contrib import admin
+from simple_history.admin import SimpleHistoryAdmin
 from django.apps import apps
 from django.contrib.admin.sites import AlreadyRegistered
 from django.contrib import admin
 from polymorphic.admin import PolymorphicParentModelAdmin, PolymorphicChildModelAdmin, PolymorphicChildModelFilter
 
-from apps.events.models import Event, SkiTraining, SkiRace, Category, Location
+from apps.events.models import Event, SkiTraining, SkiRace, Category, Location, EventResponse
 
 _event_display_fields = ("season", "start", "type", "location")
 
@@ -66,6 +67,15 @@ class LocationAdmin(admin.ModelAdmin):
     __fields = ("name", "detail")
     list_filter = __fields
     list_display = admin.ModelAdmin.list_display + __fields
+
+
+# RES: https://django-simple-history.readthedocs.io/en/latest/admin.html
+@admin.register(EventResponse)
+class EventResponseAdmin(SimpleHistoryAdmin):
+    __fields = ("event", "user_to_event", "going", "created_at", "updated_at",)
+    list_filter = __fields
+    list_display = __fields
+    history_list_display = ("going",)
 
 
 app_models = apps.get_app_config('events').get_models()

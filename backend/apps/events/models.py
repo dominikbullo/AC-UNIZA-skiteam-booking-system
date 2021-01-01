@@ -1,5 +1,5 @@
-from datetime import timedelta
-
+from datetime import timedelta, datetime
+from simple_history.models import HistoricalRecords
 from colorfield.fields import ColorField
 
 from django.contrib.postgres.fields import ArrayField
@@ -12,7 +12,7 @@ from rest_framework.exceptions import ValidationError
 
 from core.choices import CategoryNameChoices, EventTypeChoices, SkiTypeChoices, year_choices, current_year
 from apps.family.models import Child
-from apps.users.models import Profile
+from apps.users.models import Profile, User
 
 
 class Season(models.Model):
@@ -49,7 +49,7 @@ class Category(models.Model):
 
     class Meta:
         verbose_name_plural = "Categories"
-        ordering = ['id']
+        ordering = ["-year_from", "id"]
         # One child, One category, One Season -> many categories in different seasons
         unique_together = (('season', 'name'),)
 
@@ -136,6 +136,7 @@ class Accommodation(models.Model):
 # RES: https://django-polymorphic.readthedocs.io/en/stable/
 # RES (null vs blank): https://stackoverflow.com/questions/8609192/differentiate-null-true-blank-true-in-django
 class Event(PolymorphicModel):
+    created = models.DateTimeField(auto_now_add=True)
     season = models.ForeignKey(Season, on_delete=models.CASCADE)
     type = models.ForeignKey(EventType, on_delete=models.DO_NOTHING)
 
@@ -162,13 +163,30 @@ class Event(PolymorphicModel):
     additional_info = models.CharField(max_length=150, blank=True)
 
     def __str__(self):
-        return f"{self.type} | {self.season}"
+        return f"{self.start.strftime('%d.%m.%Y %H:%M')} | {self.type}"
 
     def need_skis(self):
         return self.type.need_skis
 
     def has_accommodation(self):
         return self.accommodation is not None
+
+
+class EventResponse(models.Model):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=False, null=True, related_name='responses')
+    # answerer = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='answerers')
+    user_to_event = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='users_to_event')
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
+
+    # Idea:  Reason why not
+    # Yes/No -> if not found -> no answer
+    going = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.user_to_event}"
 
 
 class SkisType(models.Model):

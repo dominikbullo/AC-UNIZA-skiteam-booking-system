@@ -5,7 +5,6 @@
       <div class="vx-col flex-1">
         <table>
           <tr>
-            <!-- TODO: Child on event count total -->
             <td class="font-bold">{{ $t('Logged in') }}</td>
             <td>{{ event.participants.length }}</td>
           </tr>
@@ -31,13 +30,13 @@
 
     <!-- TODO: Child on event list -->
 
-    <div v-if="!(Array.isArray(event.accommodation) && event.accommodation.length > 0)"
-         class="flex flex-wrap items-center justify-end mt-5">
-      <vs-button icon-pack="material-icons" icon="hotel" type="border" color="warning" class="mt-4"
-                 :to="{name: 'app-event-edit', hash:'#accommodation', params: { eventId: this.event.id }}">
-        Accommodation
-      </vs-button>
-    </div>
+    <!--    <div v-if="!(Array.isArray(event.accommodation) && event.accommodation.length > 0)"-->
+    <!--         class="flex flex-wrap items-center justify-end mt-5">-->
+    <!--      <vs-button icon-pack="material-icons" icon="hotel" type="border" color="warning" class="mt-4"-->
+    <!--                 :to="{name: 'app-event-edit', hash:'#accommodation', params: { eventId: this.event.id }}">-->
+    <!--        Accommodation-->
+    <!--      </vs-button>-->
+    <!--    </div>-->
 
   </div>
 </template>

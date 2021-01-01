@@ -63,6 +63,7 @@ Werkzeug = "*"
 whitenoise = "*"
 openpyxl = "*"
 drf-reset-password = "*"
+django-simple-history = "*"
 
 [dev-packages]
 flake8 = "*"

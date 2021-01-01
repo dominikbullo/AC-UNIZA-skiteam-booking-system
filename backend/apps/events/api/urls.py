@@ -1,8 +1,8 @@
-from django.urls import path, include
+from django.urls import path
 from rest_framework.routers import DefaultRouter
 
 from apps.events.api.views import (EventViewSet, SeasonViewSet, CategoryViewSet, LocationViewSet, RaceOrganizerViewSet,
-                                   EventTypeViewSet, SkisTypeViewSet, AccommodationViewSet)
+                                   EventTypeViewSet, SkisTypeViewSet, AccommodationViewSet, EventResponseCreateAPIView)
 
 app_name = 'events'
 
@@ -21,3 +21,7 @@ router.register(r"accommodations?", AccommodationViewSet, basename="accommodatio
 
 router.register(r"categories", CategoryViewSet, basename="categories")
 router.register(r"category", CategoryViewSet, basename="category")
+
+urlpatterns = [
+    path("event/<int:pk>/response/", EventResponseCreateAPIView.as_view(), name="event-response-create"),
+]

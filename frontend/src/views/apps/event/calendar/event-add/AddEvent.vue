@@ -251,7 +251,7 @@ export default {
         this.$vs.notify({
           color: 'success',
           title: 'Event Created',
-          text: 'Your event was successfully created!'
+          text: 'Your event was successfully created_at!'
         })
         this.$emit('closePrompt')
         this.initValues(true)

@@ -4,7 +4,7 @@ export default {
   fetchUsers ({ commit }) {
     console.log('[STORE] fetchUsers')
     return new Promise((resolve, reject) => {
-      axios.get('/profile/')
+      axios.get('/profiles/')
         .then((response) => {
           commit('SET_USERS', response.data.results)
           resolve(response)

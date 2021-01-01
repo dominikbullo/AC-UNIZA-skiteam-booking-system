@@ -188,6 +188,10 @@ export default {
       if (item.event.start < new Date().getTime()) {
         item.el.classList.add('past-event')
       }
+      const canceled = this.calendarEvents.filter(x => x.canceled === true).map(x => x.id)
+      if (canceled.includes(parseInt(item.event.id))) {
+        item.el.classList.add('canceled-event')
+      }
     },
     toggleAddEventPrompt (val = false) {
       this.addEvent.active = val
@@ -206,7 +210,6 @@ export default {
         })
         return false
       }
-
       this.$store.dispatch('calendar/fetchEvent', arg.event.id)
         .then((res) => {
           this.viewEvent.data = res.data
@@ -323,6 +326,23 @@ export default {
   ),
 }
 
+.canceled-event.fc-event, .canceled-event .fc-event-dot {
+  filter: grayscale(40%);
+  background-color: red !important;
+  background: linear-gradient(to top left,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0) calc(50% - 5px),
+      rgb(0, 0, 0) 50%,
+      rgba(0, 0, 0, 0) calc(50% + 5px),
+      rgba(0, 0, 0, 0) 100%),
+  linear-gradient(to top right,
+          rgba(0, 0, 0, 0) 0%,
+          rgba(0, 0, 0, 0) calc(50% - 5px),
+          rgb(0, 0, 0) 50%,
+          rgba(0, 0, 0, 0) calc(50% + 5px),
+          rgba(0, 0, 0, 0) 100%);
+}
+
 .fc-today {
   background-color: #0C112E !important;
 }
@@ -331,6 +351,10 @@ export default {
   height: 1.15em !important; // Change This to your required height
   font-size: .9em;
   border-bottom: 0;
+}
+
+.fc-center {
+  font-size: 12px;
 }
 
 </style>

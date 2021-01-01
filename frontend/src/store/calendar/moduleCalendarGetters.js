@@ -1,5 +1,9 @@
 export default {
   getEvent: state => (id) => state.events.find((event) => event.id === id),
+  getEventParticipants: (state, getters) => (id) => getters.getEvent(id).participants,
+  getEventResponses: (state, getters) => (id) => getters.getEvent(id).responses,
+  getEventMergedResponses: (state, getters) => (id) => getters.getEvent(id).responses_merged,
+
   getType: state => (id) => state.eventConfig.types.find((e) => e.id === id),
   needSkis: (state, getters) => (id) => getters.getType(id)['need_skis'],
   isSkiTraining: (state, getters) => (id) => {
@@ -25,7 +29,8 @@ export default {
         end: obj.end,
         title: obj.type.displayName,
         color: obj.type.color,
-        textColor: obj.type.text_color
+        textColor: obj.type.text_color,
+        canceled: obj.canceled
       }
     }
 

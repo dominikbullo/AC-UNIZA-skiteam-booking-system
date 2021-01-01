@@ -62,6 +62,8 @@ THIRD_PARTY_APPS = [
     'django_excel_fixture',
     'django_filters',
     'django_rest_passwordreset',
+
+    'simple_history',
 ]
 
 LOCAL_APPS = [
@@ -87,6 +89,7 @@ MIDDLEWARE = [
 
     # 'app.middleware.LoginRequiredMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
 # DEBUG
