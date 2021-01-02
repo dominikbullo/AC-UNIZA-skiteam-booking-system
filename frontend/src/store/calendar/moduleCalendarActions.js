@@ -278,11 +278,7 @@ export default {
 
         const tmp = {
           going,
-          'user_to_event':
-            {
-              'id': user.id,
-              'displayName': user.displayName
-            }
+          'user_to_event': user
         }
         merged.push(tmp)
       }
