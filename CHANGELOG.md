@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0](https://github.com/dominikbullo/SportAgenda/compare/v0.3.1...v1.0.0) (2021-01-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* 3 state event response. User can explicitly add yes/no responses to event, not only check the checkbox. This means that users responses to event differentiate between not filling the event and filling yes/no (primary no)
+
+### Features
+
+* 3 state event response. User can explicitly add yes/no responses to event, not only check the checkbox. This means that users responses to event differentiate between not filling the event and filling yes/no (primary no) ([4d99984](https://github.com/dominikbullo/SportAgenda/commit/4d99984612d4ff1d7d349633f18fb14fb9ba4753)), closes [SA-60](https://sportagenda.myjetbrains.com/youtrack/issue/SA-60)
+* Basic display table (all in one) of children on event with their responses ([43c9f79](https://github.com/dominikbullo/SportAgenda/commit/43c9f79259b5c1b0bf123a80eadc5c4cebc4d5c1)), closes [SA-60](https://sportagenda.myjetbrains.com/youtrack/issue/SA-60)
+* **children:** Added bookmarks to important stuff such as create child or change family ([15c685d](https://github.com/dominikbullo/SportAgenda/commit/15c685d21b07a8310437d5f8e3ee30d469fae819))
+
 ### [0.3.1](https://github.com/dominikbullo/SportAgenda/compare/v0.3.0...v0.3.1) (2020-12-07)
 
 
