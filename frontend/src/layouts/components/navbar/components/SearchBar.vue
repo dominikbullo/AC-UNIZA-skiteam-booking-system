@@ -3,18 +3,18 @@
     <div class="search-full-container w-full h-full absolute left-0 top-0" :class="{'flex': showFullSearch}"
          v-show="showFullSearch">
       <vx-auto-suggest
-        ref="navbarSearch"
-        :autoFocus="showFullSearch"
-        :data="navbarSearchAndPinList"
-        search_key="title"
-        background-overlay
-        class="w-full"
-        inputClassses="w-full vs-input-no-border vs-input-no-shdow-focus"
-        icon="SearchIcon"
-        placeholder="Explore Vuexy..."
-        @input="hnd_search_query_update"
-        @selected="selected"
-        @closeSearchbar="showFullSearch = false">
+          ref="navbarSearch"
+          :autoFocus="showFullSearch"
+          :data="navbarSearchAndPinList"
+          search_key="title"
+          background-overlay
+          class="w-full"
+          inputClassses="w-full vs-input-no-border vs-input-no-shdow-focus"
+          icon="SearchIcon"
+          placeholder="Explore SportAgenda..."
+          @input="hnd_search_query_update"
+          @selected="selected"
+          @closeSearchbar="showFullSearch = false">
 
         <template v-slot:group="{ group_name }">
           <p class="font-semibold text-primary">{{ group_name | title }}</p>
