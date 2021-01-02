@@ -241,10 +241,6 @@ export default {
   },
   created () {
     this.$vs.loading()
-    if (!moduleUserManagement.isRegistered) {
-      this.$store.registerModule('userManagement', moduleUserManagement)
-      moduleUserManagement.isRegistered = true
-    }
     this.$store.dispatch('family/fetchUserStats',
       {
         id: this.$route.params.userId

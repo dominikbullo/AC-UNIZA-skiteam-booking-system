@@ -414,10 +414,6 @@ export default {
     this.gridApi = this.gridOptions.api
   },
   created () {
-    if (!moduleUserManagement.isRegistered) {
-      this.$store.registerModule('userManagement', moduleUserManagement)
-      moduleUserManagement.isRegistered = true
-    }
     this.$store.dispatch('userManagement/fetchUsers')
   }
 }

@@ -183,12 +183,6 @@ export default {
     }
   },
   created () {
-    // Register Module UserManagement Module
-    if (!moduleUserManagement.isRegistered) {
-      this.$store.registerModule('userManagement', moduleUserManagement)
-      moduleUserManagement.isRegistered = true
-    }
-
     const userId = this.$route.params.userId
     console.log('userId', userId)
     this.$store.dispatch('userManagement/fetchUser', userId)

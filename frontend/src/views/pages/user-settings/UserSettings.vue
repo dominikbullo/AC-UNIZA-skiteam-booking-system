@@ -74,10 +74,6 @@ export default {
     }
   },
   created () {
-    if (!moduleUserManagement.isRegistered) {
-      this.$store.registerModule('userManagement', moduleUserManagement)
-      moduleUserManagement.isRegistered = true
-    }
     this.activeTab = this.tabs.findIndex(tab => tab === this.$route.hash)
   }
 }

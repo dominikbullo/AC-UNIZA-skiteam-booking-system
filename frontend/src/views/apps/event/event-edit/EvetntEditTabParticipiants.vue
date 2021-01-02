@@ -69,10 +69,6 @@ export default {
     }
   },
   created () {
-    if (!moduleUserManagement.isRegistered) {
-      this.$store.registerModule('userManagement', moduleUserManagement)
-      moduleUserManagement.isRegistered = true
-    }
     this.$store.dispatch('userManagement/fetchUsers')
   }
 }

@@ -90,11 +90,6 @@ export default {
     }
   },
   created () {
-    // Register Module UserManagement Module
-    if (!moduleUserManagement.isRegistered) {
-      this.$store.registerModule('userManagement', moduleUserManagement)
-      moduleUserManagement.isRegistered = true
-    }
     this.fetch_user_data(this.$route.params.userId)
   }
 }
