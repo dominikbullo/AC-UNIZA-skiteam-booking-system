@@ -22,7 +22,7 @@
     "ag-grid-community": "^21.0.1",
     "ag-grid-vue": "^21.0.1",
     "apexcharts": "^3.22.2",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "chart.js": "^2.8.0",
     "core-js": "^3.7.0",
     "echarts": "^4.2.1",
