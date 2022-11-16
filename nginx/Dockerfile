@@ -7,8 +7,11 @@ COPY frontend/package.json frontend/package-lock.json /app/
 RUN npm install
 
 COPY frontend /app/
-#COPY .env /app/.env #TODO for testing CI/CD disabled
+COPY .env /app/.env
 RUN npm run build
+
+COPY --chown=node:node . .
+USER node
 
 # Stage 2 - nginx & frontend dist
 FROM nginx:alpine

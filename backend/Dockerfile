@@ -14,7 +14,7 @@ COPY ./Pipfile* /
 RUN pip install --upgrade pip
 RUN pip install pipenv
 
-RUN pipenv lock --requirements > requirements.txt
+RUN pipenv requirements > requirements.txt
 RUN pip install -r requirements.txt
 
 # upload scripts

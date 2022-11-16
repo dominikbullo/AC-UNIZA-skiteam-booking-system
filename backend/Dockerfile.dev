@@ -14,12 +14,14 @@ COPY ./Pipfile* /
 RUN pip install --upgrade pip
 RUN pip install pipenv
 
-RUN pipenv lock --requirements > requirements.txt
+RUN pipenv requirements > requirements.txt
 RUN pip install -r requirements.txt
 
 #Instal also dev packpages
-RUN pipenv lock --dev --requirements > requirements_dev.txt
+RUN pipenv requirements --dev > requirements_dev.txt
 RUN pip install -r requirements_dev.txt
+
+RUN pip install -U poetry pipenv-poetry-migrate
 
 # upload scripts
 COPY ./scripts/entrypoint.sh ./scripts/start.sh ./scripts/gunicorn.sh /

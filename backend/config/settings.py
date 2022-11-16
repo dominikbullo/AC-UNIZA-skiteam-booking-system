@@ -95,12 +95,12 @@ MIDDLEWARE = [
 # DEBUG
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#debug
-DEBUG = env.bool('DEBUG')
-SECRET_KEY = env.str('SECRET_KEY')
+DEBUG = env.bool('DEBUG', default=False)
+SECRET_KEY = env.str('SECRET_KEY', default='not-safe-key')
 
 # DOMAINS
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
-DOMAIN = env.str('DOMAIN')
+DOMAIN = env.str('DOMAIN', default="localhost")
 
 # RES: https://stackoverflow.com/questions/6367014/how-to-send-email-via-django
 # EMAIL CONFIGURATION
@@ -119,7 +119,7 @@ EMAIL_USE_SSL = env.bool('EMAIL_USE_SSL', default=False)
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = [
-    ('Dominik Bullo', 'admin@acuniza.skiteam.sk'),
+    ('Dominik Bullo', 'dominik@bullo.sk'),
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#managers
