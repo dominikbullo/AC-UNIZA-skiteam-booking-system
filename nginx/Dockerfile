@@ -3,7 +3,7 @@ FROM node:18-alpine as build-deps
 
 WORKDIR /app/
 
-COPY frontend/package.json frontend/yarn.lock /app/
+COPY frontend/package.json /app/
 RUN yarn
 
 COPY frontend /app/
