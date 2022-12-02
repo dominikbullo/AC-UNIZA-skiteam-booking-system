@@ -7,7 +7,6 @@ COPY frontend/package.json /app/
 RUN yarn
 
 COPY frontend /app/
-COPY .env /app/.env
 RUN yarn build
 
 # Stage 2 - nginx & frontend dist
