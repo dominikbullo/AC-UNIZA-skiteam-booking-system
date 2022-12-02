@@ -1,17 +1,14 @@
 # Stage 1 - build frontend app
-FROM node:14-alpine as build-deps
+FROM node:18-alpine as build-deps
 
 WORKDIR /app/
 
-COPY frontend/package.json frontend/package-lock.json /app/
-RUN npm install
+COPY frontend/package.json frontend/yarn.lock /app/
+RUN yarn
 
 COPY frontend /app/
 COPY .env /app/.env
-RUN npm run build
-
-COPY --chown=node:node . .
-USER node
+RUN yarn build
 
 # Stage 2 - nginx & frontend dist
 FROM nginx:alpine
