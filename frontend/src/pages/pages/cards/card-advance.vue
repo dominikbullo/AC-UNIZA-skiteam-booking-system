@@ -22,7 +22,7 @@ import CardAdvanceWebsiteAnalytics from '@/views/pages/cards/card-advance/CardAd
       sm="6"
       lg="4"
     >
-      <CardAdvanceMonthlyCampaignState />
+      <CardAdvanceMonthlyCampaignState/>
     </VCol>
 
     <!-- 👉 Active Project -->
@@ -31,7 +31,7 @@ import CardAdvanceWebsiteAnalytics from '@/views/pages/cards/card-advance/CardAd
       sm="6"
       lg="4"
     >
-      <CardAdvanceActiveProject />
+      <CardAdvanceActiveProject/>
     </VCol>
 
     <!-- 👉 Source Visits -->
@@ -40,7 +40,7 @@ import CardAdvanceWebsiteAnalytics from '@/views/pages/cards/card-advance/CardAd
       sm="6"
       lg="4"
     >
-      <CardAdvanceSourceVisits />
+      <CardAdvanceSourceVisits/>
     </VCol>
 
     <!-- 👉 Sales by countries -->
@@ -49,7 +49,7 @@ import CardAdvanceWebsiteAnalytics from '@/views/pages/cards/card-advance/CardAd
       sm="6"
       lg="4"
     >
-      <CardAdvanceSalesByCountries />
+      <CardAdvanceSalesByCountries/>
     </VCol>
 
     <!-- 👉 Earning Reports -->
@@ -58,7 +58,7 @@ import CardAdvanceWebsiteAnalytics from '@/views/pages/cards/card-advance/CardAd
       sm="6"
       lg="4"
     >
-      <CardAdvanceEarningReports />
+      <CardAdvanceEarningReports/>
     </VCol>
 
     <!-- 👉 Browser States -->
@@ -67,7 +67,7 @@ import CardAdvanceWebsiteAnalytics from '@/views/pages/cards/card-advance/CardAd
       sm="6"
       lg="4"
     >
-      <CardAdvanceBrowserStates />
+      <CardAdvanceBrowserStates/>
     </VCol>
 
     <!-- 👉 Orders -->
@@ -76,7 +76,7 @@ import CardAdvanceWebsiteAnalytics from '@/views/pages/cards/card-advance/CardAd
       sm="6"
       lg="4"
     >
-      <CardAdvanceOrder />
+      <CardAdvanceOrder/>
     </VCol>
 
     <!-- 👉 Transactions -->
@@ -85,7 +85,7 @@ import CardAdvanceWebsiteAnalytics from '@/views/pages/cards/card-advance/CardAd
       sm="6"
       lg="4"
     >
-      <CardAdvanceTransactions />
+      <CardAdvanceTransactions/>
     </VCol>
 
     <!-- 👉 Popular Products -->
@@ -94,7 +94,7 @@ import CardAdvanceWebsiteAnalytics from '@/views/pages/cards/card-advance/CardAd
       sm="6"
       lg="4"
     >
-      <CardAdvancePopularProducts />
+      <CardAdvancePopularProducts/>
     </VCol>
 
     <!-- 👉 Last Transaction -->
@@ -102,7 +102,7 @@ import CardAdvanceWebsiteAnalytics from '@/views/pages/cards/card-advance/CardAd
       cols="12"
       sm="6"
     >
-      <CardAdvanceLastTransaction />
+      <CardAdvanceLastTransaction/>
     </VCol>
 
     <!-- 👉 Activity Timeline -->
@@ -110,7 +110,7 @@ import CardAdvanceWebsiteAnalytics from '@/views/pages/cards/card-advance/CardAd
       cols="12"
       md="6"
     >
-      <CardAdvanceActivityTimeline />
+      <CardAdvanceActivityTimeline/>
     </VCol>
 
     <!-- 👉 Websites Analytics -->
@@ -118,7 +118,7 @@ import CardAdvanceWebsiteAnalytics from '@/views/pages/cards/card-advance/CardAd
       cols="12"
       md="6"
     >
-      <CardAdvanceWebsiteAnalytics />
+      <CardAdvanceWebsiteAnalytics/>
     </VCol>
 
     <!-- 👉 Congratulations John -->
@@ -126,7 +126,7 @@ import CardAdvanceWebsiteAnalytics from '@/views/pages/cards/card-advance/CardAd
       cols="12"
       md="6"
     >
-      <CardAdvanceCongratulationsJohn />
+      <CardAdvanceCongratulationsJohn/>
     </VCol>
   </VRow>
 </template>
