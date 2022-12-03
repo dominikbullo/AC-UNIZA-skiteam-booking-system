@@ -2,7 +2,6 @@ from rest_framework import permissions
 
 
 class IsOwnFamilyOrReadOnly(permissions.BasePermission):
-
     def has_permission(self, request, view):
         """
         Return `True` if permission is granted, `False` otherwise.

@@ -1,18 +1,17 @@
-from datetime import timedelta, datetime
-from simple_history.models import HistoricalRecords
-from colorfield.fields import ColorField
+from datetime import timedelta
 
+from apps.family.models import Child
+from apps.users.models import Profile, User
+from colorfield.fields import ColorField
+from core.choices import (CategoryNameChoices, EventTypeChoices,
+                          SkiTypeChoices, current_year, year_choices)
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import gettext as _
-
 from polymorphic.models import PolymorphicModel
 from rest_framework.exceptions import ValidationError
-
-from core.choices import CategoryNameChoices, EventTypeChoices, SkiTypeChoices, year_choices, current_year
-from apps.family.models import Child
-from apps.users.models import Profile, User
+from simple_history.models import HistoricalRecords
 
 
 class Season(models.Model):
@@ -34,15 +33,21 @@ class Category(models.Model):
     season = models.ForeignKey(Season, on_delete=models.CASCADE)
 
     # RES (Many to many birectional): https://stackoverflow.com/questions/4881578/django-bi-directional-manytomany-how-to-prevent-table-creation-on-second-model
-    members = models.ManyToManyField('family.Child', through=Child.categories.through, blank=True)
+    members = models.ManyToManyField(
+        "family.Child", through=Child.categories.through, blank=True
+    )
 
     name = models.CharField(
         max_length=3,
         choices=CategoryNameChoices.choices,
     )
 
-    year_from = models.IntegerField(_('Year from'), choices=year_choices(), default=current_year() - 2)
-    year_until = models.IntegerField(_('Year until'), choices=year_choices(), default=current_year())
+    year_from = models.IntegerField(
+        _("Year from"), choices=year_choices(), default=current_year() - 2
+    )
+    year_until = models.IntegerField(
+        _("Year until"), choices=year_choices(), default=current_year()
+    )
 
     def __str__(self):
         return "{name} | {season}".format(name=self.name, season=self.season)
@@ -51,7 +56,7 @@ class Category(models.Model):
         verbose_name_plural = "Categories"
         ordering = ["-year_from", "id"]
         # One child, One category, One Season -> many categories in different seasons
-        unique_together = (('season', 'name'),)
+        unique_together = (("season", "name"),)
 
 
 class Location(models.Model):
@@ -71,16 +76,13 @@ class Location(models.Model):
         return self.name
 
     class Meta:
-        unique_together = (('name', 'detail'),)
+        unique_together = (("name", "detail"),)
 
 
 class EventType(models.Model):
-    type = models.CharField(
-        max_length=50,
-        choices=EventTypeChoices.choices
-    )
+    type = models.CharField(max_length=50, choices=EventTypeChoices.choices)
 
-    color = ColorField(default='#3788d8')
+    color = ColorField(default="#3788d8")
     text_color = ColorField(default="white")
     average_time = models.DurationField(default=timedelta(hours=1))
 
@@ -96,7 +98,7 @@ class EventType(models.Model):
         return f"{self.get_type_display()}"
 
     class Meta:
-        unique_together = (('type', 'need_skis'),)
+        unique_together = (("type", "need_skis"),)
 
 
 class Accommodation(models.Model):
@@ -128,7 +130,7 @@ class Accommodation(models.Model):
         constraints = [
             models.CheckConstraint(
                 check=Q(name__isnull=False) | Q(website__isnull=False),
-                name='not_both_null'
+                name="not_both_null",
             )
         ]
 
@@ -146,7 +148,9 @@ class Event(PolymorphicModel):
     location = models.ForeignKey(Location, on_delete=models.DO_NOTHING)
     category = models.ManyToManyField(Category)
 
-    participants = models.ManyToManyField('users.Profile', through=Profile.events.through, blank=True)
+    participants = models.ManyToManyField(
+        "users.Profile", through=Profile.events.through, blank=True
+    )
 
     all_day = models.BooleanField(default=False)
     start = models.DateTimeField()
@@ -155,7 +159,9 @@ class Event(PolymorphicModel):
     # recurring events
     is_recur = models.BooleanField(default=False)
     # group_id = models.IntegerField(max_length=150, blank=True)
-    days_of_week = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
+    days_of_week = ArrayField(
+        models.IntegerField(null=True, blank=True), null=True, blank=True
+    )
 
     canceled = models.BooleanField(default=False)
     send_email = models.BooleanField(default=False)
@@ -173,9 +179,17 @@ class Event(PolymorphicModel):
 
 
 class EventResponse(models.Model):
-    event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=False, null=True, related_name='responses')
+    event = models.ForeignKey(
+        Event,
+        on_delete=models.CASCADE,
+        blank=False,
+        null=True,
+        related_name="responses",
+    )
     # answerer = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='answerers')
-    user_to_event = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='users_to_event')
+    user_to_event = models.ForeignKey(
+        Profile, on_delete=models.CASCADE, related_name="users_to_event"
+    )
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -194,7 +208,7 @@ class SkisType(models.Model):
         max_length=3,
         unique=True,
         choices=SkiTypeChoices.choices,
-        default=SkiTypeChoices.GIANT_SLALOM
+        default=SkiTypeChoices.GIANT_SLALOM,
     )
 
     def __str__(self):
@@ -209,7 +223,7 @@ class SkiEvent(Event):
     # RES: https://stackoverflow.com/questions/22538563/django-reverse-accessors-for-foreign-keys-clashing
     skis_type = models.ManyToManyField(
         to=SkisType,
-        related_name='%(class)s_skis_type',  # the name for that relation from the point of view of a skill
+        related_name="%(class)s_skis_type",  # the name for that relation from the point of view of a skill
     )
 
     # IDEA
@@ -226,10 +240,7 @@ class SkiTraining(SkiEvent):
     number_of_runs = models.CharField(max_length=50, blank=True, null=True)
 
     def __init__(self, *args, **kwargs):
-        query = {
-            "type"     : EventTypeChoices.TRAINING,
-            "need_skis": True
-        }
+        query = {"type": EventTypeChoices.TRAINING, "need_skis": True}
 
         super(SkiEvent, self).__init__(*args, **kwargs)
         self.type, created = EventType.objects.get_or_create(**query)
@@ -257,11 +268,18 @@ class RaceOrganizer(models.Model):
         no parent and the same name.
         """
         from django.core.exceptions import ValidationError
-        if self.club is None and RaceOrganizer.objects.filter(name=self.name, club=None).exists():
-            raise ValidationError("Another RaceOrganizer with name %s and no club already exists" % self.name)
+
+        if (
+            self.club is None
+            and RaceOrganizer.objects.filter(name=self.name, club=None).exists()
+        ):
+            raise ValidationError(
+                "Another RaceOrganizer with name %s and no club already exists"
+                % self.name
+            )
 
     class Meta:
-        unique_together = (('name', 'club'),)
+        unique_together = (("name", "club"),)
 
 
 class SkiRace(SkiEvent):
@@ -273,9 +291,6 @@ class SkiRace(SkiEvent):
     book_hotel_to = models.DateTimeField(blank=True, null=True)
 
     def __init__(self, *args, **kwargs):
-        query = {
-            "type"     : EventTypeChoices.RACE,
-            "need_skis": True
-        }
+        query = {"type": EventTypeChoices.RACE, "need_skis": True}
         super(SkiEvent, self).__init__(*args, **kwargs)
         self.type, created = EventType.objects.get_or_create(**query)

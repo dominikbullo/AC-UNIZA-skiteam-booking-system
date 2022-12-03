@@ -7,19 +7,18 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Family',
+            name="Family",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=100)),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("name", models.CharField(max_length=100)),
             ],
             options={
-                'verbose_name_plural': 'Families',
-                'ordering': ['id'],
+                "verbose_name_plural": "Families",
+                "ordering": ["id"],
             },
         ),
     ]

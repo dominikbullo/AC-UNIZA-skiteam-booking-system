@@ -1,6 +1,5 @@
-from rest_framework import permissions
-
 from core import choices
+from rest_framework import permissions
 
 
 class IsCoachOrReadOnly(permissions.BasePermission):

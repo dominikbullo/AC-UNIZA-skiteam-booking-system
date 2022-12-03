@@ -1,15 +1,13 @@
-from django.utils import timezone
-
-from rest_polymorphic.serializers import PolymorphicSerializer
-
-from rest_framework import serializers
-
 from apps.events.api.serializers import SeasonSerializer
-from apps.events.models import Season, EventType, Event
+from apps.events.models import Event, EventType, Season
 from apps.family.models import Child
-from apps.stats.models import EventStatistic, PerformanceTestStatistic, RaceStatistic
+from apps.stats.models import (EventStatistic, PerformanceTestStatistic,
+                               RaceStatistic)
 from apps.users.api.serializers import BaseProfileSerializer
 from apps.users.models import Profile
+from django.utils import timezone
+from rest_framework import serializers
+from rest_polymorphic.serializers import PolymorphicSerializer
 
 
 class EventStatisticSerializer(serializers.ModelSerializer):
@@ -32,9 +30,9 @@ class RaceStatisticSerializer(serializers.ModelSerializer):
 
 class StatisticPolymorphicSerializer(PolymorphicSerializer):
     model_serializer_mapping = {
-        EventStatistic          : EventStatisticSerializer,
+        EventStatistic: EventStatisticSerializer,
         PerformanceTestStatistic: PerformanceTestStatisticSerializer,
-        RaceStatistic           : RaceStatisticSerializer,
+        RaceStatistic: RaceStatisticSerializer,
     }
 
 
@@ -47,12 +45,15 @@ class ProfileStatSerializer(BaseProfileSerializer):
      Parent -> Helping count
      Coach -> Number of event (for payment)
     """
+
     event_stats = serializers.SerializerMethodField()
 
     def get_event_stats(self, instance):
         if Child.objects.filter(user__profile=instance).exists():
             child = Child.objects.get(user__profile=instance)
-            return ChildStatSerializer(instance=child, context={"profile": instance}).data
+            return ChildStatSerializer(
+                instance=child, context={"profile": instance}
+            ).data
 
         return
 
@@ -80,18 +81,22 @@ class ChildStatSerializer(serializers.ModelSerializer):
                 # "start__lte" because end could be blank or null
                 # TODO: maybe some think that end could not be blank tho
                 query = {
-                    "category"  : item,
-                    "type"      : event_type,
+                    "category": item,
+                    "type": event_type,
                     "start__lte": timezone.now(),
-                    "canceled"  : False
+                    "canceled": False,
                 }
-                events = Event.objects.filter(**query).order_by('start')
+                events = Event.objects.filter(**query).order_by("start")
 
-                tmp.append({
-                    "type" : EventTypeStatSerializer(instance=event_type).data,
-                    "count": self.context.get("profile").events.filter(**query).count(),
-                    "total": events.count(),
-                })
+                tmp.append(
+                    {
+                        "type": EventTypeStatSerializer(instance=event_type).data,
+                        "count": self.context.get("profile")
+                        .events.filter(**query)
+                        .count(),
+                        "total": events.count(),
+                    }
+                )
 
             ret.update({str(item.season): tmp})
         return ret
@@ -102,7 +107,7 @@ class ChildStatSerializer(serializers.ModelSerializer):
 
 
 class EventTypeStatSerializer(serializers.ModelSerializer):
-    displayName = serializers.CharField(source='display_name', read_only=True)
+    displayName = serializers.CharField(source="display_name", read_only=True)
 
     class Meta:
         model = EventType

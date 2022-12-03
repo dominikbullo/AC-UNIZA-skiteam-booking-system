@@ -1,14 +1,13 @@
-from django_filters import rest_framework as filters
-from rest_framework import viewsets
-
 from apps.events.models import Event, Season
-from apps.stats.api.serializers import StatisticPolymorphicSerializer, ProfileStatSerializer
+from apps.stats.api.serializers import (ProfileStatSerializer,
+                                        StatisticPolymorphicSerializer)
 from apps.stats.models import Statistic
 from apps.users.api.serializers import BaseProfileSerializer
 from apps.users.models import Profile
 from core.choices import UserTypeChoices
-
 from core.views import get_object_custom_queryset
+from django_filters import rest_framework as filters
+from rest_framework import viewsets
 
 
 def departments(request):
@@ -32,6 +31,7 @@ class ProfileStatsViewSet(viewsets.ReadOnlyModelViewSet):
     ViewSet for listing or retrieving statistic of events.
     For now only working with Child instances.
     """
+
     # TODO: When adding new feature disable filter
     queryset = Profile.objects.all()
     serializer_class = ProfileStatSerializer
@@ -45,7 +45,10 @@ class ProfileStatsViewSet(viewsets.ReadOnlyModelViewSet):
 class StatsViewSet(viewsets.ModelViewSet):
     serializer_class = StatisticPolymorphicSerializer
     filter_backends = (filters.DjangoFilterBackend,)
-    filterset_fields = ("season", "user",)
+    filterset_fields = (
+        "season",
+        "user",
+    )
 
     def get_queryset(self):
         return get_object_custom_queryset(self.request, Statistic)

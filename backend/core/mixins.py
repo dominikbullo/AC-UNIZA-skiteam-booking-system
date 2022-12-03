@@ -2,10 +2,10 @@ class FlattenMixin(object):
     """Flatens the specified related objects in this representation"""
 
     def to_representation(self, obj):
-        assert hasattr(self.Meta, 'flatten'), (
-            'Class {serializer_class} missing "Meta.flatten" attribute'.format(
-                serializer_class=self.__class__.__name__
-            )
+        assert hasattr(
+            self.Meta, "flatten"
+        ), 'Class {serializer_class} missing "Meta.flatten" attribute'.format(
+            serializer_class=self.__class__.__name__
         )
         # Get the current object representation
         rep = super(FlattenMixin, self).to_representation(obj)

@@ -75,16 +75,16 @@ The app will then be available at http://localhost:8000
 * [12 Factor](http://12factor.net/)
 * Template: [Vuexy](https://pixinvent.com/demo/vuexy-vuejs-admin-dashboard-template/landing/)
 * Frontend: [Vue.js](https://vuejs.org/) + [Vue Cli](https://cli.vuejs.org/) + [PWA](https://developers.google.com/web/progressive-web-apps/)
-* Backend: [Django](https://www.djangoproject.com/)  
+* Backend: [Django](https://www.djangoproject.com/)
 * Database: [PostgreSQL](https://ww.postgresql.org/)
 * Server: [Nginx](https://nginx.org/)
 * API:  [Django REST Framework](https://www.django-rest-framework.org/)
 
 ## Versioning
 
-I use [Bumpversion](https://github.com/c4urself/bump2version) for versioning. For the versions available, see the 
-[Releases on this repository](https://github.com/dominikbullo/sport_club_management_system/releases) or if you need more details you could check you 
-[Tags on this repository](https://github.com/dominikbullo/sport_club_management_system/tags). 
+I use [Bumpversion](https://github.com/c4urself/bump2version) for versioning. For the versions available, see the
+[Releases on this repository](https://github.com/dominikbullo/sport_club_management_system/releases) or if you need more details you could check you
+[Tags on this repository](https://github.com/dominikbullo/sport_club_management_system/tags).
 
 ## Authors
 

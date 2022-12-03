@@ -15,4 +15,3 @@
   ],
   "issueUrlFormat": "https://sportagenda.myjetbrains.com/youtrack/issue/{{prefix}}{{id}}"
 }
-

@@ -1,18 +1,18 @@
+from apps.events.models import Season
+from apps.family.api.serializers import (ChildSerializer,
+                                         FamilyMemberSerializer,
+                                         FamilySerializer)
+from apps.family.models import Child, Family, FamilyMember
+# https://github.com/LondonAppDeveloper/recipe-app-api/blob/master/app/recipe/views.py
+from core.views import get_season_by_query
 from django.db import transaction
-from rest_framework import viewsets, mixins, generics
-from rest_framework.views import APIView
+from django.utils.crypto import get_random_string
+from rest_framework import generics, mixins, viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
-
-from apps.events.models import Season
-from apps.family.models import Family, Child, FamilyMember
-from apps.family.api.serializers import FamilySerializer, ChildSerializer, FamilyMemberSerializer
-
-# https://github.com/LondonAppDeveloper/recipe-app-api/blob/master/app/recipe/views.py
-from core.views import get_season_by_query
-from django.utils.crypto import get_random_string
+from rest_framework.views import APIView
 
 
 class FamilyViewSet(viewsets.ModelViewSet):
@@ -24,7 +24,7 @@ class FamilyViewSet(viewsets.ModelViewSet):
     filter_backends = [SearchFilter]
     search_fields = ["name"]
 
-    @action(detail=True, methods=['get'], url_path='token')
+    @action(detail=True, methods=["get"], url_path="token")
     def get_family_token(self, obj, pk=None):
         family = self.get_object()
         family.token = get_random_string(length=64)
@@ -61,7 +61,9 @@ class AddToFamilyView(APIView):
         family_member = get_object_or_404(FamilyMember, user=request.user)
 
         old_family = get_object_or_404(Family, id=family_member.family.id)
-        user_old_family_members = FamilyMember.objects.filter(family=family_member.family)
+        user_old_family_members = FamilyMember.objects.filter(
+            family=family_member.family
+        )
 
         print(f"Old family {old_family}")
         ret.update({"old": self.serializer_class(old_family).data})
@@ -87,7 +89,9 @@ class AddToFamilyView(APIView):
         print(f"Found family with token {token}")
         family_member = get_object_or_404(FamilyMember, user=request.user)
         print(family_member.family.id)
-        user_old_family_members = FamilyMember.objects.filter(family=family_member.family)
+        user_old_family_members = FamilyMember.objects.filter(
+            family=family_member.family
+        )
         print("*****************")
         print(user_old_family_members)
         print(f"Found {len(user_old_family_members)} family member of requested user")

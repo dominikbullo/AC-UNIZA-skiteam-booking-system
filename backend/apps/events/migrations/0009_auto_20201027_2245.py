@@ -6,13 +6,22 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('events', '0008_auto_20201027_2244'),
+        ("events", "0008_auto_20201027_2244"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='skistype',
-            name='name',
-            field=models.CharField(choices=[('SL', 'Slalom'), ('GS', 'Giant Slalom'), ('SG', 'Super Giant Slalom')], default='GS', max_length=3, unique=True),
+            model_name="skistype",
+            name="name",
+            field=models.CharField(
+                choices=[
+                    ("SL", "Slalom"),
+                    ("GS", "Giant Slalom"),
+                    ("SG", "Super Giant Slalom"),
+                ],
+                default="GS",
+                max_length=3,
+                unique=True,
+            ),
         ),
     ]

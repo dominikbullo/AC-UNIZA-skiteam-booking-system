@@ -2,7 +2,7 @@ from apps.events.models import Season
 
 
 def get_object_custom_queryset(request, db_object):
-    if request.query_params.get('season') == "all":
+    if request.query_params.get("season") == "all":
         print("Getting all events")
         return db_object.objects.all()
 
@@ -12,7 +12,7 @@ def get_object_custom_queryset(request, db_object):
 
 # TODO refactor
 def get_season_by_query(request, seasons):
-    query = request.query_params.get('season')
+    query = request.query_params.get("season")
     if query:
         if query == "current":
             seasons = seasons.filter(current=True)

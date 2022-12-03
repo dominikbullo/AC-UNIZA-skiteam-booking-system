@@ -2,50 +2,57 @@
 
 import colorfield.fields
 import django.contrib.postgres.fields
-from django.db import migrations, models
 import django.db.models.deletion
+from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('events', '0003_eventtype'),
+        ("events", "0003_eventtype"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='event',
-            name='days_of_week',
-            field=django.contrib.postgres.fields.ArrayField(base_field=models.IntegerField(blank=True, null=True), blank=True, null=True, size=None),
+            model_name="event",
+            name="days_of_week",
+            field=django.contrib.postgres.fields.ArrayField(
+                base_field=models.IntegerField(blank=True, null=True),
+                blank=True,
+                null=True,
+                size=None,
+            ),
         ),
         migrations.AddField(
-            model_name='event',
-            name='end_recur',
+            model_name="event",
+            name="end_recur",
             field=models.DateTimeField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='event',
-            name='group_id',
+            model_name="event",
+            name="group_id",
             field=models.CharField(blank=True, max_length=150),
         ),
         migrations.AddField(
-            model_name='event',
-            name='start_recur',
+            model_name="event",
+            name="start_recur",
             field=models.DateTimeField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='eventtype',
-            name='text_color',
-            field=colorfield.fields.ColorField(default='white', max_length=18),
+            model_name="eventtype",
+            name="text_color",
+            field=colorfield.fields.ColorField(default="white", max_length=18),
         ),
         migrations.AlterField(
-            model_name='event',
-            name='type',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='events.eventtype'),
+            model_name="event",
+            name="type",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.DO_NOTHING, to="events.eventtype"
+            ),
         ),
         migrations.AlterField(
-            model_name='eventtype',
-            name='color',
-            field=colorfield.fields.ColorField(default='#3788d8', max_length=18),
+            model_name="eventtype",
+            name="color",
+            field=colorfield.fields.ColorField(default="#3788d8", max_length=18),
         ),
     ]

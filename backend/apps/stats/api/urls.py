@@ -1,8 +1,7 @@
+from apps.stats.api.views import ProfileStatsViewSet, StatsViewSet
 from rest_framework.routers import DefaultRouter
 
-from apps.stats.api.views import StatsViewSet, ProfileStatsViewSet
-
-app_name = 'stats'
+app_name = "stats"
 
 # https://www.django-rest-framework.org/api-guide/routers/
 router = DefaultRouter()
