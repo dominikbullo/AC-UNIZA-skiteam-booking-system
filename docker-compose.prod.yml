@@ -43,3 +43,17 @@ networks:
   default:
     name: nginx-proxy
     external: true
+
+
+#  postgres:
+#    image: postgres
+#    expose:
+#      - ${DB_PORT} # Publishes port to other containers but NOT to host machine
+#    command: -p ${DB_PORT}
+#    env_file:  ${ENV_FILE:-.env}
+#
+#  nginx:
+#    image: "ghcr.io/dominikbullo/sportagenda_nginx:${IMAGE_VERSION}"
+#    depends_on:
+#      - backend
+#    env_file: ${ENV_FILE:-.env}

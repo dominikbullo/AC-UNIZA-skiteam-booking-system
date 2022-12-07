@@ -279,7 +279,9 @@ typings/
 /backend/uploads/
 /backend/media/
 /backend/staticfiles/
-/.old/
 /docker-compose.override.yml
 /scripts/
 /logs/
+
+.env.*
+!.env.example
