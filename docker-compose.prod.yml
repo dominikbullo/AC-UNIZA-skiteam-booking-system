@@ -1,8 +1,4 @@
-# You have to fill up .env file
-# Used on stage/prod versions with command docker-compose -f docker-compose.yml -f docker-compose.prod.yml up
-# Or you rename this file to docker-compose.override.yml and then just run docker-compose up
-# RES: https://docs.docker.com/compose/extends/
-version: "3"
+version: "3.8"
 
 services:
   backend:
@@ -45,5 +41,5 @@ volumes:
 
 networks:
   default:
-    external:
-      name: nginx-proxy
+    name: nginx-proxy
+    external: true
