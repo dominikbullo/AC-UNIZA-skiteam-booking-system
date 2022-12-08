@@ -3,10 +3,10 @@ from apps.family.models import Family, FamilyMember
 from apps.users.models import Profile
 from core import utils
 from core.choices import UserTypeChoices
+from dj_rest_auth.models import TokenModel
+from dj_rest_auth.registration.serializers import RegisterSerializer
 from django.contrib.auth import get_user_model, password_validation
 from django.utils.translation import gettext_lazy as _
-from rest_auth.models import TokenModel
-from rest_auth.registration.serializers import RegisterSerializer
 from rest_framework import serializers
 
 

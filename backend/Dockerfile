@@ -1,4 +1,4 @@
-FROM python:3.7
+FROM python:3.11
 
 # python envs
 ENV PYTHONFAULTHANDLER=1 \
@@ -6,7 +6,7 @@ ENV PYTHONFAULTHANDLER=1 \
     PYTHONUNBUFFERED=1
 
 
-WORKDIR /app/backend
+WORKDIR /app/backend/
 
 # Upload Poetry files
 COPY pyproject.toml poetry.lock ./

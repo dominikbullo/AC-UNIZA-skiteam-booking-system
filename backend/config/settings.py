@@ -35,14 +35,16 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
+    "unfold",  # before django.contrib.admin
+    "unfold.contrib.filters",  # optional
     "django_extensions",
     "rest_framework",
     "rest_framework.authtoken",
-    "rest_auth",
+    "dj_rest_auth",
     # https://django-rest-auth.readthedocs.io/en/latest/api_endpoints.html
     "allauth",
     "allauth.account",
-    "rest_auth.registration",
+    "dj_rest_auth.registration",
     # https://django-rest-auth.readthedocs.io/en/latest/installation.html
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
