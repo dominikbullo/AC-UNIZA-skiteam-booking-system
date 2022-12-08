@@ -7,17 +7,41 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('events', '0002_auto_20201027_2114'),
+        ("events", "0002_auto_20201027_2114"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='EventType',
+            name="EventType",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('type', models.CharField(choices=[('SKI_TRAINING', 'Ski Training'), ('ATHLETIC_TRAINING', 'Athletic Training'), ('SKI_RACE', 'Ski Race'), ('SKI_CAMP', 'Ski Camp'), ('VIDEO_ANALYZE', 'Video Analyze'), ('MEETING', 'Meeting')], max_length=50)),
-                ('color', colorfield.fields.ColorField(default='#FF0000', max_length=18)),
-                ('need_skis', models.BooleanField(default=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "type",
+                    models.CharField(
+                        choices=[
+                            ("SKI_TRAINING", "Ski Training"),
+                            ("ATHLETIC_TRAINING", "Athletic Training"),
+                            ("SKI_RACE", "Ski Race"),
+                            ("SKI_CAMP", "Ski Camp"),
+                            ("VIDEO_ANALYZE", "Video Analyze"),
+                            ("MEETING", "Meeting"),
+                        ],
+                        max_length=50,
+                    ),
+                ),
+                (
+                    "color",
+                    colorfield.fields.ColorField(default="#FF0000", max_length=18),
+                ),
+                ("need_skis", models.BooleanField(default=True)),
             ],
         ),
     ]

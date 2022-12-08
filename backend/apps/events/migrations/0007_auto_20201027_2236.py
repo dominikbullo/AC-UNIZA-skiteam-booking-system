@@ -6,17 +6,17 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('events', '0006_auto_20201027_2218'),
+        ("events", "0006_auto_20201027_2218"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='location',
-            old_name='ski_slope',
-            new_name='detail',
+            model_name="location",
+            old_name="ski_slope",
+            new_name="detail",
         ),
         migrations.AlterUniqueTogether(
-            name='location',
-            unique_together={('name', 'detail')},
+            name="location",
+            unique_together={("name", "detail")},
         ),
     ]

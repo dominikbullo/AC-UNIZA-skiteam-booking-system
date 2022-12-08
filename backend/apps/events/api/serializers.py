@@ -1,21 +1,24 @@
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
-from rest_framework.generics import get_object_or_404
-
 from rest_polymorphic.serializers import PolymorphicSerializer
 
-from core import choices
-
-from apps.events.models import (Event, SkiTraining, SkiRace, Season, Category, Location, RaceOrganizer, EventType,
-                                SkisType, Accommodation, EventResponse)
-from apps.family.models import Child
+from apps.events.models import (
+    Accommodation,
+    Category,
+    Event,
+    EventResponse,
+    EventType,
+    Location,
+    RaceOrganizer,
+    Season,
+    SkiRace,
+    SkisType,
+    SkiTraining,
+)
 from apps.users.models import Profile
-
-from apps.users.api.serializers import BaseProfileSerializer, BaseUserSerializer
 
 
 class SeasonSerializer(serializers.ModelSerializer):
-    displayName = serializers.CharField(source='get_name_display', read_only=True)
+    displayName = serializers.CharField(source="get_name_display", read_only=True)
 
     class Meta:
         model = Season
@@ -23,7 +26,7 @@ class SeasonSerializer(serializers.ModelSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
-    displayName = serializers.CharField(source='get_name_display', read_only=True)
+    displayName = serializers.CharField(source="get_name_display", read_only=True)
 
     class Meta:
         model = Category
@@ -33,8 +36,9 @@ class CategorySerializer(serializers.ModelSerializer):
 # RES: https://github.com/richardtallent/vue-simple-calendar#calendar-item-properties
 # RES(Nested relationships): https://medium.com/@raaj.akshar/creating-reverse-related-objects-with-django-rest-framework-b1952ddff1c
 
+
 class RaceOrganizerSerializer(serializers.ModelSerializer):
-    displayName = serializers.CharField(source='display_name', read_only=True)
+    displayName = serializers.CharField(source="display_name", read_only=True)
 
     class Meta:
         model = RaceOrganizer
@@ -42,7 +46,7 @@ class RaceOrganizerSerializer(serializers.ModelSerializer):
 
 
 class SkisTypeSerializer(serializers.ModelSerializer):
-    displayName = serializers.CharField(source='display_name', read_only=True)
+    displayName = serializers.CharField(source="display_name", read_only=True)
 
     class Meta:
         model = SkisType
@@ -50,7 +54,7 @@ class SkisTypeSerializer(serializers.ModelSerializer):
 
 
 class EventTypeSerializer(serializers.ModelSerializer):
-    displayName = serializers.CharField(source='display_name', read_only=True)
+    displayName = serializers.CharField(source="display_name", read_only=True)
 
     class Meta:
         model = EventType
@@ -58,7 +62,7 @@ class EventTypeSerializer(serializers.ModelSerializer):
 
 
 class AccommodationSerializer(serializers.ModelSerializer):
-    displayName = serializers.CharField(source='display_name', read_only=True)
+    displayName = serializers.CharField(source="display_name", read_only=True)
 
     class Meta:
         model = Accommodation
@@ -66,7 +70,7 @@ class AccommodationSerializer(serializers.ModelSerializer):
 
 
 class LocationSerializer(serializers.ModelSerializer):
-    displayName = serializers.CharField(source='display_name', read_only=True)
+    displayName = serializers.CharField(source="display_name", read_only=True)
 
     class Meta:
         model = Location
@@ -74,23 +78,26 @@ class LocationSerializer(serializers.ModelSerializer):
 
 
 class ParticipantsSerializer(serializers.ModelSerializer):
-    displayName = serializers.CharField(source='user.full_name', read_only=True)
+    displayName = serializers.CharField(source="user.full_name", read_only=True)
 
     class Meta:
         model = Profile
-        fields = ("id", "displayName",)
+        fields = (
+            "id",
+            "displayName",
+        )
 
 
 class EventResponseSerializer(serializers.ModelSerializer):
-
     def create(self, validated_data):
         # for x in validated_data:;
         #     print(f"{x} -> {validated_data[x]}")
         response, created = EventResponse.objects.update_or_create(
-            user_to_event=validated_data.get('user_to_event', None),
-            event=validated_data.get('event', None))
+            user_to_event=validated_data.get("user_to_event", None),
+            event=validated_data.get("event", None),
+        )
 
-        response.going = validated_data.get('going', None)
+        response.going = validated_data.get("going", None)
         response.save()
         return response
 
@@ -109,8 +116,11 @@ class BaseEventSerializer(serializers.ModelSerializer):
 
     def get_responses(self, item):
         # get unique newest instance for each child child
-        qs = EventResponse.objects.order_by("user_to_event__user_id", "-created_at") \
-            .filter(event=item).distinct("user_to_event__user_id")
+        qs = (
+            EventResponse.objects.order_by("user_to_event__user_id", "-created_at")
+            .filter(event=item)
+            .distinct("user_to_event__user_id")
+        )
         serializer = EventResponseSerializer(instance=qs, many=True)
         return serializer.data
 
@@ -191,7 +201,7 @@ class SkiRaceSerializer(BaseEventSerializer):
 # RES: https://pypi.org/project/django-rest-polymorphic/
 class EventPolymorphicSerializer(PolymorphicSerializer):
     model_serializer_mapping = {
-        Event      : EventSerializer,
+        Event: EventSerializer,
         SkiTraining: SkiTrainingSerializer,
-        SkiRace    : SkiRaceSerializer,
+        SkiRace: SkiRaceSerializer,
     }

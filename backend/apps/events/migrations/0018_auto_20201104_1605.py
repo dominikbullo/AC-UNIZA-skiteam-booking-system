@@ -6,27 +6,27 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('events', '0017_accommodation_price'),
+        ("events", "0017_accommodation_price"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='accommodation',
-            name='adults',
+            model_name="accommodation",
+            name="adults",
             field=models.IntegerField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='accommodation',
-            name='children',
+            model_name="accommodation",
+            name="children",
             field=models.IntegerField(blank=True, null=True),
         ),
         migrations.RemoveField(
-            model_name='event',
-            name='accommodation',
+            model_name="event",
+            name="accommodation",
         ),
         migrations.AddField(
-            model_name='event',
-            name='accommodation',
-            field=models.ManyToManyField(blank=True, null=True, to='events.Accommodation'),
+            model_name="event",
+            name="accommodation",
+            field=models.ManyToManyField(blank=True, null=True, to="events.Accommodation"),
         ),
     ]

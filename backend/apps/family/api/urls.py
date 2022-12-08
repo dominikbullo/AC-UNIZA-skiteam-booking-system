@@ -1,9 +1,9 @@
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
-from apps.family.api.views import FamilyViewSet, ChildViewSet, AddToFamilyView
+from apps.family.api.views import AddToFamilyView, ChildViewSet, FamilyViewSet
 
-app_name = 'family'
+app_name = "family"
 
 # https://www.django-rest-framework.org/api-guide/routers/
 router = DefaultRouter()

@@ -1,24 +1,37 @@
-from django.db import transaction
-from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django_filters import rest_framework as filters
-from rest_framework import viewsets, status, generics, mixins
+from rest_framework import generics, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
-from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
-from apps.events.models import (Event, Season, Category, Location, RaceOrganizer, EventType, SkisType, Accommodation,
-                                EventResponse)
-from apps.events.api.serializers import (EventPolymorphicSerializer, SeasonSerializer, CategorySerializer,
-                                         LocationSerializer, RaceOrganizerSerializer, EventTypeSerializer,
-                                         SkisTypeSerializer, AccommodationSerializer, EventResponseSerializer)
+from apps.events.api.serializers import (
+    AccommodationSerializer,
+    CategorySerializer,
+    EventPolymorphicSerializer,
+    EventResponseSerializer,
+    EventTypeSerializer,
+    LocationSerializer,
+    RaceOrganizerSerializer,
+    SeasonSerializer,
+    SkisTypeSerializer,
+)
+from apps.events.models import (
+    Accommodation,
+    Category,
+    Event,
+    EventResponse,
+    EventType,
+    Location,
+    RaceOrganizer,
+    Season,
+    SkisType,
+)
 
 # RES: https://github.com/LondonAppDeveloper/recipe-app-api/blob/master/app/recipe/views.py
 # RES: https://stackoverflow.com/questions/51016896/how-to-serialize-inherited-models-in-django-rest-framework
-from apps.family.models import Child, FamilyMember
 from apps.users.models import Profile
-from core.choices import get_all_choices, UserTypeChoices
 from core.permissions import IsCoachOrReadOnly
 from core.views import get_object_custom_queryset
 
@@ -35,7 +48,7 @@ class MyFilterBackend(filters.DjangoFilterBackend):
         kwargs = super().get_filterset_kwargs(request, queryset, view)
 
         # merge filterset kwargs provided by view class
-        if hasattr(view, 'get_filterset_kwargs'):
+        if hasattr(view, "get_filterset_kwargs"):
             kwargs.update(view.get_filterset_kwargs())
 
         return kwargs
@@ -49,7 +62,7 @@ class EventsFilter(filters.FilterSet):
 
     class Meta:
         model = Event
-        fields = ['start', 'end', 'type', "participants"]
+        fields = ["start", "end", "type", "participants"]
 
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -61,7 +74,12 @@ class EventViewSet(viewsets.ModelViewSet):
     def get_event(self, pk):
         return get_object_or_404(Event, pk=pk)
 
-    @action(detail=True, methods=['post'], url_path='accommodation', permission_classes=[IsAuthenticatedOrReadOnly])
+    @action(
+        detail=True,
+        methods=["post"],
+        url_path="accommodation",
+        permission_classes=[IsAuthenticatedOrReadOnly],
+    )
     def add_accommodation(self, request, pk=None):
         # raise Exception('Not Implemented yet!')
         print(f"request is{request}")
@@ -83,7 +101,7 @@ class EventViewSet(viewsets.ModelViewSet):
         return Response(event_serializer.data, status=status.HTTP_200_OK)
 
     def get_queryset(self):
-        return get_object_custom_queryset(self.request, Event).order_by('start')
+        return get_object_custom_queryset(self.request, Event).order_by("start")
 
 
 class SeasonViewSet(viewsets.ModelViewSet):
@@ -92,12 +110,12 @@ class SeasonViewSet(viewsets.ModelViewSet):
 
 
 class LocationViewSet(viewsets.ModelViewSet):
-    queryset = Location.objects.all().order_by('name')
+    queryset = Location.objects.all().order_by("name")
     serializer_class = LocationSerializer
 
 
 class RaceOrganizerViewSet(viewsets.ModelViewSet):
-    queryset = RaceOrganizer.objects.all().order_by('name')
+    queryset = RaceOrganizer.objects.all().order_by("name")
     serializer_class = RaceOrganizerSerializer
 
 
@@ -105,7 +123,7 @@ class EventTypeViewSet(viewsets.ModelViewSet):
     queryset = EventType.objects.all()
     serializer_class = EventTypeSerializer
     filter_backends = (filters.DjangoFilterBackend,)
-    filterset_fields = ('need_skis',)
+    filterset_fields = ("need_skis",)
 
 
 class SkisTypeViewSet(viewsets.ModelViewSet):
@@ -120,14 +138,14 @@ class AccommodationViewSet(viewsets.ModelViewSet):
 
 # RES: https://stackoverflow.com/a/61490489/10523982
 class EventResponseCreateAPIView(generics.CreateAPIView):
-    queryset = EventResponse.objects.all().order_by('created_at')
+    queryset = EventResponse.objects.all().order_by("created_at")
     serializer_class = EventResponseSerializer
 
     # filter_backends = (filters.DjangoFilterBackend,)
     # filterset_fields = ('event', "answerer", "user_to_event",)
 
     def perform_create(self, serializer):
-        answerer = self.request.user.profile
+        self.request.user.profile
 
         kwarg_pk = self.kwargs.get("pk")
         event = get_object_or_404(Event, id=kwarg_pk)

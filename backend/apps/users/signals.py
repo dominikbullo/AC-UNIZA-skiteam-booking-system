@@ -1,18 +1,16 @@
 from allauth.account.models import EmailAddress
 from allauth.account.signals import email_confirmed
-
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.db import transaction
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.template.loader import render_to_string
-
 from django_rest_passwordreset.signals import reset_password_token_created
 from rest_framework.authtoken.models import Token
 
+from apps.events.models import Event, Season
 from core.utils import send_custom_mail
-from apps.events.models import Season, Event
 
 
 def notify_users(sender, instance, **kwargs):
@@ -72,14 +70,14 @@ def update_user_email(sender, request, email_address, **kwargs):
     # email_address is an instance of allauth.account.models.EmailAddress
     email_address.set_as_primary()
     # Get rid of old email addresses
-    stale_addresses = EmailAddress.objects.filter(
-        user=email_address.user).exclude(primary=True).delete()
+    EmailAddress.objects.filter(user=email_address.user).exclude(primary=True).delete()
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def generate_token(sender, instance, created, **kwargs):
     if created:
         Token.objects.create(user=instance)
+
 
 @receiver(reset_password_token_created)
 def password_reset_token_created(sender, instance, reset_password_token, *args, **kwargs):
@@ -95,19 +93,20 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
     """
     # send an e-mail to the user
     context = {
-        'current_user'      : reset_password_token.user,
-        'username'          : reset_password_token.user.username,
-        'email'             : reset_password_token.user.email,
-        'domain'            : instance.request.get_host(),
-        'reset_password_url': "{}/reset-password/{}".format(
+        "current_user": reset_password_token.user,
+        "username": reset_password_token.user.username,
+        "email": reset_password_token.user.email,
+        "domain": instance.request.get_host(),
+        "reset_password_url": "{}/reset-password/{}".format(
             # TODO: Test this url on production
             instance.request.get_host(),
-            reset_password_token.key)
+            reset_password_token.key,
+        ),
     }
 
     # render email text
-    email_html_message = render_to_string('email/user/user_reset_password.html', context)
-    email_plaintext_message = render_to_string('email/user/user_reset_password.txt', context)
+    email_html_message = render_to_string("email/user/user_reset_password.html", context)
+    email_plaintext_message = render_to_string("email/user/user_reset_password.txt", context)
 
     msg = EmailMultiAlternatives(
         # title:
@@ -117,7 +116,7 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
         # from:
         settings.DEFAULT_FROM_EMAIL,
         # to:
-        [reset_password_token.user.email]
+        [reset_password_token.user.email],
     )
     msg.attach_alternative(email_html_message, "text/html")
     msg.send()

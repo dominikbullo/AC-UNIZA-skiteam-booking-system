@@ -7,8 +7,10 @@ https://docs.djangoproject.com/en/dev/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/dev/ref/settings/
 """
+
 import environ
-from datetime import timedelta
+from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
 
 ROOT_DIR = environ.Path(__file__) - 2
 APP_DIR = environ.Path(__file__) - 3
@@ -23,54 +25,48 @@ env = environ.Env()
 # ------------------------------------------------------------------------------
 DJANGO_APPS = [
     # https://github.com/deschler/django-modeltranslation/issues/408
-    'modeltranslation',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'whitenoise.runserver_nostatic',
-    'django.contrib.staticfiles',
-    'django.contrib.sites',
+    "unfold",  # before django.contrib.admin
+    "unfold.contrib.filters",  # optional
+    "modeltranslation",
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "whitenoise.runserver_nostatic",
+    "django.contrib.staticfiles",
+    "django.contrib.sites",
 ]
 
 THIRD_PARTY_APPS = [
-    'django_extensions',
-
-    'rest_framework',
-    'rest_framework.authtoken',
-    'rest_auth',
-
+    "django_extensions",
+    "rest_framework",
+    "rest_framework.authtoken",
+    "dj_rest_auth",
     # https://django-rest-auth.readthedocs.io/en/latest/api_endpoints.html
-    'allauth',
-    'allauth.account',
-    'rest_auth.registration',
-
+    "allauth",
+    "allauth.account",
+    "dj_rest_auth.registration",
     # https://django-rest-auth.readthedocs.io/en/latest/installation.html
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.facebook',
-
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
+    "allauth.socialaccount.providers.facebook",
     # https://github.com/adamchainz/django-cors-headers#cors_allow_headers
-    'corsheaders',
-
-    'polymorphic',
-    'colorfield',
-
-    'pwa',
-
-    'django_excel_fixture',
-    'django_filters',
-    'django_rest_passwordreset',
-
-    'simple_history',
+    "corsheaders",
+    "polymorphic",
+    "colorfield",
+    "pwa",
+    "django_excel_fixture",
+    "django_filters",
+    "django_rest_passwordreset",
+    "simple_history",
 ]
 
 LOCAL_APPS = [
-    'apps.users',
-    'apps.family',
-    'apps.events',
-    'apps.stats',
+    "apps.users",
+    "apps.family",
+    "apps.events",
+    "apps.stats",
 ]
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -78,48 +74,47 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 # MIDDLEWARE CONFIGURATION
 # ------------------------------------------------------------------------------
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # 'app.middleware.LoginRequiredMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
-    'simple_history.middleware.HistoryRequestMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
+    "simple_history.middleware.HistoryRequestMiddleware",
 ]
 
 # DEBUG
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#debug
-DEBUG = env.bool('DEBUG', default=False)
-SECRET_KEY = env.str('SECRET_KEY', default='not-safe-key')
+DEBUG = env.bool("DEBUG", default=False)
+SECRET_KEY = env.str("SECRET_KEY", default="not-safe-key")
 
 # DOMAINS
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
-DOMAIN = env.str('DOMAIN', default="localhost")
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"])
+DOMAIN = env.str("DOMAIN", default="localhost")
 
 # RES: https://stackoverflow.com/questions/6367014/how-to-send-email-via-django
 # EMAIL CONFIGURATION
 # ------------------------------------------------------------------------------
-EMAIL_PORT = env.int('EMAIL_PORT', default='1025')
-EMAIL_HOST = env.str('EMAIL_HOST', default='mailhog')
-EMAIL_HOST_USER = env.str('EMAIL_HOST_USER', default='noreply@sportagenda.local')
-EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD', default='')
+EMAIL_PORT = env.int("EMAIL_PORT", default="1025")
+EMAIL_HOST = env.str("EMAIL_HOST", default="mailhog")
+EMAIL_HOST_USER = env.str("EMAIL_HOST_USER", default="noreply@sportagenda.local")
+EMAIL_HOST_PASSWORD = env.str("EMAIL_HOST_PASSWORD", default="")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # It need to be TSL = False , SSL True on prod
-EMAIL_USE_TSL = env.bool('EMAIL_USE_TSL', default=True)
-EMAIL_USE_SSL = env.bool('EMAIL_USE_SSL', default=False)
+EMAIL_USE_TSL = env.bool("EMAIL_USE_TSL", default=True)
+EMAIL_USE_SSL = env.bool("EMAIL_USE_SSL", default=False)
 
 # MANAGER CONFIGURATION
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = [
-    ('Dominik Bullo', 'dominik@bullo.sk'),
+    ("Dominik Bullo", "dominik@bullo.sk"),
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#managers
@@ -133,13 +128,13 @@ SITE_ID = 1
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
-    'default': {
-        'ENGINE'  : 'django.db.backends.postgresql',
-        'NAME'    : env.str('POSTGRES_DB'),
-        'USER'    : env.str('POSTGRES_USER'),
-        'PASSWORD': env.str('POSTGRES_PASSWORD'),
-        'PORT'    : env.str('DB_PORT'),
-        'HOST'    : env.str('DB_HOST'),
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": env.str("POSTGRES_DB"),
+        "USER": env.str("POSTGRES_USER"),
+        "PASSWORD": env.str("POSTGRES_PASSWORD"),
+        "PORT": env.str("DB_PORT"),
+        "HOST": env.str("DB_HOST"),
     },
 }
 
@@ -149,10 +144,10 @@ DATABASES = {
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
 # In a Windows environment this must be set to your system time zone.
-TIME_ZONE = 'Europe/Bratislava'
+TIME_ZONE = "Europe/Bratislava"
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#language-code
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "en-us"
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#use-i18n
 USE_I18N = True
@@ -166,61 +161,61 @@ USE_TZ = True
 # STATIC FILE CONFIGURATION
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#static-root
-STATIC_ROOT = str(ROOT_DIR('staticfiles'))
+STATIC_ROOT = str(ROOT_DIR("static"))
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#static-url
-STATIC_URL = '/staticfiles/'
+STATIC_URL = "/static/"
 
 # See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
 STATICFILES_DIRS = [
-    str(ROOT_DIR('static')),
+    str(ROOT_DIR("staticfiles")),
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
 STATICFILES_FINDERS = [
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # MEDIA CONFIGURATION
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#media-root
-MEDIA_ROOT = str(ROOT_DIR('media'))
+MEDIA_ROOT = str(ROOT_DIR("media"))
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#media-url
-MEDIA_URL = '/media/'
+MEDIA_URL = "/media/"
 
 # URL Configuration
 # ------------------------------------------------------------------------------
-ROOT_URLCONF = 'config.urls'
+ROOT_URLCONF = "config.urls"
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#wsgi-application
-WSGI_APPLICATION = 'config.wsgi.application'
+WSGI_APPLICATION = "config.wsgi.application"
 
 # TEMPLATE CONFIGURATION
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#templates
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS'   : STATICFILES_DIRS,
-        'OPTIONS': {
-            'debug'             : DEBUG,
-            'loaders'           : [
-                'django.template.loaders.filesystem.Loader',
-                'django.template.loaders.app_directories.Loader',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": STATICFILES_DIRS,
+        "OPTIONS": {
+            "debug": DEBUG,
+            "loaders": [
+                "django.template.loaders.filesystem.Loader",
+                "django.template.loaders.app_directories.Loader",
             ],
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.template.context_processors.i18n',
-                'django.template.context_processors.media',
-                'django.template.context_processors.static',
-                'django.template.context_processors.tz',
-                'django.contrib.messages.context_processors.messages',
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.template.context_processors.i18n",
+                "django.template.context_processors.media",
+                "django.template.context_processors.static",
+                "django.template.context_processors.tz",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
@@ -230,21 +225,21 @@ TEMPLATES = [
 # ------------------------------------------------------------------------------
 # See https://docs.djangoproject.com/en/dev/ref/settings/#password-hashers
 PASSWORD_HASHERS = [
-    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
-    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
-    'django.contrib.auth.hashers.Argon2PasswordHasher',
-    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
-    'django.contrib.auth.hashers.BCryptPasswordHasher',
+    "django.contrib.auth.hashers.PBKDF2PasswordHasher",
+    "django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher",
+    "django.contrib.auth.hashers.Argon2PasswordHasher",
+    "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
+    "django.contrib.auth.hashers.BCryptPasswordHasher",
 ]
 
 # PASSWORD VALIDATION
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-password-validators
 # ------------------------------------------------------------------------------
 AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
 # AUTHENTICATION CONFIGURATION
@@ -252,14 +247,13 @@ AUTH_PASSWORD_VALIDATORS = [
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
     "django.contrib.auth.backends.ModelBackend",
-
     # `allauth` specific authentication methods, such as login by e-mail
     "allauth.account.auth_backends.AuthenticationBackend",
 )
 
 # Custom user app defaults
 # Select the correct user model
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = "users.User"
 
 # DJANGO REST FRAMEWORK
 # ------------------------------------------------------------------------------
@@ -269,96 +263,166 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 OLD_PASSWORD_FIELD_ENABLED = True
 
-ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+ACCOUNT_AUTHENTICATION_METHOD = "username_email"
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
 REST_AUTH_REGISTER_SERIALIZERS = {
-    'REGISTER_SERIALIZER': 'users.api.serializers.CustomRegisterSerializer',
+    "REGISTER_SERIALIZER": "users.api.serializers.CustomRegisterSerializer",
 }
 REST_AUTH_SERIALIZERS = {
     # 'USER_DETAILS_SERIALIZER': 'users.api.serializers.CustomUserDetailSerializer',
-    'TOKEN_SERIALIZER': 'users.api.serializers.TokenSerializer',
+    "TOKEN_SERIALIZER": "users.api.serializers.TokenSerializer",
 }
-CALENDAR_DATETIME_FORMAT = '%Y-%m-%d %H:%M'
-DATETIME_FORMAT = '%d.%m.%Y %H:%M'
+CALENDAR_DATETIME_FORMAT = "%Y-%m-%d %H:%M"
+DATETIME_FORMAT = "%d.%m.%Y %H:%M"
 DATE_FORMAT = "%d.%m.%Y"
 
 # Django-REST-Framework
 # https://medium.com/@apogiatzis/create-a-restful-api-with-users-and-jwt-authentication-using-django-1-11-drf-part-2-eb6fdcf71f45
 REST_FRAMEWORK = {
-    "DATETIME_INPUT_FORMATS"        : [(DATETIME_FORMAT), ('iso-8601')],
-    "DATE_INPUT_FORMATS"            : [('iso-8601'), ],
-    'DEFAULT_FILTER_BACKENDS'       : ('django_filters.rest_framework.DjangoFilterBackend',),
-    'DEFAULT_PERMISSION_CLASSES'    : ('rest_framework.permissions.IsAuthenticated',),
-    'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework.authentication.TokenAuthentication',
-                                       # RELEASE Delete SessionAuthentication
-                                       'rest_framework.authentication.SessionAuthentication',
-                                       ),
-    'DEFAULT_PAGINATION_CLASS'      : 'rest_framework.pagination.PageNumberPagination',
-
+    "DATETIME_INPUT_FORMATS": [(DATETIME_FORMAT), ("iso-8601")],
+    "DATE_INPUT_FORMATS": [
+        ("iso-8601"),
+    ],
+    "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework.authentication.TokenAuthentication",
+        # RELEASE Delete SessionAuthentication
+        "rest_framework.authentication.SessionAuthentication",
+    ),
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     # FIXME on front
-    'PAGE_SIZE'                     : 200
+    "PAGE_SIZE": 200,
 }
 
 # raven sentry client
 # See https://docs.sentry.io/clients/python/integrations/django/
-INSTALLED_APPS += ['raven.contrib.django.raven_compat']
-RAVEN_MIDDLEWARE = ['raven.contrib.django.raven_compat.middleware.SentryResponseErrorIdMiddleware']
+INSTALLED_APPS += ["raven.contrib.django.raven_compat"]
+RAVEN_MIDDLEWARE = ["raven.contrib.django.raven_compat.middleware.SentryResponseErrorIdMiddleware"]
 MIDDLEWARE = RAVEN_MIDDLEWARE + MIDDLEWARE
 
 # Sentry Configuration
-SENTRY_DSN = env.str('SENTRY_DSN', default="")
-SENTRY_CLIENT = 'raven.contrib.django.raven_compat.DjangoClient'
+SENTRY_DSN = env.str("SENTRY_DSN", default="")
+SENTRY_CLIENT = "raven.contrib.django.raven_compat.DjangoClient"
 LOGGING = {
-    'version'                 : 1,
-    'disable_existing_loggers': True,
-    'root'                    : {
-        'level'   : 'WARNING',
-        'handlers': ['sentry'],
+    "version": 1,
+    "disable_existing_loggers": True,
+    "root": {
+        "level": "WARNING",
+        "handlers": ["sentry"],
     },
-    'formatters'              : {
-        'verbose': {
-            'format': '%(levelname)s %(asctime)s %(module)s '
-                      '%(process)d %(thread)d %(message)s'
+    "formatters": {
+        "verbose": {"format": "%(levelname)s %(asctime)s %(module)s " "%(process)d %(thread)d %(message)s"},
+    },
+    "handlers": {
+        "sentry": {
+            "level": "ERROR",
+            "class": "raven.contrib.django.raven_compat.handlers.SentryHandler",
+        },
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
         },
     },
-    'handlers'                : {
-        'sentry' : {
-            'level': 'ERROR',
-            'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
+    "loggers": {
+        "django.db.backends": {
+            "level": "ERROR",
+            "handlers": ["console"],
+            "propagate": False,
         },
-        'console': {
-            'level'    : 'DEBUG',
-            'class'    : 'logging.StreamHandler',
-            'formatter': 'verbose'
-        }
-    },
-    'loggers'                 : {
-        'django.db.backends'            : {
-            'level'    : 'ERROR',
-            'handlers' : ['console'],
-            'propagate': False,
+        "raven": {
+            "level": "DEBUG",
+            "handlers": ["console"],
+            "propagate": False,
         },
-        'raven'                         : {
-            'level'    : 'DEBUG',
-            'handlers' : ['console'],
-            'propagate': False,
+        "sentry.errors": {
+            "level": "DEBUG",
+            "handlers": ["console"],
+            "propagate": False,
         },
-        'sentry.errors'                 : {
-            'level'    : 'DEBUG',
-            'handlers' : ['console'],
-            'propagate': False,
-        },
-        'django.security.DisallowedHost': {
-            'level'    : 'ERROR',
-            'handlers' : ['console', 'sentry'],
-            'propagate': False,
+        "django.security.DisallowedHost": {
+            "level": "ERROR",
+            "handlers": ["console", "sentry"],
+            "propagate": False,
         },
     },
 }
 
-RAVEN_CONFIG = {
-    'DSN': SENTRY_DSN
+RAVEN_CONFIG = {"DSN": SENTRY_DSN}
+
+UNFOLD = {
+    "SITE_TITLE": "SpotAgenda",
+    "SITE_HEADER": "SportAgenda",
+    "COLORS": {
+        "primary": {
+            "50": "224 250 255",
+            "100": "194 245 255",
+            "200": "138 235 255",
+            "300": "77 225 255",
+            "400": "15 215 255",
+            "500": "0 176 211",
+            "600": "0 140 168",
+            "700": "0 106 128",
+            "800": "0  72 87",
+            "900": "0  34 41",
+        },
+    },
+    "EXTENSIONS": {
+        "modeltranslation": {
+            "flags": {
+                "en": "🇬🇧",
+                "sk": "🇫🇷",
+            },
+        },
+    },
+    "SIDEBAR": {
+        "show_search": True,
+        "show_all_applications": True,
+        "navigation": [
+            {
+                "title": _("Navigation"),
+                "separator": True,  # Top border
+                "items": [
+                    {
+                        "title": _("Dashboard"),
+                        "icon": "dashboard",
+                        "link": reverse_lazy("admin:index"),
+                    },
+                    {
+                        "title": _("Users"),
+                        "icon": "people",
+                        "link": reverse_lazy("admin:users_user_changelist"),
+                    },
+                    {
+                        "title": _("Events"),
+                        "icon": "dashboard",
+                        "link": reverse_lazy("admin:events_event_changelist"),
+                    },
+                    {
+                        "title": _("Statistics"),
+                        "icon": "dashboard",
+                        "link": reverse_lazy("admin:users_user_changelist"),
+                    },
+                ],
+            },
+        ],
+    },
+    "TABS": [
+        {
+            "models": [
+                "apps.users.user",
+            ],
+            "items": [
+                {
+                    "title": _("Dashboard"),
+                    "icon": "dashboard",
+                    "link": reverse_lazy("admin:index"),
+                },
+            ],
+        },
+    ],
 }

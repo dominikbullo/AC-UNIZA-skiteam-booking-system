@@ -1,28 +1,16 @@
-FROM python:3.7
+FROM python:3.11
 
 # python envs
 ENV PYTHONFAULTHANDLER=1 \
-    PYTHONUNBUFFERED=1 \
     PYTHONHASHSEED=random \
-    PIP_NO_CACHE_DIR=off \
-    PIP_DISABLE_PIP_VERSION_CHECK=on \
-    PIP_DEFAULT_TIMEOUT=100
+    PYTHONUNBUFFERED=1
 
-COPY ./Pipfile* /
 
-# Install pipenv
+WORKDIR /app/backend/
+
+# Upload Poetry files
+COPY pyproject.toml poetry.lock ./
+
+# Upgrage pip, install poetry and install packpages (also creates virtual env)
 RUN pip install --upgrade pip
-RUN pip install pipenv
-
-RUN pipenv requirements > requirements.txt
-RUN pip install -r requirements.txt
-
-# upload scripts
-COPY ./scripts/entrypoint.sh ./scripts/start.sh ./scripts/gunicorn.sh /
-
-# Fix windows docker bug, convert CRLF to LF
-RUN sed -i 's/\r$//g' /start.sh && chmod +x /start.sh &&\
-    sed -i 's/\r$//g' /entrypoint.sh && chmod +x /entrypoint.sh &&\
-    sed -i 's/\r$//g' /gunicorn.sh && chmod +x /gunicorn.sh
-
-WORKDIR /app
+RUN pip install poetry && poetry install

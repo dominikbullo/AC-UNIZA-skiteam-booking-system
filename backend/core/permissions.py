@@ -1,7 +1,5 @@
 from rest_framework import permissions
 
-from core import choices
-
 
 class IsCoachOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):

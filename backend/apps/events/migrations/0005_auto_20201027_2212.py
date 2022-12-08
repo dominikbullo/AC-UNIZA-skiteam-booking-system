@@ -6,38 +6,68 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('events', '0004_auto_20201027_2125'),
+        ("events", "0004_auto_20201027_2125"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='SkisType',
+            name="SkisType",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(choices=[('SL', 'Slalom'), ('GS', 'Giant Slalom'), ('SG', 'Super Giant Slalom')], default='GS', max_length=3)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        choices=[
+                            ("SL", "Slalom"),
+                            ("GS", "Giant Slalom"),
+                            ("SG", "Super Giant Slalom"),
+                        ],
+                        default="GS",
+                        max_length=3,
+                    ),
+                ),
             ],
         ),
         migrations.AlterField(
-            model_name='eventtype',
-            name='type',
-            field=models.CharField(choices=[('SKI_TRAINING', 'Ski Training'), ('ATHLETIC_TRAINING', 'Athletic Training'), ('SKI_RACE', 'Ski Race'), ('SKI_CAMP', 'Ski Camp'), ('VIDEO_ANALYZE', 'Video Analyze'), ('MEETING', 'Meeting')], max_length=50, unique=True),
+            model_name="eventtype",
+            name="type",
+            field=models.CharField(
+                choices=[
+                    ("SKI_TRAINING", "Ski Training"),
+                    ("ATHLETIC_TRAINING", "Athletic Training"),
+                    ("SKI_RACE", "Ski Race"),
+                    ("SKI_CAMP", "Ski Camp"),
+                    ("VIDEO_ANALYZE", "Video Analyze"),
+                    ("MEETING", "Meeting"),
+                ],
+                max_length=50,
+                unique=True,
+            ),
         ),
         migrations.RemoveField(
-            model_name='skirace',
-            name='skis_type',
+            model_name="skirace",
+            name="skis_type",
         ),
         migrations.RemoveField(
-            model_name='skitraining',
-            name='skis_type',
+            model_name="skitraining",
+            name="skis_type",
         ),
         migrations.AddField(
-            model_name='skirace',
-            name='skis_type',
-            field=models.ManyToManyField(related_name='skirace_skis_type', to='events.SkisType'),
+            model_name="skirace",
+            name="skis_type",
+            field=models.ManyToManyField(related_name="skirace_skis_type", to="events.SkisType"),
         ),
         migrations.AddField(
-            model_name='skitraining',
-            name='skis_type',
-            field=models.ManyToManyField(related_name='skitraining_skis_type', to='events.SkisType'),
+            model_name="skitraining",
+            name="skis_type",
+            field=models.ManyToManyField(related_name="skitraining_skis_type", to="events.SkisType"),
         ),
     ]

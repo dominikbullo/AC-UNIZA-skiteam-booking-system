@@ -6,26 +6,26 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('events', '0019_event_group_id'),
+        ("events", "0019_event_group_id"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='accommodation',
-            name='hotel',
+            model_name="accommodation",
+            name="hotel",
         ),
         migrations.RemoveField(
-            model_name='event',
-            name='group_id',
+            model_name="event",
+            name="group_id",
         ),
         migrations.AddField(
-            model_name='accommodation',
-            name='name',
+            model_name="accommodation",
+            name="name",
             field=models.CharField(max_length=150, null=True),
         ),
         migrations.AlterField(
-            model_name='accommodation',
-            name='website',
+            model_name="accommodation",
+            name="website",
             field=models.URLField(null=True),
         ),
     ]

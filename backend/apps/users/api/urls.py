@@ -1,8 +1,9 @@
-from django.urls import path, include
+from django.urls import path
 from rest_framework.routers import DefaultRouter
-from apps.users.api.views import ProfileViewSet, AvatarUpdateView, ChangePasswordView
 
-app_name = 'users'
+from apps.users.api.views import AvatarUpdateView, ChangePasswordView, ProfileViewSet
+
+app_name = "users"
 
 router = DefaultRouter()
 router.register(r"profiles?", ProfileViewSet, basename="profile")

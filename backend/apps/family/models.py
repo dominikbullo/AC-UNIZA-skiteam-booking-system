@@ -2,7 +2,6 @@ from django.db import models
 
 from apps.users.models import User
 
-
 # RESOURCES
 # https://www.youtube.com/watch?v=gf2-J9YOMcc&t=458s
 # https://stackoverflow.com/questions/55006095/how-to-represent-a-family-relationship-in-django-using-manytomany-and-inlineform
@@ -20,7 +19,7 @@ class Family(models.Model):
 
     class Meta:
         verbose_name_plural = "Families"
-        ordering = ['id']
+        ordering = ["id"]
 
 
 # TODO: This is not necessary -> try with profile
@@ -33,12 +32,12 @@ class FamilyMember(models.Model):
         return self.user.display_name
 
     class Meta:
-        ordering = ['user__date_joined']
+        ordering = ["user__date_joined"]
 
 
 class Child(FamilyMember):
     # RES (Many to many birectional): https://stackoverflow.com/questions/4881578/django-bi-directional-manytomany-how-to-prevent-table-creation-on-second-model
-    categories = models.ManyToManyField('events.Category', blank=True)
+    categories = models.ManyToManyField("events.Category", blank=True)
     # events = models.ManyToManyField('events.Event', blank=True)
     test_field = models.CharField(max_length=30, blank=True)
 

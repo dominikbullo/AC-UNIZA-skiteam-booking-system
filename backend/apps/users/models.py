@@ -1,8 +1,5 @@
-import uuid
-
 from allauth.account.models import EmailAddress
-from django.contrib.auth.base_user import AbstractBaseUser
-from django.contrib.auth.models import AbstractUser, Group, PermissionsMixin
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 from core import choices
@@ -16,6 +13,7 @@ class User(AbstractUser):
     Custom user model that supports using email or username
     Also require first and last name
     """
+
     first_name = models.CharField(max_length=50, null=False, blank=False)
     last_name = models.CharField(max_length=150, null=False, blank=False)
 
@@ -72,10 +70,10 @@ class Profile(models.Model):
 
     gender = models.CharField(choices=GenderChoices.choices, max_length=1, null=False, blank=False)
 
-    events = models.ManyToManyField('events.Event', blank=True)
+    events = models.ManyToManyField("events.Event", blank=True)
 
     class Meta:
-        ordering = ['user__date_joined']
+        ordering = ["user__date_joined"]
 
     def __str__(self):
         return self.user.email_or_username

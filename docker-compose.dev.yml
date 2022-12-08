@@ -1,40 +1,10 @@
-# Used on local dev with command docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
-# Or you rename this file to docker-compose.override.yml and then just run docker-compose up
-# RES: https://docs.docker.com/compose/extends/
-version: "3"
+version: "3.8"
 
 services:
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile.dev
-    depends_on:
-      - postgres
-    volumes:
-      - ./backend:/app
-    command: /start.sh
-    entrypoint: /entrypoint.sh
-    restart: on-failure
-
-  frontend:
-    image: node:14-alpine
-    command: npm run serve
-    volumes:
-      - ./.env:/app/.env:ro
-      - ./frontend:/app
-    working_dir: /app
-    restart: on-failure
-
-  # postgres database
   postgres:
-    image: postgres
-    volumes:
-      - sportagenda_data:/var/lib/postgresql/data/ # persist data even if container shuts down
     ports:
       - ${DB_PORT}:${DB_PORT}
 
-  # pgadmin for managing postgis db (runs at localhost:5050)
-  # To add the above postgres server to pgadmin, use hostname as defined by docker: 'postgres'
   pgadmin:
     image: dpage/pgadmin4
     ports:
@@ -49,18 +19,3 @@ services:
       - "8025:8025"
     logging:
       driver: none
-
-  nginx:
-    image: nginx:alpine
-    ports:
-      - "8000:80"
-    volumes:
-      - ./backend/media/:/media/
-      - ./backend/staticfiles/:/staticfiles/
-      - ./nginx/dev.conf:/etc/nginx/nginx.conf:ro
-    logging:
-      driver: none
-
-volumes:
-  sportagenda_data: {}
-  pgadmin_data: {}

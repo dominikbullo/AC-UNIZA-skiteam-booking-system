@@ -1,0 +1,61 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.3.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-case-conflict
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: check-toml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+  - repo: https://github.com/PyCQA/autoflake
+    rev: v2.0.0
+    hooks:
+      - id: autoflake
+  - repo: https://github.com/pycqa/isort
+    rev: 5.10.1
+    hooks:
+      - id: isort
+        files: "\\.(py)$"
+        args: [ --settings-path=backend/pyproject.toml ]
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.4
+    hooks:
+      - id: bandit
+        args: [ --skip, "B310,B320,B410", -x, tests, --recursive, clumper ]
+
+  - repo: https://github.com/ambv/black
+    rev: 22.10.0
+    hooks:
+      - id: black
+        args: [ --config=backend/pyproject.toml ]
+        exclude: ^frontend/
+  - repo: https://github.com/pycqa/flake8
+    rev: 5.0.4
+    hooks:
+      - id: flake8
+        args:
+          - "--exclude=**/migrations/*"
+          - "--max-line-length=120"
+          - "--max-complexity=18"
+          - "--select=C,E,F,W,B,B950"
+          - "--extend-ignore=E203,E501,W503"
+        additional_dependencies:
+          - flake8-tidy-imports
+          - flake8-typing-imports
+  - repo: https://github.com/hadialqattan/pycln
+    rev: v2.1.1
+    hooks:
+      - id: pycln
+        language: python
+        language_version: python3
+        types: [ python ]
+        args: [ --config=backend/pyproject.toml ]
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v2.1.1
+    hooks:
+      - id: conventional-pre-commit
+        stages: [ commit-msg ]
+        args: [ ]

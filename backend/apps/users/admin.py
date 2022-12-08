@@ -1,19 +1,18 @@
 from django.contrib import admin
-
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Permission
 
-from apps.family.models import FamilyMember, Child
-from apps.users.forms import CustomUserCreationForm, CustomUserChangeForm
-from apps.users.models import User, Profile
+from apps.family.models import FamilyMember
+from apps.users.forms import CustomUserChangeForm, CustomUserCreationForm
+from apps.users.models import Profile, User
 
 
 class ProfileInline(admin.StackedInline):
     model = Profile
     can_delete = False
-    verbose_name_plural = 'Profile'
-    fk_name = 'user'
-    filter_horizontal = ('events',)
+    verbose_name_plural = "Profile"
+    fk_name = "user"
+    filter_horizontal = ("events",)
 
 
 # class ChildInline(admin.StackedInline):
@@ -26,8 +25,8 @@ class ProfileInline(admin.StackedInline):
 class FamilyMemberInLine(admin.StackedInline):
     model = FamilyMember
     can_delete = False
-    verbose_name_plural = 'Families'
-    fk_name = 'user'
+    verbose_name_plural = "Families"
+    fk_name = "user"
 
 
 @admin.register(User)
@@ -35,7 +34,11 @@ class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = User
-    list_display = UserAdmin.list_display + ("date_joined", "last_login", "get_user_role",)
+    list_display = UserAdmin.list_display + (
+        "date_joined",
+        "last_login",
+        "get_user_role",
+    )
 
     inlines = [ProfileInline, FamilyMemberInLine]
 
@@ -46,16 +49,26 @@ class CustomUserAdmin(UserAdmin):
             return "Unidentified"
 
     add_fieldsets = (
-        (None, {
-            'classes': ('wide',),
-            'fields' : ("username", "email", "first_name", "last_name", "password1", "password2",),
-        }),
+        (
+            None,
+            {
+                "classes": ("wide",),
+                "fields": (
+                    "username",
+                    "email",
+                    "first_name",
+                    "last_name",
+                    "password1",
+                    "password2",
+                ),
+            },
+        ),
     )
 
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    filter_horizontal = ('events',)
+    filter_horizontal = ("events",)
 
 
 admin.site.register(Permission)

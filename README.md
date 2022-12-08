@@ -4,27 +4,37 @@
 ![Language](https://img.shields.io/static/v1?label=Language&message=Python&color=blue)
 
 # Sport Agenda
-Web app for complete managing a sport clubs. Events, recording child statistics by time, calculating payouts for coaches and so on...
+
+Web app for complete managing a sport clubs. Events, recording child statistics by time, calculating payouts for coaches
+and so on...
 
 ## Getting Started
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+
+These instructions will get you a copy of the project up and running on your local machine for development and testing
+purposes. See deployment for notes on how to deploy the project on a live system.
+
 ### Prerequisites
 
-In order to run this container you'll need [Docker](https://docs.docker.com/install/#desktop) and [Docker Compose](https://docs.docker.com/compose/install/) installed.
+In order to run this container you'll need [Docker](https://docs.docker.com/install/#desktop)
+and [Docker Compose](https://docs.docker.com/compose/install/) installed.
+
 #### Docker
+
 * [Windows](https://docs.docker.com/docker-for-windows/install/)
 * [Mac](https://docs.docker.com/docker-for-mac/install/)
 * [Linux](https://docs.docker.com/install/#server)
 
 #### Docker Compose
-**On desktop systems like Docker Desktop for Mac and Windows, Docker Compose is included as part of those desktop installs.**
+
+**On desktop systems like Docker Desktop for Mac and Windows, Docker Compose is included as part of those desktop
+installs.**
 
 * [Manual](https://docs.docker.com/mac/started/)
 
-
 ## Development
 
-Install [Docker](https://docs.docker.com/install/) and [Docker-Compose](https://docs.docker.com/compose/). Start your virtual machines with the following shell command:
+Install [Docker](https://docs.docker.com/install/) and [Docker-Compose](https://docs.docker.com/compose/). Start your
+virtual machines with the following shell command:
 
 ```
 docker-compose up --build
@@ -60,12 +70,10 @@ docker-compose run --rm backend flake8 --exit-zero  --statistics
 
 ## Deploy app
 
-
 For production you'll need to fill out `.env` file and use
 `docker-compose-prod.yml` file:
 
     $ docker-compose -f docker-compose-prod.yml up --build -d
-
 
 The app will then be available at http://localhost:8000
 
@@ -74,17 +82,21 @@ The app will then be available at http://localhost:8000
 * [Docker](https://www.docker.com/)
 * [12 Factor](http://12factor.net/)
 * Template: [Vuexy](https://pixinvent.com/demo/vuexy-vuejs-admin-dashboard-template/landing/)
-* Frontend: [Vue.js](https://vuejs.org/) + [Vue Cli](https://cli.vuejs.org/) + [PWA](https://developers.google.com/web/progressive-web-apps/)
-* Backend: [Django](https://www.djangoproject.com/)  
+*
+
+Frontend: [Vue.js](https://vuejs.org/) + [Vue Cli](https://cli.vuejs.org/) + [PWA](https://developers.google.com/web/progressive-web-apps/)
+
+* Backend: [Django](https://www.djangoproject.com/)
 * Database: [PostgreSQL](https://ww.postgresql.org/)
 * Server: [Nginx](https://nginx.org/)
 * API:  [Django REST Framework](https://www.django-rest-framework.org/)
 
 ## Versioning
 
-I use [Bumpversion](https://github.com/c4urself/bump2version) for versioning. For the versions available, see the 
-[Releases on this repository](https://github.com/dominikbullo/sport_club_management_system/releases) or if you need more details you could check you 
-[Tags on this repository](https://github.com/dominikbullo/sport_club_management_system/tags). 
+I use [Bumpversion](https://github.com/c4urself/bump2version) for versioning. For the versions available, see the
+[Releases on this repository](https://github.com/dominikbullo/sport_club_management_system/releases) or if you need more
+details you could check you
+[Tags on this repository](https://github.com/dominikbullo/sport_club_management_system/tags).
 
 ## Authors
 
@@ -93,3 +105,21 @@ I use [Bumpversion](https://github.com/c4urself/bump2version) for versioning. Fo
 ## License
 
 This project is licensed under the GPL License - see the [LICENSE](LICENSE) file for details
+
+## Commands
+
+- docker-compose run --rm backend /bin/bash
+- docker-compose build backend
+- docker-compose build backend --no-cache
+
+## Ideas
+
+- Optimize Django imports
+    - https://stackoverflow.com/questions/25376213/delete-unused-packages-from-requirements-file
+      - Use pylint to check each file for unused imports and delete them, (you should be doing this anyway)
+      - Run your tests to make sure that it was right
+      - Use a tool like snakefood or snakefood3 to generate your new list of dependencies
+    - https://furius.ca/snakefood/
+
+- Include pytest
+  - Pytest can run multiple tests in parallel, which reduces the execution time of the test suite. Pytest has its own way to detect the test file and test functions automatically, if not mentioned explicitly. Pytest allows us to skip a subset of the tests during execution.

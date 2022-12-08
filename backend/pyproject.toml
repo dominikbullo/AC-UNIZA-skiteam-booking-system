@@ -1,0 +1,113 @@
+[tool.poetry]
+name = "sportagenda-backend"
+version = "0.1.0"
+description = "Web app for complete managing a sport clubs. Events, recording statistics, calculating payouts for coaches and so on..."
+authors = ["Dominik Bullo"]
+homepage = "https://sportagenda.sk/"
+repository = "https://github.com/dominikbullo/SportAgenda/"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+apns2 = "^0.7.2"
+asgiref = "^3.5.2"
+attrs = "^22.1.0"
+backcall = "^0.2.0"
+certifi = "^2022.9.24"
+cffi = "^1.15.1"
+chardet = "^5.1.0"
+cryptography = "^38.0.4"
+decorator = "^5.1.1"
+defusedxml = "^0.7.1"
+django-allauth = "^0.51.0"
+django-colorfield = "^0.8.0"
+django-cors-headers = "^3.13.0"
+django-environ = "^0.9.0"
+django-excel-fixture = "^0.1"
+django-extensions = "^3.2.1"
+django-filter = "^22.1"
+django-js-asset = "^2.0.0"
+django-modeltranslation = "^0.18.7"
+django-polymorphic = "^3.1.0"
+django-push-notifications = "^3.0.0"
+django-pwa = "^1.0.10"
+django-redis = "^5.2.0"
+django-reset-migrations = "^0.4.0"
+django-rest-passwordreset = "^1.3.0"
+django-rest-polymorphic = "^0.1.10"
+django-simple-history = "^3.2.0"
+django-webpush = "^0.3.4"
+djangorestframework = "^3.14.0"
+drf-reset-password = "^1.2.9"
+drf-writable-nested = "^0.7.0"
+et-xmlfile = "^1.1.0"
+gevent = "^22.10.2"
+greenlet = "^2.0.1"
+gunicorn = "^20.1.0"
+http-ece = "^1.1.0"
+hyper = "^0.7.0"
+idna = "^3.4"
+ipython-genutils = "^0.2.0"
+jdcal = "^1.4.1"
+jedi = "^0.18.2"
+mccabe = "^0.7.0"
+mypy = "^0.991"
+mypy-extensions = "^0.4.3"
+oauthlib = "^3.2.2"
+openpyxl = "^3.0.10"
+parso = "^0.8.3"
+pexpect = "^4.8.0"
+pickleshare = "^0.7.5"
+pillow = "^9.3.0"
+prompt-toolkit = "^3.0.36"
+psycopg2-binary = "^2.9.5"
+ptyprocess = "^0.7.0"
+py-vapid = "^1.9.0"
+pycodestyle = "^2.10.0"
+pycparser = "^2.21"
+pyflakes = "^3.0.1"
+pygments = "^2.13.0"
+python3-openid = "^3.2.0"
+pytz = "^2022.6"
+raven = "^6.10.0"
+redis = "^4.4.0"
+requests = "^2.28.1"
+requests-oauthlib = "^1.3.1"
+rope = "^1.5.1"
+simplegeneric = "^0.8.1"
+six = "^1.16.0"
+sqlparse = "^0.4.3"
+traitlets = "^5.6.0"
+typed-ast = "^1.5.4"
+typing-extensions = "^4.4.0"
+urllib3 = ">=1.26.4"
+wcwidth = "^0.2.5"
+werkzeug = "^2.2.2"
+whitenoise = "^6.2.0"
+zope-event = "^4.5.0"
+zope-interface = "^5.5.2"
+django-unfold = "^0.3.2"
+dj-rest-auth = "^2.2.5"
+
+[tool.black]
+line-length = 120
+
+[tool.pycln]
+all = true
+
+[tool.isort]
+profile = "black"
+line_length = 120
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings"
+markers = "enable_signals"
+
+
+[build-system]
+requires = ["poetry-core>=1.1.13"]
+build-backend = "poetry.core.masonry.api"

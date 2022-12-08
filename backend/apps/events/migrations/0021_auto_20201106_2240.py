@@ -6,12 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('events', '0020_auto_20201106_2234'),
+        ("events", "0020_auto_20201106_2234"),
     ]
 
     operations = [
         migrations.AddConstraint(
-            model_name='accommodation',
-            constraint=models.CheckConstraint(check=models.Q(('name__isnull', False), ('website__isnull', False), _connector='OR'), name='not_both_null'),
+            model_name="accommodation",
+            constraint=models.CheckConstraint(
+                check=models.Q(("name__isnull", False), ("website__isnull", False), _connector="OR"),
+                name="not_both_null",
+            ),
         ),
     ]

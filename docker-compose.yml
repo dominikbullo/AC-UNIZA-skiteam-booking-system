@@ -1,26 +1,47 @@
-# Base file for docker-compose
-# If you run this file without docker-compose.override.yml file, nothing happened, you need to it with some another file
-# If you run this file with docker-compose.override.yml file, it will be automatically accepted as another file
-# RES: https://docs.docker.com/compose/extends/
-version: "3"
+version: "3.8"
 
 services:
   backend:
-    image: "ghcr.io/dominikbullo/sportagenda_backend:${IMAGE_VERSION}"
+    build:
+      context: ./backend
+    command: bash -c "poetry install && poetry run python manage.py migrate && poetry run python manage.py runserver 0.0.0.0:8000"
     depends_on:
       - postgres
+    env_file: ${ENV_FILE:-.env}
     restart: on-failure
-    env_file: .env
+    volumes:
+      - ./backend:/app/backend
 
   postgres:
     image: postgres
     expose:
-      - ${DB_PORT} # Publishes port to other containers but NOT to host machine
+      - ${DB_PORT}
     command: -p ${DB_PORT}
-    env_file: .env
+    env_file: ${ENV_FILE:-.env}
+    volumes:
+      - sportagenda_data:/var/lib/postgresql/data/
+
+  frontend:
+    image: node:14-alpine
+    command: npm run serve
+    volumes:
+      - ./frontend:/app/frontend
+    working_dir: /app/frontend
+    restart: on-failure
 
   nginx:
-    image: "ghcr.io/dominikbullo/sportagenda_nginx:${IMAGE_VERSION}"
+    image: nginx:alpine
+    ports:
+      - "8000:80"
+    volumes:
+      - ./backend/media/:/media/
+      - ./backend/static/:/static/
+      - ./backend/staticfiles/:/staticfiles/
+      - ./nginx/dev.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - backend
-    env_file: .env
+    env_file: ${ENV_FILE:-.env}
+
+volumes:
+  sportagenda_data:
+  pgadmin_data:

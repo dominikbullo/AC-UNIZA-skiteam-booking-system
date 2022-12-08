@@ -1,18 +1,15 @@
+# https://github.com/LondonAppDeveloper/recipe-app-api/blob/master/app/recipe/views.py
 from django.db import transaction
-from rest_framework import viewsets, mixins, generics
-from rest_framework.views import APIView
+from django.utils.crypto import get_random_string
+from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from apps.events.models import Season
-from apps.family.models import Family, Child, FamilyMember
-from apps.family.api.serializers import FamilySerializer, ChildSerializer, FamilyMemberSerializer
-
-# https://github.com/LondonAppDeveloper/recipe-app-api/blob/master/app/recipe/views.py
-from core.views import get_season_by_query
-from django.utils.crypto import get_random_string
+from apps.family.api.serializers import ChildSerializer, FamilySerializer
+from apps.family.models import Child, Family, FamilyMember
 
 
 class FamilyViewSet(viewsets.ModelViewSet):
@@ -24,7 +21,7 @@ class FamilyViewSet(viewsets.ModelViewSet):
     filter_backends = [SearchFilter]
     search_fields = ["name"]
 
-    @action(detail=True, methods=['get'], url_path='token')
+    @action(detail=True, methods=["get"], url_path="token")
     def get_family_token(self, obj, pk=None):
         family = self.get_object()
         family.token = get_random_string(length=64)
@@ -53,7 +50,6 @@ class AddToFamilyView(APIView):
         :return: Returning how family should look like after merging
         """
         ret = {}
-        new_data = []
 
         mew_family = get_object_or_404(Family, token=token)
         print(f"Found new family {mew_family} with token {token}")

@@ -1,18 +1,18 @@
-from django.contrib import admin
-from simple_history.admin import SimpleHistoryAdmin
 from django.apps import apps
-from django.contrib.admin.sites import AlreadyRegistered
 from django.contrib import admin
-from polymorphic.admin import PolymorphicParentModelAdmin, PolymorphicChildModelAdmin, PolymorphicChildModelFilter
+from django.contrib.admin.sites import AlreadyRegistered
+from polymorphic.admin import PolymorphicChildModelAdmin, PolymorphicParentModelAdmin
+from simple_history.admin import SimpleHistoryAdmin
 
-from apps.events.models import Event, SkiTraining, SkiRace, Category, Location, EventResponse
+from apps.events.models import Category, Event, EventResponse, Location, SkiRace, SkiTraining
 
 _event_display_fields = ("season", "start", "type", "location")
 
 
 # RES: https://django-polymorphic.readthedocs.io/en/stable/admin.html
 class ModelAChildAdmin(PolymorphicChildModelAdmin):
-    """ Base admin class for all child models """
+    """Base admin class for all child models"""
+
     base_model = Event  # Optional, explicitly set here.
 
     list_filter = _event_display_fields
@@ -22,7 +22,7 @@ class ModelAChildAdmin(PolymorphicChildModelAdmin):
 @admin.register(SkiTraining)
 class SkiRaceAdmin(ModelAChildAdmin):
     base_model = SkiTraining  # Explicitly set here!
-    exclude = ('type',)
+    exclude = ("type",)
     # define custom features here
 
 
@@ -30,12 +30,13 @@ class SkiRaceAdmin(ModelAChildAdmin):
 class SkiTrainingAdmin(ModelAChildAdmin):
     base_model = SkiRace  # Explicitly set here!
     # define custom features here
-    exclude = ('type',)
+    exclude = ("type",)
 
 
 @admin.register(Event)
 class EventAdmin(PolymorphicParentModelAdmin):
-    """ The parent model admin """
+    """The parent model admin"""
+
     base_model = Event  # Optional, explicitly set here.
     child_models = (Event, SkiTraining, SkiRace)
     list_filter = _event_display_fields
@@ -44,8 +45,13 @@ class EventAdmin(PolymorphicParentModelAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    filter_horizontal = ('members',)
-    __fields = ("name", "season", "year_from", "year_until",)
+    filter_horizontal = ("members",)
+    __fields = (
+        "name",
+        "season",
+        "year_from",
+        "year_until",
+    )
     list_filter = __fields
     list_display = admin.ModelAdmin.list_display + __fields
 
@@ -72,13 +78,19 @@ class LocationAdmin(admin.ModelAdmin):
 # RES: https://django-simple-history.readthedocs.io/en/latest/admin.html
 @admin.register(EventResponse)
 class EventResponseAdmin(SimpleHistoryAdmin):
-    __fields = ("event", "user_to_event", "going", "created_at", "updated_at",)
+    __fields = (
+        "event",
+        "user_to_event",
+        "going",
+        "created_at",
+        "updated_at",
+    )
     list_filter = __fields
     list_display = __fields
     history_list_display = ("going",)
 
 
-app_models = apps.get_app_config('events').get_models()
+app_models = apps.get_app_config("events").get_models()
 for model in app_models:
     try:
         admin.site.register(model)

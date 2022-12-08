@@ -275,11 +275,14 @@ typings/
 *.sw*
 /frontend/dist/
 /frontend/webpack-stats.json
+
 /backend/fixtures/
 /backend/uploads/
+/backend/static/
 /backend/media/
-/backend/staticfiles/
-/.old/
 /docker-compose.override.yml
 /scripts/
 /logs/
+
+.env.*
+!.env.example

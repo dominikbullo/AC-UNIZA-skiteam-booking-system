@@ -1,7 +1,7 @@
 import unicodedata
 
 from django.contrib.auth import get_user_model
-from django.core.mail import send_mail, EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 
@@ -15,14 +15,11 @@ def custom_create_user(**params):
 
 
 def send_custom_mail(new_event, template_file, old_event=None):
-    context = {
-        'event'    : new_event,
-        "old_event": old_event
-    }
+    context = {"event": new_event, "old_event": old_event}
 
     # render email text
-    email_html_message = render_to_string(f'email/event/{template_file}.html', context)
-    email_plaintext_message = render_to_string(f'email/event/{template_file}.txt', context)
+    email_html_message = render_to_string(f"email/event/{template_file}.html", context)
+    email_plaintext_message = render_to_string(f"email/event/{template_file}.txt", context)
 
     emails = getEmailList()
     print("sending emails to ", emails)
@@ -35,7 +32,7 @@ def send_custom_mail(new_event, template_file, old_event=None):
         # from:
         settings.EMAIL_HOST_USER,
         # to:
-        emails
+        emails,
     )
 
     msg.attach_alternative(email_html_message, "text/html")
@@ -65,9 +62,9 @@ def get_family_id(self, instance):
 
 
 def generate_custom_unique_username(user_data):
-    username = str(user_data.get('first_name', '') + user_data.get('last_name', '')).lower()
+    username = str(user_data.get("first_name", "") + user_data.get("last_name", "")).lower()
     # RES: https://www.py.cz/Cestina3X
-    username_candidate_normalized = ''
+    username_candidate_normalized = ""
     for c in username:
         if not unicodedata.combining(c):
             username_candidate_normalized += c
@@ -78,4 +75,4 @@ def generate_custom_unique_username(user_data):
         username = username + str(counter)
         counter += 1
     # RES: https://stackoverflow.com/questions/16664874/how-to-add-an-element-to-the-beginning-of-an-ordereddict
-    user_data.update({'username': username})
+    user_data.update({"username": username})
