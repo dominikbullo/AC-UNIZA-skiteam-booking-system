@@ -13,9 +13,7 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name="accommodation",
             constraint=models.CheckConstraint(
-                check=models.Q(
-                    ("name__isnull", False), ("website__isnull", False), _connector="OR"
-                ),
+                check=models.Q(("name__isnull", False), ("website__isnull", False), _connector="OR"),
                 name="not_both_null",
             ),
         ),

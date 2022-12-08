@@ -1,6 +1,3 @@
-from allauth.account.models import EmailAddress
-from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
-
 #
 # class MySocialAccountAdapter(DefaultSocialAccountAdapter):
 #     def authentication_error(self, request, provider_id, error, exception, extra_context):

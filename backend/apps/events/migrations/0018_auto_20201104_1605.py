@@ -27,8 +27,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="event",
             name="accommodation",
-            field=models.ManyToManyField(
-                blank=True, null=True, to="events.Accommodation"
-            ),
+            field=models.ManyToManyField(blank=True, null=True, to="events.Accommodation"),
         ),
     ]

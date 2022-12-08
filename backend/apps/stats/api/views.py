@@ -1,13 +1,11 @@
-from apps.events.models import Event, Season
-from apps.stats.api.serializers import (ProfileStatSerializer,
-                                        StatisticPolymorphicSerializer)
-from apps.stats.models import Statistic
-from apps.users.api.serializers import BaseProfileSerializer
-from apps.users.models import Profile
-from core.choices import UserTypeChoices
-from core.views import get_object_custom_queryset
 from django_filters import rest_framework as filters
 from rest_framework import viewsets
+
+from apps.events.models import Season
+from apps.stats.api.serializers import ProfileStatSerializer, StatisticPolymorphicSerializer
+from apps.stats.models import Statistic
+from apps.users.models import Profile
+from core.views import get_object_custom_queryset
 
 
 def departments(request):

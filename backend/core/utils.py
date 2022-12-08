@@ -1,12 +1,13 @@
 import unicodedata
 
+from django.contrib.auth import get_user_model
+from django.core.mail import EmailMultiAlternatives
+from django.shortcuts import get_object_or_404
+from django.template.loader import render_to_string
+
 from apps.family.models import FamilyMember
 from apps.users.models import User
 from config import settings
-from django.contrib.auth import get_user_model
-from django.core.mail import EmailMultiAlternatives, send_mail
-from django.shortcuts import get_object_or_404
-from django.template.loader import render_to_string
 
 
 def custom_create_user(**params):
@@ -18,9 +19,7 @@ def send_custom_mail(new_event, template_file, old_event=None):
 
     # render email text
     email_html_message = render_to_string(f"email/event/{template_file}.html", context)
-    email_plaintext_message = render_to_string(
-        f"email/event/{template_file}.txt", context
-    )
+    email_plaintext_message = render_to_string(f"email/event/{template_file}.txt", context)
 
     emails = getEmailList()
     print("sending emails to ", emails)
@@ -63,9 +62,7 @@ def get_family_id(self, instance):
 
 
 def generate_custom_unique_username(user_data):
-    username = str(
-        user_data.get("first_name", "") + user_data.get("last_name", "")
-    ).lower()
+    username = str(user_data.get("first_name", "") + user_data.get("last_name", "")).lower()
     # RES: https://www.py.cz/Cestina3X
     username_candidate_normalized = ""
     for c in username:

@@ -40,9 +40,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "season",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE, to="events.season"
-                    ),
+                    models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="events.season"),
                 ),
                 (
                     "user",

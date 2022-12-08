@@ -1,30 +1,39 @@
-from apps.events.api.serializers import (AccommodationSerializer,
-                                         CategorySerializer,
-                                         EventPolymorphicSerializer,
-                                         EventResponseSerializer,
-                                         EventTypeSerializer,
-                                         LocationSerializer,
-                                         RaceOrganizerSerializer,
-                                         SeasonSerializer, SkisTypeSerializer)
-from apps.events.models import (Accommodation, Category, Event, EventResponse,
-                                EventType, Location, RaceOrganizer, Season,
-                                SkisType)
-# RES: https://github.com/LondonAppDeveloper/recipe-app-api/blob/master/app/recipe/views.py
-# RES: https://stackoverflow.com/questions/51016896/how-to-serialize-inherited-models-in-django-rest-framework
-from apps.family.models import Child, FamilyMember
-from apps.users.models import Profile
-from core.choices import UserTypeChoices, get_all_choices
-from core.permissions import IsCoachOrReadOnly
-from core.views import get_object_custom_queryset
-from django.db import transaction
-from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django_filters import rest_framework as filters
-from rest_framework import generics, mixins, status, viewsets
+from rest_framework import generics, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
-from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
+
+from apps.events.api.serializers import (
+    AccommodationSerializer,
+    CategorySerializer,
+    EventPolymorphicSerializer,
+    EventResponseSerializer,
+    EventTypeSerializer,
+    LocationSerializer,
+    RaceOrganizerSerializer,
+    SeasonSerializer,
+    SkisTypeSerializer,
+)
+from apps.events.models import (
+    Accommodation,
+    Category,
+    Event,
+    EventResponse,
+    EventType,
+    Location,
+    RaceOrganizer,
+    Season,
+    SkisType,
+)
+
+# RES: https://github.com/LondonAppDeveloper/recipe-app-api/blob/master/app/recipe/views.py
+# RES: https://stackoverflow.com/questions/51016896/how-to-serialize-inherited-models-in-django-rest-framework
+from apps.users.models import Profile
+from core.permissions import IsCoachOrReadOnly
+from core.views import get_object_custom_queryset
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -87,9 +96,7 @@ class EventViewSet(viewsets.ModelViewSet):
                 if Accommodation.objects.filter(id=acc).exists():
                     event.accommodation.add(acc)
                 else:
-                    raise Exception(
-                        "Object not exist in DB. You are trying to add non existing Accommodation "
-                    )
+                    raise Exception("Object not exist in DB. You are trying to add non existing Accommodation ")
 
         return Response(event_serializer.data, status=status.HTTP_200_OK)
 
@@ -138,7 +145,7 @@ class EventResponseCreateAPIView(generics.CreateAPIView):
     # filterset_fields = ('event', "answerer", "user_to_event",)
 
     def perform_create(self, serializer):
-        answerer = self.request.user.profile
+        self.request.user.profile
 
         kwarg_pk = self.kwargs.get("pk")
         event = get_object_or_404(Event, id=kwarg_pk)
@@ -153,9 +160,7 @@ class EventResponseCreateAPIView(generics.CreateAPIView):
         #     raise ValidationError("User is already up to date with your answer")
 
         # Save the response first (in case of failure)
-        self.manage_user_on_event(
-            get_object_or_404(Profile, id=user_to_event), event, going
-        )
+        self.manage_user_on_event(get_object_or_404(Profile, id=user_to_event), event, going)
         serializer.save(event=event)
 
     def manage_user_on_event(self, profile, event, going):

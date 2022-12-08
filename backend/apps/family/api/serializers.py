@@ -1,12 +1,12 @@
 from allauth.account.models import EmailAddress
 from allauth.account.utils import send_email_confirmation
-from apps.events.models import Category, Season
-from apps.family.models import Child, Family, FamilyMember
-from apps.users.api.serializers import (BaseUserSerializer,
-                                        CustomRegisterSerializer)
-from apps.users.models import Profile, User
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
+
+from apps.events.models import Category, Season
+from apps.family.models import Child, Family, FamilyMember
+from apps.users.api.serializers import BaseUserSerializer, CustomRegisterSerializer
+from apps.users.models import Profile, User
 
 
 class ChildProfileSerializer(serializers.ModelSerializer):
@@ -24,9 +24,7 @@ class CustomRegisterChildSerializer(CustomRegisterSerializer):
 
 class ChildSerializer(serializers.ModelSerializer):
     user = CustomRegisterChildSerializer(required=True)
-    family = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="family-detail"
-    )
+    family = serializers.HyperlinkedRelatedField(read_only=True, view_name="family-detail")
 
     def create(self, validated_data):
         # TODO: Use allauth method for usernames if possible
@@ -39,9 +37,7 @@ class ChildSerializer(serializers.ModelSerializer):
         user_data = validated_data["user"]
         print(f"user_data {user_data}")
 
-        username = str(
-            user_data.get("first_name", "") + user_data.get("last_name", "")
-        ).lower()
+        username = str(user_data.get("first_name", "") + user_data.get("last_name", "")).lower()
         counter = 1
         while User.objects.filter(username=username):
             username = username + str(counter)

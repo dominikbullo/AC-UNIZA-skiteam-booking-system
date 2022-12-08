@@ -63,15 +63,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="skirace",
             name="skis_type",
-            field=models.ManyToManyField(
-                related_name="skirace_skis_type", to="events.SkisType"
-            ),
+            field=models.ManyToManyField(related_name="skirace_skis_type", to="events.SkisType"),
         ),
         migrations.AddField(
             model_name="skitraining",
             name="skis_type",
-            field=models.ManyToManyField(
-                related_name="skitraining_skis_type", to="events.SkisType"
-            ),
+            field=models.ManyToManyField(related_name="skitraining_skis_type", to="events.SkisType"),
         ),
     ]

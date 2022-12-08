@@ -1,5 +1,6 @@
-from apps.stats.api.views import ProfileStatsViewSet, StatsViewSet
 from rest_framework.routers import DefaultRouter
+
+from apps.stats.api.views import ProfileStatsViewSet, StatsViewSet
 
 app_name = "stats"
 

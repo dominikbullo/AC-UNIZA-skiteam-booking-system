@@ -1,7 +1,8 @@
-from allauth.account.forms import LoginForm, SignupForm
-from apps.users.models import User
+from allauth.account.forms import SignupForm
 from django import forms
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
+
+from apps.users.models import User
 
 
 class FullNameRequiredMixin(object):
@@ -24,10 +25,6 @@ class CustomUserChangeForm(FullNameRequiredMixin, UserChangeForm):
     class Meta:
         model = User
         fields = ("email",)
-
-
-from allauth.account.forms import SignupForm
-from django import forms
 
 
 class CustomSignupForm(SignupForm):

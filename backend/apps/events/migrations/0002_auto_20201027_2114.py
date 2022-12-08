@@ -35,9 +35,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="event",
             name="season",
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE, to="events.season"
-            ),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="events.season"),
         ),
         migrations.AddField(
             model_name="category",
@@ -47,9 +45,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="category",
             name="season",
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE, to="events.season"
-            ),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="events.season"),
         ),
         migrations.AddField(
             model_name="skirace",

@@ -1,13 +1,12 @@
-from apps.events.api.serializers import SeasonSerializer
-from apps.events.models import Event, EventType, Season
-from apps.family.models import Child
-from apps.stats.models import (EventStatistic, PerformanceTestStatistic,
-                               RaceStatistic)
-from apps.users.api.serializers import BaseProfileSerializer
-from apps.users.models import Profile
 from django.utils import timezone
 from rest_framework import serializers
 from rest_polymorphic.serializers import PolymorphicSerializer
+
+from apps.events.models import Event, EventType
+from apps.family.models import Child
+from apps.stats.models import EventStatistic, PerformanceTestStatistic, RaceStatistic
+from apps.users.api.serializers import BaseProfileSerializer
+from apps.users.models import Profile
 
 
 class EventStatisticSerializer(serializers.ModelSerializer):
@@ -51,9 +50,7 @@ class ProfileStatSerializer(BaseProfileSerializer):
     def get_event_stats(self, instance):
         if Child.objects.filter(user__profile=instance).exists():
             child = Child.objects.get(user__profile=instance)
-            return ChildStatSerializer(
-                instance=child, context={"profile": instance}
-            ).data
+            return ChildStatSerializer(instance=child, context={"profile": instance}).data
 
         return
 
@@ -91,9 +88,7 @@ class ChildStatSerializer(serializers.ModelSerializer):
                 tmp.append(
                     {
                         "type": EventTypeStatSerializer(instance=event_type).data,
-                        "count": self.context.get("profile")
-                        .events.filter(**query)
-                        .count(),
+                        "count": self.context.get("profile").events.filter(**query).count(),
                         "total": events.count(),
                     }
                 )

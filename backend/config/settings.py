@@ -9,6 +9,8 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 """
 
 import environ
+from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
 
 ROOT_DIR = environ.Path(__file__) - 2
 APP_DIR = environ.Path(__file__) - 3
@@ -234,9 +236,7 @@ PASSWORD_HASHERS = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-password-validators
 # ------------------------------------------------------------------------------
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
-    },
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
@@ -301,9 +301,7 @@ REST_FRAMEWORK = {
 # raven sentry client
 # See https://docs.sentry.io/clients/python/integrations/django/
 INSTALLED_APPS += ["raven.contrib.django.raven_compat"]
-RAVEN_MIDDLEWARE = [
-    "raven.contrib.django.raven_compat.middleware.SentryResponseErrorIdMiddleware"
-]
+RAVEN_MIDDLEWARE = ["raven.contrib.django.raven_compat.middleware.SentryResponseErrorIdMiddleware"]
 MIDDLEWARE = RAVEN_MIDDLEWARE + MIDDLEWARE
 
 # Sentry Configuration
@@ -317,10 +315,7 @@ LOGGING = {
         "handlers": ["sentry"],
     },
     "formatters": {
-        "verbose": {
-            "format": "%(levelname)s %(asctime)s %(module)s "
-                      "%(process)d %(thread)d %(message)s"
-        },
+        "verbose": {"format": "%(levelname)s %(asctime)s %(module)s " "%(process)d %(thread)d %(message)s"},
     },
     "handlers": {
         "sentry": {
@@ -358,10 +353,6 @@ LOGGING = {
 }
 
 RAVEN_CONFIG = {"DSN": SENTRY_DSN}
-
-from django.templatetags.static import static
-from django.urls import reverse_lazy
-from django.utils.translation import gettext_lazy as _
 
 UNFOLD = {
     "SITE_TITLE": "SpotAgenda",
@@ -416,7 +407,6 @@ UNFOLD = {
                         "icon": "dashboard",
                         "link": reverse_lazy("admin:users_user_changelist"),
                     },
-
                 ],
             },
         ],

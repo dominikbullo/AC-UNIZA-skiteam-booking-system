@@ -1,7 +1,6 @@
-from apps.users.api.views import CustomConfirmEmailView
 from django.urls import include, path, re_path
 
-from . import views as acc_views
+from apps.users.api.views import CustomConfirmEmailView
 
 urlpatterns = [
     path("", include("dj_rest_auth.urls")),

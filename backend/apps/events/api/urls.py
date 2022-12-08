@@ -1,10 +1,17 @@
-from apps.events.api.views import (AccommodationViewSet, CategoryViewSet,
-                                   EventResponseCreateAPIView,
-                                   EventTypeViewSet, EventViewSet,
-                                   LocationViewSet, RaceOrganizerViewSet,
-                                   SeasonViewSet, SkisTypeViewSet)
 from django.urls import path
 from rest_framework.routers import DefaultRouter
+
+from apps.events.api.views import (
+    AccommodationViewSet,
+    CategoryViewSet,
+    EventResponseCreateAPIView,
+    EventTypeViewSet,
+    EventViewSet,
+    LocationViewSet,
+    RaceOrganizerViewSet,
+    SeasonViewSet,
+    SkisTypeViewSet,
+)
 
 app_name = "events"
 

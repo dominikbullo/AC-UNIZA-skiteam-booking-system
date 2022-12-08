@@ -1,15 +1,20 @@
-from apps.events.models import (Accommodation, Category, Event, EventResponse,
-                                EventType, Location, RaceOrganizer, Season,
-                                SkiRace, SkisType, SkiTraining)
-from apps.family.models import Child
-from apps.users.api.serializers import (BaseProfileSerializer,
-                                        BaseUserSerializer)
-from apps.users.models import Profile
-from core import choices
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
-from rest_framework.generics import get_object_or_404
 from rest_polymorphic.serializers import PolymorphicSerializer
+
+from apps.events.models import (
+    Accommodation,
+    Category,
+    Event,
+    EventResponse,
+    EventType,
+    Location,
+    RaceOrganizer,
+    Season,
+    SkiRace,
+    SkisType,
+    SkiTraining,
+)
+from apps.users.models import Profile
 
 
 class SeasonSerializer(serializers.ModelSerializer):
@@ -98,9 +103,7 @@ class EventResponseSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         self.fields["user_to_event"] = ParticipantsSerializer(read_only=True)
-        to_representation = super(EventResponseSerializer, self).to_representation(
-            instance
-        )
+        to_representation = super(EventResponseSerializer, self).to_representation(instance)
         return to_representation
 
     class Meta:
@@ -130,18 +133,12 @@ class BaseEventSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         # TODO: order category by year from
         # TODO: order location by recent used, or used count
-        self.fields["accommodation"] = AccommodationSerializer(
-            many=True, read_only=True
-        )
+        self.fields["accommodation"] = AccommodationSerializer(many=True, read_only=True)
         self.fields["participants"] = ParticipantsSerializer(many=True, read_only=True)
         self.fields["category"] = CategorySerializer(many=True, read_only=True)
         self.fields["skis_type"] = SkisTypeSerializer(many=True, read_only=True)
-        self.fields["location"] = LocationSerializer(
-            instance.location, many=False, read_only=True
-        )
-        self.fields["type"] = EventTypeSerializer(
-            instance.type, many=False, read_only=True
-        )
+        self.fields["location"] = LocationSerializer(instance.location, many=False, read_only=True)
+        self.fields["type"] = EventTypeSerializer(instance.type, many=False, read_only=True)
 
         to_representation = super(BaseEventSerializer, self).to_representation(instance)
         return to_representation
@@ -187,9 +184,7 @@ class SkiRaceSerializer(BaseEventSerializer):
     type = EventTypeSerializer(read_only=True)
 
     def to_representation(self, instance):
-        self.fields["organizer"] = RaceOrganizerSerializer(
-            instance.organizer, many=False, read_only=True
-        )
+        self.fields["organizer"] = RaceOrganizerSerializer(instance.organizer, many=False, read_only=True)
         return super(SkiRaceSerializer, self).to_representation(instance)
 
     # def validate(self, data):

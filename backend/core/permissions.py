@@ -1,4 +1,3 @@
-from core import choices
 from rest_framework import permissions
 
 

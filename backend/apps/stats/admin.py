@@ -1,10 +1,9 @@
-from apps.stats.models import (EventStatistic, PerformanceTestStatistic,
-                               RaceStatistic, Statistic)
 from django.apps import apps
 from django.contrib import admin
 from django.contrib.admin.sites import AlreadyRegistered
-from polymorphic.admin import (PolymorphicChildModelAdmin,
-                               PolymorphicParentModelAdmin)
+from polymorphic.admin import PolymorphicChildModelAdmin, PolymorphicParentModelAdmin
+
+from apps.stats.models import EventStatistic, PerformanceTestStatistic, RaceStatistic, Statistic
 
 
 # RES: https://django-polymorphic.readthedocs.io/en/stable/admin.html

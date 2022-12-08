@@ -1,5 +1,6 @@
-from apps.users.models import User
 from django.db import models
+
+from apps.users.models import User
 
 # RESOURCES
 # https://www.youtube.com/watch?v=gf2-J9YOMcc&t=458s

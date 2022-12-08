@@ -1,13 +1,14 @@
 from allauth.account.models import EmailAddress
-from apps.family.models import Family, FamilyMember
-from apps.users.models import Profile
-from core import utils
-from core.choices import UserTypeChoices
 from dj_rest_auth.models import TokenModel
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from django.contrib.auth import get_user_model, password_validation
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
+
+from apps.family.models import Family, FamilyMember
+from apps.users.models import Profile
+from core import utils
+from core.choices import UserTypeChoices
 
 
 class BaseProfileSerializer(serializers.ModelSerializer):
@@ -167,29 +168,19 @@ class TokenSerializer(serializers.ModelSerializer):
 
 class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(max_length=128, write_only=True, required=True)
-    new_password1 = serializers.CharField(
-        max_length=128, write_only=True, required=True
-    )
-    new_password2 = serializers.CharField(
-        max_length=128, write_only=True, required=True
-    )
+    new_password1 = serializers.CharField(max_length=128, write_only=True, required=True)
+    new_password2 = serializers.CharField(max_length=128, write_only=True, required=True)
 
     def validate_old_password(self, value):
         user = self.context["request"].user
         if not user.check_password(value):
-            raise serializers.ValidationError(
-                _("Your old password was entered incorrectly. Please enter it again.")
-            )
+            raise serializers.ValidationError(_("Your old password was entered incorrectly. Please enter it again."))
         return value
 
     def validate(self, data):
         if data["new_password1"] != data["new_password2"]:
-            raise serializers.ValidationError(
-                {"new_password2": _("The two password fields didn't match.")}
-            )
-        password_validation.validate_password(
-            data["new_password1"], self.context["request"].user
-        )
+            raise serializers.ValidationError({"new_password2": _("The two password fields didn't match.")})
+        password_validation.validate_password(data["new_password1"], self.context["request"].user)
         return data
 
     def save(self, **kwargs):

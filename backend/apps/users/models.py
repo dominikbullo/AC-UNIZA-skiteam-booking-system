@@ -1,9 +1,9 @@
 from allauth.account.models import EmailAddress
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+
 from core import choices
 from core.choices import GenderChoices, UserTypeChoices
-from django.contrib.auth.base_user import AbstractBaseUser
-from django.contrib.auth.models import AbstractUser, Group, PermissionsMixin
-from django.db import models
 
 
 # https://testdriven.io/blog/django-custom-user-model/
@@ -61,18 +61,14 @@ class User(AbstractUser):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    user_role = models.CharField(
-        max_length=6, choices=UserTypeChoices.choices, default=UserTypeChoices.PUBLIC
-    )
+    user_role = models.CharField(max_length=6, choices=UserTypeChoices.choices, default=UserTypeChoices.PUBLIC)
 
     phone_number = models.CharField(max_length=30, blank=True)
     location = models.CharField(max_length=30, blank=True)
     birth_date = models.DateField()
     avatar = models.ImageField(null=True, blank=True)
 
-    gender = models.CharField(
-        choices=GenderChoices.choices, max_length=1, null=False, blank=False
-    )
+    gender = models.CharField(choices=GenderChoices.choices, max_length=1, null=False, blank=False)
 
     events = models.ManyToManyField("events.Event", blank=True)
 

@@ -1,9 +1,10 @@
-from apps.family.models import Child, FamilyMember
-from apps.users.forms import CustomUserChangeForm, CustomUserCreationForm
-from apps.users.models import Profile, User
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Permission
+
+from apps.family.models import FamilyMember
+from apps.users.forms import CustomUserChangeForm, CustomUserCreationForm
+from apps.users.models import Profile, User
 
 
 class ProfileInline(admin.StackedInline):

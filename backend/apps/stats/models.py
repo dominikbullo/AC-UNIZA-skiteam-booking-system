@@ -1,7 +1,8 @@
-from apps.events.models import Season
-from apps.users.models import Profile, User
 from django.db import models
 from polymorphic.models import PolymorphicModel
+
+from apps.events.models import Season
+from apps.users.models import User
 
 
 class Statistic(PolymorphicModel):
@@ -20,12 +21,8 @@ class PerformanceTestStatistic(Statistic):
     date = models.DateField()
     long_jump = models.FloatField(blank=True, null=True, default=0)
     high_jump = models.FloatField(blank=True, null=True, default=0)
-    twelve_minutes_run = models.DurationField(
-        blank=True, null=True, default="00:00", help_text='"MM:SS" format'
-    )
-    boating = models.DurationField(
-        blank=True, null=True, default="00:00", help_text='"MM:SS" format'
-    )
+    twelve_minutes_run = models.DurationField(blank=True, null=True, default="00:00", help_text='"MM:SS" format')
+    boating = models.DurationField(blank=True, null=True, default="00:00", help_text='"MM:SS" format')
 
 
 class RaceStatistic(Statistic):

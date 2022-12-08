@@ -46,9 +46,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="event",
             name="type",
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.DO_NOTHING, to="events.eventtype"
-            ),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to="events.eventtype"),
         ),
         migrations.AlterField(
             model_name="eventtype",

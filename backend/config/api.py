@@ -1,10 +1,11 @@
+from django.conf.urls import include
+from django.urls import path
+
 from apps.events.api.urls import router as events_router
 from apps.family.api.urls import router as family_router
 from apps.stats.api.urls import router as stats_router
 from apps.users.api.urls import router as user_router
 from core import router as custom_router
-from django.conf.urls import include
-from django.urls import path
 
 router = custom_router.DefaultRouter()
 router.extend(user_router)

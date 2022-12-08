@@ -1,12 +1,10 @@
-from apps.events.models import (Category, Event, EventResponse, Location,
-                                SkiRace, SkiTraining)
 from django.apps import apps
 from django.contrib import admin
 from django.contrib.admin.sites import AlreadyRegistered
-from polymorphic.admin import (PolymorphicChildModelAdmin,
-                               PolymorphicChildModelFilter,
-                               PolymorphicParentModelAdmin)
+from polymorphic.admin import PolymorphicChildModelAdmin, PolymorphicParentModelAdmin
 from simple_history.admin import SimpleHistoryAdmin
+
+from apps.events.models import Category, Event, EventResponse, Location, SkiRace, SkiTraining
 
 _event_display_fields = ("season", "start", "type", "location")
 

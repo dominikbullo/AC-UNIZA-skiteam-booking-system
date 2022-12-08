@@ -1,17 +1,16 @@
 from datetime import timedelta
 
-from apps.family.models import Child
-from apps.users.models import Profile, User
 from colorfield.fields import ColorField
-from core.choices import (CategoryNameChoices, EventTypeChoices,
-                          SkiTypeChoices, current_year, year_choices)
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import gettext as _
 from polymorphic.models import PolymorphicModel
-from rest_framework.exceptions import ValidationError
 from simple_history.models import HistoricalRecords
+
+from apps.family.models import Child
+from apps.users.models import Profile
+from core.choices import CategoryNameChoices, EventTypeChoices, SkiTypeChoices, current_year, year_choices
 
 
 class Season(models.Model):
@@ -33,21 +32,15 @@ class Category(models.Model):
     season = models.ForeignKey(Season, on_delete=models.CASCADE)
 
     # RES (Many to many birectional): https://stackoverflow.com/questions/4881578/django-bi-directional-manytomany-how-to-prevent-table-creation-on-second-model
-    members = models.ManyToManyField(
-        "family.Child", through=Child.categories.through, blank=True
-    )
+    members = models.ManyToManyField("family.Child", through=Child.categories.through, blank=True)
 
     name = models.CharField(
         max_length=3,
         choices=CategoryNameChoices.choices,
     )
 
-    year_from = models.IntegerField(
-        _("Year from"), choices=year_choices(), default=current_year() - 2
-    )
-    year_until = models.IntegerField(
-        _("Year until"), choices=year_choices(), default=current_year()
-    )
+    year_from = models.IntegerField(_("Year from"), choices=year_choices(), default=current_year() - 2)
+    year_until = models.IntegerField(_("Year until"), choices=year_choices(), default=current_year())
 
     def __str__(self):
         return "{name} | {season}".format(name=self.name, season=self.season)
@@ -148,9 +141,7 @@ class Event(PolymorphicModel):
     location = models.ForeignKey(Location, on_delete=models.DO_NOTHING)
     category = models.ManyToManyField(Category)
 
-    participants = models.ManyToManyField(
-        "users.Profile", through=Profile.events.through, blank=True
-    )
+    participants = models.ManyToManyField("users.Profile", through=Profile.events.through, blank=True)
 
     all_day = models.BooleanField(default=False)
     start = models.DateTimeField()
@@ -159,9 +150,7 @@ class Event(PolymorphicModel):
     # recurring events
     is_recur = models.BooleanField(default=False)
     # group_id = models.IntegerField(max_length=150, blank=True)
-    days_of_week = ArrayField(
-        models.IntegerField(null=True, blank=True), null=True, blank=True
-    )
+    days_of_week = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
 
     canceled = models.BooleanField(default=False)
     send_email = models.BooleanField(default=False)
@@ -187,9 +176,7 @@ class EventResponse(models.Model):
         related_name="responses",
     )
     # answerer = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='answerers')
-    user_to_event = models.ForeignKey(
-        Profile, on_delete=models.CASCADE, related_name="users_to_event"
-    )
+    user_to_event = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="users_to_event")
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -269,14 +256,8 @@ class RaceOrganizer(models.Model):
         """
         from django.core.exceptions import ValidationError
 
-        if (
-            self.club is None
-            and RaceOrganizer.objects.filter(name=self.name, club=None).exists()
-        ):
-            raise ValidationError(
-                "Another RaceOrganizer with name %s and no club already exists"
-                % self.name
-            )
+        if self.club is None and RaceOrganizer.objects.filter(name=self.name, club=None).exists():
+            raise ValidationError("Another RaceOrganizer with name %s and no club already exists" % self.name)
 
     class Meta:
         unique_together = (("name", "club"),)
