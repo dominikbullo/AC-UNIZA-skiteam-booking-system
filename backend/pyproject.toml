@@ -3,7 +3,6 @@ name = "sportagenda"
 version = "0.1.0"
 description = "Web app for complete managing a sport clubs. Events, recording statistics, calculating payouts for coaches and so on..."
 authors = ["Dominik Bullo"]
-readme = "README.md"
 homepage = "https://sportagenda.sk/"
 repository = "https://github.com/dominikbullo/SportAgenda/"
 

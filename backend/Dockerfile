@@ -3,16 +3,11 @@ FROM python:3.7
 # python envs
 ENV PYTHONUNBUFFERED 1
 
-WORKDIR /app/backend
+WORKDIR /app/
 
-COPY pyproject.toml /
+# Upload Poetry files
+COPY pyproject.toml poetry.lock /
 
+# Upgrage pip, install poetry and install packpages (also creates virtual env)
 RUN pip install --upgrade pip
 RUN pip install poetry && poetry install
-
-# upload scripts
-COPY ./scripts/start.sh ./scripts/gunicorn.sh /
-
-# Fix windows docker bug, convert CRLF to LF
-RUN sed -i 's/\r$//g' /start.sh && chmod +x /start.sh &&\
-    sed -i 's/\r$//g' /gunicorn.sh && chmod +x /gunicorn.sh

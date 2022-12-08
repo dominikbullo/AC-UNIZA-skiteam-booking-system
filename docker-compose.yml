@@ -4,7 +4,7 @@ services:
   backend:
     build:
       context: ./backend
-    command: /start.sh
+    command: bash -c "poetry install && poetry run python manage.py migrate && poetry run python manage.py runserver 0.0.0.0:8000"
     depends_on:
       - postgres
     env_file: ${ENV_FILE:-.env}
@@ -35,12 +35,15 @@ services:
       - "8000:80"
     volumes:
       - ./backend/media/:/media/
+      - ./backend/static/:/staticfiles/
+      - ./backend/static/:/static/
       - ./backend/staticfiles/:/staticfiles/
+      - ./backend/staticfiles/:/static/
       - ./nginx/dev.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - backend
     env_file: ${ENV_FILE:-.env}
 
 volumes:
-  sportagenda_data: { }
-  pgadmin_data: { }
+  sportagenda_data:
+  pgadmin_data:
