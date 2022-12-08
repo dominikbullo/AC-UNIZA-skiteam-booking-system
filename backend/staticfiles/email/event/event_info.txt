@@ -1,0 +1,11 @@
+<html>
+<head><title>Event information</title></head>
+
+<body>
+
+<h1>Udalosť zrušená</h1>
+
+<p>Udalosť, ktorá sa mala konať {{ event.start }} je zrušená</p>
+
+</body>
+</html>
