@@ -1,12 +1,15 @@
 FROM python:3.7
 
 # python envs
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONFAULTHANDLER=1 \
+    PYTHONHASHSEED=random \
+    PYTHONUNBUFFERED=1
 
-WORKDIR /app/
+
+WORKDIR /app/backend
 
 # Upload Poetry files
-COPY pyproject.toml poetry.lock /
+COPY pyproject.toml poetry.lock ./
 
 # Upgrage pip, install poetry and install packpages (also creates virtual env)
 RUN pip install --upgrade pip
