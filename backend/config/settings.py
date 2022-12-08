@@ -23,6 +23,8 @@ env = environ.Env()
 # ------------------------------------------------------------------------------
 DJANGO_APPS = [
     # https://github.com/deschler/django-modeltranslation/issues/408
+    "unfold",  # before django.contrib.admin
+    "unfold.contrib.filters",  # optional
     "modeltranslation",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -35,8 +37,6 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
-    "unfold",  # before django.contrib.admin
-    "unfold.contrib.filters",  # optional
     "django_extensions",
     "rest_framework",
     "rest_framework.authtoken",
@@ -319,7 +319,7 @@ LOGGING = {
     "formatters": {
         "verbose": {
             "format": "%(levelname)s %(asctime)s %(module)s "
-            "%(process)d %(thread)d %(message)s"
+                      "%(process)d %(thread)d %(message)s"
         },
     },
     "handlers": {
@@ -358,3 +358,81 @@ LOGGING = {
 }
 
 RAVEN_CONFIG = {"DSN": SENTRY_DSN}
+
+from django.templatetags.static import static
+from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
+
+UNFOLD = {
+    "SITE_TITLE": "SpotAgenda",
+    "SITE_HEADER": "SportAgenda",
+    "COLORS": {
+        "primary": {
+            "50": "250 245 255",
+            "100": "243 232 255",
+            "200": "233 213 255",
+            "300": "216 180 254",
+            "400": "192 132 252",
+            "500": "168 85 247",
+            "600": "147 51 234",
+            "700": "126 34 206",
+            "800": "107 33 168",
+            "900": "88 28 135",
+        },
+    },
+    "EXTENSIONS": {
+        "modeltranslation": {
+            "flags": {
+                "en": "🇬🇧",
+                "sk": "🇫🇷",
+            },
+        },
+    },
+    "SIDEBAR": {
+        "show_search": True,
+        "show_all_applications": True,
+        "navigation": [
+            {
+                "title": _("Navigation"),
+                "separator": True,  # Top border
+                "items": [
+                    {
+                        "title": _("Dashboard"),
+                        "icon": "dashboard",
+                        "link": reverse_lazy("admin:index"),
+                    },
+                    {
+                        "title": _("Users"),
+                        "icon": "people",
+                        "link": reverse_lazy("admin:users_user_changelist"),
+                    },
+                    {
+                        "title": _("Events"),
+                        "icon": "dashboard",
+                        "link": reverse_lazy("admin:events_event_changelist"),
+                    },
+                    {
+                        "title": _("Statistics"),
+                        "icon": "dashboard",
+                        "link": reverse_lazy("admin:users_user_changelist"),
+                    },
+
+                ],
+            },
+        ],
+    },
+    "TABS": [
+        {
+            "models": [
+                "apps.users.user",
+            ],
+            "items": [
+                {
+                    "title": _("Dashboard"),
+                    "icon": "dashboard",
+                    "link": reverse_lazy("admin:index"),
+                },
+            ],
+        },
+    ],
+}
