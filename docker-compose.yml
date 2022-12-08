@@ -35,10 +35,8 @@ services:
       - "8000:80"
     volumes:
       - ./backend/media/:/media/
-      - ./backend/static/:/staticfiles/
       - ./backend/static/:/static/
       - ./backend/staticfiles/:/staticfiles/
-      - ./backend/staticfiles/:/static/
       - ./nginx/dev.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - backend
