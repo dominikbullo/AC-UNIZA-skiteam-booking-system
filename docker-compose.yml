@@ -15,8 +15,8 @@ services:
   postgres:
     image: postgres
     expose:
-      - 1234
-    command: -p 1234
+      - ${DB_PORT}
+    command: -p ${DB_PORT}
     env_file: ${ENV_FILE:-.env}
     volumes:
       - sportagenda_data:/var/lib/postgresql/data/
