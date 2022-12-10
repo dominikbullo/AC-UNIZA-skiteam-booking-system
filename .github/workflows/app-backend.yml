@@ -6,14 +6,12 @@ on:
 env:
   IMAGE_NAME: sportagenda_backend
 
-environment:
-  name: develop
-  url: https://develop.sportagenda.sk
-
 jobs:
   build:
-    name: Build app
     runs-on: ubuntu-latest
+    environment:
+      name: develop
+      url: https://develop.sportagenda.sk
 
     steps:
       - name: Check out the repo
