@@ -35,13 +35,16 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ build_backend ]
     steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
       - name: Pre-commit
         uses: pre-commit/action@v3.0.0
         with:
           extra_args: flake8 --all-files
 
       - name: Check migrations
-        run:  docker-compose run --rm backend poetry run python manage.py makemigrations --dry-run --check || (echo 'Error in migrations dry-check' && exit 1)
+        run: docker-compose run --rm backend poetry run python manage.py makemigrations --dry-run --check || (echo 'Error in migrations dry-check' && exit 1)
 
   test:
     runs-on: ubuntu-latest
