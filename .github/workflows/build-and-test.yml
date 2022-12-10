@@ -23,7 +23,7 @@ jobs:
 
       - name: Install requirements
         run: |
-          poetry self update
+          pip install poetry
           poetry install
 
       - name: Run tests
