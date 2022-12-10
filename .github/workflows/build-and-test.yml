@@ -11,6 +11,26 @@ env:
 
 
 jobs:
+  simple_build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Python $PYTHON_VERSION
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Install requirements
+        run: |
+          poetry self update
+          poetry install
+
+      - name: Run tests
+        run: |
+          cd src
+          python manage.py test
   build-backend:
     runs-on: ubuntu-latest
 
