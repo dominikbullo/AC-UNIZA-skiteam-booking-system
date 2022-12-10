@@ -50,7 +50,7 @@ jobs:
 
   push_backend_to_container_repository:
     name: Push backend Docker image to container repository
-    needs: [ build_backend ]
+    needs: [ build_backend, build_nginx ]
     runs-on: ubuntu-latest
 
     steps:
@@ -62,7 +62,7 @@ jobs:
 
   push_nginx_to_container_repository:
     name: Push backend Docker image to container repository
-    needs: [ build_backend ]
+    needs: [ build_backend, build_nginx ]
     runs-on: ubuntu-latest
 
     steps:
