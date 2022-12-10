@@ -61,7 +61,7 @@ jobs:
       - name: Pre-commit
         uses: pre-commit/action@v3.0.0
         with:
-          extra_args: flake8 --all-files
+          extra_args: --all-files
 
       - name: Check migrations
         run: ENV_FILE=.env.ci docker compose run --rm backend poetry run python manage.py makemigrations --dry-run --check || (echo 'Error in migrations dry-check' && exit 1)
