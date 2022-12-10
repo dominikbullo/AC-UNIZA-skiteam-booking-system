@@ -5,6 +5,25 @@ on:
   pull_request:
 
 jobs:
+  build-with-cache:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test action
+        uses: whoan/docker-build-with-cache-action@v5
+        with:
+          username: dominikbullo
+          password: "${{ secrets.GITHUB_TOKEN }}"
+          registry: ghcr.io
+          image_name: test_image
+          dockerfile: ./backend/Dockerfile
+          push_image_and_stages: docker run test_image:latest
+  test123:
+    runs-on: ubuntu-latest
+    need: build-with-cache
+    steps:
+      - name: Test action
+
+
   build:
     runs-on: ubuntu-latest
     steps:
@@ -47,13 +66,3 @@ jobs:
         run: |
           docker load --input /tmp/myimage.tar
           docker image ls -a
-
-      - name: Test action
-        uses: whoan/docker-build-with-cache-action@v5
-        with:
-          username: dominikbullo
-          password: "${{ secrets.GITHUB_TOKEN }}"
-          registry: ghcr.io
-          image_name: test_image
-          dockerfile: ./backend/Dockerfile
-          push_image_and_stages: docker run test_image:latest
