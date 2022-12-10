@@ -20,7 +20,7 @@ jobs:
 
   test123:
     runs-on: ubuntu-latest
-    need: build-with-cache
+    needs: build-with-cache
     steps:
       - name: Test action 2
         uses: whoan/docker-build-with-cache-action@v5
