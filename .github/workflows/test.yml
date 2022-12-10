@@ -15,7 +15,7 @@ jobs:
           password: "${{ secrets.GITHUB_TOKEN }}"
           registry: ghcr.io
           image_name: test_image
-          dockerfile: ./backend/Dockerfile
+          dockerfile: backend/Dockerfile
           push_image_and_stages: docker run test_image:latest
 
   test123:
@@ -29,7 +29,7 @@ jobs:
           password: "${{ secrets.GITHUB_TOKEN }}"
           registry: ghcr.io
           image_name: test_image
-          dockerfile: ./backend/Dockerfile
+          dockerfile: backend/Dockerfile
           push_image_and_stages: false
 
 
