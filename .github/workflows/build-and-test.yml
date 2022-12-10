@@ -60,7 +60,7 @@ jobs:
       - name: Push image to GitHub Container Registry
         run: echo "Push $IMAGE image to GitHub Container Registry"
 
-  push_backend_to_container_repository:
+  push_nginx_to_container_repository:
     name: Push backend Docker image to container repository
     needs: [ build_backend ]
     runs-on: ubuntu-latest
