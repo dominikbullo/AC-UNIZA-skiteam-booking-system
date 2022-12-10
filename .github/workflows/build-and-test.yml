@@ -23,6 +23,13 @@ jobs:
           file_name: .env
           fail_on_empty: true
 
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: envfile
+          path: |
+            .env
+
       - name: Check env file in another job
         run: cat .env
 
@@ -36,6 +43,9 @@ jobs:
 
       - name: Build backend image
         run: docker build ./backend --file backend/Dockerfile
+
+      - name: Check env file in another job
+        run: cat .env
 
       - name: Check env file in another job
         run: cat .env
