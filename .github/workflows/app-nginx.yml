@@ -1,20 +1,36 @@
-name: Build & Publish to registry
+name: Develop flow
 
 on:
   push:
-    # Publish `master` as Docker `latest` image.
-    # Publish `develop` as Docker `develop` image.
-    branches:
-      - master
-      - develop
-
-    # Publish `v1.2.3` tags as releases.
-    tags:
-      - v*
 
 jobs:
+  build:
+    name: Build app
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: Build backend image
+        run: docker build ./backend --file backend/Dockerfile
+
+  build_nginx:
+    name: build frontend
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: build nginx image
+        run: docker build . --file nginx/Dockerfile
+
   test:
     runs-on: ubuntu-latest
+    needs: [ build_backend, build_nginx ]
 
     steps:
       - name: Check out the repo
@@ -31,10 +47,9 @@ jobs:
           fi
 
   push_backend_to_registry:
-    name: build & push backend
+    name: Push backend Docker image to container repository
     needs: test
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
     env:
       IMAGE_NAME: sportagenda_backend
 
