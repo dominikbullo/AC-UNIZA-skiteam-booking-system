@@ -46,7 +46,7 @@ jobs:
 
   push-backend-to-container-repository:
     name: Push backend Docker image to container repository
-    needs: [ test, lint, build-nginx ]
+    needs: [ test, lint, build ]
     runs-on: ubuntu-latest
 
     steps:
@@ -58,7 +58,7 @@ jobs:
 
   push-nginx-to-container-repository:
     name: Push backend Docker image to container repository
-    needs: [ test, lint, build-nginx ]
+    needs: [ test, lint, build ]
     runs-on: ubuntu-latest
 
     steps:
