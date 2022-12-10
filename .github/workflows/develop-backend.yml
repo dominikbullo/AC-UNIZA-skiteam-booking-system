@@ -5,9 +5,6 @@ env:
   IMAGE: backend
 
 on:
-  push:
-    - $ENVIRONMENT
-
   workflow_run:
     workflows: [ "Build & Test" ]
     branches: [ $ENVIRONMENT ]
