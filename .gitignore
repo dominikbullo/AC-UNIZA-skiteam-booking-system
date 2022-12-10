@@ -286,3 +286,4 @@ typings/
 
 .env.*
 !.env.example
+!/.env.ci
