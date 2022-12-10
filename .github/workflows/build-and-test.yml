@@ -1,17 +1,14 @@
-name: Backend app
+name: Build & Test
 
 on:
   push:
-
+  pull_request:
 env:
   IMAGE_NAME: sportagenda_backend
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment:
-      name: develop
-      url: https://develop.sportagenda.sk
 
     steps:
       - name: Check out the repo
