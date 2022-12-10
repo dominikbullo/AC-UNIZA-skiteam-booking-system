@@ -8,7 +8,6 @@ env:
   ENVIRONMENT: develop
   BACKEND_IMAGE_NAME: backend
   NGINX_IMAGE_NAME: nginx
-  PYTHON_VERSION: 3.11
 
 jobs:
   simple_build:
@@ -17,10 +16,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup Python $PYTHON_VERSION
+      - name: Setup Python 3.11
         uses: actions/setup-python@v4
         with:
-          python-version: $PYTHON_VERSION
+          python-version: 3.11
 
       - name: Install requirements
         run: |
