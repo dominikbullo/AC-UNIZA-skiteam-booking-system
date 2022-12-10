@@ -64,7 +64,7 @@ jobs:
           extra_args: flake8 --all-files
 
       - name: Check migrations
-        run: docker-compose run --rm backend poetry run python manage.py makemigrations --dry-run --check || (echo 'Error in migrations dry-check' && exit 1)
+        run: ENV_FILE=.env.ci docker compose run --rm backend poetry run python manage.py makemigrations --dry-run --check || (echo 'Error in migrations dry-check' && exit 1)
 
   test:
     runs-on: ubuntu-latest
