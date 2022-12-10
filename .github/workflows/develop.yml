@@ -40,7 +40,7 @@ jobs:
     steps:
       - name: Lint
         run: |
-          run poetry run pre-commit run --all-files --show-diff-on-failure && \
+          run poetry run pre-commit run --all-files --show-diff-on-failure
           run poetry run python manage.py makemigrations --dry-run --check || (echo 'Error in migrations dry-check' && exit 1)
 
   test:
