@@ -3,8 +3,8 @@ FROM python:3.11
 # python envs
 ENV PYTHONFAULTHANDLER=1 \
     PYTHONHASHSEED=random \
-    PYTHONUNBUFFERED=1
-
+    PYTHONUNBUFFERED=1 \
+    PATH="${PATH}:/root/.local/bin"
 
 WORKDIR /app/backend/
 
