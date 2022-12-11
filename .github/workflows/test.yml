@@ -47,3 +47,32 @@ jobs:
         run: |
           docker load --input /tmp/myimage.tar
           docker image ls -a
+
+  build-with-cache:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Test action
+        uses: whoan/docker-build-with-cache-action@v5
+        with:
+          username: dominikbullo
+          password: "${{ secrets.GITHUB_TOKEN }}"
+          registry: ghcr.io
+          compose_file: docker-compose.yml
+          push_image_and_stages: docker run test_image:latest
+
+  test123:
+    runs-on: ubuntu-latest
+    needs: build-with-cache
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Test action 2
+        uses: whoan/docker-build-with-cache-action@v5
+        with:
+          username: dominikbullo
+          password: "${{ secrets.GITHUB_TOKEN }}"
+          registry: ghcr.io
+          compose_file: docker-compose.yml
+          push_image_and_stages: docker run test_image:latest
