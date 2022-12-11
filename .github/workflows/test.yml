@@ -47,6 +47,7 @@ jobs:
         run: |
           docker load --input /tmp/myimage.tar
           docker image ls -a
+          docker run myimage:latest
 
   build-with-cache:
     runs-on: ubuntu-latest
@@ -60,7 +61,6 @@ jobs:
           password: "${{ secrets.GITHUB_TOKEN }}"
           registry: ghcr.io
           image_name: test_image
-          dockerfile: backend/Dockerfile
           context: ./backend
           push_image_and_stages: docker run test_image:latest
 
@@ -77,6 +77,5 @@ jobs:
           password: "${{ secrets.GITHUB_TOKEN }}"
           registry: ghcr.io
           image_name: test_image
-          dockerfile: backend/Dockerfile
           context: ./backend
           push_image_and_stages: docker run test_image:latest
