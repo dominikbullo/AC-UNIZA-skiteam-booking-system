@@ -1,9 +1,5 @@
 name: Build & Test
 
-on:
-  push:
-  pull_request:
-
 env:
   ENVIRONMENT: develop
   BACKEND_IMAGE_NAME: backend
