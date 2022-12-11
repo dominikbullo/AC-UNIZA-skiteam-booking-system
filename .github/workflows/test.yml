@@ -16,8 +16,7 @@ jobs:
           username: dominikbullo
           password: "${{ secrets.GITHUB_TOKEN }}"
           registry: ghcr.io
-          image_name: test_image
-          dockerfile: backend/Dockerfile
+          compose_file: docker-compose.yml
           push_image_and_stages: docker run test_image:latest
 
   test123:
